@@ -1,0 +1,520 @@
+/* ================================
+   Student Certificate Login Page
+==================================*/
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:
+    linear-gradient(rgba(0,0,0,.35),rgba(0,0,0,.35)),
+    url("../images/background.png") center center/cover no-repeat;
+
+    background-attachment:fixed;
+    overflow:hidden;
+}
+
+.background{
+    display:none;
+}
+
+.login-container{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.login-card{
+    width:470px;
+    padding:40px;
+
+    background:rgba(255,255,255,.18);
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.35);
+    border-radius:30px;
+
+    box-shadow:0 20px 60px rgba(0,0,0,.35);
+
+    animation:fadeIn .8s ease;
+}
+
+
+/* ==========================
+         LOGO
+========================== */
+
+.logo{
+    width:110px;
+    height:110px;
+
+    margin:0 auto 20px;
+
+    background:#fff;
+
+    border-radius:50%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    overflow:hidden;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+
+.logo img{
+    width:75px;
+    height:75px;
+
+    object-fit:contain;
+
+    display:block;
+}
+
+
+/* ==========================
+         HEADINGS
+========================== */
+
+/* Student Certificate */
+
+h2{
+    text-align:center;
+
+    color:#ffffff;
+
+    font-size:42px;
+    font-weight:800;
+
+    margin-bottom:5px;
+
+    text-shadow:2px 2px 8px rgba(0,0,0,.6);
+}
+
+
+/* Management System */
+
+h5{
+    text-align:center;
+
+    color:#FFFFFF;
+
+    font-size:28px;
+    font-weight:600;
+
+    margin-bottom:5px;
+}
+
+
+/* Secure Login Portal */
+
+.text-muted{
+    text-align:center;
+
+    color:#E5E7EB !important;
+
+    font-size:17px;
+    font-weight:500;
+
+    margin-bottom:30px;
+
+    text-shadow:1px 1px 5px rgba(0,0,0,.5);
+}
+
+
+/* ==========================
+          FORM
+========================== */
+
+.form-label{
+    font-weight:700;
+
+    color:#E5E7EB;
+
+    font-size:16px;
+}
+
+.input-group{
+    margin-bottom:15px;
+}
+
+.input-group-text{
+    border:none;
+
+    background:#fff;
+
+    border-radius:12px 0 0 12px;
+}
+
+.form-control{
+    border:none;
+
+    background:#fff;
+
+    height:55px;
+
+    font-size:16px;
+}
+
+.form-control:focus{
+    box-shadow:none;
+}
+
+.btn-outline-secondary{
+    border:none;
+
+    background:#fff;
+
+    border-radius:0 12px 12px 0;
+}
+
+
+/* ==========================
+         BUTTON
+========================== */
+
+.login-btn{
+    width:100%;
+    height:55px;
+
+    border:none;
+
+    border-radius:15px;
+
+    background:#198754;
+
+    color:#fff;
+
+    font-size:20px;
+    font-weight:700;
+
+    transition:.3s;
+}
+
+.login-btn:hover{
+    background:#157347;
+
+    transform:translateY(-2px);
+}
+
+
+/* ==========================
+         LINKS
+========================== */
+
+a{
+    color:#ffffff;
+
+    font-weight:600;
+
+    text-decoration:none;
+}
+
+a:hover{
+    color:#22C55E;
+}
+
+.alert{
+    border-radius:15px;
+}
+
+hr{
+    margin:25px 0;
+
+    border-color:rgba(255,255,255,.2);
+}
+
+
+/* ==========================
+         FOOTER
+========================== */
+
+small{
+    color:#ffffff;
+
+    font-weight:500;
+
+    text-align:center;
+
+    display:block;
+
+    text-shadow:1px 1px 5px rgba(0,0,0,.7);
+}
+
+.footer span{
+    color:#22C55E;
+
+    font-weight:700;
+}
+
+
+/* ================================
+        ANIMATION
+================================ */
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+
+        transform:translateY(40px);
+    }
+
+    to{
+        opacity:1;
+
+        transform:translateY(0);
+    }
+
+}
+
+
+/* ================================
+        REPORT SEARCH
+================================ */
+
+.report-search-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-end;
+
+    gap:12px;
+
+    margin-left:auto;
+}
+
+
+/* ================================
+        SEARCH INPUT
+================================ */
+
+.report-search-actions input{
+
+    width:320px;
+
+    height:48px;
+
+    padding:0 18px;
+
+    border:2px solid #168b5a;
+
+    border-radius:10px;
+
+    outline:none;
+
+    background:#ffffff;
+
+    color:#333333;
+
+    font-size:15px;
+
+    font-family:'Poppins',sans-serif;
+
+    transition:.3s;
+}
+
+.report-search-actions input::placeholder{
+
+    color:#777777;
+
+}
+
+.report-search-actions input:focus{
+
+    border-color:#0f754a;
+
+    box-shadow:
+        0 0 0 3px rgba(22,139,90,.12);
+
+}
+
+
+/* ================================
+        DOWNLOAD ALL BUTTON
+================================ */
+
+.download-all-btn{
+
+    height:48px;
+
+    padding:0 22px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#168b5a !important;
+
+    color:#ffffff !important;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    font-family:'Poppins',sans-serif;
+
+    cursor:pointer;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:7px;
+
+    white-space:nowrap;
+
+    transition:.3s ease;
+
+    box-shadow:0 3px 8px rgba(0,0,0,.12);
+}
+
+.download-all-btn:hover{
+
+    background:#117348 !important;
+
+    color:#ffffff !important;
+
+    transform:translateY(-1px);
+
+    box-shadow:0 5px 12px rgba(0,0,0,.16);
+}
+
+.download-all-btn:active{
+
+    transform:translateY(0);
+
+}
+
+
+/* ================================
+        REPORT BOX HEADER
+================================ */
+
+.box-header{
+
+    display:flex;
+
+    align-items:center;
+
+    width:100%;
+
+}
+
+.box-header h2{
+
+    margin:0;
+
+    text-align:left;
+
+}
+
+
+/* ================================
+        RESPONSIVE
+================================ */
+
+@media(max-width:768px){
+
+    .login-card{
+
+        width:95%;
+
+        padding:30px;
+
+    }
+
+    .logo{
+
+        width:90px;
+
+        height:90px;
+
+    }
+
+    .logo img{
+
+        width:60px;
+
+        height:60px;
+
+    }
+
+    h2{
+
+        font-size:32px;
+
+    }
+
+    h5{
+
+        font-size:22px;
+
+    }
+
+    .text-muted{
+
+        font-size:15px;
+
+    }
+
+
+    /* Report responsive */
+
+    .box-header{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+        gap:15px;
+
+    }
+
+    .box-header h2{
+
+        text-align:left;
+
+    }
+
+    .report-search-actions{
+
+        width:100%;
+
+        justify-content:flex-start;
+
+        margin-left:0;
+
+    }
+
+    .report-search-actions input{
+
+        width:100%;
+
+    }
+
+    .download-all-btn{
+
+        flex-shrink:0;
+
+    }
+
+}

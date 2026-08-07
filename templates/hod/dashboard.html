@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HOD Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hod.css') }}">
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <!-- ================= Sidebar ================= -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+
+            <i class="bi bi-mortarboard-fill"></i>
+
+            <h3>HOD PANEL</h3>
+
+            <small>Department Management</small>
+
+        </div>
+
+        <ul>
+
+            <li class="active">
+                <a href="/hod">
+                    <i class="bi bi-grid-fill"></i>
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="/hod_reports">
+                    <i class="bi bi-bar-chart-fill"></i>
+                    Reports
+                </a>
+            </li>
+
+            <li>
+                <a href="/manage_tutor">
+                    <i class="bi bi-person-workspace"></i>
+                    Manage Tutors
+                </a>
+            </li>
+
+            <li>
+                <a href="/hod_profile">
+                    <i class="bi bi-person-circle"></i>
+                    My Profile
+                </a>
+            </li>
+
+            <li>
+                <a href="/logout">
+                    <i class="bi bi-box-arrow-right"></i>
+                    Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+
+    <!-- ================= Main ================= -->
+
+    <div class="main">
+
+        <!-- ================= Topbar ================= -->
+
+        <div class="topbar">
+
+    <div>
+
+        <h2>
+            Welcome, {{ hod[0] }}
+        </h2>
+
+        <p>
+            Head of Department Dashboard
+        </p>
+
+    </div>
+
+    <div class="profile">
+
+
+
+       <div class="profile">
+
+
+
+   
+ 
+
+</div>
+    </div>
+
+</div>
+        <!-- ================= Dashboard Cards ================= -->
+
+        <div class="row mt-4">
+
+            <div class="col-lg-3 col-md-6 mb-3">
+
+                <div class="card dashboard-card green">
+
+                    <div>
+
+                        <h5>Total Students</h5>
+
+                        <h1>{{ total_students }}</h1>
+
+                    </div>
+
+                    <i class="bi bi-people-fill"></i>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-3">
+
+                <div class="card dashboard-card blue">
+
+                    <div>
+
+                        <h5>Total Certificates</h5>
+
+                        <h1>{{ total_certificates }}</h1>
+
+                    </div>
+
+                    <i class="bi bi-award-fill"></i>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-3">
+
+                <div class="card dashboard-card orange">
+
+                    <div>
+
+                        <h5>Total Tutors</h5>
+
+                        <h1>{{ total_tutors }}</h1>
+
+                    </div>
+
+                    <i class="bi bi-person-workspace"></i>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-3">
+
+                <div class="card dashboard-card purple">
+
+                    <div>
+
+                        <h5>Department</h5>
+
+                        <h1>{{ hod[1] }}</h1>
+
+                    </div>
+
+                    <i class="bi bi-building"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- ================================= -->
+<!-- Department Students -->
+<!-- ================================= -->
+
+<div class="card table-card mt-4">
+
+    <div class="table-header d-flex justify-content-between align-items-center">
+
+        <h3>
+            <i class="bi bi-people-fill"></i>
+            Department Students
+        </h3>
+
+        <input
+            type="text"
+            id="studentSearch"
+            class="form-control"
+            placeholder="Search Student..."
+            style="width:300px;">
+
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="table table-hover align-middle" id="studentTable">
+
+            <thead class="table-success">
+
+                <tr>
+                    <th>Register No</th>
+                    <th>Student Name</th>
+                    <th>Department</th>
+                    <th>Year</th>
+                    <th>Email</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for student in students %}
+
+                <tr>
+
+                    <td>{{ student[1] }}</td>
+                    <td>{{ student[2] }}</td>
+                    <td>{{ student[3] }}</td>
+                    <td>{{ student[4] }}</td>
+                    <td>{{ student[5] }}</td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- ================================= -->
+<!-- Department Tutors -->
+<!-- ================================= -->
+
+<div class="card table-card mt-4">
+
+    <div class="table-header">
+
+        <h3>
+            <i class="bi bi-person-workspace"></i>
+            Department Tutors
+        </h3>
+
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="table table-hover align-middle">
+
+            <thead class="table-success">
+
+                <tr>
+
+                    <th>Photo</th>
+                    <th>Tutor Name</th>
+                    <th>Department</th>
+                    <th>Class Year</th>
+                    <th>Section</th>
+                    <th>Email</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for tutor in tutors %}
+
+                <tr>
+
+                    <td>
+
+                        {% if tutor[5] %}
+                        <img src="{{ url_for('static', filename='uploads/profile/' ~ tutor[5]) }}"
+                             width="55"
+                             height="55"
+                             class="rounded-circle"
+                             style="object-fit:cover;">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='uploads/profile/default.png') }}"
+                             width="55"
+                             height="55"
+                             class="rounded-circle"
+                             style="object-fit:cover;">
+                        {% endif %}
+
+                    </td>
+
+                    <td>{{ tutor[0] }}</td>
+                    <td>{{ tutor[1] }}</td>
+                    <td>{{ tutor[2] }}</td>
+                    <td>{{ tutor[3] }}</td>
+                    <td>{{ tutor[4] }}</td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+<!-- ================================= -->
+<!-- Footer -->
+<!-- ================================= -->
+
+<footer class="text-center mt-5 mb-4">
+
+    <small class="text-muted">
+
+        © 2026 Student Certificate Management System | Designed By PRADEEP From AIDS 
+
+    </small>
+
+</footer>
+
+</div>
+<!-- End Main -->
+
+</div>
+<!-- End Wrapper -->
+
+<!-- ================================= -->
+<!-- Search Students -->
+<!-- ================================= -->
+
+<script>
+
+document.getElementById("studentSearch").addEventListener("keyup", function(){
+
+    let value = this.value.toLowerCase();
+
+    let rows = document.querySelectorAll("#studentTable tr");
+
+    rows.forEach(function(row){
+
+        let text = row.innerText.toLowerCase();
+
+        row.style.display =
+            text.indexOf(value) > -1 ? "" : "none";
+
+    });
+
+});
+
+</script>
+
+<!-- ================================= -->
+<!-- Search Certificates -->
+<!-- ================================= -->
+
+<script>
+
+document.getElementById("certificateSearch").addEventListener("keyup", function(){
+
+    let value = this.value.toLowerCase();
+
+    let rows = document.querySelectorAll("#certificateBody tr");
+
+    rows.forEach(function(row){
+
+        let text = row.innerText.toLowerCase();
+
+        row.style.display =
+            text.indexOf(value) > -1 ? "" : "none";
+
+    });
+
+});
+
+</script>
+
+<!-- Bootstrap -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

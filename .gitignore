@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+
+token.pickle
+client_secret*.json
+wired-office*.json
+
+uploads/

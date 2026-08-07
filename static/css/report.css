@@ -1,0 +1,627 @@
+/* ==========================
+   Google Font
+========================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#ecfdf5;
+    color:#1f2937;
+}
+
+/* ==========================
+   Container
+========================== */
+
+.container{
+    width:95%;
+    max-width:1500px;
+    margin:30px auto;
+}
+
+/* ==========================
+   Topbar
+========================== */
+
+.topbar{
+    background:linear-gradient(135deg,#065f46,#10b981);
+    color:#fff;
+    padding:30px;
+    border-radius:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 15px 35px rgba(16,185,129,.25);
+    margin-bottom:30px;
+}
+
+.topbar h1{
+    font-size:38px;
+    font-weight:700;
+}
+
+.topbar p{
+    margin-top:8px;
+    font-size:18px;
+    opacity:.9;
+}
+
+/* ==========================
+   Buttons
+========================== */
+
+.top-buttons{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    text-decoration:none;
+    color:#fff;
+    padding:12px 20px;
+    border-radius:10px;
+    font-weight:600;
+    transition:.3s;
+    border:none;
+    cursor:pointer;
+}
+
+.back{
+    background:#0f766e;
+}
+
+.back:hover{
+    background:#115e59;
+}
+
+.excel{
+    background:#16a34a;
+}
+
+.excel:hover{
+    background:#15803d;
+}
+
+.pdf{
+    background:#dc2626;
+}
+
+.pdf:hover{
+    background:#b91c1c;
+}
+
+.print{
+    background:#2563eb;
+}
+
+.print:hover{
+    background:#1d4ed8;
+}
+
+/* ==========================
+   Cards
+========================== */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:25px;
+    margin-bottom:35px;
+}
+
+.card{
+    background:#fff;
+    border-radius:18px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+}
+
+.card i{
+    font-size:55px;
+    margin-bottom:15px;
+}
+
+.card h2{
+    font-size:40px;
+    margin-bottom:10px;
+}
+
+.card p{
+    font-size:18px;
+    color:#666;
+    font-weight:600;
+}
+
+/* Card Colors */
+
+.blue{
+    border-top:6px solid #2563eb;
+}
+
+.blue i{
+    color:#2563eb;
+}
+
+.green{
+    border-top:6px solid #10b981;
+}
+
+.green i{
+    color:#10b981;
+}
+
+.orange{
+    border-top:6px solid #f59e0b;
+}
+
+.orange i{
+    color:#f59e0b;
+}
+
+.purple{
+    border-top:6px solid #8b5cf6;
+}
+
+.purple i{
+    color:#8b5cf6;
+}
+/* ==========================
+   Report Box
+========================== */
+
+.report-box{
+    background:#ffffff;
+    border-radius:20px;
+    padding:30px;
+    margin-bottom:35px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.report-box:hover{
+    transform:translateY(-4px);
+    box-shadow:0 18px 40px rgba(16,185,129,.18);
+}
+
+/* ==========================
+   Box Header
+========================== */
+
+.box-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+    padding-bottom:15px;
+    border-bottom:2px solid #d1fae5;
+}
+
+.box-header h2{
+    color:#065f46;
+    font-size:28px;
+    font-weight:700;
+}
+
+.box-header i{
+    color:#10b981;
+    margin-right:10px;
+}
+
+/* ==========================
+   Tables
+========================== */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    overflow:hidden;
+    border-radius:15px;
+}
+
+table thead{
+    background:#10b981;
+}
+
+table th{
+    color:#fff;
+    padding:18px;
+    text-align:left;
+    font-size:17px;
+    font-weight:600;
+}
+
+table td{
+    padding:16px;
+    border-bottom:1px solid #e5e7eb;
+    font-size:16px;
+    color:#374151;
+}
+
+table tbody tr:nth-child(even){
+    background:#f8fffb;
+}
+
+table tbody tr:hover{
+    background:#dcfce7;
+    transition:.3s;
+}
+
+/* ==========================
+   Summary Row
+========================== */
+
+.total-row{
+    background:#ecfdf5 !important;
+    font-weight:700;
+    color:#065f46;
+}
+
+/* ==========================
+   Status Badge
+========================== */
+
+.badge{
+    display:inline-block;
+    padding:8px 15px;
+    border-radius:30px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.badge-success{
+    background:#dcfce7;
+    color:#15803d;
+}
+
+.badge-warning{
+    background:#fef3c7;
+    color:#b45309;
+}
+
+.badge-danger{
+    background:#fee2e2;
+    color:#b91c1c;
+}
+
+/* ==========================
+   Search Box
+========================== */
+
+.search-box{
+    margin-bottom:25px;
+    display:flex;
+    justify-content:flex-end;
+}
+
+.search-box input{
+    width:350px;
+    padding:14px 18px;
+    border:2px solid #d1fae5;
+    border-radius:12px;
+    outline:none;
+    font-size:16px;
+    transition:.3s;
+}
+
+.search-box input:focus{
+    border-color:#10b981;
+    box-shadow:0 0 12px rgba(16,185,129,.25);
+}
+
+/* ==========================
+   Table Scroll
+========================== */
+
+.table-responsive{
+    overflow-x:auto;
+}
+
+/* ==========================
+   Tutor Profile
+========================== */
+
+.profile-box{
+    display:flex;
+    align-items:center;
+    gap:30px;
+    background:#ffffff;
+    padding:30px;
+    margin-bottom:35px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.profile-left{
+    width:180px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.profile-img{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    object-fit:cover;
+    border:5px solid #10b981;
+    background:#fff;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+.profile-right{
+    flex:1;
+}
+
+.profile-right h2{
+    color:#065f46;
+    margin-bottom:20px;
+    font-size:28px;
+}
+
+.info-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.info-table td{
+    padding:12px;
+    border-bottom:1px solid #e5e7eb;
+    font-size:16px;
+}
+
+.info-table td:first-child{
+    width:220px;
+    font-weight:600;
+    color:#065f46;
+}
+
+/* ==========================
+   Footer
+========================== */
+
+.footer{
+    margin-top:40px;
+    text-align:center;
+    padding:20px;
+    background:#065f46;
+    color:#ffffff;
+    border-radius:15px;
+    font-size:16px;
+    font-weight:500;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+/* ==========================
+   Hover Effects
+========================== */
+
+.btn,
+.card,
+.report-box,
+table tbody tr{
+    transition:all .3s ease;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.card:hover{
+    transform:translateY(-8px);
+}
+
+.report-box:hover{
+    transform:translateY(-5px);
+}
+
+/* ==========================
+   Animation
+========================== */
+
+@keyframes fadeInUp{
+
+    from{
+
+        opacity:0;
+        transform:translateY(25px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+}
+
+.topbar,
+.cards,
+.report-box,
+.footer{
+
+    animation:fadeInUp .6s ease;
+
+}
+
+/* ==========================
+   Scrollbar
+========================== */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#d1fae5;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#10b981;
+    border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#047857;
+
+}
+
+/* ==========================
+   Responsive
+========================== */
+
+@media(max-width:1200px){
+
+.cards{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+@media(max-width:900px){
+
+.container{
+
+width:98%;
+
+}
+
+.topbar{
+
+flex-direction:column;
+align-items:flex-start;
+gap:20px;
+
+}
+
+.top-buttons{
+
+width:100%;
+justify-content:flex-start;
+flex-wrap:wrap;
+
+}
+
+.cards{
+
+grid-template-columns:1fr;
+
+}
+
+.box-header{
+
+flex-direction:column;
+align-items:flex-start;
+gap:15px;
+
+}
+
+table{
+
+display:block;
+overflow-x:auto;
+white-space:nowrap;
+
+}
+
+}
+
+@media(max-width:600px){
+
+.topbar h1{
+
+font-size:28px;
+
+}
+
+.topbar p{
+
+font-size:15px;
+
+}
+
+.card h2{
+
+font-size:30px;
+
+}
+
+.card p{
+
+font-size:16px;
+
+}
+
+.btn{
+
+width:100%;
+text-align:center;
+
+}
+
+}
+
+/* ==========================
+   Print
+========================== */
+
+@media print{
+
+body{
+
+background:#ffffff;
+
+}
+
+.top-buttons{
+
+display:none;
+
+}
+
+.footer{
+
+display:none;
+
+}
+
+.report-box{
+
+page-break-inside:avoid;
+
+box-shadow:none;
+
+}
+
+table th{
+
+background:#10b981 !important;
+color:#ffffff !important;
+
+}
+
+}

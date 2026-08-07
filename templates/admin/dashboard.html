@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Dashboard</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/admin.css') }}">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- ==================================================
+SIDEBAR
+================================================== -->
+
+<div class="sidebar">
+
+    <div class="logo">
+
+        <img
+            src="{{ url_for('static', filename='images/logo.png') }}"
+            alt="Logo"
+        >
+
+        <h2>Certificate Portal</h2>
+
+    </div>
+
+    <ul>
+
+        <li class="active">
+
+            <a href="/admin">
+
+                <i class="bi bi-grid-fill"></i>
+
+                Dashboard
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="#students">
+
+                <i class="bi bi-people-fill"></i>
+
+                Students
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="#certificates">
+
+                <i class="bi bi-award-fill"></i>
+
+                Certificates
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/reports">
+
+                <i class="bi bi-bar-chart-fill"></i>
+
+                Reports
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/download_all">
+
+                <i class="bi bi-download"></i>
+
+                Download All
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/logout">
+
+                <i class="bi bi-box-arrow-right"></i>
+
+                Logout
+
+            </a>
+
+        </li>
+
+    </ul>
+
+</div>
+
+
+<!-- ==================================================
+MAIN
+================================================== -->
+
+<div class="main">
+
+    <!-- ==================================================
+    TOPBAR
+    ================================================== -->
+
+    <div class="topbar">
+
+        <h2>Admin Dashboard</h2>
+
+        <div class="admin-box">
+
+            <img
+                src="{{ url_for('static', filename='images/admin.png') }}"
+                alt="Admin"
+            >
+
+            <div>
+
+                <h3>Administrator</h3>
+
+                <small>System Administrator</small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="container">
+
+
+        <!-- ==================================================
+        WELCOME BANNER
+        ================================================== -->
+
+        <div class="welcome-banner">
+
+            <div>
+
+                <h1>Welcome Admin 👋</h1>
+
+                <p>
+                    Manage Students, Certificates and Reports from one place.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+        STATISTICS
+        ================================================== -->
+
+        <div class="stats">
+
+            <div class="stat-card">
+
+                <i class="bi bi-people-fill"></i>
+
+                <h2>{{ total_students }}</h2>
+
+                <p>Total Students</p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <i class="bi bi-award-fill"></i>
+
+                <h2>{{ total_certificates }}</h2>
+
+                <p>Total Certificates</p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <i class="bi bi-bar-chart-fill"></i>
+
+                <h2>Reports</h2>
+
+                <p>Certificate Reports</p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+        STUDENTS TABLE
+        ================================================== -->
+
+        <div
+            class="table-card"
+            id="students"
+        >
+
+            <div class="table-header">
+
+                <h2>
+
+                    <i class="bi bi-people-fill"></i>
+
+                    Registered Students
+
+                </h2>
+
+            </div>
+
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Register No</th>
+
+                        <th>Student Name</th>
+
+                        <th>Department</th>
+
+                        <th>Year</th>
+
+                        <th>Email</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for student in students %}
+
+                    <tr>
+
+                        <td>
+                            {{ student[1] }}
+                        </td>
+
+                        <td>
+                            {{ student[2] }}
+                        </td>
+
+                        <td>
+                            {{ student[3] }}
+                        </td>
+
+                        <td>
+                            {{ student[4] }}
+                        </td>
+
+                        <td>
+                            {{ student[5] }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- ==================================================
+        CERTIFICATE TABLE
+        ================================================== -->
+
+        <div
+            class="table-card"
+            id="certificates"
+        >
+
+            <!-- ==============================
+            HEADER
+            ============================== -->
+
+            <div class="table-header">
+
+                <h2>
+
+                    <i class="bi bi-award-fill"></i>
+
+                    All Certificates
+
+                </h2>
+
+
+                <!-- SEARCH + DOWNLOAD -->
+
+                <div class="certificate-actions">
+
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Search Student / Department / Certificate"
+                        autocomplete="off"
+                    >
+
+
+                    <button
+                        type="button"
+                        class="download-all-btn"
+                        onclick="downloadCertificates()"
+                    >
+
+                        <i class="bi bi-download"></i>
+
+                        Download All
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==============================
+            CERTIFICATE TABLE
+            ============================== -->
+
+            <table id="certificateTable">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Student</th>
+
+                        <th>Department</th>
+
+                        <th>Year</th>
+
+                        <th>Certificate</th>
+
+                        <th>Category</th>
+
+                        <th>Achievement</th>
+
+                        <th>Date</th>
+
+                        <th>View</th>
+
+                        <th>Download</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for certificate in certificates %}
+
+                    <tr>
+
+                        <!-- STUDENT -->
+
+                        <td>
+                            {{ certificate[0] }}
+                        </td>
+
+
+                        <!-- DEPARTMENT -->
+
+                        <td>
+                            {{ certificate[1] }}
+                        </td>
+
+
+                        <!-- YEAR -->
+
+                        <td>
+                            {{ certificate[2] }}
+                        </td>
+
+
+                        <!-- CERTIFICATE -->
+
+                        <td>
+                            {{ certificate[3] }}
+                        </td>
+
+
+                        <!-- CATEGORY -->
+
+                        <td>
+                            {{ certificate[4] }}
+                        </td>
+
+
+                        <!-- ACHIEVEMENT -->
+
+                        <td>
+
+                            {% if certificate[5] %}
+
+                                {{ certificate[5] }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- DATE -->
+
+                        <td>
+                            {{ certificate[7] }}
+                        </td>
+
+
+                        <!-- VIEW -->
+
+                        <td>
+
+                            {% if certificate[6] %}
+
+                            <a
+                                class="view"
+                                target="_blank"
+                                href="{{ url_for(
+                                    'static',
+                                    filename='uploads/certificates/' ~ certificate[6]
+                                ) }}"
+                            >
+
+                                <i class="bi bi-eye-fill"></i>
+
+                                View
+
+                            </a>
+
+                            {% else %}
+
+                            <span>
+                                No File
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- DOWNLOAD -->
+
+                        <td>
+
+                            {% if certificate[6] %}
+
+                            <a
+                                class="download"
+                                href="{{ url_for(
+                                    'download',
+                                    filename=certificate[6]
+                                ) }}"
+                            >
+
+                                <i class="bi bi-download"></i>
+
+                                Download
+
+                            </a>
+
+                            {% else %}
+
+                            <span>
+                                No File
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ==================================================
+    FOOTER
+    ================================================== -->
+
+    <footer class="admin-footer">
+
+        <div class="footer-left">
+
+            <strong>Certificate Portal</strong>
+
+            <span> | </span>
+
+            Student Certificate Management System
+
+        </div>
+
+        <div class="footer-right">
+
+            © 2026 Designed By PRADEEP From AIDS
+
+        </div>
+
+    </footer>
+
+</div>
+
+
+<!-- ==================================================
+SEARCH + DOWNLOAD SCRIPT
+================================================== -->
+
+<script>
+
+/* ==================================================
+SEARCH CERTIFICATES
+================================================== */
+
+const searchInput =
+    document.getElementById("searchInput");
+
+
+if (searchInput) {
+
+    searchInput.addEventListener(
+        "keyup",
+        function () {
+
+            const filter =
+                this.value
+                    .trim()
+                    .toLowerCase();
+
+
+            const rows =
+                document.querySelectorAll(
+                    "#certificateTable tbody tr"
+                );
+
+
+            rows.forEach(function (row) {
+
+                const text =
+                    row.innerText.toLowerCase();
+
+
+                if (text.includes(filter)) {
+
+                    row.style.display = "";
+
+                } else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+        }
+    );
+
+}
+
+
+/* ==================================================
+DOWNLOAD CERTIFICATES
+================================================== */
+
+function downloadCertificates() {
+
+    const searchBox =
+        document.getElementById("searchInput");
+
+
+    if (!searchBox) {
+
+        return;
+
+    }
+
+
+    const searchText =
+        searchBox.value.trim();
+
+
+    /* ==================================================
+       NOTHING SEARCHED
+       → DOWNLOAD ALL CERTIFICATES
+    ================================================== */
+
+    if (searchText === "") {
+
+        window.location.href =
+            "/admin_export_zip";
+
+        return;
+
+    }
+
+
+    /* ==================================================
+       SEARCH TEXT ENTERED
+       → DOWNLOAD ONLY MATCHING CERTIFICATES
+    ================================================== */
+
+    window.location.href =
+        "/admin_export_zip?search=" +
+        encodeURIComponent(searchText);
+
+}
+
+</script>
+
+
+</body>
+
+</html>

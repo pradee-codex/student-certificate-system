@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HOD Reports Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/hod_report.css') }}">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- =====================================================
+     TOP BAR
+===================================================== -->
+
+<div class="topbar">
+
+    <div>
+
+        <h1>
+            <i class="bi bi-bar-chart-line-fill"></i>
+            HOD Reports Dashboard
+        </h1>
+
+        <p>
+            Student Certificate Management System
+        </p>
+
+    </div>
+
+    <div class="top-buttons">
+
+        <a href="/hod" class="btn dashboard">
+            <i class="bi bi-speedometer2"></i>
+            Dashboard
+        </a>
+
+        <a href="/hod_export_excel" class="btn excel">
+            <i class="bi bi-file-earmark-excel-fill"></i>
+            Excel
+        </a>
+
+        <a href="/hod_export_pdf" class="btn pdf">
+            <i class="bi bi-file-earmark-pdf-fill"></i>
+            PDF
+        </a>
+
+        <button
+            onclick="window.print()"
+            class="btn print">
+
+            <i class="bi bi-printer-fill"></i>
+            Print
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SUMMARY CARDS
+===================================================== -->
+
+<div class="cards">
+
+    <div class="card green">
+
+        <i class="bi bi-people-fill"></i>
+
+        <h2>{{ total_students }}</h2>
+
+        <p>Total Students</p>
+
+    </div>
+
+
+    <div class="card blue">
+
+        <i class="bi bi-award-fill"></i>
+
+        <h2>{{ total_certificates }}</h2>
+
+        <p>Total Certificates</p>
+
+    </div>
+
+
+    <div class="card orange">
+
+        <i class="bi bi-building"></i>
+
+        <h2>{{ department }}</h2>
+
+        <p>Department</p>
+
+    </div>
+
+
+    <div class="card purple">
+
+        <i class="bi bi-calendar3"></i>
+
+        <h2>{{ year_report|length }}</h2>
+
+        <p>Academic Years</p>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     HOD PROFILE
+===================================================== -->
+
+<div class="profile-box">
+
+    <div class="profile-left">
+
+        <div class="hod-photo">
+
+            {% if hod[3] %}
+
+                <img
+                    src="{{ url_for('static', filename='uploads/profile/' ~ hod[3]) }}"
+                    class="profile-img">
+
+            {% else %}
+
+                <img
+                    src="{{ url_for('static', filename='uploads/profile/default.png') }}"
+                    class="profile-img">
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <div class="profile-right">
+
+        <h2>
+
+            <i class="bi bi-person-badge-fill"></i>
+
+            HOD Information
+
+        </h2>
+
+
+        <table class="info-table">
+
+            <tr>
+
+                <td>
+                    <b>Name</b>
+                </td>
+
+                <td>
+                    {{ hod[0] }}
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    <b>Department</b>
+                </td>
+
+                <td>
+                    {{ hod[1] }}
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    <b>Email</b>
+                </td>
+
+                <td>
+                    {{ hod[2] }}
+                </td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     DEPARTMENT WISE REPORT
+===================================================== -->
+
+<div class="report-box">
+
+    <div class="box-header">
+
+        <h2>
+
+            <i class="bi bi-building-fill"></i>
+
+            Department Wise Report
+
+        </h2>
+
+    </div>
+
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Department</th>
+
+                <th>Total Students</th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for dept in department_report %}
+
+            <tr>
+
+                <td>
+                    {{ dept[0] }}
+                </td>
+
+                <td>
+                    {{ dept[1] }}
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+<!-- =====================================================
+     YEAR WISE REPORT
+===================================================== -->
+
+<div class="report-box">
+
+    <div class="box-header">
+
+        <h2>
+
+            <i class="bi bi-calendar-check-fill"></i>
+
+            Year Wise Report
+
+        </h2>
+
+    </div>
+
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Year</th>
+
+                <th>Total Students</th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for year in year_report %}
+
+            <tr>
+
+                <td>
+                    {{ year[0] }}
+                </td>
+
+                <td>
+                    {{ year[1] }}
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+<!-- =====================================================
+     CATEGORY WISE REPORT
+===================================================== -->
+
+<div class="report-box">
+
+    <div class="box-header">
+
+        <h2>
+
+            <i class="bi bi-award-fill"></i>
+
+            Certificate Category Report
+
+        </h2>
+
+    </div>
+
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Category</th>
+
+                <th>Total Certificates</th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for cat in category_report %}
+
+            <tr>
+
+                <td>
+                    {{ cat[0] }}
+                </td>
+
+                <td>
+                    {{ cat[1] }}
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+<!-- =====================================================
+     QUICK STATISTICS
+===================================================== -->
+
+<div class="report-box">
+
+    <div class="box-header">
+
+        <h2>
+
+            <i class="bi bi-graph-up-arrow"></i>
+
+            Quick Statistics
+
+        </h2>
+
+    </div>
+
+
+    <div class="stats-grid">
+
+        <div class="mini-card">
+
+            <i class="bi bi-people-fill"></i>
+
+            <h3>
+                {{ total_students }}
+            </h3>
+
+            <p>
+                Total Students
+            </p>
+
+        </div>
+
+
+        <div class="mini-card">
+
+            <i class="bi bi-award-fill"></i>
+
+            <h3>
+                {{ total_certificates }}
+            </h3>
+
+            <p>
+                Total Certificates
+            </p>
+
+        </div>
+
+
+        <div class="mini-card">
+
+            <i class="bi bi-building-fill"></i>
+
+            <h3>
+                {{ department }}
+            </h3>
+
+            <p>
+                Department
+            </p>
+
+        </div>
+
+
+        <div class="mini-card">
+
+            <i class="bi bi-calendar3"></i>
+
+            <h3>
+                {{ year_report|length }}
+            </h3>
+
+            <p>
+                Academic Years
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     RECENT CERTIFICATE UPLOADS
+===================================================== -->
+
+<div class="report-box">
+
+    <div class="box-header">
+
+        <h2>
+
+            <i class="bi bi-clock-history"></i>
+
+            Recent Certificate Uploads
+
+        </h2>
+
+
+        <div class="report-search-actions">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search Student / Register No / Certificate">
+
+
+            <button
+                type="button"
+                id="downloadReportsBtn"
+                class="download-all-btn"
+                onclick="downloadHodReports()">
+
+                <i class="bi bi-download"></i>
+
+                Download All
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         CERTIFICATE TABLE
+    ================================================= -->
+
+    <table id="certificateTable">
+
+        <thead>
+
+            <tr>
+
+                <th>Register No</th>
+
+                <th>Student</th>
+
+                <th>Department</th>
+
+                <th>Year</th>
+
+                <th>Certificate</th>
+
+                <th>Category</th>
+
+                <th>Achievement</th>
+
+                <th>Date</th>
+
+                <th>View</th>
+
+                <th>Download</th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for certificate in certificates %}
+
+            <tr>
+
+                <!-- Register No -->
+
+                <td>
+                    {{ certificate[0] }}
+                </td>
+
+
+                <!-- Student -->
+
+                <td>
+                    {{ certificate[1] }}
+                </td>
+
+
+                <!-- Department -->
+
+                <td>
+                    {{ certificate[2] }}
+                </td>
+
+
+                <!-- Year -->
+
+                <td>
+                    {{ certificate[3] }}
+                </td>
+
+
+                <!-- Certificate -->
+
+                <td>
+                    {{ certificate[4] }}
+                </td>
+
+
+                <!-- Category -->
+
+                <td>
+                    {{ certificate[5] }}
+                </td>
+
+
+                <!-- Achievement -->
+
+                <td>
+
+                    {% if certificate[6] == "Participated" %}
+
+                        <span class="badge bg-primary">
+                            🏅 {{ certificate[6] }}
+                        </span>
+
+                    {% elif certificate[6] == "Winner" %}
+
+                        <span class="badge bg-success">
+                            🥇 {{ certificate[6] }}
+                        </span>
+
+                    {% elif certificate[6] == "Runner Up" %}
+
+                        <span class="badge bg-warning text-dark">
+                            🥈 {{ certificate[6] }}
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-secondary">
+                            {{ certificate[6] or "Others" }}
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+
+                <!-- Date -->
+
+                <td>
+                    {{ certificate[8] }}
+                </td>
+
+
+                <!-- View -->
+
+                <td>
+
+                    {% if certificate[7] %}
+
+                    <a
+                        class="view-btn"
+                        href="{{ url_for('static', filename='uploads/certificates/' ~ certificate[7]) }}"
+                        target="_blank">
+
+                        <i class="bi bi-eye-fill"></i>
+
+                        View
+
+                    </a>
+
+                    {% else %}
+
+                        <span>
+                            No File
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+
+                <!-- Download -->
+
+                <td>
+
+                    {% if certificate[7] %}
+
+                    <a
+                        class="download-btn"
+                        href="/download/{{ certificate[7] }}">
+
+                        <i class="bi bi-download"></i>
+
+                        Download
+
+                    </a>
+
+                    {% else %}
+
+                        <span>
+                            No File
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+<!-- =====================================================
+     REPORT SUMMARY
+===================================================== -->
+
+<div class="report-box">
+
+    <div class="box-header">
+
+        <h2>
+
+            <i class="bi bi-clipboard-data-fill"></i>
+
+            Report Summary
+
+        </h2>
+
+    </div>
+
+
+    <div class="summary-area">
+
+
+        <div class="summary-card">
+
+            <h3>
+                Total Students
+            </h3>
+
+            <span>
+                {{ total_students }}
+            </span>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <h3>
+                Total Certificates
+            </h3>
+
+            <span>
+                {{ total_certificates }}
+            </span>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <h3>
+                Departments
+            </h3>
+
+            <span>
+                {{ department_report|length }}
+            </span>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <h3>
+                Categories
+            </h3>
+
+            <span>
+                {{ category_report|length }}
+            </span>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<div class="footer">
+
+    <div class="footer-left">
+
+        <h3>
+
+            <i class="bi bi-mortarboard-fill"></i>
+
+            Student Certificate Management System
+
+        </h3>
+
+        <p>
+            Head of Department Report Dashboard
+        </p>
+
+    </div>
+
+
+    <div class="footer-right">
+
+        <p>
+            Generated by HOD Panel
+        </p>
+
+        <p>
+            © 2026 All Rights Reserved
+        </p>
+
+    </div>
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================================
+     SEARCH + DOWNLOAD SCRIPT
+===================================================== -->
+
+<script>
+
+
+/* ==========================================
+   SEARCH
+========================================== */
+
+const searchInput =
+    document.getElementById("searchInput");
+
+
+searchInput.addEventListener("keyup", function(){
+
+    let filter =
+        this.value.toLowerCase().trim();
+
+
+    let rows =
+        document.querySelectorAll(
+            "#certificateTable tbody tr"
+        );
+
+
+    rows.forEach(function(row){
+
+        let text =
+            row.innerText.toLowerCase();
+
+
+        if(text.includes(filter)){
+
+            row.style.display = "";
+
+        }
+        else{
+
+            row.style.display = "none";
+
+        }
+
+    });
+
+});
+
+
+/* ==========================================
+   DOWNLOAD
+========================================== */
+
+function downloadHodReports(){
+
+    const searchText =
+        document
+        .getElementById("searchInput")
+        .value
+        .trim();
+
+
+    /* ======================================
+       EMPTY SEARCH
+       DOWNLOAD ALL
+    ====================================== */
+
+    if(searchText === ""){
+
+        window.location.href =
+            "/hod_export_zip";
+
+        return;
+
+    }
+
+
+    /* ======================================
+       SEARCH ENTERED
+       DOWNLOAD MATCHING FILES
+    ====================================== */
+
+    window.location.href =
+        "/hod_export_zip?search=" +
+        encodeURIComponent(searchText);
+
+}
+
+
+</script>
+
+
+<!-- =====================================================
+     PRINT STYLE
+===================================================== -->
+
+<style>
+
+@media print{
+
+    .top-buttons{
+
+        display:none !important;
+
+    }
+
+
+    .report-search-actions{
+
+        display:none !important;
+
+    }
+
+
+    body{
+
+        background:#ffffff;
+
+    }
+
+
+    .report-box{
+
+        page-break-inside:avoid;
+
+    }
+
+
+    .footer{
+
+        margin-top:30px;
+
+        text-align:center;
+
+    }
+
+}
+
+</style>
+
+
+</body>
+
+</html>

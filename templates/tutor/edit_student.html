@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Student</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/tutor.css') }}">
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <i class="bi bi-mortarboard-fill"></i>
+
+            <h3>Tutor Panel</h3>
+
+            <p>Student Certificate Management</p>
+
+        </div>
+
+        <ul>
+
+            <li>
+                <a href="/tutor">
+                    <i class="bi bi-speedometer2"></i>
+                    Dashboard
+                </a>
+            </li>
+
+            <li class="active">
+                <a href="/manage_student">
+                    <i class="bi bi-people-fill"></i>
+                    Manage Students
+                </a>
+            </li>
+
+            <li>
+                <a href="/logout">
+                    <i class="bi bi-box-arrow-right"></i>
+                    Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- Main Content -->
+
+    <main class="main-content">
+
+        <div class="card shadow-lg border-0">
+
+            <div class="card-header bg-success text-white">
+
+                <h3>
+
+                    <i class="bi bi-pencil-square"></i>
+
+                    Edit Student Details
+
+                </h3>
+
+            </div>
+
+            <div class="card-body">
+
+                <form action="/update_student/{{ student[0] }}" method="POST">
+
+                    <div class="row">
+                        <!-- Student Name -->
+
+<div class="col-md-6 mb-4">
+
+    <label class="form-label">
+        Student Name
+    </label>
+
+    <input
+        type="text"
+        name="student_name"
+        class="form-control"
+        value="{{ student[1] }}"
+        required>
+
+</div>
+
+<!-- Register Number -->
+
+<div class="col-md-6 mb-4">
+
+    <label class="form-label">
+        Register Number
+    </label>
+
+    <input
+        type="text"
+        name="register_no"
+        class="form-control"
+        value="{{ student[2] }}"
+        required>
+
+</div>
+
+<!-- Department -->
+
+<div class="col-md-6 mb-4">
+
+    <label class="form-label">
+        Department
+    </label>
+
+    <input
+        type="text"
+        name="department"
+        class="form-control"
+        value="{{ student[3] }}"
+        readonly>
+
+</div>
+
+<!-- Year -->
+
+<div class="col-md-6 mb-4">
+
+    <label class="form-label">
+        Year
+    </label>
+
+    <select
+        name="year"
+        class="form-select"
+        required>
+
+        <option value="I" {% if student[4]=='I' %}selected{% endif %}>I Year</option>
+
+        <option value="II" {% if student[4]=='II' %}selected{% endif %}>II Year</option>
+
+        <option value="III" {% if student[4]=='III' %}selected{% endif %}>III Year</option>
+
+        <option value="IV" {% if student[4]=='IV' %}selected{% endif %}>IV Year</option>
+
+    </select>
+
+</div>
+<!-- Email -->
+
+<div class="col-md-6 mb-4">
+
+    <label class="form-label">
+        Email Address
+    </label>
+
+    <input
+        type="email"
+        name="email"
+        class="form-control"
+        value="{{ student[5] }}"
+        required>
+
+</div>
+
+<!-- Phone Number -->
+
+<div class="col-md-6 mb-4">
+
+    <label class="form-label">
+        Phone Number
+    </label>
+
+    <input
+        type="text"
+        name="phone"
+        class="form-control"
+        value="{{ student[6] }}"
+        maxlength="10"
+        required>
+
+</div>
+<div class="col-md-6 mb-3">
+    <label class="form-label">Username</label>
+    <input type="text"
+           name="username"
+           class="form-control"
+           value="{{ student[7] }}"
+           required>
+</div>
+
+<!-- Buttons -->
+
+<div class="col-12 text-center mt-4">
+
+    <button
+        type="submit"
+        class="btn btn-success btn-lg px-5">
+
+        <i class="bi bi-check-circle-fill"></i>
+
+        Update Student
+
+    </button>
+
+    <a
+        href="/manage_student"
+        class="btn btn-secondary btn-lg px-5 ms-3">
+
+        <i class="bi bi-arrow-left-circle-fill"></i>
+
+        Cancel
+
+    </a>
+
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+<!-- Footer -->
+
+<footer class="text-center mt-5 mb-3">
+
+    <hr>
+
+    <small class="text-muted">
+
+        © 2026 Student Certificate Management System | Designed By PRADEEP From AIDS
+
+    </small>
+
+</footer>
+
+</main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

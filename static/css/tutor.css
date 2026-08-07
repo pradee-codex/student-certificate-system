@@ -1,0 +1,517 @@
+/* ==========================
+   Google Font
+========================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#eefaf3;
+}
+
+/* ==========================
+   Sidebar
+========================== */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:270px;
+    height:100vh;
+    background:linear-gradient(180deg,#065f46,#10b981);
+    color:#fff;
+    padding:25px;
+    overflow:auto;
+    box-shadow:5px 0 20px rgba(0,0,0,.15);
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.logo img{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:#fff;
+    padding:8px;
+}
+
+.logo h2{
+    margin-top:15px;
+    font-size:26px;
+    font-weight:700;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar ul li{
+    margin:12px 0;
+    padding:16px;
+    border-radius:12px;
+    transition:.3s;
+    font-size:18px;
+}
+
+.sidebar ul li:hover,
+.sidebar ul li.active{
+    background:#059669;
+}
+
+.sidebar ul li a{
+    color:#fff;
+    text-decoration:none;
+    display:block;
+    font-size:18px;
+}
+
+/* ==========================
+   Main
+========================== */
+
+.wrapper{
+    display:flex;
+}
+
+.main-content{
+    margin-left:270px;
+    width:calc(100% - 270px);
+    min-height:100vh;
+    padding:30px;
+    background:#eefaf3;
+    overflow-x:auto;
+}
+
+
+/* ==========================
+   Topbar
+========================== */
+
+.topbar{
+    background:#fff;
+    height:90px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 35px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.topbar h2{
+    color:#065f46;
+    font-size:32px;
+    font-weight:700;
+}
+
+.admin-box{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.admin-box img{
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    border:3px solid #10b981;
+}
+
+.admin-box h3{
+    font-size:20px;
+}
+
+.admin-box small{
+    font-size:15px;
+    color:#666;
+}
+
+/* ==========================
+   Container
+========================== */
+
+.container{
+    padding:30px;
+}
+
+/* ==========================
+   Welcome Banner
+========================== */
+
+.welcome-banner{
+    background:linear-gradient(135deg,#10b981,#059669);
+    color:#fff;
+    border-radius:20px;
+    padding:35px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+    box-shadow:0 15px 30px rgba(0,0,0,.15);
+}
+
+.welcome-banner h1{
+    font-size:38px;
+}
+
+.welcome-banner p{
+    margin-top:10px;
+    font-size:18px;
+}
+
+.welcome-banner img{
+    width:220px;
+}
+
+/* ==========================
+   Part 2 Starts Here
+========================== */
+/* ==========================
+   Statistics Cards
+========================== */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+    margin-bottom:30px;
+}
+
+.stat-card{
+    background:#fff;
+    border-radius:18px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.stat-card:hover{
+    transform:translateY(-6px);
+}
+
+.stat-card i{
+    font-size:45px;
+    color:#10b981;
+}
+
+.stat-card h2{
+    margin:12px 0;
+    font-size:36px;
+    color:#065f46;
+    font-weight:700;
+}
+
+.stat-card p{
+    font-size:18px;
+    color:#555;
+}
+
+/* ==========================
+   Table Card
+========================== */
+
+.table-card{
+    background:#fff;
+    border-radius:18px;
+    padding:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.table-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.table-header h2{
+    color:#065f46;
+    font-size:28px;
+    font-weight:700;
+}
+
+.table-header input{
+    width:360px;
+    padding:14px 18px;
+    border:2px solid #10b981;
+    border-radius:12px;
+    outline:none;
+    font-size:17px;
+    transition:.3s;
+}
+
+.table-header input:focus{
+    border-color:#059669;
+    box-shadow:0 0 10px rgba(16,185,129,.25);
+}
+
+/* ==========================
+   Table
+========================== */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+table th{
+    background:#10b981;
+    color:#fff;
+    padding:18px;
+    font-size:17px;
+    font-weight:600;
+}
+
+table td{
+    padding:18px;
+    font-size:16px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+table tr:hover{
+    background:#f0fdf4;
+}
+
+/* ==========================
+   Buttons
+========================== */
+
+.view,
+.download,
+.delete{
+    display:inline-block;
+    padding:10px 16px;
+    border-radius:8px;
+    text-decoration:none;
+    color:#fff;
+    font-size:15px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.view{
+    background:#2563eb;
+}
+
+.view:hover{
+    background:#1d4ed8;
+}
+
+.download{
+    background:#16a34a;
+}
+
+.download:hover{
+    background:#15803d;
+}
+
+.delete{
+    background:#dc2626;
+}
+
+.delete:hover{
+    background:#b91c1c;
+}
+
+/* ==========================
+   Part 3 Starts Here
+========================== */
+/* ==========================
+   Responsive
+========================== */
+
+@media (max-width:1024px){
+
+.stats{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.table-header{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:15px;
+}
+
+.table-header input{
+    width:100%;
+}
+
+}
+
+@media (max-width:768px){
+
+.sidebar{
+    width:100%;
+    height:auto;
+    position:relative;
+}
+
+.main{
+    margin-left:0;
+}
+
+.topbar{
+    flex-direction:column;
+    justify-content:center;
+    align-items:flex-start;
+    height:auto;
+    padding:20px;
+    gap:15px;
+}
+
+.topbar h2{
+    font-size:28px;
+}
+
+.container{
+    padding:20px;
+}
+
+.welcome-banner{
+    flex-direction:column;
+    text-align:center;
+    padding:25px;
+}
+
+.welcome-banner h1{
+    font-size:30px;
+}
+
+.welcome-banner p{
+    font-size:16px;
+}
+
+.welcome-banner img{
+    width:180px;
+    margin-top:20px;
+}
+
+.stats{
+    grid-template-columns:1fr;
+}
+
+.stat-card{
+    padding:25px;
+}
+
+.stat-card h2{
+    font-size:30px;
+}
+
+.stat-card p{
+    font-size:16px;
+}
+
+.table-card{
+    padding:18px;
+    overflow-x:auto;
+}
+
+table{
+    min-width:1000px;
+}
+
+table th{
+    font-size:16px;
+    padding:15px;
+}
+
+table td{
+    font-size:15px;
+    padding:15px;
+}
+
+.view,
+.download,
+.delete{
+    padding:8px 14px;
+    font-size:14px;
+}
+
+}
+
+@media (max-width:480px){
+
+.logo img{
+    width:70px;
+    height:70px;
+}
+
+.logo h2{
+    font-size:22px;
+}
+
+.sidebar ul li{
+    font-size:16px;
+    padding:14px;
+}
+
+.sidebar ul li a{
+    font-size:16px;
+}
+
+.topbar h2{
+    font-size:24px;
+}
+
+.admin-box img{
+    width:55px;
+    height:55px;
+}
+
+.admin-box h3{
+    font-size:18px;
+}
+
+.admin-box small{
+    font-size:13px;
+}
+
+.welcome-banner h1{
+    font-size:26px;
+}
+
+.welcome-banner p{
+    font-size:15px;
+}
+
+.table-header h2{
+    font-size:22px;
+}
+
+.table-header input{
+    font-size:15px;
+}
+
+}
+
+/* ==========================
+   Scrollbar
+========================== */
+
+::-webkit-scrollbar{
+    width:10px;
+}
+
+::-webkit-scrollbar-track{
+    background:#e5e7eb;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#10b981;
+    border-radius:10px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background:#059669;
+}
