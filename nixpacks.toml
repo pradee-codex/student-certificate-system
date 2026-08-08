@@ -1,5 +1,6 @@
 [phases.setup]
-nixPkgs = ["mariadb-connector-c"]
+nixPkgs = ["...", "mariadb-connector-c"]
+nixLibs = ["...", "mariadb-connector-c.dev"]
 
 [phases.install]
 cmds = [
@@ -7,4 +8,4 @@ cmds = [
 ]
 
 [start]
-cmd = "gunicorn app:app"
+cmd = "gunicorn --bind 0.0.0.0:$PORT app:app"
