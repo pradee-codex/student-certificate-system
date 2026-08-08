@@ -1,6 +1,5 @@
 [phases.setup]
-nixPkgs = ["...", "mariadb-connector-c"]
-nixLibs = ["...", "mariadb-connector-c"]
+nixPkgs = ["mariadb-connector-c"]
 
 [phases.install]
 cmds = [
