@@ -14,7 +14,7 @@ from flask_mysqldb import MySQL
 from config import Config
 from flask import send_from_directory
 from werkzeug.utils import secure_filename
-from drive import upload_to_drive
+from drive_service import upload_to_drive
 
 import os
 import zipfile

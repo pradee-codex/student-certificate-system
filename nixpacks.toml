@@ -1,2 +1,11 @@
 [phases.setup]
-nixPkgs = ["mariadb-connector-c"]
+nixPkgs = ["...", "mariadb-connector-c"]
+nixLibs = ["...", "mariadb-connector-c"]
+
+[phases.install]
+cmds = [
+  "pip install -r requirements.txt"
+]
+
+[start]
+cmd = "gunicorn app:app"
