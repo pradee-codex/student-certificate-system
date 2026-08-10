@@ -4,3 +4,4 @@ Flask-Login
 mysql-connector-python
 Werkzeug
 gunicorn
+google-auth-oauthlib
