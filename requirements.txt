@@ -2,9 +2,10 @@ Flask
 Flask-MySQLdb
 Flask-Login
 mysql-connector-python
-Werkzeug
 gunicorn
 google-auth-oauthlib
 google-auth-oauthlib
 google-api-python-client
 google-auth-httplib2
+pandas
+openpyxl
