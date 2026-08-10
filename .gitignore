@@ -6,3 +6,4 @@ client_secret*.json
 wired-office*.json
 
 uploads/
+credentials.json
