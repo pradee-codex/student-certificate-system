@@ -2,4 +2,4 @@ Flask
 Flask-MySQLdb
 Flask-Login
 mysql-connector-python
-Werkzeug
+Werkzeuggunicorn
