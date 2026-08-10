@@ -1,76 +1,101 @@
 import os
-import pickle
+import json
 
-from google_auth_oauthlib.flow import InstalledAppFlow
+from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
 
-# ==========================================
-# Google Drive Folder ID
-# ==========================================
+# =========================================================
+# GOOGLE DRIVE FOLDER ID
+# =========================================================
 
 FOLDER_ID = "1e8HPw_r_PPnEqjcgQbl3CaSebdLbENIz"
 
 
-# ==========================================
-# OAuth Client Secret
-# ==========================================
-
-import os
-
-CLIENT_SECRET_FILE = os.getenv(
-    "CLIENT_SECRET_FILE",
-    "/etc/secrets/credentials.json"
-)
-
-
-# ==========================================
-# Google Drive Scope
-# ==========================================
+# =========================================================
+# GOOGLE DRIVE SCOPES
+# =========================================================
 
 SCOPES = [
     "https://www.googleapis.com/auth/drive"
 ]
 
 
-# ==========================================
-# Create Google Drive Service
-# ==========================================
+# =========================================================
+# TOKEN FILE
+# =========================================================
+#
+# Render:
+# /etc/secrets/token.json
+#
+# Local:
+# token.json
+#
+
+TOKEN_FILE = os.getenv(
+    "GOOGLE_TOKEN_FILE",
+    "/etc/secrets/token.json"
+)
+
+
+# =========================================================
+# GET GOOGLE DRIVE SERVICE
+# =========================================================
 
 def get_drive_service():
 
-    creds = None
+    if not os.path.exists(TOKEN_FILE):
+        raise FileNotFoundError(
+            f"Google Drive token file not found: {TOKEN_FILE}"
+        )
 
-    # Load saved token
-    if os.path.exists("token.pickle"):
+    try:
 
-        with open("token.pickle", "rb") as token:
-            creds = pickle.load(token)
+        creds = Credentials.from_authorized_user_file(
+            TOKEN_FILE,
+            SCOPES
+        )
 
-    # Check credentials
-    if not creds or not creds.valid:
+    except Exception as e:
 
-        # Refresh expired credentials
-        if creds and creds.expired and creds.refresh_token:
+        raise Exception(
+            f"Unable to load Google Drive token: {e}"
+        )
 
+
+    # =====================================================
+    # REFRESH TOKEN IF EXPIRED
+    # =====================================================
+
+    if creds.expired and creds.refresh_token:
+
+        try:
             creds.refresh(Request())
 
-        else:
+        except Exception as e:
 
-            flow = InstalledAppFlow.from_client_secrets_file(
-                CLIENT_SECRET_FILE,
-                SCOPES
+            raise Exception(
+                f"Google Drive token refresh failed: {e}"
             )
 
-            creds = flow.run_local_server(port=0)
 
-        # Save credentials
-        with open("token.pickle", "wb") as token:
-            pickle.dump(creds, token)
+    # =====================================================
+    # CHECK CREDENTIALS
+    # =====================================================
 
-    # Create Drive service
+    if not creds.valid:
+
+        raise Exception(
+            "Google Drive credentials are invalid or expired."
+        )
+
+
+    # =====================================================
+    # BUILD DRIVE SERVICE
+    # =====================================================
+
     service = build(
         "drive",
         "v3",
@@ -80,52 +105,64 @@ def get_drive_service():
     return service
 
 
-# ==========================================
-# Google Drive Service
-# ==========================================
+# =========================================================
+# UPLOAD FILE TO GOOGLE DRIVE
+# =========================================================
 
-drive_service = get_drive_service()
+def upload_to_drive(file_path, file_name=None):
+
+    if not os.path.exists(file_path):
+
+        raise FileNotFoundError(
+            f"File not found: {file_path}"
+        )
 
 
-# ==========================================
-# Upload File To Google Drive
-# ==========================================
+    # Use original filename if not provided
+    if file_name is None:
+        file_name = os.path.basename(file_path)
 
-def upload_to_drive(file_path, file_name):
+
+    # =====================================================
+    # GET DRIVE SERVICE
+    # =====================================================
+
+    service = get_drive_service()
+
+
+    # =====================================================
+    # FILE METADATA
+    # =====================================================
 
     file_metadata = {
         "name": file_name,
         "parents": [FOLDER_ID]
     }
 
+
+    # =====================================================
+    # FILE UPLOAD
+    # =====================================================
+
     media = MediaFileUpload(
         file_path,
         resumable=True
     )
 
-    uploaded_file = drive_service.files().create(
+
+    uploaded_file = service.files().create(
         body=file_metadata,
         media_body=media,
-        fields="id"
+        fields="id,name,webViewLink"
     ).execute()
 
-    file_id = uploaded_file["id"]
 
-    print("\n========================================")
-    print("      GOOGLE DRIVE UPLOAD SUCCESS")
-    print("========================================")
-    print("File Name :", file_name)
-    print("File ID   :", file_id)
-    print("========================================\n")
-
-    view_link = f"https://drive.google.com/file/d/{file_id}/view"
-
-    download_link = (
-        f"https://drive.google.com/uc?id={file_id}&export=download"
-    )
+    # =====================================================
+    # RETURN INFORMATION
+    # =====================================================
 
     return {
-        "id": file_id,
-        "view_link": view_link,
-        "download_link": download_link
+        "id": uploaded_file.get("id"),
+        "name": uploaded_file.get("name"),
+        "url": uploaded_file.get("webViewLink")
     }
