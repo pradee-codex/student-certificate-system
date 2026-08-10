@@ -18,7 +18,12 @@ FOLDER_ID = "1e8HPw_r_PPnEqjcgQbl3CaSebdLbENIz"
 # OAuth Client Secret
 # ==========================================
 
-CLIENT_SECRET_FILE = "credentials.json"
+import os
+
+CLIENT_SECRET_FILE = os.getenv(
+    "CLIENT_SECRET_FILE",
+    "/etc/secrets/credentials.json"
+)
 
 
 # ==========================================
