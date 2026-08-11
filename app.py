@@ -58,18 +58,21 @@ os.makedirs(PROFILE_FOLDER, exist_ok=True)
 # ==========================
 
 
-app.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST")
-app.config["MYSQL_USER"] = os.getenv("MYSQL_USER")
+
+
+app = Flask(__name__)
+
+app.config["MYSQL_HOST"] = "mysql-2712797e-vertex00096-7dca.l.aivencloud.com"
+app.config["MYSQL_USER"] = "avnadmind"
 app.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD")
-app.config["MYSQL_DB"] = os.getenv("MYSQL_DATABASE")
-app.config["MYSQL_PORT"] = int(os.getenv("MYSQL_PORT", "3306"))
+app.config["MYSQL_DB"] = "defaultdb"
+app.config["MYSQL_PORT"] = 17135
 
 app.config["MYSQL_SSL"] = {
-    "ca": None
+    "ssl": {}
 }
 
-mysql = MySQL()
-mysql.init_app(app)
+mysql = MySQL(app)
 
 # ==========================
 # Home
