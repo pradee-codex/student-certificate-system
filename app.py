@@ -74,6 +74,20 @@ app.config["MYSQL_SSL"] = {
 
 mysql = MySQL(app)
 
+@app.route("/test-db")
+def test_db():
+
+    try:
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT 1")
+        result = cursor.fetchone()
+        cursor.close()
+
+        return f"Database connected successfully: {result}"
+
+    except Exception as e:
+             return f"Database ERROR: {str(e)}", 500
+
 # ==========================
 # Home
 # ==========================
@@ -5144,16 +5158,3 @@ if __name__ == "__main__":
     )
 
     #---------------
-@app.route("/test-db")
-def test_db():
-
-    try:
-        cursor = mysql.connection.cursor()
-        cursor.execute("SELECT 1")
-        result = cursor.fetchone()
-        cursor.close()
-
-        return f"Database connected successfully: {result}"
-
-    except Exception as e:
-             return f"Database ERROR: {str(e)}", 500
