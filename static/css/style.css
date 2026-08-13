@@ -1,520 +1,719 @@
-/* ================================
-   Student Certificate Login Page
-==================================*/
+/* =========================================================
+   STUDENT CERTIFICATE MANAGEMENT SYSTEM
+   LOGIN + REPORT PAGE CSS
+   ========================================================= */
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
+/* ================================
+   GLOBAL
+================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
-body{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+body {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     background:
-    linear-gradient(rgba(0,0,0,.35),rgba(0,0,0,.35)),
-    url("../images/background.png") center center/cover no-repeat;
+        linear-gradient(
+            rgba(0, 0, 0, 0.35),
+            rgba(0, 0, 0, 0.35)
+        ),
+        url("../images/background.png")
+        center center / cover no-repeat;
 
-    background-attachment:fixed;
-    overflow:hidden;
+    background-attachment: fixed;
+
+    overflow-x: hidden;
 }
 
-.background{
-    display:none;
-}
-
-.login-container{
-    width:100%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-}
-
-.login-card{
-    width:470px;
-    padding:40px;
-
-    background:rgba(255,255,255,.18);
-
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
-
-    border:1px solid rgba(255,255,255,.35);
-    border-radius:30px;
-
-    box-shadow:0 20px 60px rgba(0,0,0,.35);
-
-    animation:fadeIn .8s ease;
-}
-
-
-/* ==========================
-         LOGO
-========================== */
-
-.logo{
-    width:110px;
-    height:110px;
-
-    margin:0 auto 20px;
-
-    background:#fff;
-
-    border-radius:50%;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    overflow:hidden;
-
-    box-shadow:0 10px 25px rgba(0,0,0,.25);
-}
-
-.logo img{
-    width:75px;
-    height:75px;
-
-    object-fit:contain;
-
-    display:block;
-}
-
-
-/* ==========================
-         HEADINGS
-========================== */
-
-/* Student Certificate */
-
-h2{
-    text-align:center;
-
-    color:#ffffff;
-
-    font-size:42px;
-    font-weight:800;
-
-    margin-bottom:5px;
-
-    text-shadow:2px 2px 8px rgba(0,0,0,.6);
-}
-
-
-/* Management System */
-
-h5{
-    text-align:center;
-
-    color:#FFFFFF;
-
-    font-size:28px;
-    font-weight:600;
-
-    margin-bottom:5px;
-}
-
-
-/* Secure Login Portal */
-
-.text-muted{
-    text-align:center;
-
-    color:#E5E7EB !important;
-
-    font-size:17px;
-    font-weight:500;
-
-    margin-bottom:30px;
-
-    text-shadow:1px 1px 5px rgba(0,0,0,.5);
-}
-
-
-/* ==========================
-          FORM
-========================== */
-
-.form-label{
-    font-weight:700;
-
-    color:#E5E7EB;
-
-    font-size:16px;
-}
-
-.input-group{
-    margin-bottom:15px;
-}
-
-.input-group-text{
-    border:none;
-
-    background:#fff;
-
-    border-radius:12px 0 0 12px;
-}
-
-.form-control{
-    border:none;
-
-    background:#fff;
-
-    height:55px;
-
-    font-size:16px;
-}
-
-.form-control:focus{
-    box-shadow:none;
-}
-
-.btn-outline-secondary{
-    border:none;
-
-    background:#fff;
-
-    border-radius:0 12px 12px 0;
-}
-
-
-/* ==========================
-         BUTTON
-========================== */
-
-.login-btn{
-    width:100%;
-    height:55px;
-
-    border:none;
-
-    border-radius:15px;
-
-    background:#198754;
-
-    color:#fff;
-
-    font-size:20px;
-    font-weight:700;
-
-    transition:.3s;
-}
-
-.login-btn:hover{
-    background:#157347;
-
-    transform:translateY(-2px);
-}
-
-
-/* ==========================
-         LINKS
-========================== */
-
-a{
-    color:#ffffff;
-
-    font-weight:600;
-
-    text-decoration:none;
-}
-
-a:hover{
-    color:#22C55E;
-}
-
-.alert{
-    border-radius:15px;
-}
-
-hr{
-    margin:25px 0;
-
-    border-color:rgba(255,255,255,.2);
-}
-
-
-/* ==========================
-         FOOTER
-========================== */
-
-small{
-    color:#ffffff;
-
-    font-weight:500;
-
-    text-align:center;
-
-    display:block;
-
-    text-shadow:1px 1px 5px rgba(0,0,0,.7);
-}
-
-.footer span{
-    color:#22C55E;
-
-    font-weight:700;
+.background {
+    display: none;
 }
 
 
 /* ================================
-        ANIMATION
+   LOGIN CONTAINER
 ================================ */
 
-@keyframes fadeIn{
+.login-container {
+    width: 100%;
 
-    from{
-        opacity:0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-        transform:translateY(40px);
-    }
-
-    to{
-        opacity:1;
-
-        transform:translateY(0);
-    }
-
+    padding: 20px;
 }
 
 
 /* ================================
-        REPORT SEARCH
+   LOGIN CARD
 ================================ */
 
-.report-search-actions{
+.login-card {
+    width: 430px;
 
-    display:flex;
+    padding: 32px 36px;
 
-    align-items:center;
+    background: rgba(255, 255, 255, 0.18);
 
-    justify-content:flex-end;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
 
-    gap:12px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
 
-    margin-left:auto;
-}
-
-
-/* ================================
-        SEARCH INPUT
-================================ */
-
-.report-search-actions input{
-
-    width:320px;
-
-    height:48px;
-
-    padding:0 18px;
-
-    border:2px solid #168b5a;
-
-    border-radius:10px;
-
-    outline:none;
-
-    background:#ffffff;
-
-    color:#333333;
-
-    font-size:15px;
-
-    font-family:'Poppins',sans-serif;
-
-    transition:.3s;
-}
-
-.report-search-actions input::placeholder{
-
-    color:#777777;
-
-}
-
-.report-search-actions input:focus{
-
-    border-color:#0f754a;
+    border-radius: 28px;
 
     box-shadow:
-        0 0 0 3px rgba(22,139,90,.12);
+        0 20px 60px rgba(0, 0, 0, 0.35);
 
+    animation: fadeIn 0.8s ease;
 }
 
 
 /* ================================
-        DOWNLOAD ALL BUTTON
+   LOGO
 ================================ */
 
-.download-all-btn{
+.logo {
+    width: 95px;
+    height: 95px;
 
-    height:48px;
+    margin: 0 auto 15px;
 
-    padding:0 22px;
+    background: #ffffff;
 
-    border:none;
+    border-radius: 50%;
 
-    border-radius:10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    background:#168b5a !important;
+    overflow: hidden;
 
-    color:#ffffff !important;
-
-    font-size:15px;
-
-    font-weight:600;
-
-    font-family:'Poppins',sans-serif;
-
-    cursor:pointer;
-
-    display:inline-flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:7px;
-
-    white-space:nowrap;
-
-    transition:.3s ease;
-
-    box-shadow:0 3px 8px rgba(0,0,0,.12);
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.25);
 }
 
-.download-all-btn:hover{
+.logo img {
+    width: 68px;
+    height: 68px;
 
-    background:#117348 !important;
+    object-fit: contain;
 
-    color:#ffffff !important;
-
-    transform:translateY(-1px);
-
-    box-shadow:0 5px 12px rgba(0,0,0,.16);
-}
-
-.download-all-btn:active{
-
-    transform:translateY(0);
-
+    display: block;
 }
 
 
 /* ================================
-        REPORT BOX HEADER
+   MAIN HEADING
 ================================ */
 
-.box-header{
+h2 {
+    text-align: center;
 
-    display:flex;
+    color: #ffffff;
 
-    align-items:center;
+    font-size: 36px;
 
-    width:100%;
+    font-weight: 800;
 
-}
+    line-height: 1.1;
 
-.box-header h2{
+    margin-bottom: 6px;
 
-    margin:0;
-
-    text-align:left;
-
+    text-shadow:
+        2px 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 
 /* ================================
-        RESPONSIVE
+   MANAGEMENT SYSTEM
 ================================ */
 
-@media(max-width:768px){
+h5 {
+    text-align: center;
 
-    .login-card{
+    color: #22c55e;
 
-        width:95%;
+    font-size: 24px;
 
-        padding:30px;
+    font-weight: 700;
 
+    line-height: 1.2;
+
+    margin-bottom: 6px;
+
+    text-shadow:
+        1px 1px 5px rgba(0, 0, 0, 0.45);
+}
+
+
+/* ================================
+   SECURE LOGIN PORTAL
+================================ */
+
+.text-muted {
+    text-align: center;
+
+    color: #e5e7eb !important;
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    margin-bottom: 24px;
+
+    text-shadow:
+        1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+
+/* ================================
+   FORM LABEL
+================================ */
+
+.form-label {
+    font-weight: 700;
+
+    color: #ffffff;
+
+    font-size: 15px;
+
+    margin-bottom: 7px;
+}
+
+
+/* ================================
+   INPUT GROUP
+================================ */
+
+.input-group {
+    margin-bottom: 14px;
+}
+
+
+/* ================================
+   INPUT ICON
+================================ */
+
+.input-group-text {
+    border: none;
+
+    background: #ffffff;
+
+    border-radius: 11px 0 0 11px;
+
+    color: #333333;
+
+    min-width: 50px;
+
+    justify-content: center;
+}
+
+
+/* ================================
+   INPUT FIELD
+================================ */
+
+.form-control {
+    border: none;
+
+    background: #ffffff;
+
+    height: 52px;
+
+    font-size: 15px;
+
+    color: #333333;
+
+    border-radius: 0 11px 11px 0;
+}
+
+.form-control::placeholder {
+    color: #777777;
+}
+
+.form-control:focus {
+    box-shadow: none;
+
+    border: none;
+
+    outline: none;
+}
+
+
+/* ================================
+   PASSWORD BUTTON
+================================ */
+
+.btn-outline-secondary {
+    border: none;
+
+    background: #ffffff;
+
+    color: #777777;
+
+    border-radius: 0 11px 11px 0;
+
+    height: 52px;
+}
+
+.btn-outline-secondary:hover {
+    background: #ffffff;
+
+    color: #198754;
+}
+
+
+/* ================================
+   LOGIN BUTTON
+================================ */
+
+.login-btn {
+    width: 100%;
+
+    height: 52px;
+
+    margin-top: 5px;
+
+    border: none;
+
+    border-radius: 13px;
+
+    background: #198754;
+
+    color: #ffffff;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+
+    box-shadow:
+        0 5px 15px rgba(0, 0, 0, 0.18);
+}
+
+.login-btn:hover {
+    background: #157347;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.login-btn:active {
+    transform: translateY(0);
+}
+
+
+/* ================================
+   LINKS
+================================ */
+
+a {
+    color: #ffffff;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition: 0.3s ease;
+}
+
+a:hover {
+    color: #22c55e;
+
+    text-decoration: none;
+}
+
+
+/* ================================
+   ALERT
+================================ */
+
+.alert {
+    border-radius: 12px;
+
+    font-size: 14px;
+
+    margin-bottom: 15px;
+}
+
+
+/* ================================
+   HORIZONTAL LINE
+================================ */
+
+hr {
+    margin: 20px 0;
+
+    border: none;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+
+/* ================================
+   FOOTER
+================================ */
+
+small {
+    color: #ffffff;
+
+    font-weight: 500;
+
+    text-align: center;
+
+    display: block;
+
+    font-size: 13px;
+
+    text-shadow:
+        1px 1px 5px rgba(0, 0, 0, 0.7);
+}
+
+.footer span {
+    color: #22c55e;
+
+    font-weight: 700;
+}
+
+
+/* ================================
+   ANIMATION
+================================ */
+
+@keyframes fadeIn {
+
+    from {
+        opacity: 0;
+
+        transform: translateY(40px);
     }
 
-    .logo{
+    to {
+        opacity: 1;
 
-        width:90px;
+        transform: translateY(0);
+    }
+}
 
-        height:90px;
 
+/* =========================================================
+   REPORT PAGE
+   ========================================================= */
+
+
+/* ================================
+   REPORT SEARCH ACTIONS
+================================ */
+
+.report-search-actions {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 12px;
+
+    margin-left: auto;
+}
+
+
+/* ================================
+   REPORT SEARCH INPUT
+================================ */
+
+.report-search-actions input {
+    width: 320px;
+
+    height: 48px;
+
+    padding: 0 18px;
+
+    border: 2px solid #168b5a;
+
+    border-radius: 10px;
+
+    outline: none;
+
+    background: #ffffff;
+
+    color: #333333;
+
+    font-size: 15px;
+
+    font-family: 'Poppins', sans-serif;
+
+    transition: 0.3s ease;
+}
+
+.report-search-actions input::placeholder {
+    color: #777777;
+}
+
+.report-search-actions input:focus {
+    border-color: #0f754a;
+
+    box-shadow:
+        0 0 0 3px rgba(22, 139, 90, 0.12);
+}
+
+
+/* ================================
+   DOWNLOAD ALL BUTTON
+================================ */
+
+.download-all-btn {
+    height: 48px;
+
+    padding: 0 22px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #168b5a !important;
+
+    color: #ffffff !important;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    font-family: 'Poppins', sans-serif;
+
+    cursor: pointer;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    white-space: nowrap;
+
+    transition: 0.3s ease;
+
+    box-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+.download-all-btn:hover {
+    background: #117348 !important;
+
+    color: #ffffff !important;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 5px 12px rgba(0, 0, 0, 0.16);
+}
+
+.download-all-btn:active {
+    transform: translateY(0);
+}
+
+
+/* ================================
+   REPORT BOX HEADER
+================================ */
+
+.box-header {
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+}
+
+.box-header h2 {
+    margin: 0;
+
+    text-align: left;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    /* LOGIN */
+
+    .login-card {
+        width: 95%;
+
+        padding: 28px 24px;
+
+        border-radius: 24px;
     }
 
-    .logo img{
+    .logo {
+        width: 85px;
+        height: 85px;
 
-        width:60px;
-
-        height:60px;
-
+        margin-bottom: 13px;
     }
 
-    h2{
-
-        font-size:32px;
-
+    .logo img {
+        width: 58px;
+        height: 58px;
     }
 
-    h5{
-
-        font-size:22px;
-
+    h2 {
+        font-size: 30px;
     }
 
-    .text-muted{
+    h5 {
+        font-size: 21px;
+    }
 
-        font-size:15px;
+    .text-muted {
+        font-size: 14px;
 
+        margin-bottom: 22px;
+    }
+
+    .form-label {
+        font-size: 14px;
+    }
+
+    .form-control {
+        height: 50px;
+    }
+
+    .btn-outline-secondary {
+        height: 50px;
+    }
+
+    .login-btn {
+        height: 50px;
+
+        font-size: 17px;
     }
 
 
-    /* Report responsive */
+    /* REPORT */
 
-    .box-header{
+    .box-header {
+        flex-direction: column;
 
-        flex-direction:column;
+        align-items: stretch;
 
-        align-items:stretch;
-
-        gap:15px;
-
+        gap: 15px;
     }
 
-    .box-header h2{
-
-        text-align:left;
-
+    .box-header h2 {
+        text-align: left;
     }
 
-    .report-search-actions{
+    .report-search-actions {
+        width: 100%;
 
-        width:100%;
+        justify-content: flex-start;
 
-        justify-content:flex-start;
+        margin-left: 0;
 
-        margin-left:0;
-
+        flex-wrap: wrap;
     }
 
-    .report-search-actions input{
-
-        width:100%;
-
+    .report-search-actions input {
+        width: 100%;
     }
 
-    .download-all-btn{
+    .download-all-btn {
+        flex-shrink: 0;
 
-        flex-shrink:0;
+        width: 100%;
+    }
+}
 
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    body {
+        background-attachment: scroll;
     }
 
+    .login-container {
+        padding: 12px;
+    }
+
+    .login-card {
+        width: 100%;
+
+        padding: 25px 20px;
+
+        border-radius: 22px;
+    }
+
+    .logo {
+        width: 78px;
+        height: 78px;
+    }
+
+    .logo img {
+        width: 52px;
+        height: 52px;
+    }
+
+    h2 {
+        font-size: 27px;
+    }
+
+    h5 {
+        font-size: 19px;
+    }
+
+    .text-muted {
+        font-size: 13px;
+
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        height: 48px;
+
+        font-size: 14px;
+    }
+
+    .input-group-text {
+        min-width: 45px;
+    }
+
+    .btn-outline-secondary {
+        height: 48px;
+    }
+
+    .login-btn {
+        height: 48px;
+
+        font-size: 16px;
+    }
+
+    small {
+        font-size: 12px;
+    }
 }
