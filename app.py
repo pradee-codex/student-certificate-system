@@ -58,19 +58,18 @@ os.makedirs(PROFILE_FOLDER, exist_ok=True)
 # ==========================
 
 
-
-
-app.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST")
-app.config["MYSQL_USER"] = os.getenv("MYSQL_USER")
-app.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD")
-app.config["MYSQL_DB"] = os.getenv("MYSQL_DB")
-app.config["MYSQL_PORT"] = int(os.getenv("MYSQL_PORT", "3306"))
+app.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST", "").strip()
+app.config["MYSQL_USER"] = os.getenv("MYSQL_USER", "").strip()
+app.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD", "").strip()
+app.config["MYSQL_DB"] = os.getenv("MYSQL_DB", "").strip()
+app.config["MYSQL_PORT"] = int(os.getenv("MYSQL_PORT", "3306").strip())
 
 app.config["MYSQL_SSL"] = {
     "ssl": {}
 }
 
 mysql = MySQL(app)
+
 
 @app.route("/test-db")
 def test_db():
