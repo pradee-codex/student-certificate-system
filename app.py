@@ -36,6 +36,31 @@ app.config.from_object(Config)
 app.secret_key = Config.SECRET_KEY
 
 # ==========================
+# Startup diagnostics:
+# logs whether the Drive service account key is visible
+# ==========================
+
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
+_drive_key_paths = [
+    os.getenv("GOOGLE_SERVICE_ACCOUNT_FILE"),
+    "/etc/secrets/key.json",
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "key.json")
+]
+
+if not any(p and os.path.exists(p) for p in _drive_key_paths):
+    logging.warning(
+        "Drive service account key NOT found. Checked: %s",
+        [p for p in _drive_key_paths if p]
+    )
+else:
+    for _p in _drive_key_paths:
+        if _p and os.path.exists(_p):
+            logging.info("Drive service account key FOUND at: %s", _p)
+
+# ==========================
 # Upload Folder
 # ==========================
 

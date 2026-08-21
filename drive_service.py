@@ -1,17 +1,19 @@
 import os
-import json
+import logging
 
-from google.oauth2.credentials import Credentials
-from google.auth.transport.requests import Request
+from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
+
+
+logger = logging.getLogger(__name__)
 
 
 # =========================================================
 # GOOGLE DRIVE FOLDER ID
 # =========================================================
 
-FOLDER_ID = "1e8HPw_r_PPnEqjcgQbl3CaSebdLbENIz"
+FOLDER_ID = os.getenv("GOOGLE_DRIVE_FOLDER_ID", "1e8HPw_r_PPnEqjcgQbl3CaSebdLbENIz")
 
 
 # =========================================================
@@ -24,85 +26,103 @@ SCOPES = [
 
 
 # =========================================================
-# TOKEN FILE
+# SERVICE ACCOUNT KEY FILE
 # =========================================================
 #
-# Render:
-# /etc/secrets/token.json
+# Single source of truth:
 #
-# Local:
-# token.json
+#   1. GOOGLE_SERVICE_ACCOUNT_FILE env var (custom path)
+#   2. /etc/secrets/key.json   -> Render Secret File
+#   3. ./key.json              -> local development
 #
 
-TOKEN_FILE = os.getenv(
-    "GOOGLE_TOKEN_FILE",
-    "/etc/secrets/token.json"
-)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+SERVICE_ACCOUNT_FILE_CANDIDATES = [
+    os.getenv("GOOGLE_SERVICE_ACCOUNT_FILE"),
+    "/etc/secrets/key.json",
+    os.path.join(BASE_DIR, "key.json"),
+]
 
-# =========================================================
-# GET GOOGLE DRIVE SERVICE
-# =========================================================
+_drive_service = None
+
 
 def get_drive_service():
 
-    if not os.path.exists(TOKEN_FILE):
+    global _drive_service
+
+    if _drive_service is not None:
+        return _drive_service
+
+
+    # =====================================================
+    # LOCATE KEY FILE
+    # =====================================================
+
+    key_file = next(
+        (
+            path
+            for path in SERVICE_ACCOUNT_FILE_CANDIDATES
+            if path and os.path.exists(path)
+        ),
+        None
+    )
+
+    if key_file is None:
+
+        checked = [
+            path
+            for path in SERVICE_ACCOUNT_FILE_CANDIDATES
+            if path
+        ]
+
         raise FileNotFoundError(
-            f"Google Drive token file not found: {TOKEN_FILE}"
+            f"Google Drive service account key not found. "
+            f"Checked: {checked}. Add a Render Secret File named "
+            f"'key.json' or set GOOGLE_SERVICE_ACCOUNT_FILE."
         )
+
+
+    # =====================================================
+    # LOAD SERVICE ACCOUNT CREDENTIALS
+    # =====================================================
 
     try:
 
-        creds = Credentials.from_authorized_user_file(
-            TOKEN_FILE,
-            SCOPES
+        creds = service_account.Credentials.from_service_account_file(
+            key_file,
+            scopes=SCOPES
         )
 
     except Exception as e:
 
         raise Exception(
-            f"Unable to load Google Drive token: {e}"
+            f"Unable to load service account key {key_file}: {e}"
         )
 
 
-    # =====================================================
-    # REFRESH TOKEN IF EXPIRED
-    # =====================================================
-
-    if creds.expired and creds.refresh_token:
-
-        try:
-            creds.refresh(Request())
-
-        except Exception as e:
-
-            raise Exception(
-                f"Google Drive token refresh failed: {e}"
-            )
+    logger.info("Drive auth: using service account key %s", key_file)
 
 
     # =====================================================
-    # CHECK CREDENTIALS
+    # BUILD AND CACHE DRIVE SERVICE
     # =====================================================
 
-    if not creds.valid:
-
-        raise Exception(
-            "Google Drive credentials are invalid or expired."
-        )
-
-
-    # =====================================================
-    # BUILD DRIVE SERVICE
-    # =====================================================
-
-    service = build(
+    _drive_service = build(
         "drive",
         "v3",
         credentials=creds
     )
 
-    return service
+    return _drive_service
+
+
+def reset_drive_service():
+    """Clear cached service so next call re-authenticates."""
+
+    global _drive_service
+
+    _drive_service = None
 
 
 # =========================================================
