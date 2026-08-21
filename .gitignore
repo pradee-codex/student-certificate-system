@@ -1,11 +1,7 @@
 __pycache__/
 *.pyc
 
-token.pickle
-client_secret*.json
-wired-office*.json
-
 uploads/
 credentials.json
-credentials.json
 token.json
+key.json
