@@ -72,7 +72,6 @@ Add token.json as a Secret File at:
 """
         )
 
-
     # -----------------------------------------------------
     # LOAD CREDENTIALS
     # -----------------------------------------------------
@@ -89,7 +88,6 @@ Add token.json as a Secret File at:
         raise Exception(
             f"Unable to load Google Drive credentials: {e}"
         )
-
 
     # -----------------------------------------------------
     # REFRESH TOKEN IF EXPIRED
@@ -123,7 +121,6 @@ again and authorize Google Drive.
 """
             )
 
-
     # -----------------------------------------------------
     # CHECK CREDENTIALS
     # -----------------------------------------------------
@@ -133,7 +130,6 @@ again and authorize Google Drive.
         raise Exception(
             "Google Drive credentials are invalid."
         )
-
 
     # -----------------------------------------------------
     # BUILD GOOGLE DRIVE SERVICE
@@ -152,7 +148,6 @@ again and authorize Google Drive.
         raise Exception(
             f"Unable to connect to Google Drive: {e}"
         )
-
 
     return service
 
@@ -173,7 +168,6 @@ def upload_to_drive(file_path, file_name=None):
             f"File not found: {file_path}"
         )
 
-
     # -----------------------------------------------------
     # FILE NAME
     # -----------------------------------------------------
@@ -182,13 +176,11 @@ def upload_to_drive(file_path, file_name=None):
 
         file_name = os.path.basename(file_path)
 
-
     # -----------------------------------------------------
     # GET DRIVE SERVICE
     # -----------------------------------------------------
 
     service = get_drive_service()
-
 
     # -----------------------------------------------------
     # GOOGLE DRIVE FILE METADATA
@@ -199,7 +191,6 @@ def upload_to_drive(file_path, file_name=None):
         "parents": [FOLDER_ID]
     }
 
-
     # -----------------------------------------------------
     # MEDIA FILE
     # -----------------------------------------------------
@@ -209,9 +200,8 @@ def upload_to_drive(file_path, file_name=None):
         resumable=True
     )
 
-
     # -----------------------------------------------------
-    # UPLOAD
+    # UPLOAD FILE
     # -----------------------------------------------------
 
     try:
@@ -228,13 +218,58 @@ def upload_to_drive(file_path, file_name=None):
             f"Google Drive upload failed: {e}"
         )
 
+    # -----------------------------------------------------
+    # GET FILE ID
+    # -----------------------------------------------------
+
+    file_id = uploaded_file.get("id")
+
+    if not file_id:
+
+        raise Exception(
+            "Google Drive uploaded file ID not found."
+        )
 
     # -----------------------------------------------------
-    # RETURN UPLOADED FILE INFORMATION
+    # MAKE FILE PUBLIC
+    # Anyone with the link -> Viewer
+    # -----------------------------------------------------
+
+    try:
+
+        service.permissions().create(
+            fileId=file_id,
+            body={
+                "type": "anyone",
+                "role": "reader"
+            },
+            fields="id"
+        ).execute()
+
+    except Exception as e:
+
+        raise Exception(
+            f"Unable to set Google Drive file permission: {e}"
+        )
+
+    # -----------------------------------------------------
+    # GET WEB VIEW LINK
+    # -----------------------------------------------------
+
+    file_url = uploaded_file.get("webViewLink")
+
+    if not file_url:
+
+        file_url = (
+            f"https://drive.google.com/file/d/{file_id}/view"
+        )
+
+    # -----------------------------------------------------
+    # RETURN FILE INFORMATION
     # -----------------------------------------------------
 
     return {
-        "id": uploaded_file.get("id"),
+        "id": file_id,
         "name": uploaded_file.get("name"),
-        "url": uploaded_file.get("webViewLink")
+        "url": file_url
     }
