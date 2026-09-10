@@ -4258,12 +4258,17 @@ AND (
     return html
 
 #---------------------------
-@app.route("/view/<filename>")
+@app.route("/view/<path:filename>")
 def view(filename):
 
     if "role" not in session:
         return redirect("/")
 
+    # Google Drive file
+    if filename.startswith("https://") or filename.startswith("http://"):
+        return redirect(filename)
+
+    # Old/local uploaded file
     return send_from_directory(
         "static/uploads/certificates",
         filename
