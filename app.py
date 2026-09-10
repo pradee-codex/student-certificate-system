@@ -4829,7 +4829,7 @@ def upload_certificate():
     drive_result = upload_to_drive(filepath, filename)
 
     # Store Google Drive link in database
-    certificate_file = drive_result["view_link"]
+    certificate_file = drive_result["url"]
 
     cursor.execute("""
         INSERT INTO certificates
