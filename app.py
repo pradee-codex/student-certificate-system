@@ -4789,80 +4789,150 @@ def upload_certificate():
     if session.get("role") != "student":
         return redirect("/")
 
-    # Get student_id from logged-in user
     cursor = mysql.connection.cursor()
 
-    cursor.execute("""
-        SELECT student_id
-        FROM students
-        WHERE user_id=%s
-    """, (session["user_id"],))
+    try:
 
-    student = cursor.fetchone()
+        # -----------------------------------------
+        # GET STUDENT ID
+        # -----------------------------------------
 
-    if not student:
-        cursor.close()
-        flash("Student not found")
-        return redirect("/student")
+        cursor.execute("""
+            SELECT student_id
+            FROM students
+            WHERE user_id=%s
+        """, (session["user_id"],))
 
-    student_id = student[0]
+        student = cursor.fetchone()
 
-    category_id = request.form["category_id"]
-    certificate_title = request.form["certificate_title"]
-    achievement = request.form["achievement"]
+        if not student:
+            flash("Student not found")
+            return redirect("/student")
 
-    file = request.files["certificate_file"]
+        student_id = student[0]
 
-    if file.filename == "":
-        cursor.close()
-        flash("Please select a certificate")
-        return redirect("/student")
+        # -----------------------------------------
+        # GET FORM DATA
+        # -----------------------------------------
 
-    filename = secure_filename(file.filename)
+        category_id = request.form.get("category_id")
+        certificate_title = request.form.get("certificate_title")
+        achievement = request.form.get("achievement")
 
-    upload_folder = os.path.join("uploads", "certificates")
+        file = request.files.get("certificate_file")
 
-    if not os.path.exists(upload_folder):
-        os.makedirs(upload_folder)
+        if not file or file.filename == "":
+            flash("Please select a certificate")
+            return redirect("/student")
 
-    filepath = os.path.join(upload_folder, filename)
+        # -----------------------------------------
+        # SECURE FILE NAME
+        # -----------------------------------------
 
-    # Save locally
-    file.save(filepath)
+        filename = secure_filename(file.filename)
 
-    # Upload to Google Drive
-    drive_result = upload_to_drive(filepath, filename)
+        # -----------------------------------------
+        # LOCAL UPLOAD FOLDER
+        # -----------------------------------------
 
-    # Store Google Drive link in database
-    certificate_file = drive_result["url"]
+        upload_folder = os.path.join(
+            "uploads",
+            "certificates"
+        )
 
-    cursor.execute("""
-        INSERT INTO certificates
-        (
+        os.makedirs(
+            upload_folder,
+            exist_ok=True
+        )
+
+        filepath = os.path.join(
+            upload_folder,
+            filename
+        )
+
+        # -----------------------------------------
+        # SAVE FILE TEMPORARILY
+        # -----------------------------------------
+
+        file.save(filepath)
+
+        # -----------------------------------------
+        # UPLOAD TO GOOGLE DRIVE
+        # -----------------------------------------
+
+        drive_result = upload_to_drive(
+            filepath,
+            filename
+        )
+
+        # -----------------------------------------
+        # GET GOOGLE DRIVE URL
+        # -----------------------------------------
+
+        certificate_file = drive_result.get("url")
+
+        if not certificate_file:
+            raise Exception(
+                "Google Drive URL was not returned."
+            )
+
+        # -----------------------------------------
+        # INSERT INTO DATABASE
+        # -----------------------------------------
+
+        cursor.execute("""
+            INSERT INTO certificates
+            (
+                student_id,
+                category_id,
+                certificate_title,
+                achievement,
+                certificate_file,
+                upload_date
+            )
+            VALUES
+            (%s, %s, %s, %s, %s, NOW())
+        """, (
             student_id,
             category_id,
             certificate_title,
             achievement,
-            certificate_file,
-            upload_date
+            certificate_file
+        ))
+
+        mysql.connection.commit()
+
+        # -----------------------------------------
+        # DELETE LOCAL TEMP FILE
+        # -----------------------------------------
+
+        try:
+            if os.path.exists(filepath):
+                os.remove(filepath)
+        except Exception:
+            pass
+
+        flash("Certificate Uploaded Successfully")
+
+        return redirect("/student")
+
+    except Exception as e:
+
+        mysql.connection.rollback()
+
+        app.logger.exception(
+            "Certificate upload failed"
         )
-        VALUES
-        (%s, %s, %s, %s, %s, NOW())
-    """, (
-        student_id,
-        category_id,
-        certificate_title,
-        achievement,
-        certificate_file
-    ))
 
-    mysql.connection.commit()
+        flash(
+            f"Certificate upload failed: {str(e)}"
+        )
 
-    cursor.close()
+        return redirect("/student")
 
-    flash("Certificate Uploaded Successfully")
+    finally:
 
-    return redirect("/student")
+        cursor.close()
 # ==========================
 # Download All Certificates
 # ==========================
