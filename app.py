@@ -4649,7 +4649,10 @@ def student():
 
     cursor = mysql.connection.cursor()
 
-    # Student Details
+    # =========================================
+    # STUDENT DETAILS
+    # =========================================
+
     cursor.execute("""
         SELECT
             student_id,
@@ -4667,7 +4670,10 @@ def student():
 
     student = cursor.fetchone()
 
-    # Categories
+    # =========================================
+    # CERTIFICATE CATEGORIES
+    # =========================================
+
     cursor.execute("""
         SELECT
             category_id,
@@ -4677,6 +4683,10 @@ def student():
     """)
 
     categories = cursor.fetchall()
+
+    # =========================================
+    # STUDENT CERTIFICATES
+    # =========================================
 
     certificates = []
 
@@ -4692,8 +4702,9 @@ def student():
 
             FROM certificates
 
-            INNER JOIN certificate_categories
-            ON certificates.category_id = certificate_categories.category_id
+            LEFT JOIN certificate_categories
+            ON certificates.category_id =
+               certificate_categories.category_id
 
             WHERE certificates.student_id=%s
 
@@ -4704,13 +4715,16 @@ def student():
 
     cursor.close()
 
+    # =========================================
+    # STUDENT DASHBOARD
+    # =========================================
+
     return render_template(
         "student/dashboard.html",
         student=student,
         certificates=certificates,
         categories=categories
     )
-
 #-----------------------------------
 @app.route("/student_profile")
 def student_profile():
