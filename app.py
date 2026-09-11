@@ -4795,8 +4795,6 @@ def update_student_profile():
 #--------------------------------
 
 
-
-
 @app.route("/upload_certificate", methods=["POST"])
 def upload_certificate():
 
@@ -4807,9 +4805,9 @@ def upload_certificate():
 
     try:
 
-        # -----------------------------------------
-        # GET STUDENT ID
-        # -----------------------------------------
+        # =========================================
+        # GET STUDENT
+        # =========================================
 
         cursor.execute("""
             SELECT student_id
@@ -4825,9 +4823,9 @@ def upload_certificate():
 
         student_id = student[0]
 
-        # -----------------------------------------
+        # =========================================
         # GET FORM DATA
-        # -----------------------------------------
+        # =========================================
 
         category_id = request.form.get("category_id")
         certificate_title = request.form.get("certificate_title")
@@ -4839,15 +4837,19 @@ def upload_certificate():
             flash("Please select a certificate")
             return redirect("/student")
 
-        # -----------------------------------------
-        # SECURE FILE NAME
-        # -----------------------------------------
+        # =========================================
+        # FILE NAME
+        # =========================================
 
         filename = secure_filename(file.filename)
 
-        # -----------------------------------------
-        # LOCAL UPLOAD FOLDER
-        # -----------------------------------------
+        if not filename:
+            flash("Invalid certificate filename")
+            return redirect("/student")
+
+        # =========================================
+        # TEMPORARY LOCAL FOLDER
+        # =========================================
 
         upload_folder = os.path.join(
             "uploads",
@@ -4864,24 +4866,34 @@ def upload_certificate():
             filename
         )
 
-        # -----------------------------------------
+        # =========================================
         # SAVE FILE TEMPORARILY
-        # -----------------------------------------
+        # =========================================
 
         file.save(filepath)
 
-        # -----------------------------------------
-        # UPLOAD TO GOOGLE DRIVE
-        # -----------------------------------------
+        app.logger.info(
+            "Certificate saved locally: %s",
+            filepath
+        )
+
+        # =========================================
+        # GOOGLE DRIVE UPLOAD
+        # =========================================
 
         drive_result = upload_to_drive(
             filepath,
             filename
         )
 
-        # -----------------------------------------
-        # GET GOOGLE DRIVE URL
-        # -----------------------------------------
+        app.logger.info(
+            "Google Drive upload result: %s",
+            drive_result
+        )
+
+        # =========================================
+        # GET DRIVE URL
+        # =========================================
 
         certificate_file = drive_result.get("url")
 
@@ -4890,9 +4902,14 @@ def upload_certificate():
                 "Google Drive URL was not returned."
             )
 
-        # -----------------------------------------
-        # INSERT INTO DATABASE
-        # -----------------------------------------
+        app.logger.info(
+            "Certificate Drive URL: %s",
+            certificate_file
+        )
+
+        # =========================================
+        # INSERT INTO MYSQL
+        # =========================================
 
         cursor.execute("""
             INSERT INTO certificates
@@ -4914,17 +4931,40 @@ def upload_certificate():
             certificate_file
         ))
 
+        # =========================================
+        # CHECK INSERT
+        # =========================================
+
+        app.logger.info(
+            "Certificate INSERT successful. Row ID: %s",
+            cursor.lastrowid
+        )
+
+        # =========================================
+        # COMMIT
+        # =========================================
+
         mysql.connection.commit()
 
-        # -----------------------------------------
-        # DELETE LOCAL TEMP FILE
-        # -----------------------------------------
+        app.logger.info(
+            "Certificate database commit successful."
+        )
+
+        # =========================================
+        # DELETE TEMP FILE
+        # =========================================
 
         try:
+
             if os.path.exists(filepath):
                 os.remove(filepath)
-        except Exception:
-            pass
+
+        except Exception as e:
+
+            app.logger.warning(
+                "Temporary file delete failed: %s",
+                e
+            )
 
         flash("Certificate Uploaded Successfully")
 
@@ -4932,14 +4972,17 @@ def upload_certificate():
 
     except Exception as e:
 
-        mysql.connection.rollback()
+        try:
+            mysql.connection.rollback()
+        except Exception:
+            pass
 
         app.logger.exception(
-            "Certificate upload failed"
+            "CERTIFICATE UPLOAD FAILED"
         )
 
         flash(
-            f"Certificate upload failed: {str(e)}"
+            "Certificate upload failed. Please try again."
         )
 
         return redirect("/student")
