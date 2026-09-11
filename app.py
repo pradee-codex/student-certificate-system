@@ -4279,8 +4279,51 @@ def view(filename):
 @app.route("/download/<path:filename>")
 def download(filename):
 
+    # =====================================================
+    # LOGIN CHECK
+    # =====================================================
+
     if "role" not in session:
         return redirect("/")
+
+
+    # =====================================================
+    # GOOGLE DRIVE FILE
+    # =====================================================
+
+    if filename.startswith("http://") or filename.startswith("https://"):
+
+        # Google Drive URL
+        if "drive.google.com" in filename:
+
+            import re
+
+            # Extract Google Drive File ID
+            match = re.search(
+                r"/file/d/([^/]+)",
+                filename
+            )
+
+            if match:
+
+                file_id = match.group(1)
+
+                # Google Drive direct download URL
+                download_url = (
+                    f"https://drive.google.com/uc"
+                    f"?export=download&id={file_id}"
+                )
+
+                return redirect(download_url)
+
+
+        # Other external URL
+        return redirect(filename)
+
+
+    # =====================================================
+    # OLD LOCAL FILE SUPPORT
+    # =====================================================
 
     folder = os.path.join(
         app.root_path,
@@ -4289,13 +4332,13 @@ def download(filename):
         "certificates"
     )
 
-    # Prevent wrong path issues
     filename = os.path.basename(filename)
 
     filepath = os.path.join(
         folder,
         filename
     )
+
 
     print("================================")
     print("DOWNLOAD ROUTE")
@@ -4305,20 +4348,29 @@ def download(filename):
     print("Exists   :", os.path.isfile(filepath))
     print("================================")
 
+
+    # =====================================================
+    # FILE NOT FOUND
+    # =====================================================
+
     if not os.path.isfile(filepath):
 
         return f"""
         <h3>Certificate File Not Found</h3>
         <p>Filename: {filename}</p>
         <p>Path: {filepath}</p>
-        """
+        """, 404
+
+
+    # =====================================================
+    # LOCAL DOWNLOAD
+    # =====================================================
 
     return send_from_directory(
         folder,
         filename,
         as_attachment=True
     )
-
 #----------------------------
 #profile
 #-----------------------------
