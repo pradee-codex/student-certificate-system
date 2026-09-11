@@ -16,7 +16,9 @@
 
 </head>
 
+
 <body>
+
 
 <!-- ==================================================
 SIDEBAR
@@ -35,6 +37,7 @@ SIDEBAR
 
     </div>
 
+
     <ul>
 
         <li class="active">
@@ -49,6 +52,7 @@ SIDEBAR
 
         </li>
 
+
         <li>
 
             <a href="#students">
@@ -60,6 +64,7 @@ SIDEBAR
             </a>
 
         </li>
+
 
         <li>
 
@@ -73,6 +78,7 @@ SIDEBAR
 
         </li>
 
+
         <li>
 
             <a href="/reports">
@@ -85,6 +91,7 @@ SIDEBAR
 
         </li>
 
+
         <li>
 
             <a href="/download_all">
@@ -96,6 +103,7 @@ SIDEBAR
             </a>
 
         </li>
+
 
         <li>
 
@@ -114,11 +122,13 @@ SIDEBAR
 </div>
 
 
+
 <!-- ==================================================
 MAIN
 ================================================== -->
 
 <div class="main">
+
 
     <!-- ==================================================
     TOPBAR
@@ -128,12 +138,14 @@ MAIN
 
         <h2>Admin Dashboard</h2>
 
+
         <div class="admin-box">
 
             <img
                 src="{{ url_for('static', filename='images/admin.png') }}"
                 alt="Admin"
             >
+
 
             <div>
 
@@ -146,6 +158,7 @@ MAIN
         </div>
 
     </div>
+
 
 
     <div class="container">
@@ -170,11 +183,13 @@ MAIN
         </div>
 
 
+
         <!-- ==================================================
         STATISTICS
         ================================================== -->
 
         <div class="stats">
+
 
             <div class="stat-card">
 
@@ -185,6 +200,7 @@ MAIN
                 <p>Total Students</p>
 
             </div>
+
 
 
             <div class="stat-card">
@@ -198,6 +214,7 @@ MAIN
             </div>
 
 
+
             <div class="stat-card">
 
                 <i class="bi bi-bar-chart-fill"></i>
@@ -208,7 +225,9 @@ MAIN
 
             </div>
 
+
         </div>
+
 
 
         <!-- ==================================================
@@ -219,6 +238,7 @@ MAIN
             class="table-card"
             id="students"
         >
+
 
             <div class="table-header">
 
@@ -231,6 +251,7 @@ MAIN
                 </h2>
 
             </div>
+
 
 
             <table>
@@ -254,6 +275,7 @@ MAIN
                 </thead>
 
 
+
                 <tbody>
 
                     {% for student in students %}
@@ -264,17 +286,21 @@ MAIN
                             {{ student[1] }}
                         </td>
 
+
                         <td>
                             {{ student[2] }}
                         </td>
+
 
                         <td>
                             {{ student[3] }}
                         </td>
 
+
                         <td>
                             {{ student[4] }}
                         </td>
+
 
                         <td>
                             {{ student[5] }}
@@ -291,6 +317,7 @@ MAIN
         </div>
 
 
+
         <!-- ==================================================
         CERTIFICATE TABLE
         ================================================== -->
@@ -300,11 +327,13 @@ MAIN
             id="certificates"
         >
 
+
             <!-- ==============================
             HEADER
             ============================== -->
 
             <div class="table-header">
+
 
                 <h2>
 
@@ -315,9 +344,11 @@ MAIN
                 </h2>
 
 
+
                 <!-- SEARCH + DOWNLOAD -->
 
                 <div class="certificate-actions">
+
 
                     <input
                         type="text"
@@ -339,9 +370,11 @@ MAIN
 
                     </button>
 
+
                 </div>
 
             </div>
+
 
 
             <!-- ==============================
@@ -349,6 +382,7 @@ MAIN
             ============================== -->
 
             <table id="certificateTable">
+
 
                 <thead>
 
@@ -377,45 +411,64 @@ MAIN
                 </thead>
 
 
+
                 <tbody>
+
 
                     {% for certificate in certificates %}
 
+
                     <tr>
+
 
                         <!-- STUDENT -->
 
                         <td>
+
                             {{ certificate[0] }}
+
                         </td>
+
 
 
                         <!-- DEPARTMENT -->
 
                         <td>
+
                             {{ certificate[1] }}
+
                         </td>
+
 
 
                         <!-- YEAR -->
 
                         <td>
+
                             {{ certificate[2] }}
+
                         </td>
+
 
 
                         <!-- CERTIFICATE -->
 
                         <td>
+
                             {{ certificate[3] }}
+
                         </td>
+
 
 
                         <!-- CATEGORY -->
 
                         <td>
+
                             {{ certificate[4] }}
+
                         </td>
+
 
 
                         <!-- ACHIEVEMENT -->
@@ -435,26 +488,32 @@ MAIN
                         </td>
 
 
+
                         <!-- DATE -->
 
                         <td>
+
                             {{ certificate[7] }}
+
                         </td>
 
 
-                        <!-- VIEW -->
+
+                        <!-- ==================================================
+                        VIEW CERTIFICATE
+                        ================================================== -->
 
                         <td>
 
+
                             {% if certificate[6] %}
+
 
                             <a
                                 class="view"
+                                href="{{ certificate[6] }}"
                                 target="_blank"
-                                href="{{ url_for(
-                                    'static',
-                                    filename='uploads/certificates/' ~ certificate[6]
-                                ) }}"
+                                rel="noopener noreferrer"
                             >
 
                                 <i class="bi bi-eye-fill"></i>
@@ -463,22 +522,33 @@ MAIN
 
                             </a>
 
+
                             {% else %}
 
+
                             <span>
+
                                 No File
+
                             </span>
 
+
                             {% endif %}
+
 
                         </td>
 
 
-                        <!-- DOWNLOAD -->
+
+                        <!-- ==================================================
+                        DOWNLOAD
+                        ================================================== -->
 
                         <td>
 
+
                             {% if certificate[6] %}
+
 
                             <a
                                 class="download"
@@ -494,19 +564,28 @@ MAIN
 
                             </a>
 
+
                             {% else %}
 
+
                             <span>
+
                                 No File
+
                             </span>
+
 
                             {% endif %}
 
+
                         </td>
+
 
                     </tr>
 
+
                     {% endfor %}
+
 
                 </tbody>
 
@@ -515,7 +594,9 @@ MAIN
         </div>
 
 
+
     </div>
+
 
 
     <!-- ==================================================
@@ -523,6 +604,7 @@ MAIN
     ================================================== -->
 
     <footer class="admin-footer">
+
 
         <div class="footer-left">
 
@@ -534,15 +616,19 @@ MAIN
 
         </div>
 
+
         <div class="footer-right">
 
             © 2026 Designed By PRADEEP From AIDS
 
         </div>
 
+
     </footer>
 
+
 </div>
+
 
 
 <!-- ==================================================
@@ -550,6 +636,7 @@ SEARCH + DOWNLOAD SCRIPT
 ================================================== -->
 
 <script>
+
 
 /* ==================================================
 SEARCH CERTIFICATES
@@ -561,9 +648,11 @@ const searchInput =
 
 if (searchInput) {
 
+
     searchInput.addEventListener(
         "keyup",
         function () {
+
 
             const filter =
                 this.value
@@ -579,6 +668,7 @@ if (searchInput) {
 
             rows.forEach(function (row) {
 
+
                 const text =
                     row.innerText.toLowerCase();
 
@@ -593,12 +683,16 @@ if (searchInput) {
 
                 }
 
+
             });
+
 
         }
     );
 
+
 }
+
 
 
 /* ==================================================
@@ -606,6 +700,7 @@ DOWNLOAD CERTIFICATES
 ================================================== */
 
 function downloadCertificates() {
+
 
     const searchBox =
         document.getElementById("searchInput");
@@ -622,6 +717,7 @@ function downloadCertificates() {
         searchBox.value.trim();
 
 
+
     /* ==================================================
        NOTHING SEARCHED
        → DOWNLOAD ALL CERTIFICATES
@@ -629,12 +725,15 @@ function downloadCertificates() {
 
     if (searchText === "") {
 
+
         window.location.href =
             "/admin_export_zip";
+
 
         return;
 
     }
+
 
 
     /* ==================================================
@@ -646,9 +745,12 @@ function downloadCertificates() {
         "/admin_export_zip?search=" +
         encodeURIComponent(searchText);
 
+
 }
 
+
 </script>
+
 
 
 </body>
