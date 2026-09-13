@@ -46,7 +46,7 @@
 
         <div class="top-buttons">
 
-            <a href="/tutor"
+            <a href="{{ url_for('tutor') }}"
                class="btn dashboard">
 
                 <i class="bi bi-speedometer2"></i>
@@ -238,7 +238,7 @@
                     </td>
 
                     <td>
-                        {{ tutor[2] }}
+                        {{ tutor[2] if tutor[2] else 'All' }}
                     </td>
 
                 </tr>
@@ -251,7 +251,7 @@
                     </td>
 
                     <td>
-                        {{ tutor[3] }}
+                        {{ tutor[3] if tutor[3] else 'All' }}
                     </td>
 
                 </tr>
@@ -526,7 +526,7 @@
                 </h2>
 
                 <small>
-                    Search and download certificates
+                    Search and manage certificates
                 </small>
 
             </div>
@@ -615,7 +615,6 @@
                     </tr>
 
                 </thead>
-
 
 
                 <tbody>
@@ -713,7 +712,7 @@
 
                         <!-- =================================================
                              VIEW
-                             DIRECT GOOGLE DRIVE URL
+                             GOOGLE DRIVE VIEWER
                         ================================================== -->
 
                         <td>
@@ -746,7 +745,7 @@
 
                         <!-- =================================================
                              DOWNLOAD
-                             DIRECT GOOGLE DRIVE DOWNLOAD
+                             OPEN GOOGLE DRIVE FILE
                         ================================================== -->
 
                         <td>
@@ -756,7 +755,6 @@
                                 <a
                                     class="download-btn drive-download-btn"
                                     href="{{ certificate[6] }}"
-                                    data-drive-url="{{ certificate[6] }}"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
@@ -952,137 +950,49 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-
     const searchInput =
         document.getElementById("searchInput");
-
 
     const tableRows =
         document.querySelectorAll(
             "#certificateTable tbody tr"
         );
 
-
     if (!searchInput) {
         return;
     }
 
-
     searchInput.addEventListener(
         "keyup",
         function () {
-
 
             const filter =
                 this.value
                     .toLowerCase()
                     .trim();
 
+            tableRows.forEach(function (row) {
 
-            tableRows.forEach(
-                function (row) {
+                const text =
+                    row.innerText.toLowerCase();
 
+                if (
+                    filter === "" ||
+                    text.includes(filter)
+                ) {
 
-                    const text =
-                        row.innerText
-                            .toLowerCase();
+                    row.style.display = "";
 
+                } else {
 
-                    if (
-                        filter === "" ||
-                        text.includes(filter)
-                    ) {
-
-                        row.style.display = "";
-
-                    }
-
-                    else {
-
-                        row.style.display = "none";
-
-                    }
+                    row.style.display = "none";
 
                 }
-            );
+
+            });
 
         }
     );
-
-});
-
-</script>
-
-
-
-<!-- =====================================================
-     GOOGLE DRIVE DOWNLOAD SCRIPT
-====================================================== -->
-
-<script>
-
-document.addEventListener("DOMContentLoaded", function () {
-
-
-    const downloadButtons =
-        document.querySelectorAll(
-            ".drive-download-btn"
-        );
-
-
-    downloadButtons.forEach(function (button) {
-
-
-        const driveUrl =
-            button.getAttribute("data-drive-url");
-
-
-        if (!driveUrl) {
-            return;
-        }
-
-
-        /*
-        =====================================================
-        GOOGLE DRIVE FILE ID
-        =====================================================
-        */
-
-
-        let fileId = null;
-
-
-        const match =
-            driveUrl.match(
-                /\/file\/d\/([^\/]+)/
-            );
-
-
-        if (match && match[1]) {
-
-            fileId = match[1];
-
-        }
-
-
-        /*
-        =====================================================
-        CREATE GOOGLE DRIVE DOWNLOAD URL
-        =====================================================
-        */
-
-
-        if (fileId) {
-
-            button.href =
-                "https://drive.google.com/uc?export=download&id=" +
-                encodeURIComponent(fileId);
-
-            button.target = "_blank";
-
-        }
-
-    });
 
 });
 
@@ -1098,15 +1008,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function downloadReports() {
 
-
     const searchBox =
         document.getElementById("searchInput");
-
 
     if (!searchBox) {
         return;
     }
-
 
     const searchText =
         searchBox.value.trim();
@@ -1116,18 +1023,15 @@ function downloadReports() {
     ========================================================
     EMPTY SEARCH
 
-    Download ALL certificates belonging
+    Download all certificates belonging
     to this tutor.
     ========================================================
     */
 
-
     if (searchText === "") {
-
 
         window.location.href =
             "/export_zip";
-
 
         return;
 
@@ -1138,10 +1042,9 @@ function downloadReports() {
     ========================================================
     SEARCH ENTERED
 
-    Download ONLY matching certificates.
+    Download only matching certificates.
     ========================================================
     */
-
 
     window.location.href =
         "/export_zip?search=" +
@@ -1161,49 +1064,30 @@ function downloadReports() {
 
 @media print {
 
-
     body {
-
         background:#ffffff !important;
-
     }
-
 
     .top-buttons {
-
         display:none !important;
-
     }
-
 
     .report-search-actions {
-
         display:none !important;
-
     }
-
 
     .report-box {
-
         page-break-inside:avoid;
-
     }
-
 
     .footer {
-
         margin-top:30px;
-
         text-align:center;
-
     }
-
 
     .view-btn,
     .download-btn {
-
         display:none !important;
-
     }
 
 }
