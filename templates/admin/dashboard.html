@@ -3,16 +3,17 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Admin Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet"
-      href="{{ url_for('static', filename='css/admin.css') }}">
+    <title>Admin Dashboard</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-      rel="stylesheet">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/admin.css') }}">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
 
 </head>
 
@@ -286,21 +287,17 @@ MAIN
                             {{ student[1] }}
                         </td>
 
-
                         <td>
                             {{ student[2] }}
                         </td>
-
 
                         <td>
                             {{ student[3] }}
                         </td>
 
-
                         <td>
                             {{ student[4] }}
                         </td>
-
 
                         <td>
                             {{ student[5] }}
@@ -501,82 +498,70 @@ MAIN
 
                         <!-- ==================================================
                         VIEW CERTIFICATE
+                        GOOGLE DRIVE
                         ================================================== -->
 
                         <td>
 
-
                             {% if certificate[6] %}
 
+                                <a
+                                    class="view"
+                                    href="{{ certificate[6] }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
 
-                            <a
-                                class="view"
-                                href="{{ certificate[6] }}"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
+                                    <i class="bi bi-eye-fill"></i>
 
-                                <i class="bi bi-eye-fill"></i>
+                                    View
 
-                                View
-
-                            </a>
-
+                                </a>
 
                             {% else %}
 
+                                <span>
 
-                            <span>
+                                    No File
 
-                                No File
-
-                            </span>
-
+                                </span>
 
                             {% endif %}
-
 
                         </td>
 
 
 
                         <!-- ==================================================
-                        DOWNLOAD
+                        DOWNLOAD CERTIFICATE
+                        GOOGLE DRIVE
                         ================================================== -->
 
                         <td>
 
-
                             {% if certificate[6] %}
 
+                                <a
+                                    class="download"
+                                    href="javascript:void(0);"
+                                    onclick="downloadDriveFile('{{ certificate[6] }}')"
+                                >
 
-                            <a
-                                class="download"
-                                href="{{ url_for(
-                                    'download',
-                                    filename=certificate[6]
-                                ) }}"
-                            >
+                                    <i class="bi bi-download"></i>
 
-                                <i class="bi bi-download"></i>
+                                    Download
 
-                                Download
-
-                            </a>
-
+                                </a>
 
                             {% else %}
 
+                                <span>
 
-                            <span>
+                                    No File
 
-                                No File
-
-                            </span>
-
+                                </span>
 
                             {% endif %}
-
 
                         </td>
 
@@ -592,7 +577,6 @@ MAIN
             </table>
 
         </div>
-
 
 
     </div>
@@ -677,7 +661,9 @@ if (searchInput) {
 
                     row.style.display = "";
 
-                } else {
+                }
+
+                else {
 
                     row.style.display = "none";
 
@@ -690,6 +676,98 @@ if (searchInput) {
         }
     );
 
+
+}
+
+
+
+/* ==================================================
+GOOGLE DRIVE DOWNLOAD
+================================================== */
+
+function downloadDriveFile(driveUrl) {
+
+
+    if (!driveUrl) {
+
+        alert("Google Drive file URL not found.");
+
+        return;
+
+    }
+
+
+    let fileId = null;
+
+
+    /* ----------------------------------------------
+       FORMAT:
+
+       https://drive.google.com/file/d/FILE_ID/view
+    ---------------------------------------------- */
+
+    const fileMatch =
+        driveUrl.match(/\/file\/d\/([^\/]+)/);
+
+
+    if (fileMatch) {
+
+        fileId = fileMatch[1];
+
+    }
+
+
+    /* ----------------------------------------------
+       FORMAT:
+
+       https://drive.google.com/open?id=FILE_ID
+    ---------------------------------------------- */
+
+    if (!fileId) {
+
+        const idMatch =
+            driveUrl.match(/[?&]id=([^&]+)/);
+
+
+        if (idMatch) {
+
+            fileId = idMatch[1];
+
+        }
+
+    }
+
+
+    /* ----------------------------------------------
+       FILE ID NOT FOUND
+    ---------------------------------------------- */
+
+    if (!fileId) {
+
+        alert("Unable to find Google Drive File ID.");
+
+        return;
+
+    }
+
+
+    /* ----------------------------------------------
+       GOOGLE DRIVE DOWNLOAD URL
+    ---------------------------------------------- */
+
+    const downloadUrl =
+        "https://drive.google.com/uc?export=download&id=" +
+        encodeURIComponent(fileId);
+
+
+    /* ----------------------------------------------
+       OPEN DOWNLOAD
+    ---------------------------------------------- */
+
+    window.open(
+        downloadUrl,
+        "_blank"
+    );
 
 }
 

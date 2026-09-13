@@ -637,22 +637,26 @@
                 </td>
 
 
-                <!-- View -->
+                <!-- =================================================
+                     VIEW CERTIFICATE
+                     GOOGLE DRIVE URL
+                ================================================= -->
 
                 <td>
 
                     {% if certificate[7] %}
 
-                    <a
-                        class="view-btn"
-                        href="{{ url_for('static', filename='uploads/certificates/' ~ certificate[7]) }}"
-                        target="_blank">
+                        <a
+                            class="view-btn"
+                            href="{{ certificate[7] }}"
+                            target="_blank"
+                            rel="noopener noreferrer">
 
-                        <i class="bi bi-eye-fill"></i>
+                            <i class="bi bi-eye-fill"></i>
 
-                        View
+                            View
 
-                    </a>
+                        </a>
 
                     {% else %}
 
@@ -665,21 +669,23 @@
                 </td>
 
 
-                <!-- Download -->
+                <!-- =================================================
+                     DOWNLOAD
+                ================================================= -->
 
                 <td>
 
                     {% if certificate[7] %}
 
-                    <a
-                        class="download-btn"
-                        href="/download/{{ certificate[7] }}">
+                        <a
+                            class="download-btn"
+                            href="/download/{{ certificate[7] }}">
 
-                        <i class="bi bi-download"></i>
+                            <i class="bi bi-download"></i>
 
-                        Download
+                            Download
 
-                    </a>
+                        </a>
 
                     {% else %}
 
@@ -828,7 +834,6 @@
 
 <script>
 
-
 /* ==========================================
    SEARCH
 ========================================== */
@@ -909,7 +914,6 @@ function downloadHodReports(){
         encodeURIComponent(searchText);
 
 }
-
 
 </script>
 
