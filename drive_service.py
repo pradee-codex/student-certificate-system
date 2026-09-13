@@ -33,6 +33,13 @@ TOKEN_FILE = os.getenv(
 
 
 # =========================================================
+# COLLEGE DOMAIN
+# =========================================================
+
+COLLEGE_DOMAIN = "sritcbe.ac.in"
+
+
+# =========================================================
 # GET GOOGLE DRIVE SERVICE
 # =========================================================
 
@@ -218,6 +225,34 @@ def upload_to_drive(file_path, file_name=None):
 
         raise Exception(
             "Google Drive uploaded file ID not found."
+        )
+
+    # =====================================================
+    # GIVE COLLEGE DOMAIN VIEW ACCESS
+    # =====================================================
+
+    try:
+
+        permission = {
+            "type": "domain",
+            "role": "reader",
+            "domain": COLLEGE_DOMAIN
+        }
+
+        service.permissions().create(
+            fileId=file_id,
+            body=permission,
+            fields="id"
+        ).execute()
+
+        print(
+            f"College domain access granted: {COLLEGE_DOMAIN}"
+        )
+
+    except Exception as e:
+
+        raise Exception(
+            f"Unable to give college domain access: {e}"
         )
 
     # -----------------------------------------------------
