@@ -16,9 +16,11 @@
 
 </head>
 
+
 <body>
 
 <div class="container">
+
 
     <!-- =====================================================
          TOP BAR
@@ -39,6 +41,7 @@
 
         </div>
 
+
         <div class="top-buttons">
 
             <a href="/tutor"
@@ -49,6 +52,7 @@
 
             </a>
 
+
             <a href="/tutor_export_excel"
                class="btn excel">
 
@@ -57,6 +61,7 @@
 
             </a>
 
+
             <a href="/tutor_export_pdf"
                class="btn pdf">
 
@@ -64,6 +69,7 @@
                 PDF
 
             </a>
+
 
             <button
                 type="button"
@@ -78,6 +84,7 @@
         </div>
 
     </div>
+
 
 
     <!-- =====================================================
@@ -146,6 +153,7 @@
         </div>
 
     </div>
+
 
 
     <!-- =====================================================
@@ -252,6 +260,7 @@
     </div>
 
 
+
     <!-- =====================================================
          DEPARTMENT REPORT
     ====================================================== -->
@@ -328,6 +337,7 @@
     </div>
 
 
+
     <!-- =====================================================
          YEAR REPORT
     ====================================================== -->
@@ -402,6 +412,7 @@
         </table>
 
     </div>
+
 
 
     <!-- =====================================================
@@ -489,11 +500,13 @@
     </div>
 
 
+
     <!-- =====================================================
          RECENT CERTIFICATE UPLOADS
     ====================================================== -->
 
     <div class="report-box">
+
 
         <div class="box-header">
 
@@ -529,8 +542,7 @@
                 <button
                     type="button"
                     onclick="downloadReports()"
-                    class="download-all-btn"
-                >
+                    class="download-all-btn">
 
                     <i class="bi bi-download"></i>
 
@@ -541,6 +553,7 @@
             </div>
 
         </div>
+
 
 
         <!-- =================================================
@@ -602,6 +615,7 @@
 
                     <tr>
 
+
                         <!-- STUDENT -->
 
                         <td>
@@ -661,6 +675,7 @@
 
                                 </span>
 
+
                             {% elif certificate[5] == "Winner" %}
 
                                 <span class="badge bg-success">
@@ -668,6 +683,7 @@
                                     🥇 Winner
 
                                 </span>
+
 
                             {% elif certificate[5] == "Runner Up" %}
 
@@ -677,6 +693,7 @@
 
                                 </span>
 
+
                             {% elif certificate[5] == "Runner" %}
 
                                 <span class="badge bg-warning text-dark">
@@ -685,11 +702,12 @@
 
                                 </span>
 
+
                             {% else %}
 
                                 <span class="badge bg-secondary">
 
-                                    📜 {{ certificate[5] }}
+                                    📜 {{ certificate[5] or "Others" }}
 
                                 </span>
 
@@ -707,18 +725,31 @@
                         </td>
 
 
+
                         <!-- =================================================
-                             VIEW
-                             DIRECT GOOGLE DRIVE URL
+                             VIEW CERTIFICATE
+                             
+                             IMPORTANT:
+                             Direct Google Drive URL
+                             No /view/ Flask route
                         ================================================== -->
 
                         <td>
 
                             {% if certificate[6] %}
 
+                                {% set file_url = certificate[6] %}
+
+                                {% if file_url.startswith('/view/') %}
+
+                                    {% set file_url = file_url[6:] %}
+
+                                {% endif %}
+
+
                                 <a
                                     class="view-btn"
-                                    href="{{ certificate[6] }}"
+                                    href="{{ file_url }}"
                                     target="_blank"
                                     rel="noopener noreferrer">
 
@@ -739,9 +770,11 @@
                         </td>
 
 
+
                         <!-- =================================================
                              DOWNLOAD
-                             SEND GOOGLE DRIVE URL TO FLASK
+                             
+                             Send Google Drive URL to Flask
                         ================================================== -->
 
                         <td>
@@ -771,6 +804,7 @@
 
                         </td>
 
+
                     </tr>
 
 
@@ -780,13 +814,12 @@
 
                         <td
                             colspan="9"
-                            style="text-align:center;padding:40px;"
-                        >
+                            style="text-align:center;padding:40px;">
 
                             <i
                                 class="bi bi-award"
-                                style="font-size:45px;"
-                            ></i>
+                                style="font-size:45px;">
+                            </i>
 
                             <h3>
                                 No Certificates Found
@@ -809,6 +842,7 @@
         </div>
 
     </div>
+
 
 
     <!-- =====================================================
@@ -888,6 +922,7 @@
     </div>
 
 
+
     <!-- =====================================================
          FOOTER
     ====================================================== -->
@@ -925,7 +960,9 @@
 
     </div>
 
+
 </div>
+
 
 
 <!-- =====================================================
@@ -948,6 +985,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
+
     searchInput.addEventListener(
         "keyup",
         function () {
@@ -957,12 +995,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     .toLowerCase()
                     .trim();
 
+
             tableRows.forEach(
                 function (row) {
 
                     const text =
                         row.innerText
                             .toLowerCase();
+
 
                     if (
                         filter === "" ||
@@ -971,9 +1011,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         row.style.display = "";
 
-                    }
-
-                    else {
+                    } else {
 
                         row.style.display = "none";
 
@@ -990,6 +1028,7 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 
+
 <!-- =====================================================
      DOWNLOAD REPORTS
 ====================================================== -->
@@ -1001,9 +1040,11 @@ function downloadReports() {
     const searchBox =
         document.getElementById("searchInput");
 
+
     if (!searchBox) {
         return;
     }
+
 
     const searchText =
         searchBox.value.trim();
@@ -1045,6 +1086,7 @@ function downloadReports() {
 </script>
 
 
+
 <!-- =====================================================
      PRINT STYLE
 ====================================================== -->
@@ -1059,11 +1101,13 @@ function downloadReports() {
 
     }
 
+
     .top-buttons {
 
         display:none !important;
 
     }
+
 
     .report-search-actions {
 
@@ -1071,11 +1115,13 @@ function downloadReports() {
 
     }
 
+
     .report-box {
 
         page-break-inside:avoid;
 
     }
+
 
     .footer {
 
@@ -1088,6 +1134,7 @@ function downloadReports() {
 }
 
 </style>
+
 
 
 </body>
