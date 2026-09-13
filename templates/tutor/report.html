@@ -88,7 +88,6 @@
     </div>
 
 
-
     <!-- =====================================================
          SUMMARY CARDS
     ====================================================== -->
@@ -155,7 +154,6 @@
         </div>
 
     </div>
-
 
 
     <!-- =====================================================
@@ -262,7 +260,6 @@
     </div>
 
 
-
     <!-- =====================================================
          DEPARTMENT REPORT
     ====================================================== -->
@@ -337,7 +334,6 @@
         </table>
 
     </div>
-
 
 
     <!-- =====================================================
@@ -416,7 +412,6 @@
     </div>
 
 
-
     <!-- =====================================================
          QUICK STATISTICS
     ====================================================== -->
@@ -437,6 +432,7 @@
 
 
         <div class="stats-grid">
+
 
             <div class="mini-card">
 
@@ -502,7 +498,6 @@
     </div>
 
 
-
     <!-- =====================================================
          RECENT CERTIFICATE UPLOADS
     ====================================================== -->
@@ -530,7 +525,7 @@
             </div>
 
 
-            <!-- SEARCH + DOWNLOAD -->
+            <!-- SEARCH + DOWNLOAD ALL -->
 
             <div class="report-search-actions">
 
@@ -557,7 +552,6 @@
             </div>
 
         </div>
-
 
 
         <!-- =================================================
@@ -612,7 +606,6 @@
                     </tr>
 
                 </thead>
-
 
 
                 <tbody>
@@ -708,10 +701,9 @@
                         </td>
 
 
-
                         <!-- =================================================
                              VIEW
-                             GOOGLE DRIVE VIEW URL
+                             GOOGLE DRIVE VIEWER
                         ================================================== -->
 
                         <td>
@@ -743,10 +735,9 @@
                         </td>
 
 
-
                         <!-- =================================================
                              DOWNLOAD
-                             GOOGLE DRIVE DOWNLOAD
+                             FLASK DOWNLOAD ROUTE
                         ================================================== -->
 
                         <td>
@@ -754,9 +745,11 @@
                             {% if certificate[6] %}
 
                                 <a
-                                    class="download-btn drive-download-btn"
-                                    href="#"
-                                    data-drive-url="{{ certificate[6] }}"
+                                    class="download-btn"
+                                    href="{{ url_for(
+                                        'download',
+                                        filename=certificate[6]
+                                    ) }}"
                                 >
 
                                     <i class="bi bi-download"></i>
@@ -817,7 +810,6 @@
         </div>
 
     </div>
-
 
 
     <!-- =====================================================
@@ -898,7 +890,6 @@
     </div>
 
 
-
     <!-- =====================================================
          FOOTER
     ====================================================== -->
@@ -941,7 +932,6 @@
 </div>
 
 
-
 <!-- =====================================================
      SEARCH SCRIPT
 ====================================================== -->
@@ -953,14 +943,17 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchInput =
         document.getElementById("searchInput");
 
+
     const tableRows =
         document.querySelectorAll(
             "#certificateTable tbody tr"
         );
 
+
     if (!searchInput) {
         return;
     }
+
 
     searchInput.addEventListener(
         "keyup",
@@ -971,10 +964,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     .toLowerCase()
                     .trim();
 
+
             tableRows.forEach(function (row) {
 
                 const text =
                     row.innerText.toLowerCase();
+
 
                 if (
                     filter === "" ||
@@ -999,9 +994,14 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 
-
 <!-- =====================================================
-     GOOGLE DRIVE VIEW + DOWNLOAD
+     GOOGLE DRIVE VIEW ONLY
+     
+     IMPORTANT:
+     VIEW uses Google Drive.
+     
+     DOWNLOAD DOES NOT USE GOOGLE DRIVE URL.
+     DOWNLOAD uses Flask /download route.
 ====================================================== -->
 
 <script>
@@ -1011,7 +1011,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /*
     ========================================================
-    FUNCTION
     EXTRACT GOOGLE DRIVE FILE ID
     ========================================================
     */
@@ -1058,27 +1057,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     /[?&]id=([^&#]+)/
                 );
 
-            if (match && match[1]) {
-
-                fileId = match[1];
-
-            }
-
-        }
-
-
-        /*
-        Format:
-
-        drive.usercontent.google.com/download?id=FILE_ID
-        */
-
-        if (!fileId) {
-
-            match =
-                url.match(
-                    /[?&]id=([^&#]+)/
-                );
 
             if (match && match[1]) {
 
@@ -1094,10 +1072,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-
     /*
     ========================================================
-    VIEW BUTTON
+    VIEW BUTTON ONLY
     ========================================================
     */
 
@@ -1123,7 +1100,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (fileId) {
 
             /*
-            Google Drive normal viewer
+            Google Drive VIEW URL
             */
 
             button.href =
@@ -1135,59 +1112,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
-
-
-    /*
-    ========================================================
-    DOWNLOAD BUTTON
-    ========================================================
-    */
-
-    const downloadButtons =
-        document.querySelectorAll(
-            ".drive-download-btn"
-        );
-
-
-    downloadButtons.forEach(function (button) {
-
-
-        const driveUrl =
-            button.getAttribute(
-                "data-drive-url"
-            );
-
-
-        const fileId =
-            getDriveFileId(driveUrl);
-
-
-        if (fileId) {
-
-            /*
-            IMPORTANT:
-
-            This is DOWNLOAD URL.
-
-            It will NOT open the
-            Google Drive viewer.
-            */
-
-            button.href =
-                "https://drive.google.com/uc?export=download&id=" +
-                encodeURIComponent(fileId);
-
-
-            button.removeAttribute("target");
-
-        }
-
-    });
-
 });
 
 </script>
-
 
 
 <!-- =====================================================
@@ -1201,9 +1128,11 @@ function downloadReports() {
     const searchBox =
         document.getElementById("searchInput");
 
+
     if (!searchBox) {
         return;
     }
+
 
     const searchText =
         searchBox.value.trim();
@@ -1212,10 +1141,10 @@ function downloadReports() {
     /*
     ========================================================
     EMPTY SEARCH
-
-    Download all certificates
-    belonging to this tutor.
     ========================================================
+
+    Download all certificates belonging
+    to this tutor.
     */
 
     if (searchText === "") {
@@ -1231,9 +1160,9 @@ function downloadReports() {
     /*
     ========================================================
     SEARCH ENTERED
+    ========================================================
 
     Download only matching certificates.
-    ========================================================
     */
 
     window.location.href =
@@ -1243,7 +1172,6 @@ function downloadReports() {
 }
 
 </script>
-
 
 
 <!-- =====================================================
@@ -1258,22 +1186,27 @@ function downloadReports() {
         background:#ffffff !important;
     }
 
+
     .top-buttons {
         display:none !important;
     }
+
 
     .report-search-actions {
         display:none !important;
     }
 
+
     .report-box {
         page-break-inside:avoid;
     }
+
 
     .footer {
         margin-top:30px;
         text-align:center;
     }
+
 
     .view-btn,
     .download-btn {
