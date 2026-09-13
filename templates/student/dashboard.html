@@ -3,20 +3,24 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Student Dashboard</title>
+    <title>Student Dashboard</title>
 
-<link rel="stylesheet"
-      href="{{ url_for('static', filename='css/student.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/student.css') }}">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-      rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
 
 </head>
 
 <body>
+
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
 
 <div class="sidebar">
 
@@ -77,7 +81,17 @@
 
 </div>
 
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
 <div class="main">
+
+
+    <!-- =====================================================
+         TOPBAR
+    ====================================================== -->
 
     <div class="topbar">
 
@@ -88,19 +102,25 @@
 
         </div>
 
+
         <div class="user-box">
 
             {% if student[8] %}
 
-            <img src="{{ url_for('static',
-                    filename='uploads/profile/' + student[8]) }}">
+            <img src="{{ url_for(
+                'static',
+                filename='uploads/profile/' + student[8]
+            ) }}">
 
             {% else %}
 
-            <img src="{{ url_for('static',
-                    filename='images/default.png') }}">
+            <img src="{{ url_for(
+                'static',
+                filename='images/default.png'
+            ) }}">
 
             {% endif %}
+
 
             <div>
 
@@ -114,7 +134,17 @@
 
     </div>
 
+
+    <!-- =====================================================
+         CONTAINER
+    ====================================================== -->
+
     <div class="container">
+
+
+        <!-- =================================================
+             WELCOME BANNER
+        ================================================== -->
 
         <div class="welcome-banner">
 
@@ -130,460 +160,706 @@
 
             </div>
 
+
             <div class="right">
 
-    {% if student[8] %}
-        <img src="{{ url_for('static', filename='uploads/profile/' + student[8]) }}"
-             class="student-photo">
-    {% else %}
-        <img src="{{ url_for('static', filename='images/default.png') }}"
-             class="student-photo">
-    {% endif %}
+                {% if student[8] %}
 
-    <form action="/upload_student_photo"
-          method="POST"
-          enctype="multipart/form-data">
+                <img src="{{ url_for(
+                    'static',
+                    filename='uploads/profile/' + student[8]
+                ) }}"
+                class="student-photo">
 
-        <input type="file"
-               name="profile_photo"
-               class="form-control mt-3"
-               accept=".jpg,.jpeg,.png"
-               required>
+                {% else %}
 
-        <button type="submit" class="btn btn-success mt-2">
-            <i class="bi bi-upload"></i>
-            Upload Photo
-        </button>
+                <img src="{{ url_for(
+                    'static',
+                    filename='images/default.png'
+                ) }}"
+                class="student-photo">
 
-    </form>
+                {% endif %}
 
-</div>
 
-            </div>
+                <form action="/upload_student_photo"
+                      method="POST"
+                      enctype="multipart/form-data">
 
-        </div>
-        <!-- ================= Upload Certificate ================= -->
+                    <input type="file"
+                           name="profile_photo"
+                           class="form-control mt-3"
+                           accept=".jpg,.jpeg,.png"
+                           required>
 
-<div class="card" id="upload">
-
-    <div class="card-header">
-
-        <h2>
-            <i class="bi bi-cloud-arrow-up-fill"></i>
-            Upload Certificate
-        </h2>
-
-    </div>
-
-    <div class="card-body">
-
-        <form action="/upload_certificate"
-              method="POST"
-              enctype="multipart/form-data">
-
-            <div class="row">
-
-                <!-- Certificate Name -->
-
-                <div class="col-md-6 mb-3">
-
-                    <label class="form-label">
-                        Certificate Name
-                    </label>
-
-                    <input
-                        type="text"
-                        name="certificate_title"
-                        class="form-control"
-                        placeholder="Enter Certificate Name"
-                        required>
-
-                </div>
-
-                <!-- Category -->
-
-                <div class="col-md-6 mb-3">
-
-                    <label class="form-label">
-                        Certificate Category
-                    </label>
-
-                    <select
-                        name="category_id"
-                        class="form-select"
-                        required>
-
-                        <option value="">
-                            Select Category
-                        </option>
-
-                        {% for category in categories %}
-
-                        <option value="{{ category[0] }}">
-                            {{ category[1] }}
-                        </option>
-
-                        {% endfor %}
-
-                    </select>
-
-                </div>
-
-<!-- Achievement -->
- <div class="col-md-6 mb-3">
-
-    <label class="form-label">
-        Achievement
-    </label>
-
-    <select
-        name="achievement"
-        class="form-select"
-        required>
-
-        <option value="">Select Achievement</option>
-
-        <option value="Winner">🏆 Winner</option>
-
-        <option value="Runner">🥈 Runner</option>
-
-        <option value="Participated">🎖 Participated</option>
-
-        <option value="Others">📜 Others</option>
-
-    </select>
-
-</div>
-                
-
-                <!-- Upload File -->
-
-                <div class="col-md-12 mb-3">
-
-                    <label class="form-label">
-                        Upload Certificate
-                    </label>
-
-                    <input
-                        type="file"
-                        name="certificate_file"
-                        class="form-control"
-                        accept=".pdf,.jpg,.jpeg,.png"
-                        onchange="previewCertificate(event)"
-                        required>
-
-                </div>
-
-                
-                <!-- Button -->
-
-                <div class="col-md-12 text-center">
-
-                    <button
-                        type="submit"
-                        class="btn btn-success btn-lg px-5">
+                    <button type="submit"
+                            class="btn btn-success mt-2">
 
                         <i class="bi bi-upload"></i>
 
-                        Upload Certificate
+                        Upload Photo
 
                     </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             UPLOAD CERTIFICATE
+        ================================================== -->
+
+        <div class="card" id="upload">
+
+            <div class="card-header">
+
+                <h2>
+
+                    <i class="bi bi-cloud-arrow-up-fill"></i>
+
+                    Upload Certificate
+
+                </h2>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <form action="/upload_certificate"
+                      method="POST"
+                      enctype="multipart/form-data">
+
+
+                    <div class="row">
+
+
+                        <!-- Certificate Name -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+                                Certificate Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="certificate_title"
+                                class="form-control"
+                                placeholder="Enter Certificate Name"
+                                required>
+
+                        </div>
+
+
+                        <!-- Category -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+                                Certificate Category
+                            </label>
+
+                            <select
+                                name="category_id"
+                                class="form-select"
+                                required>
+
+                                <option value="">
+                                    Select Category
+                                </option>
+
+                                {% for category in categories %}
+
+                                <option value="{{ category[0] }}">
+                                    {{ category[1] }}
+                                </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+
+
+                        <!-- Achievement -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+                                Achievement
+                            </label>
+
+                            <select
+                                name="achievement"
+                                class="form-select"
+                                required>
+
+                                <option value="">
+                                    Select Achievement
+                                </option>
+
+                                <option value="Winner">
+                                    🏆 Winner
+                                </option>
+
+                                <option value="Runner">
+                                    🥈 Runner
+                                </option>
+
+                                <option value="Participated">
+                                    🎖 Participated
+                                </option>
+
+                                <option value="Others">
+                                    📜 Others
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <!-- Upload File -->
+
+                        <div class="col-md-12 mb-3">
+
+                            <label class="form-label">
+                                Upload Certificate
+                            </label>
+
+                            <input
+                                type="file"
+                                name="certificate_file"
+                                class="form-control"
+                                accept=".pdf,.jpg,.jpeg,.png"
+                                onchange="previewCertificate(event)"
+                                required>
+
+                        </div>
+
+
+
+                        <!-- Upload Button -->
+
+                        <div class="col-md-12 text-center">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success btn-lg px-5">
+
+                                <i class="bi bi-upload"></i>
+
+                                Upload Certificate
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             CERTIFICATE PREVIEW SCRIPT
+        ================================================== -->
+
+        <script>
+
+        function previewCertificate(event) {
+
+            let file = event.target.files[0];
+
+            if (!file) return;
+
+            if (file.type.startsWith("image")) {
+
+                let reader = new FileReader();
+
+                reader.onload = function(e) {
+
+                    let preview =
+                        document.getElementById("certificatePreview");
+
+                    if (preview) {
+                        preview.src = e.target.result;
+                    }
+
+                };
+
+                reader.readAsDataURL(file);
+
+            }
+
+        }
+
+        </script>
+
+
+
+        <!-- =================================================
+             MY CERTIFICATES
+        ================================================== -->
+
+        <div class="card mt-4" id="certificates">
+
+
+            <div class="card-header d-flex justify-content-between align-items-center">
+
+                <h2>
+
+                    <i class="bi bi-folder2-open"></i>
+
+                    My Certificates
+
+                </h2>
+
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    class="form-control"
+                    style="width:300px;"
+                    placeholder="🔍 Search Certificate..."
+                    onkeyup="searchTable()">
+
+            </div>
+
+
+
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table
+                        class="table table-hover table-bordered align-middle"
+                        id="certificateTable">
+
+
+                        <thead class="table-success">
+
+                            <tr>
+
+                                <th>S.No</th>
+
+                                <th>Certificate</th>
+
+                                <th>Category</th>
+
+                                <th>Upload Date</th>
+
+                                <th>Achievement</th>
+
+                                <th>View</th>
+
+                                <th>Download</th>
+
+                            </tr>
+
+                        </thead>
+
+
+
+                        <tbody>
+
+
+                        {% if certificates %}
+
+
+                            {% for certificate in certificates %}
+
+                            <tr>
+
+
+                                <!-- S.No -->
+
+                                <td>
+                                    {{ loop.index }}
+                                </td>
+
+
+
+                                <!-- Certificate -->
+
+                                <td>
+                                    {{ certificate[0] }}
+                                </td>
+
+
+
+                                <!-- Category -->
+
+                                <td>
+                                    {{ certificate[1] }}
+                                </td>
+
+
+
+                                <!-- Upload Date -->
+
+                                <td>
+                                    {{ certificate[2].strftime('%d-%m-%Y') }}
+                                </td>
+
+
+
+                                <!-- Achievement -->
+
+                                <td>
+
+                                    {% if certificate[3] == "Winner" %}
+
+                                        <span class="badge bg-success">
+                                            🏆 Winner
+                                        </span>
+
+                                    {% elif certificate[3] == "Runner" %}
+
+                                        <span class="badge bg-warning text-dark">
+                                            🥈 Runner
+                                        </span>
+
+                                    {% elif certificate[3] == "Participated" %}
+
+                                        <span class="badge bg-primary">
+                                            🎖 Participated
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+                                            📜 Others
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =================================================
+                                     VIEW
+                                     DIRECT GOOGLE DRIVE LINK
+                                ================================================== -->
+
+                                <td>
+
+                                    {% if certificate[4] %}
+
+                                    <a href="{{ certificate[4] }}"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="btn btn-success btn-sm">
+
+                                        <i class="bi bi-eye"></i>
+
+                                        View
+
+                                    </a>
+
+                                    {% else %}
+
+                                    <span class="text-muted">
+                                        No File
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- =================================================
+                                     DOWNLOAD
+                                     DIRECT GOOGLE DRIVE LINK
+                                ================================================== -->
+
+                                <td>
+
+                                    {% if certificate[4] %}
+
+                                    <a href="{{ certificate[4] }}"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="btn btn-primary btn-sm">
+
+                                        <i class="bi bi-download"></i>
+
+                                        Download
+
+                                    </a>
+
+                                    {% else %}
+
+                                    <span class="text-muted">
+                                        No File
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                            </tr>
+
+                            {% endfor %}
+
+
+                        {% else %}
+
+
+                            <!-- No Certificates -->
+
+                            <tr>
+
+                                <td colspan="7"
+                                    class="text-center p-5">
+
+                                    <img
+                                        src="{{ url_for(
+                                            'static',
+                                            filename='images/no_data.png'
+                                        ) }}"
+                                        width="120">
+
+                                    <br>
+                                    <br>
+
+                                    <h4>
+                                        No Certificates Uploaded
+                                    </h4>
+
+                                    <p class="text-muted">
+                                        Upload your first certificate.
+                                    </p>
+
+                                </td>
+
+                            </tr>
+
+
+                        {% endif %}
+
+
+                        </tbody>
+
+                    </table>
 
                 </div>
 
             </div>
 
-        </form>
+        </div>
 
-    </div>
 
-</div>
 
-<script>
+        <!-- =================================================
+             SEARCH SCRIPT
+        ================================================== -->
 
-function previewCertificate(event){
+        <script>
 
-    let file = event.target.files[0];
+        function searchTable() {
 
-    if(!file) return;
+            let input =
+                document.getElementById("searchInput")
+                    .value
+                    .toUpperCase();
 
-    if(file.type.startsWith("image")){
+            let table =
+                document.getElementById("certificateTable");
 
-        let reader = new FileReader();
+            let tr =
+                table.getElementsByTagName("tr");
 
-        reader.onload = function(e){
 
-            document.getElementById("certificatePreview").src = e.target.result;
+            for (let i = 1; i < tr.length; i++) {
+
+                let td =
+                    tr[i].getElementsByTagName("td")[1];
+
+                if (td) {
+
+                    let txt =
+                        td.textContent ||
+                        td.innerText;
+
+                    tr[i].style.display =
+                        txt.toUpperCase()
+                            .indexOf(input) > -1
+                            ? ""
+                            : "none";
+
+                }
+
+            }
 
         }
 
-        reader.readAsDataURL(file);
+        </script>
 
-    }
-}
 
-</script>
-<!-- ===========================
-     My Certificates
-=========================== -->
 
-<div class="card mt-4" id="certificates">
+        <!-- =================================================
+             ANALYTICS
+        ================================================== -->
 
-    <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="card mt-4" id="analytics">
 
-        <h2>
 
-            <i class="bi bi-folder2-open"></i>
+            <div class="card-header">
 
-            My Certificates
+                <h2>
 
-        </h2>
+                    <i class="bi bi-bar-chart-fill"></i>
 
-        <input
-            type="text"
-            id="searchInput"
-            class="form-control"
-            style="width:300px;"
-            placeholder="🔍 Search Certificate..."
-            onkeyup="searchTable()">
+                    Certificate Analytics
 
-    </div>
+                </h2>
 
-    <div class="card-body">
+            </div>
 
-        <div class="table-responsive">
 
-            <table
-                class="table table-hover table-bordered align-middle"
-                id="certificateTable">
 
-                <thead class="table-success">
+            <div class="card-body">
 
-                    <tr>
 
-                        <th>S.No</th>
+                <div class="row g-4">
 
-                        <th>Certificate</th>
 
-                        <th>Category</th>
+                    <!-- Total Certificates -->
 
-                        <th>Upload Date</th>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
 
-                        <th>Achievement</th>
+                        <div class="analytics-box">
 
-                        <th>View</th>
+                            <i class="bi bi-award-fill"></i>
 
-                        <th>Download</th>
+                            <h1>
+                                {{ certificates|length }}
+                            </h1>
 
-                    </tr>
+                            <p>
+                                Total Certificates
+                            </p>
 
-                </thead>
+                        </div>
 
-                <tbody>
+                    </div>
 
-{% if certificates %}
 
-    {% for certificate in certificates %}
 
-    <tr>
+                    <!-- Technical -->
 
-        <td>{{ loop.index }}</td>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
 
-        <td>{{ certificate[0] }}</td>
+                        <div class="analytics-box">
 
-        <td>{{ certificate[1] }}</td>
+                            <i class="bi bi-cpu-fill"></i>
 
-        <td>{{ certificate[2].strftime('%d-%m-%Y') }}</td>
+                            <h1>
 
-        <td>
-            {% if certificate[3] == "Winner" %}
-                <span class="badge bg-success">🏆 Winner</span>
+                                {{
+                                    certificates
+                                    |selectattr("1","equalto","Technical")
+                                    |list
+                                    |length
+                                }}
 
-            {% elif certificate[3] == "Runner" %}
-                <span class="badge bg-warning text-dark">🥈 Runner</span>
+                            </h1>
 
-            {% elif certificate[3] == "Participated" %}
-                <span class="badge bg-primary">🎖 Participated</span>
+                            <p>
+                                Technical Certificates
+                            </p>
 
-            {% else %}
-                <span class="badge bg-secondary">📜 Others</span>
-            {% endif %}
-        </td>
+                        </div>
 
-        <td>
-            <a href="{{ url_for('view', filename=certificate[4]) }}">
-                <i class="bi bi-eye"></i> View
-            </a>
-        </td>
+                    </div>
 
-        <td>
-            <a href="{{ url_for('download', filename=certificate[4]) }}">
-                <i class="bi bi-download"></i> Download
-            </a>
-        </td>
 
-    </tr>
 
-    {% endfor %}
+                    <!-- Other -->
 
-{% else %}
+                    <div class="col-lg-4 col-md-4 col-sm-12">
 
-    <tr>
+                        <div class="analytics-box">
 
-        <td colspan="7" class="text-center p-5">
+                            <i class="bi bi-trophy-fill"></i>
 
-            <img
-                src="{{ url_for('static', filename='images/no_data.png') }}"
-                width="120">
+                            <h1>
 
-            <br><br>
+                                {{
+                                    certificates
+                                    |rejectattr("1","equalto","Technical")
+                                    |list
+                                    |length
+                                }}
 
-            <h4>No Certificates Uploaded</h4>
+                            </h1>
 
-            <p class="text-muted">
-                Upload your first certificate.
-            </p>
+                            <p>
+                                Other Certificates
+                            </p>
 
-        </td>
+                        </div>
 
-    </tr>
+                    </div>
 
-{% endif %}
 
-</tbody>
-            </table>
+                </div>
+
+            </div>
 
         </div>
 
-    </div>
 
-</div>
 
-<script>
+        <!-- =================================================
+             FOOTER
+        ================================================== -->
 
-function searchTable(){
+        <footer class="footer">
 
-    let input = document.getElementById("searchInput").value.toUpperCase();
+            &copy; 2026 Student Certificate Management System
+            | Designed by Pradeep From AIDS
 
-    let table = document.getElementById("certificateTable");
+        </footer>
 
-    let tr = table.getElementsByTagName("tr");
-
-    for(let i=1;i<tr.length;i++){
-
-        let td = tr[i].getElementsByTagName("td")[1];
-
-        if(td){
-
-            let txt = td.textContent || td.innerText;
-
-            tr[i].style.display =
-                txt.toUpperCase().indexOf(input)>-1 ? "" : "none";
-
-        }
-
-    }
-
-}
-
-</script>
-<!-- =========================================
-Analytics Section
-========================================= -->
-
-<div class="card mt-4" id="analytics">
-
-    <div class="card-header">
-
-        <h2>
-            <i class="bi bi-bar-chart-fill"></i>
-            Certificate Analytics
-        </h2>
-
-    </div>
-
-    <div class="card-body">
-
-        <div class="row">
-
-            <!-- Total Certificates -->
-
-            <div class="row g-4">
-
-    <!-- Total Certificates -->
-    <div class="col-lg-4 col-md-4 col-sm-12">
-
-        <div class="analytics-box">
-
-            <i class="bi bi-award-fill"></i>
-
-            <h1>{{ certificates|length }}</h1>
-
-            <p>Total Certificates</p>
-
-        </div>
-
-    </div>
-
-    <!-- Technical -->
-    <div class="col-lg-4 col-md-4 col-sm-12">
-
-        <div class="analytics-box">
-
-            <i class="bi bi-cpu-fill"></i>
-
-            <h1>
-                {{ certificates
-                |selectattr("1","equalto","Technical")
-                |list|length }}
-            </h1>
-
-            <p>Technical Certificates</p>
-
-        </div>
-
-    </div>
-
-    <!-- Other -->
-    <div class="col-lg-4 col-md-4 col-sm-12">
-
-        <div class="analytics-box">
-
-            <i class="bi bi-trophy-fill"></i>
-
-            <h1>
-                {{ certificates
-                |rejectattr("1","equalto","Technical")
-                |list|length }}
-            </h1>
-
-            <p>Other Certificates</p>
-
-        </div>
 
     </div>
 
 </div>
 
 
-<!-- =========================================
-Footer
-========================================= -->
 
-<footer class="footer">
-    &copy; 2026 Student Certificate Management System | Designed by Pradeep From AIDS
-</footer>
-
+<!-- =========================================================
+     PAGE LOAD
+========================================================= -->
 
 <script>
 
-window.onload=function(){
+window.onload = function() {
 
-console.log("Student Dashboard Loaded Successfully");
+    console.log(
+        "Student Dashboard Loaded Successfully"
+    );
 
-}
+};
 
 </script>
+
 
 </body>
 
