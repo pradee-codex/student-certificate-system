@@ -93,6 +93,7 @@
 
     <div class="cards">
 
+
         <div class="card green">
 
             <i class="bi bi-people-fill"></i>
@@ -235,7 +236,7 @@
                     </td>
 
                     <td>
-                        {{ tutor[2] }}
+                        {{ tutor[2] or "All Years" }}
                     </td>
 
                 </tr>
@@ -248,7 +249,7 @@
                     </td>
 
                     <td>
-                        {{ tutor[3] }}
+                        {{ tutor[3] or "All Sections" }}
                     </td>
 
                 </tr>
@@ -436,6 +437,7 @@
 
         <div class="stats-grid">
 
+
             <div class="mini-card">
 
                 <i class="bi bi-people-fill"></i>
@@ -508,7 +510,10 @@
     <div class="report-box">
 
 
+        <!-- HEADER -->
+
         <div class="box-header">
+
 
             <div>
 
@@ -542,7 +547,8 @@
                 <button
                     type="button"
                     onclick="downloadReports()"
-                    class="download-all-btn">
+                    class="download-all-btn"
+                >
 
                     <i class="bi bi-download"></i>
 
@@ -610,6 +616,7 @@
 
 
                 <tbody>
+
 
                     {% for certificate in certificates %}
 
@@ -725,33 +732,22 @@
                         </td>
 
 
-
                         <!-- =================================================
                              VIEW CERTIFICATE
-                             
-                             IMPORTANT:
-                             Direct Google Drive URL
-                             No /view/ Flask route
+
+                             certificate[6] = Google Drive URL
                         ================================================== -->
 
                         <td>
 
                             {% if certificate[6] %}
 
-                                {% set file_url = certificate[6] %}
-
-                                {% if file_url.startswith('/view/') %}
-
-                                    {% set file_url = file_url[6:] %}
-
-                                {% endif %}
-
-
                                 <a
                                     class="view-btn"
-                                    href="{{ file_url }}"
+                                    href="{{ certificate[6] }}"
                                     target="_blank"
-                                    rel="noopener noreferrer">
+                                    rel="noopener noreferrer"
+                                >
 
                                     <i class="bi bi-eye-fill"></i>
 
@@ -770,11 +766,13 @@
                         </td>
 
 
-
                         <!-- =================================================
-                             DOWNLOAD
-                             
-                             Send Google Drive URL to Flask
+                             DOWNLOAD CERTIFICATE
+
+                             certificate[6] = Google Drive URL
+
+                             Flask route:
+                             /download?url=DRIVE_URL
                         ================================================== -->
 
                         <td>
@@ -783,10 +781,8 @@
 
                                 <a
                                     class="download-btn"
-                                    href="{{ url_for(
-                                        'download',
-                                        url=certificate[6]
-                                    ) }}">
+                                    href="{{ url_for('download', url=certificate[6]) }}"
+                                >
 
                                     <i class="bi bi-download"></i>
 
@@ -814,12 +810,13 @@
 
                         <td
                             colspan="9"
-                            style="text-align:center;padding:40px;">
+                            style="text-align:center;padding:40px;"
+                        >
 
                             <i
                                 class="bi bi-award"
-                                style="font-size:45px;">
-                            </i>
+                                style="font-size:45px;"
+                            ></i>
 
                             <h3>
                                 No Certificates Found
@@ -834,6 +831,7 @@
                     </tr>
 
                     {% endfor %}
+
 
                 </tbody>
 
@@ -865,6 +863,7 @@
 
 
         <div class="summary-area">
+
 
             <div class="summary-card">
 
@@ -973,13 +972,16 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
+
     const searchInput =
         document.getElementById("searchInput");
+
 
     const tableRows =
         document.querySelectorAll(
             "#certificateTable tbody tr"
         );
+
 
     if (!searchInput) {
         return;
@@ -990,6 +992,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "keyup",
         function () {
 
+
             const filter =
                 this.value
                     .toLowerCase()
@@ -998,6 +1001,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             tableRows.forEach(
                 function (row) {
+
 
                     const text =
                         row.innerText
@@ -1011,7 +1015,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         row.style.display = "";
 
-                    } else {
+                    }
+
+                    else {
 
                         row.style.display = "none";
 
@@ -1037,6 +1043,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function downloadReports() {
 
+
     const searchBox =
         document.getElementById("searchInput");
 
@@ -1061,8 +1068,10 @@ function downloadReports() {
 
     if (searchText === "") {
 
+
         window.location.href =
             "/export_zip";
+
 
         return;
 
@@ -1094,6 +1103,7 @@ function downloadReports() {
 <style>
 
 @media print {
+
 
     body {
 
@@ -1134,7 +1144,6 @@ function downloadReports() {
 }
 
 </style>
-
 
 
 </body>
