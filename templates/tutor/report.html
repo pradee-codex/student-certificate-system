@@ -438,7 +438,6 @@
 
         <div class="stats-grid">
 
-
             <div class="mini-card">
 
                 <i class="bi bi-people-fill"></i>
@@ -535,7 +534,6 @@
 
             <div class="report-search-actions">
 
-
                 <input
                     type="text"
                     id="searchInput"
@@ -614,6 +612,7 @@
                     </tr>
 
                 </thead>
+
 
 
                 <tbody>
@@ -709,9 +708,10 @@
                         </td>
 
 
+
                         <!-- =================================================
                              VIEW
-                             ONLY VIEW ROUTE
+                             GOOGLE DRIVE VIEW URL
                         ================================================== -->
 
                         <td>
@@ -719,11 +719,9 @@
                             {% if certificate[6] %}
 
                                 <a
-                                    class="view-btn"
-                                    href="{{ url_for(
-                                        'view',
-                                        filename=certificate[6]
-                                    ) }}"
+                                    class="view-btn drive-view-btn"
+                                    href="#"
+                                    data-drive-url="{{ certificate[6] }}"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
@@ -745,9 +743,10 @@
                         </td>
 
 
+
                         <!-- =================================================
                              DOWNLOAD
-                             ONLY DOWNLOAD ROUTE
+                             GOOGLE DRIVE DOWNLOAD
                         ================================================== -->
 
                         <td>
@@ -755,11 +754,9 @@
                             {% if certificate[6] %}
 
                                 <a
-                                    class="download-btn"
-                                    href="{{ url_for(
-                                        'download',
-                                        filename=certificate[6]
-                                    ) }}"
+                                    class="download-btn drive-download-btn"
+                                    href="#"
+                                    data-drive-url="{{ certificate[6] }}"
                                 >
 
                                     <i class="bi bi-download"></i>
@@ -1004,6 +1001,196 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 <!-- =====================================================
+     GOOGLE DRIVE VIEW + DOWNLOAD
+====================================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    /*
+    ========================================================
+    FUNCTION
+    EXTRACT GOOGLE DRIVE FILE ID
+    ========================================================
+    */
+
+    function getDriveFileId(url) {
+
+        if (!url) {
+            return null;
+        }
+
+
+        let fileId = null;
+
+
+        /*
+        Format:
+
+        https://drive.google.com/file/d/FILE_ID/view
+        */
+
+        let match =
+            url.match(
+                /\/file\/d\/([^\/?#]+)/
+            );
+
+
+        if (match && match[1]) {
+
+            fileId = match[1];
+
+        }
+
+
+        /*
+        Format:
+
+        https://drive.google.com/open?id=FILE_ID
+        */
+
+        if (!fileId) {
+
+            match =
+                url.match(
+                    /[?&]id=([^&#]+)/
+                );
+
+            if (match && match[1]) {
+
+                fileId = match[1];
+
+            }
+
+        }
+
+
+        /*
+        Format:
+
+        drive.usercontent.google.com/download?id=FILE_ID
+        */
+
+        if (!fileId) {
+
+            match =
+                url.match(
+                    /[?&]id=([^&#]+)/
+                );
+
+            if (match && match[1]) {
+
+                fileId = match[1];
+
+            }
+
+        }
+
+
+        return fileId;
+
+    }
+
+
+
+    /*
+    ========================================================
+    VIEW BUTTON
+    ========================================================
+    */
+
+    const viewButtons =
+        document.querySelectorAll(
+            ".drive-view-btn"
+        );
+
+
+    viewButtons.forEach(function (button) {
+
+
+        const driveUrl =
+            button.getAttribute(
+                "data-drive-url"
+            );
+
+
+        const fileId =
+            getDriveFileId(driveUrl);
+
+
+        if (fileId) {
+
+            /*
+            Google Drive normal viewer
+            */
+
+            button.href =
+                "https://drive.google.com/file/d/" +
+                encodeURIComponent(fileId) +
+                "/view";
+
+        }
+
+    });
+
+
+
+    /*
+    ========================================================
+    DOWNLOAD BUTTON
+    ========================================================
+    */
+
+    const downloadButtons =
+        document.querySelectorAll(
+            ".drive-download-btn"
+        );
+
+
+    downloadButtons.forEach(function (button) {
+
+
+        const driveUrl =
+            button.getAttribute(
+                "data-drive-url"
+            );
+
+
+        const fileId =
+            getDriveFileId(driveUrl);
+
+
+        if (fileId) {
+
+            /*
+            IMPORTANT:
+
+            This is DOWNLOAD URL.
+
+            It will NOT open the
+            Google Drive viewer.
+            */
+
+            button.href =
+                "https://drive.google.com/uc?export=download&id=" +
+                encodeURIComponent(fileId);
+
+
+            button.removeAttribute("target");
+
+        }
+
+    });
+
+});
+
+</script>
+
+
+
+<!-- =====================================================
      DOWNLOAD REPORTS
 ====================================================== -->
 
@@ -1026,8 +1213,8 @@ function downloadReports() {
     ========================================================
     EMPTY SEARCH
 
-    Download all certificates belonging
-    to this tutor.
+    Download all certificates
+    belonging to this tutor.
     ========================================================
     */
 
