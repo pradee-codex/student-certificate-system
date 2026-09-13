@@ -95,7 +95,6 @@
 
     <div class="cards">
 
-
         <div class="card green">
 
             <i class="bi bi-people-fill"></i>
@@ -712,7 +711,7 @@
 
                         <!-- =================================================
                              VIEW
-                             GOOGLE DRIVE VIEWER
+                             ONLY VIEW ROUTE
                         ================================================== -->
 
                         <td>
@@ -720,8 +719,11 @@
                             {% if certificate[6] %}
 
                                 <a
-                                    class="view-btn drive-view-btn"
-                                    href="{{ certificate[6] }}"
+                                    class="view-btn"
+                                    href="{{ url_for(
+                                        'view',
+                                        filename=certificate[6]
+                                    ) }}"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
@@ -745,7 +747,7 @@
 
                         <!-- =================================================
                              DOWNLOAD
-                             OPEN GOOGLE DRIVE FILE
+                             ONLY DOWNLOAD ROUTE
                         ================================================== -->
 
                         <td>
@@ -753,10 +755,11 @@
                             {% if certificate[6] %}
 
                                 <a
-                                    class="download-btn drive-download-btn"
-                                    href="{{ certificate[6] }}"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                    class="download-btn"
+                                    href="{{ url_for(
+                                        'download',
+                                        filename=certificate[6]
+                                    ) }}"
                                 >
 
                                     <i class="bi bi-download"></i>
