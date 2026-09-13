@@ -22,7 +22,7 @@
 
 
 <!-- ==================================================
-SIDEBAR
+     SIDEBAR
 ================================================== -->
 
 <div class="sidebar">
@@ -125,19 +125,21 @@ SIDEBAR
 
 
 <!-- ==================================================
-MAIN
+     MAIN
 ================================================== -->
 
 <div class="main">
 
 
     <!-- ==================================================
-    TOPBAR
+         TOPBAR
     ================================================== -->
 
     <div class="topbar">
 
-        <h2>Admin Dashboard</h2>
+        <h2>
+            Admin Dashboard
+        </h2>
 
 
         <div class="admin-box">
@@ -150,9 +152,13 @@ MAIN
 
             <div>
 
-                <h3>Administrator</h3>
+                <h3>
+                    Administrator
+                </h3>
 
-                <small>System Administrator</small>
+                <small>
+                    System Administrator
+                </small>
 
             </div>
 
@@ -166,14 +172,16 @@ MAIN
 
 
         <!-- ==================================================
-        WELCOME BANNER
+             WELCOME BANNER
         ================================================== -->
 
         <div class="welcome-banner">
 
             <div>
 
-                <h1>Welcome Admin 👋</h1>
+                <h1>
+                    Welcome Admin 👋
+                </h1>
 
                 <p>
                     Manage Students, Certificates and Reports from one place.
@@ -186,7 +194,7 @@ MAIN
 
 
         <!-- ==================================================
-        STATISTICS
+             STATISTICS
         ================================================== -->
 
         <div class="stats">
@@ -196,9 +204,13 @@ MAIN
 
                 <i class="bi bi-people-fill"></i>
 
-                <h2>{{ total_students }}</h2>
+                <h2>
+                    {{ total_students }}
+                </h2>
 
-                <p>Total Students</p>
+                <p>
+                    Total Students
+                </p>
 
             </div>
 
@@ -208,9 +220,13 @@ MAIN
 
                 <i class="bi bi-award-fill"></i>
 
-                <h2>{{ total_certificates }}</h2>
+                <h2>
+                    {{ total_certificates }}
+                </h2>
 
-                <p>Total Certificates</p>
+                <p>
+                    Total Certificates
+                </p>
 
             </div>
 
@@ -220,9 +236,13 @@ MAIN
 
                 <i class="bi bi-bar-chart-fill"></i>
 
-                <h2>Reports</h2>
+                <h2>
+                    Reports
+                </h2>
 
-                <p>Certificate Reports</p>
+                <p>
+                    Certificate Reports
+                </p>
 
             </div>
 
@@ -232,7 +252,7 @@ MAIN
 
 
         <!-- ==================================================
-        STUDENTS TABLE
+             STUDENTS TABLE
         ================================================== -->
 
         <div
@@ -316,7 +336,7 @@ MAIN
 
 
         <!-- ==================================================
-        CERTIFICATE TABLE
+             CERTIFICATE TABLE
         ================================================== -->
 
         <div
@@ -326,7 +346,7 @@ MAIN
 
 
             <!-- ==============================
-            HEADER
+                 HEADER
             ============================== -->
 
             <div class="table-header">
@@ -375,7 +395,7 @@ MAIN
 
 
             <!-- ==============================
-            CERTIFICATE TABLE
+                 CERTIFICATE TABLE
             ============================== -->
 
             <table id="certificateTable">
@@ -497,8 +517,8 @@ MAIN
 
 
                         <!-- ==================================================
-                        VIEW CERTIFICATE
-                        GOOGLE DRIVE
+                             VIEW CERTIFICATE
+                             GOOGLE DRIVE
                         ================================================== -->
 
                         <td>
@@ -521,9 +541,7 @@ MAIN
                             {% else %}
 
                                 <span>
-
                                     No File
-
                                 </span>
 
                             {% endif %}
@@ -533,8 +551,8 @@ MAIN
 
 
                         <!-- ==================================================
-                        DOWNLOAD CERTIFICATE
-                        GOOGLE DRIVE
+                             DOWNLOAD CERTIFICATE
+                             FLASK DOWNLOAD ROUTE
                         ================================================== -->
 
                         <td>
@@ -543,8 +561,7 @@ MAIN
 
                                 <a
                                     class="download"
-                                    href="javascript:void(0);"
-                                    onclick="downloadDriveFile('{{ certificate[6] }}')"
+                                    href="{{ url_for('download', filename=certificate[6]) }}"
                                 >
 
                                     <i class="bi bi-download"></i>
@@ -556,9 +573,7 @@ MAIN
                             {% else %}
 
                                 <span>
-
                                     No File
-
                                 </span>
 
                             {% endif %}
@@ -579,36 +594,40 @@ MAIN
         </div>
 
 
+
+        <!-- ==================================================
+             FOOTER
+        ================================================== -->
+
+        <footer class="admin-footer">
+
+
+            <div class="footer-left">
+
+                <strong>
+                    Certificate Portal
+                </strong>
+
+                <span>
+                    |
+                </span>
+
+                Student Certificate Management System
+
+            </div>
+
+
+            <div class="footer-right">
+
+                © 2026 Designed By PRADEEP From AIDS
+
+            </div>
+
+
+        </footer>
+
+
     </div>
-
-
-
-    <!-- ==================================================
-    FOOTER
-    ================================================== -->
-
-    <footer class="admin-footer">
-
-
-        <div class="footer-left">
-
-            <strong>Certificate Portal</strong>
-
-            <span> | </span>
-
-            Student Certificate Management System
-
-        </div>
-
-
-        <div class="footer-right">
-
-            © 2026 Designed By PRADEEP From AIDS
-
-        </div>
-
-
-    </footer>
 
 
 </div>
@@ -616,14 +635,14 @@ MAIN
 
 
 <!-- ==================================================
-SEARCH + DOWNLOAD SCRIPT
+     SEARCH + DOWNLOAD SCRIPT
 ================================================== -->
 
 <script>
 
 
 /* ==================================================
-SEARCH CERTIFICATES
+   SEARCH CERTIFICATES
 ================================================== */
 
 const searchInput =
@@ -682,99 +701,7 @@ if (searchInput) {
 
 
 /* ==================================================
-GOOGLE DRIVE DOWNLOAD
-================================================== */
-
-function downloadDriveFile(driveUrl) {
-
-
-    if (!driveUrl) {
-
-        alert("Google Drive file URL not found.");
-
-        return;
-
-    }
-
-
-    let fileId = null;
-
-
-    /* ----------------------------------------------
-       FORMAT:
-
-       https://drive.google.com/file/d/FILE_ID/view
-    ---------------------------------------------- */
-
-    const fileMatch =
-        driveUrl.match(/\/file\/d\/([^\/]+)/);
-
-
-    if (fileMatch) {
-
-        fileId = fileMatch[1];
-
-    }
-
-
-    /* ----------------------------------------------
-       FORMAT:
-
-       https://drive.google.com/open?id=FILE_ID
-    ---------------------------------------------- */
-
-    if (!fileId) {
-
-        const idMatch =
-            driveUrl.match(/[?&]id=([^&]+)/);
-
-
-        if (idMatch) {
-
-            fileId = idMatch[1];
-
-        }
-
-    }
-
-
-    /* ----------------------------------------------
-       FILE ID NOT FOUND
-    ---------------------------------------------- */
-
-    if (!fileId) {
-
-        alert("Unable to find Google Drive File ID.");
-
-        return;
-
-    }
-
-
-    /* ----------------------------------------------
-       GOOGLE DRIVE DOWNLOAD URL
-    ---------------------------------------------- */
-
-    const downloadUrl =
-        "https://drive.google.com/uc?export=download&id=" +
-        encodeURIComponent(fileId);
-
-
-    /* ----------------------------------------------
-       OPEN DOWNLOAD
-    ---------------------------------------------- */
-
-    window.open(
-        downloadUrl,
-        "_blank"
-    );
-
-}
-
-
-
-/* ==================================================
-DOWNLOAD CERTIFICATES
+   DOWNLOAD CERTIFICATES
 ================================================== */
 
 function downloadCertificates() {

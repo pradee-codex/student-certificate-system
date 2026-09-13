@@ -423,17 +423,23 @@ SIDEBAR
 
         {% if tutor[4] %}
 
-            <img src="{{ url_for('static',
-                       filename='uploads/profile/' ~ tutor[4]) }}"
-                 class="profile-img"
-                 onerror="this.src='{{ url_for('static',
-                       filename='uploads/profile/default.png') }}'">
+            <img src="{{ url_for(
+                'static',
+                filename='uploads/profile/' ~ tutor[4]
+            ) }}"
+            class="profile-img"
+            onerror="this.src='{{ url_for(
+                'static',
+                filename='uploads/profile/default.png'
+            ) }}'">
 
         {% else %}
 
-            <img src="{{ url_for('static',
-                       filename='uploads/profile/default.png') }}"
-                 class="profile-img">
+            <img src="{{ url_for(
+                'static',
+                filename='uploads/profile/default.png'
+            ) }}"
+            class="profile-img">
 
         {% endif %}
 
@@ -878,9 +884,7 @@ CERTIFICATE TABLE CARD
                         </td>
 
 
-                        <!-- ===========================
-                        DEPARTMENT
-                        =========================== -->
+                        <!-- DEPARTMENT -->
 
                         <td>
 
@@ -893,9 +897,7 @@ CERTIFICATE TABLE CARD
                         </td>
 
 
-                        <!-- ===========================
-                        YEAR
-                        =========================== -->
+                        <!-- YEAR -->
 
                         <td>
 
@@ -904,9 +906,7 @@ CERTIFICATE TABLE CARD
                         </td>
 
 
-                        <!-- ===========================
-                        CERTIFICATE
-                        =========================== -->
+                        <!-- CERTIFICATE -->
 
                         <td>
 
@@ -919,9 +919,7 @@ CERTIFICATE TABLE CARD
                         </td>
 
 
-                        <!-- ===========================
-                        CATEGORY
-                        =========================== -->
+                        <!-- CATEGORY -->
 
                         <td>
 
@@ -934,9 +932,7 @@ CERTIFICATE TABLE CARD
                         </td>
 
 
-                        <!-- ===========================
-                        ACHIEVEMENT
-                        =========================== -->
+                        <!-- ACHIEVEMENT -->
 
                         <td>
 
@@ -983,14 +979,13 @@ CERTIFICATE TABLE CARD
 
 
                         <!-- =================================================
-                        VIEW - GOOGLE DRIVE
+                        VIEW
+                        DIRECT GOOGLE DRIVE
                         ================================================= -->
 
                         <td>
 
-
                             {% if row[8] %}
-
 
                                 <a
                                     href="{{ row[8] }}"
@@ -1004,9 +999,7 @@ CERTIFICATE TABLE CARD
 
                                 </a>
 
-
                             {% else %}
-
 
                                 <span class="text-muted">
 
@@ -1014,28 +1007,23 @@ CERTIFICATE TABLE CARD
 
                                 </span>
 
-
                             {% endif %}
-
 
                         </td>
 
 
                         <!-- =================================================
-                        DOWNLOAD - GOOGLE DRIVE
+                        DOWNLOAD
+                        USE FLASK DOWNLOAD ROUTE
                         ================================================= -->
 
                         <td>
 
-
                             {% if row[8] %}
 
-
                                 <a
-                                    href="{{ row[8] }}"
-                                    class="btn btn-success btn-sm"
-                                    target="_blank"
-                                    rel="noopener noreferrer">
+                                    href="{{ url_for('download', filename=row[8]) }}"
+                                    class="btn btn-success btn-sm">
 
                                     <i class="bi bi-download"></i>
 
@@ -1043,9 +1031,7 @@ CERTIFICATE TABLE CARD
 
                                 </a>
 
-
                             {% else %}
-
 
                                 <span class="text-muted">
 
@@ -1053,9 +1039,7 @@ CERTIFICATE TABLE CARD
 
                                 </span>
 
-
                             {% endif %}
-
 
                         </td>
 
