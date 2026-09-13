@@ -4,7 +4,6 @@
 <head>
 
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>HOD Reports Dashboard</title>
@@ -136,13 +135,19 @@
             {% if hod[3] %}
 
                 <img
-                    src="{{ url_for('static', filename='uploads/profile/' ~ hod[3]) }}"
+                    src="{{ url_for(
+                        'static',
+                        filename='uploads/profile/' ~ hod[3]
+                    ) }}"
                     class="profile-img">
 
             {% else %}
 
                 <img
-                    src="{{ url_for('static', filename='uploads/profile/default.png') }}"
+                    src="{{ url_for(
+                        'static',
+                        filename='uploads/profile/default.png'
+                    ) }}"
                     class="profile-img">
 
             {% endif %}
@@ -638,7 +643,7 @@
 
 
                 <!-- =================================================
-                     VIEW CERTIFICATE
+                     VIEW
                      GOOGLE DRIVE URL
                 ================================================= -->
 
@@ -671,6 +676,8 @@
 
                 <!-- =================================================
                      DOWNLOAD
+                     IMPORTANT:
+                     Flask download route
                 ================================================= -->
 
                 <td>
@@ -679,7 +686,7 @@
 
                         <a
                             class="download-btn"
-                            href="/download/{{ certificate[7] }}">
+                            href="{{ url_for('download', filename=certificate[7]) }}">
 
                             <i class="bi bi-download"></i>
 
@@ -842,42 +849,46 @@ const searchInput =
     document.getElementById("searchInput");
 
 
-searchInput.addEventListener("keyup", function(){
+if (searchInput) {
 
-    let filter =
-        this.value.toLowerCase().trim();
+    searchInput.addEventListener("keyup", function(){
 
-
-    let rows =
-        document.querySelectorAll(
-            "#certificateTable tbody tr"
-        );
+        let filter =
+            this.value.toLowerCase().trim();
 
 
-    rows.forEach(function(row){
+        let rows =
+            document.querySelectorAll(
+                "#certificateTable tbody tr"
+            );
 
-        let text =
-            row.innerText.toLowerCase();
+
+        rows.forEach(function(row){
+
+            let text =
+                row.innerText.toLowerCase();
 
 
-        if(text.includes(filter)){
+            if(text.includes(filter)){
 
-            row.style.display = "";
+                row.style.display = "";
 
-        }
-        else{
+            }
+            else{
 
-            row.style.display = "none";
+                row.style.display = "none";
 
-        }
+            }
+
+        });
 
     });
 
-});
+}
 
 
 /* ==========================================
-   DOWNLOAD
+   DOWNLOAD REPORTS
 ========================================== */
 
 function downloadHodReports(){
