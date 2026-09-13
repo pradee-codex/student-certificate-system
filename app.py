@@ -4293,31 +4293,125 @@ def download(filename):
 
     if filename.startswith("http://") or filename.startswith("https://"):
 
-        # Google Drive URL
         if "drive.google.com" in filename:
 
             import re
 
-            # Extract Google Drive File ID
+            file_id = None
+
+            # ---------------------------------------------
+            # /file/d/FILE_ID/view
+            # ---------------------------------------------
+
             match = re.search(
                 r"/file/d/([^/]+)",
                 filename
             )
 
             if match:
-
                 file_id = match.group(1)
 
-                # Google Drive direct download URL
-                download_url = (
-                    f"https://drive.google.com/uc"
-                    f"?export=download&id={file_id}"
+            # ---------------------------------------------
+            # ?id=FILE_ID
+            # ---------------------------------------------
+
+            if not file_id:
+
+                match = re.search(
+                    r"[?&]id=([^&]+)",
+                    filename
                 )
 
-                return redirect(download_url)
+                if match:
+                    file_id = match.group(1)
 
+            # ---------------------------------------------
+            # DOWNLOAD FROM GOOGLE DRIVE
+            # ---------------------------------------------
 
-        # Other external URL
+            if file_id:
+
+                try:
+
+                    from drive_service import get_drive_service
+
+                    service = get_drive_service()
+
+                    # -------------------------------------
+                    # Get file information
+                    # -------------------------------------
+
+                    file_info = service.files().get(
+                        fileId=file_id,
+                        fields="id,name,mimeType"
+                    ).execute()
+
+                    original_name = file_info.get(
+                        "name",
+                        "certificate"
+                    )
+
+                    mime_type = file_info.get(
+                        "mimeType",
+                        "application/octet-stream"
+                    )
+
+                    # -------------------------------------
+                    # Download file content
+                    # -------------------------------------
+
+                    from googleapiclient.http import MediaIoBaseDownload
+                    from io import BytesIO
+
+                    request = service.files().get_media(
+                        fileId=file_id
+                    )
+
+                    file_stream = BytesIO()
+
+                    downloader = MediaIoBaseDownload(
+                        file_stream,
+                        request
+                    )
+
+                    done = False
+
+                    while not done:
+
+                        status, done = downloader.next_chunk()
+
+                    file_stream.seek(0)
+
+                    # -------------------------------------
+                    # SEND FILE AS DOWNLOAD
+                    # -------------------------------------
+
+                    from flask import send_file
+
+                    return send_file(
+                        file_stream,
+                        as_attachment=True,
+                        download_name=original_name,
+                        mimetype=mime_type
+                    )
+
+                except Exception as e:
+
+                    print("================================")
+                    print("GOOGLE DRIVE DOWNLOAD ERROR")
+                    print("File URL :", filename)
+                    print("Error    :", str(e))
+                    print("================================")
+
+                    return f"""
+                    <h3>Google Drive Download Failed</h3>
+                    <p>{str(e)}</p>
+                    """, 500
+
+        # ---------------------------------------------
+        # OTHER EXTERNAL URL
+        # ---------------------------------------------
+
         return redirect(filename)
 
 
@@ -4341,7 +4435,7 @@ def download(filename):
 
 
     print("================================")
-    print("DOWNLOAD ROUTE")
+    print("LOCAL DOWNLOAD ROUTE")
     print("Folder   :", folder)
     print("Filename :", filename)
     print("Full Path:", filepath)
