@@ -4,6 +4,7 @@
 <head>
 
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Tutor Reports Dashboard</title>
@@ -18,6 +19,7 @@
 
 
 <body>
+
 
 <div class="container">
 
@@ -236,7 +238,7 @@
                     </td>
 
                     <td>
-                        {{ tutor[2] or "All Years" }}
+                        {{ tutor[2] }}
                     </td>
 
                 </tr>
@@ -249,7 +251,7 @@
                     </td>
 
                     <td>
-                        {{ tutor[3] or "All Sections" }}
+                        {{ tutor[3] }}
                     </td>
 
                 </tr>
@@ -510,8 +512,6 @@
     <div class="report-box">
 
 
-        <!-- HEADER -->
-
         <div class="box-header">
 
 
@@ -535,6 +535,7 @@
             <!-- SEARCH + DOWNLOAD -->
 
             <div class="report-search-actions">
+
 
                 <input
                     type="text"
@@ -569,6 +570,7 @@
         <div style="overflow-x:auto;">
 
             <table id="certificateTable">
+
 
                 <thead>
 
@@ -615,6 +617,7 @@
                 </thead>
 
 
+
                 <tbody>
 
 
@@ -637,36 +640,28 @@
                         <!-- DEPARTMENT -->
 
                         <td>
-
                             {{ certificate[1] }}
-
                         </td>
 
 
                         <!-- YEAR -->
 
                         <td>
-
                             {{ certificate[2] }}
-
                         </td>
 
 
                         <!-- CERTIFICATE -->
 
                         <td>
-
                             {{ certificate[3] }}
-
                         </td>
 
 
                         <!-- CATEGORY -->
 
                         <td>
-
                             {{ certificate[4] }}
-
                         </td>
 
 
@@ -677,45 +672,31 @@
                             {% if certificate[5] == "Participated" %}
 
                                 <span class="badge bg-primary">
-
                                     🏅 Participated
-
                                 </span>
-
 
                             {% elif certificate[5] == "Winner" %}
 
                                 <span class="badge bg-success">
-
                                     🥇 Winner
-
                                 </span>
-
 
                             {% elif certificate[5] == "Runner Up" %}
 
                                 <span class="badge bg-warning text-dark">
-
                                     🥈 Runner Up
-
                                 </span>
-
 
                             {% elif certificate[5] == "Runner" %}
 
                                 <span class="badge bg-warning text-dark">
-
                                     🥈 Runner
-
                                 </span>
-
 
                             {% else %}
 
                                 <span class="badge bg-secondary">
-
-                                    📜 {{ certificate[5] or "Others" }}
-
+                                    📜 {{ certificate[5] }}
                                 </span>
 
                             {% endif %}
@@ -726,16 +707,13 @@
                         <!-- UPLOAD DATE -->
 
                         <td>
-
                             {{ certificate[7] }}
-
                         </td>
 
 
                         <!-- =================================================
-                             VIEW CERTIFICATE
-
-                             certificate[6] = Google Drive URL
+                             VIEW
+                             DIRECT GOOGLE DRIVE URL
                         ================================================== -->
 
                         <td>
@@ -743,7 +721,7 @@
                             {% if certificate[6] %}
 
                                 <a
-                                    class="view-btn"
+                                    class="view-btn drive-view-btn"
                                     href="{{ certificate[6] }}"
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -767,12 +745,8 @@
 
 
                         <!-- =================================================
-                             DOWNLOAD CERTIFICATE
-
-                             certificate[6] = Google Drive URL
-
-                             Flask route:
-                             /download?url=DRIVE_URL
+                             DOWNLOAD
+                             DIRECT GOOGLE DRIVE DOWNLOAD
                         ================================================== -->
 
                         <td>
@@ -780,8 +754,11 @@
                             {% if certificate[6] %}
 
                                 <a
-                                    class="download-btn"
-                                    href="{{ url_for('download', url=certificate[6]) }}"
+                                    class="download-btn drive-download-btn"
+                                    href="{{ certificate[6] }}"
+                                    data-drive-url="{{ certificate[6] }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                 >
 
                                     <i class="bi bi-download"></i>
@@ -806,6 +783,7 @@
 
                     {% else %}
 
+
                     <tr>
 
                         <td
@@ -829,6 +807,7 @@
                         </td>
 
                     </tr>
+
 
                     {% endfor %}
 
@@ -927,6 +906,7 @@
     ====================================================== -->
 
     <div class="footer">
+
 
         <div class="footer-left">
 
@@ -1036,6 +1016,81 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 <!-- =====================================================
+     GOOGLE DRIVE DOWNLOAD SCRIPT
+====================================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    const downloadButtons =
+        document.querySelectorAll(
+            ".drive-download-btn"
+        );
+
+
+    downloadButtons.forEach(function (button) {
+
+
+        const driveUrl =
+            button.getAttribute("data-drive-url");
+
+
+        if (!driveUrl) {
+            return;
+        }
+
+
+        /*
+        =====================================================
+        GOOGLE DRIVE FILE ID
+        =====================================================
+        */
+
+
+        let fileId = null;
+
+
+        const match =
+            driveUrl.match(
+                /\/file\/d\/([^\/]+)/
+            );
+
+
+        if (match && match[1]) {
+
+            fileId = match[1];
+
+        }
+
+
+        /*
+        =====================================================
+        CREATE GOOGLE DRIVE DOWNLOAD URL
+        =====================================================
+        */
+
+
+        if (fileId) {
+
+            button.href =
+                "https://drive.google.com/uc?export=download&id=" +
+                encodeURIComponent(fileId);
+
+            button.target = "_blank";
+
+        }
+
+    });
+
+});
+
+</script>
+
+
+
+<!-- =====================================================
      DOWNLOAD REPORTS
 ====================================================== -->
 
@@ -1066,6 +1121,7 @@ function downloadReports() {
     ========================================================
     */
 
+
     if (searchText === "") {
 
 
@@ -1085,6 +1141,7 @@ function downloadReports() {
     Download ONLY matching certificates.
     ========================================================
     */
+
 
     window.location.href =
         "/export_zip?search=" +
@@ -1138,6 +1195,14 @@ function downloadReports() {
         margin-top:30px;
 
         text-align:center;
+
+    }
+
+
+    .view-btn,
+    .download-btn {
+
+        display:none !important;
 
     }
 
