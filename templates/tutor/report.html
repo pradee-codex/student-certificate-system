@@ -16,7 +16,6 @@
 
 </head>
 
-
 <body>
 
 <div class="container">
@@ -40,7 +39,6 @@
 
         </div>
 
-
         <div class="top-buttons">
 
             <a href="/tutor"
@@ -51,7 +49,6 @@
 
             </a>
 
-
             <a href="/tutor_export_excel"
                class="btn excel">
 
@@ -60,7 +57,6 @@
 
             </a>
 
-
             <a href="/tutor_export_pdf"
                class="btn pdf">
 
@@ -68,7 +64,6 @@
                 PDF
 
             </a>
-
 
             <button
                 type="button"
@@ -90,7 +85,6 @@
     ====================================================== -->
 
     <div class="cards">
-
 
         <div class="card green">
 
@@ -431,7 +425,6 @@
 
         <div class="stats-grid">
 
-
             <div class="mini-card">
 
                 <i class="bi bi-people-fill"></i>
@@ -502,8 +495,6 @@
 
     <div class="report-box">
 
-        <!-- HEADER -->
-
         <div class="box-header">
 
             <div>
@@ -526,7 +517,6 @@
             <!-- SEARCH + DOWNLOAD -->
 
             <div class="report-search-actions">
-
 
                 <input
                     type="text"
@@ -608,11 +598,9 @@
 
                 <tbody>
 
-
                     {% for certificate in certificates %}
 
                     <tr>
-
 
                         <!-- STUDENT -->
 
@@ -673,7 +661,6 @@
 
                                 </span>
 
-
                             {% elif certificate[5] == "Winner" %}
 
                                 <span class="badge bg-success">
@@ -681,7 +668,6 @@
                                     🥇 Winner
 
                                 </span>
-
 
                             {% elif certificate[5] == "Runner Up" %}
 
@@ -691,7 +677,6 @@
 
                                 </span>
 
-
                             {% elif certificate[5] == "Runner" %}
 
                                 <span class="badge bg-warning text-dark">
@@ -699,7 +684,6 @@
                                     🥈 Runner
 
                                 </span>
-
 
                             {% else %}
 
@@ -723,48 +707,69 @@
                         </td>
 
 
-                        <!-- VIEW -->
+                        <!-- =================================================
+                             VIEW
+                             DIRECT GOOGLE DRIVE URL
+                        ================================================== -->
 
                         <td>
 
-                            <a
-                                class="view-btn"
-                                href="{{ url_for(
-                                    'view',
-                                    filename=certificate[6]
-                                ) }}"
-                                target="_blank"
-                            >
+                            {% if certificate[6] %}
 
-                                <i class="bi bi-eye-fill"></i>
+                                <a
+                                    class="view-btn"
+                                    href="{{ certificate[6] }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer">
 
-                                View
+                                    <i class="bi bi-eye-fill"></i>
 
-                            </a>
+                                    View
+
+                                </a>
+
+                            {% else %}
+
+                                <span>
+                                    No File
+                                </span>
+
+                            {% endif %}
 
                         </td>
 
 
-                        <!-- DOWNLOAD -->
+                        <!-- =================================================
+                             DOWNLOAD
+                             SEND GOOGLE DRIVE URL TO FLASK
+                        ================================================== -->
 
                         <td>
 
-                            <a
-                                class="download-btn"
-                                href="{{ url_for(
-                                    'download',
-                                    filename=certificate[6]
-                                ) }}"
-                            >
+                            {% if certificate[6] %}
 
-                                <i class="bi bi-download"></i>
+                                <a
+                                    class="download-btn"
+                                    href="{{ url_for(
+                                        'download',
+                                        url=certificate[6]
+                                    ) }}">
 
-                                Download
+                                    <i class="bi bi-download"></i>
 
-                            </a>
+                                    Download
+
+                                </a>
+
+                            {% else %}
+
+                                <span>
+                                    No File
+                                </span>
+
+                            {% endif %}
 
                         </td>
-
 
                     </tr>
 
@@ -797,7 +802,6 @@
 
                     {% endfor %}
 
-
                 </tbody>
 
             </table>
@@ -827,7 +831,6 @@
 
 
         <div class="summary-area">
-
 
             <div class="summary-card">
 
@@ -933,41 +936,33 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-
     const searchInput =
         document.getElementById("searchInput");
-
 
     const tableRows =
         document.querySelectorAll(
             "#certificateTable tbody tr"
         );
 
-
     if (!searchInput) {
         return;
     }
 
-
     searchInput.addEventListener(
         "keyup",
         function () {
-
 
             const filter =
                 this.value
                     .toLowerCase()
                     .trim();
 
-
             tableRows.forEach(
                 function (row) {
-
 
                     const text =
                         row.innerText
                             .toLowerCase();
-
 
                     if (
                         filter === "" ||
@@ -1003,17 +998,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function downloadReports() {
 
-
     const searchBox =
         document.getElementById("searchInput");
 
-
     if (!searchBox) {
-
         return;
-
     }
-
 
     const searchText =
         searchBox.value.trim();
@@ -1030,10 +1020,8 @@ function downloadReports() {
 
     if (searchText === "") {
 
-
         window.location.href =
             "/export_zip";
-
 
         return;
 
@@ -1047,7 +1035,6 @@ function downloadReports() {
     Download ONLY matching certificates.
     ========================================================
     */
-
 
     window.location.href =
         "/export_zip?search=" +
@@ -1066,13 +1053,11 @@ function downloadReports() {
 
 @media print {
 
-
     body {
 
         background:#ffffff !important;
 
     }
-
 
     .top-buttons {
 
@@ -1080,20 +1065,17 @@ function downloadReports() {
 
     }
 
-
     .report-search-actions {
 
         display:none !important;
 
     }
 
-
     .report-box {
 
         page-break-inside:avoid;
 
     }
-
 
     .footer {
 
