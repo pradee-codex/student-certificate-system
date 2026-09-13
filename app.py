@@ -4291,9 +4291,22 @@ def download(filename):
     # GOOGLE DRIVE FILE
     # =====================================================
 
-    if filename.startswith("http://") or filename.startswith("https://"):
+    if (
+        filename.startswith("http://")
+        or filename.startswith("https://")
+    ):
 
-        if "drive.google.com" in filename:
+        # =================================================
+        # GOOGLE DRIVE URL CHECK
+        # Supports:
+        # drive.google.com
+        # drive.usercontent.google.com
+        # =================================================
+
+        if (
+            "drive.google.com" in filename
+            or "drive.usercontent.google.com" in filename
+        ):
 
             import re
 
@@ -4335,7 +4348,25 @@ def download(filename):
 
                     from drive_service import get_drive_service
 
+                    from googleapiclient.http import (
+                        MediaIoBaseDownload
+                    )
+
+                    from io import BytesIO
+
+                    from flask import send_file
+
+                    # -------------------------------------
+                    # Get Google Drive service
+                    # -------------------------------------
+
                     service = get_drive_service()
+
+                    print("================================")
+                    print("GOOGLE DRIVE DOWNLOAD")
+                    print("File ID :", file_id)
+                    print("URL     :", filename)
+                    print("================================")
 
                     # -------------------------------------
                     # Get file information
@@ -4356,12 +4387,12 @@ def download(filename):
                         "application/octet-stream"
                     )
 
-                    # -------------------------------------
-                    # Download file content
-                    # -------------------------------------
+                    print("File Name :", original_name)
+                    print("MIME Type :", mime_type)
 
-                    from googleapiclient.http import MediaIoBaseDownload
-                    from io import BytesIO
+                    # -------------------------------------
+                    # Download file from Google Drive
+                    # -------------------------------------
 
                     request = service.files().get_media(
                         fileId=file_id
@@ -4380,13 +4411,18 @@ def download(filename):
 
                         status, done = downloader.next_chunk()
 
+                        if status:
+                            print(
+                                "Download Progress :",
+                                int(status.progress() * 100),
+                                "%"
+                            )
+
                     file_stream.seek(0)
 
                     # -------------------------------------
-                    # SEND FILE AS DOWNLOAD
+                    # FORCE DOWNLOAD
                     # -------------------------------------
-
-                    from flask import send_file
 
                     return send_file(
                         file_stream,
@@ -4404,13 +4440,44 @@ def download(filename):
                     print("================================")
 
                     return f"""
-                    <h3>Google Drive Download Failed</h3>
-                    <p>{str(e)}</p>
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Download Error</title>
+                    </head>
+
+                    <body>
+
+                        <h2>
+                            Google Drive Download Failed
+                        </h2>
+
+                        <p>
+                            <b>File ID:</b> {file_id}
+                        </p>
+
+                        <p>
+                            <b>Error:</b> {str(e)}
+                        </p>
+
+                    </body>
+                    </html>
                     """, 500
 
-        # ---------------------------------------------
+            else:
+
+                return """
+                <h3>Google Drive File ID Not Found</h3>
+                <p>
+                    The Google Drive URL does not contain
+                    a valid file ID.
+                </p>
+                """, 400
+
+
+        # =================================================
         # OTHER EXTERNAL URL
-        # ---------------------------------------------
+        # =================================================
 
         return redirect(filename)
 
@@ -4433,7 +4500,6 @@ def download(filename):
         filename
     )
 
-
     print("================================")
     print("LOCAL DOWNLOAD ROUTE")
     print("Folder   :", folder)
@@ -4451,8 +4517,14 @@ def download(filename):
 
         return f"""
         <h3>Certificate File Not Found</h3>
-        <p>Filename: {filename}</p>
-        <p>Path: {filepath}</p>
+
+        <p>
+            Filename: {filename}
+        </p>
+
+        <p>
+            Path: {filepath}
+        </p>
         """, 404
 
 
