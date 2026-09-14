@@ -4684,41 +4684,7 @@ def edit_tutor(tutor_id):
         tutor_id=tutor_id
     )
 #-------------------------------------------
-@app.route("/delete_tutor/<int:tutor_id>")
-def delete_tutor(tutor_id):
 
-    cursor = mysql.connection.cursor()
-    cursor.execute("""
-    SELECT user_id
-    FROM tutors
-    WHERE tutor_id=%s
-    """, (tutor_id,))
-
-    row = cursor.fetchone()
-
-    if row:
-
-        user_id = row[0]
-
-        # Delete tutor
-        cursor.execute("""
-        DELETE FROM tutors
-        WHERE tutor_id=%s
-        """, (tutor_id,))
-
-        # Delete login
-        cursor.execute("""
-        DELETE FROM users
-        WHERE id=%s
-        """, (user_id,))
-
-        mysql.connection.commit()
-
-        flash("Tutor deleted successfully")
-
-    cursor.close()
-
-    return redirect("/manage_tutor")
 #--------------------
 #sreach box
 #---------------------
@@ -5938,32 +5904,49 @@ def download_all():
 @app.route("/delete_certificate/<path:filename>", methods=["POST"])
 def delete_certificate(filename):
 
-    if session.get("role") != "student":
+    if session.get("role") not in ["student", "tutor"]:
         return redirect("/")
 
     cursor = mysql.connection.cursor()
 
     try:
 
-        # Delete only the certificate belonging to
-        # the currently logged-in student
+        if session.get("role") == "student":
 
-        cursor.execute("""
-            DELETE FROM certificates
-            WHERE certificate_file = %s
-            AND student_id = (
-                SELECT student_id
-                FROM students
-                WHERE user_id = %s
-            )
-        """, (
-            filename,
-            session["user_id"]
-        ))
+            # Student can delete only their own certificate
+            cursor.execute("""
+                DELETE FROM certificates
+                WHERE certificate_file = %s
+                AND student_id = (
+                    SELECT student_id
+                    FROM students
+                    WHERE user_id = %s
+                )
+            """, (
+                filename,
+                session["user_id"]
+            ))
+
+            redirect_page = "/student"
+
+        else:
+
+            # Tutor can delete the certificate
+            cursor.execute("""
+                DELETE FROM certificates
+                WHERE certificate_file = %s
+            """, (
+                filename,
+            ))
+
+            redirect_page = "/tutor"
 
         mysql.connection.commit()
 
-        flash("Certificate deleted successfully.")
+        if cursor.rowcount > 0:
+            flash("Certificate deleted successfully.")
+        else:
+            flash("Certificate not found.")
 
     except Exception as e:
 
@@ -5974,11 +5957,9 @@ def delete_certificate(filename):
         flash("Unable to delete certificate.")
 
     finally:
-
         cursor.close()
 
-    return redirect("/student")
-
+    return redirect(redirect_page)
 # ==========================
 # Export Excel
 # ==========================
