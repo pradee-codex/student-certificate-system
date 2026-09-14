@@ -21,6 +21,7 @@ body {
     overflow-x: hidden;
 }
 
+
 /* ======================================
    SIDEBAR
 ====================================== */
@@ -36,6 +37,7 @@ body {
     overflow: auto;
     box-shadow: 6px 0 20px rgba(0,0,0,.15);
 }
+
 
 /* Logo */
 
@@ -97,6 +99,7 @@ body {
     transform: translateX(3px);
 }
 
+
 /* ======================================
    MAIN
 ====================================== */
@@ -105,6 +108,7 @@ body {
     margin-left: 220px;
     min-height: 100vh;
 }
+
 
 /* ======================================
    TOP BAR
@@ -159,6 +163,7 @@ body {
     color: #777;
 }
 
+
 /* ======================================
    CONTAINER
 ====================================== */
@@ -166,6 +171,7 @@ body {
 .container {
     padding: 20px;
 }
+
 
 /* ======================================
    DASHBOARD STATS
@@ -201,6 +207,7 @@ body {
     font-size: 11px;
     color: #666;
 }
+
 
 /* ======================================
    PROFILE CARD
@@ -242,6 +249,7 @@ body {
     line-height: 1.4;
 }
 
+
 /* ======================================
    GENERAL CARDS
 ====================================== */
@@ -265,6 +273,7 @@ body {
     margin-bottom: 16px;
     font-weight: 700;
 }
+
 
 /* ======================================
    FORM
@@ -297,6 +306,7 @@ input[type=file] {
     padding: 8px;
 }
 
+
 /* ======================================
    BUTTON
 ====================================== */
@@ -317,6 +327,7 @@ button:hover {
     transform: translateY(-2px);
     box-shadow: 0 7px 18px rgba(37,99,235,.25);
 }
+
 
 /* ======================================
    TABLE
@@ -356,24 +367,122 @@ table tr:hover {
     transition: .2s;
 }
 
+
 /* ======================================
-   VIEW BUTTON
+   VIEW + DOWNLOAD + DELETE BUTTONS
 ====================================== */
 
-.view-btn {
-    background: #16a34a;
-    color: white;
-    padding: 5px 9px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 9px;
+#certificateTable .view,
+#certificateTable .download,
+#certificateTable .delete {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    min-width: 88px;
+
+    height: 36px;
+
+    padding: 8px 14px;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #4f46e5
+    );
+
+    color: #ffffff !important;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 11px;
+
     font-weight: 600;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
     transition: .3s;
+
+    white-space: nowrap;
 }
 
-.view-btn:hover {
-    background: #15803d;
+
+/* Icons */
+
+#certificateTable .view i,
+#certificateTable .download i,
+#certificateTable .delete i {
+
+    color: #ffffff !important;
+
+    font-size: 12px;
+
 }
+
+
+/* Hover */
+
+#certificateTable .view:hover,
+#certificateTable .download:hover,
+#certificateTable .delete:hover {
+
+    background: linear-gradient(
+        135deg,
+        #1d4ed8,
+        #4338ca
+    );
+
+    color: #ffffff !important;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 6px 15px rgba(37,99,235,.25);
+}
+
+
+/* ======================================
+   CERTIFICATE ACTION COLUMNS
+====================================== */
+
+#certificateTable th:nth-last-child(3),
+#certificateTable th:nth-last-child(2),
+#certificateTable th:nth-last-child(1),
+
+#certificateTable td:nth-last-child(3),
+#certificateTable td:nth-last-child(2),
+#certificateTable td:nth-last-child(1) {
+
+    text-align: center;
+
+    white-space: nowrap;
+
+}
+
+
+/* ======================================
+   DELETE FORM
+====================================== */
+
+#certificateTable td form {
+
+    display: inline;
+
+    margin: 0;
+
+    padding: 0;
+
+}
+
 
 /* ======================================
    SEARCH BOX
@@ -387,6 +496,7 @@ table tr:hover {
     border: 1px solid #dbe4ff;
     font-size: 11px;
 }
+
 
 /* ======================================
    SCROLLBAR
@@ -404,6 +514,7 @@ table tr:hover {
     background: #2563eb;
     border-radius: 8px;
 }
+
 
 /* ======================================
    ANIMATION
@@ -428,6 +539,7 @@ table tr:hover {
     }
 
 }
+
 
 /* ======================================
    ANALYTICS
@@ -464,150 +576,4 @@ table tr:hover {
 
 .analytics-box i {
     font-size: 28px;
-    color: #198754;
-    margin-bottom: 7px;
-}
-
-.analytics-box h1 {
-    font-size: 27px;
-    color: #198754;
-    margin: 5px 0;
-}
-
-.analytics-box p {
-    font-size: 10px;
-    margin: 0;
-}
-
-/* ======================================
-   FOOTER
-====================================== */
-
-.footer {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-top: 25px;
-    padding: 12px 20px;
-    color: #666;
-    font-size: 10px;
-    text-align: right;
-}
-
-.footer p {
-    margin: 0;
-}
-
-/* ======================================
-   STUDENT PHOTO
-====================================== */
-
-.student-photo {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #2563eb;
-    display: block;
-    margin: 0 0 10px 0;
-    box-shadow: 0 3px 8px rgba(0,0,0,.15);
-}
-
-/* ======================================
-   RIGHT SECTION
-====================================== */
-
-.right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-/* ======================================
-   RESPONSIVE
-====================================== */
-
-@media(max-width:1200px) {
-
-    .stats {
-        grid-template-columns: repeat(2,1fr);
-    }
-
-}
-
-@media(max-width:900px) {
-
-    .sidebar {
-        position: relative;
-        width: 100%;
-        height: auto;
-    }
-
-    .main {
-        margin-left: 0;
-    }
-
-    .topbar {
-        flex-direction: column;
-        height: auto;
-        padding: 15px;
-        gap: 12px;
-    }
-
-    .search {
-        width: 100%;
-    }
-
-    .search input {
-        width: 100%;
-    }
-
-    .profile-card {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .profile-card img {
-        width: 90px;
-        height: 90px;
-        margin: auto;
-    }
-
-    .profile-info h2 {
-        font-size: 18px;
-    }
-
-    .profile-info p {
-        font-size: 10px;
-    }
-
-    .stats {
-        grid-template-columns: 1fr;
-    }
-
-    table {
-        display: block;
-        overflow-x: auto;
-    }
-
-}
-
-@media(max-width:600px) {
-
-    .container {
-        padding: 12px;
-    }
-
-    .card {
-        padding: 15px;
-    }
-
-    .card h2 {
-        font-size: 18px;
-    }
-
-    button {
-        width: 100%;
-    }
-
-}
+    color: #198
