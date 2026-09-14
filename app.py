@@ -3467,7 +3467,7 @@ def export_zip():
         # DELETE FROM DATABASE
         # ----------------------------------------------------
 
-    @app.route("/delete_certificate/<path:filename>", methods=["POST"])
+@app.route("/delete_certificate/<path:filename>", methods=["POST"])
 def delete_certificate(filename):
 
     role = session.get("role")
