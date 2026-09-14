@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -15,8 +16,7 @@
 
 
     <!-- =====================================================
-         COMPACT SIZE
-         SAME SIZE STYLE AS TUTOR DASHBOARD
+         COMPACT SIZE + PERFECT CIRCLE PROFILE IMAGE
     ====================================================== -->
 
     <style>
@@ -25,7 +25,10 @@
             font-size: 13px !important;
         }
 
-        /* MAIN CONTAINER */
+
+        /* =================================================
+           MAIN CONTAINER
+        ================================================= */
 
         .container {
             max-width: 1400px !important;
@@ -33,7 +36,9 @@
         }
 
 
-        /* TOP BAR */
+        /* =================================================
+           TOP BAR
+        ================================================= */
 
         .topbar {
             padding: 16px 20px !important;
@@ -59,7 +64,9 @@
         }
 
 
-        /* SUMMARY CARDS */
+        /* =================================================
+           SUMMARY CARDS
+        ================================================= */
 
         .cards {
             gap: 14px !important;
@@ -84,7 +91,9 @@
         }
 
 
-        /* TUTOR PROFILE */
+        /* =================================================
+           TUTOR PROFILE BOX
+        ================================================= */
 
         .profile-box {
             padding: 18px !important;
@@ -93,10 +102,54 @@
             gap: 20px !important;
         }
 
+
+        /* =================================================
+           PERFECT CIRCLE PROFILE IMAGE
+        ================================================= */
+
+        .profile-left {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+
+        .profile-left .profile-img,
         .profile-img {
+
             width: 75px !important;
             height: 75px !important;
+
+            min-width: 75px !important;
+            min-height: 75px !important;
+
+            max-width: 75px !important;
+            max-height: 75px !important;
+
+            aspect-ratio: 1 / 1 !important;
+
+            border-radius: 50% !important;
+
+            object-fit: cover !important;
+
+            display: block !important;
+
+            overflow: hidden !important;
+
+            border: 4px solid #198754 !important;
+
+            background: #ffffff !important;
+
+            box-sizing: border-box !important;
+
+            flex-shrink: 0 !important;
+
         }
+
+
+        /* =================================================
+           PROFILE RIGHT
+        ================================================= */
 
         .profile-right h2 {
             font-size: 18px !important;
@@ -112,7 +165,9 @@
         }
 
 
-        /* REPORT BOXES */
+        /* =================================================
+           REPORT BOXES
+        ================================================= */
 
         .report-box {
             padding: 18px !important;
@@ -129,7 +184,9 @@
         }
 
 
-        /* REPORT TABLES */
+        /* =================================================
+           REPORT TABLES
+        ================================================= */
 
         .report-box table {
             font-size: 11px !important;
@@ -142,7 +199,9 @@
         }
 
 
-        /* QUICK STATISTICS */
+        /* =================================================
+           QUICK STATISTICS
+        ================================================= */
 
         .stats-grid {
             gap: 12px !important;
@@ -166,7 +225,9 @@
         }
 
 
-        /* SEARCH */
+        /* =================================================
+           SEARCH
+        ================================================= */
 
         #searchInput {
             width: 280px !important;
@@ -181,7 +242,9 @@
         }
 
 
-        /* CERTIFICATE TABLE */
+        /* =================================================
+           CERTIFICATE TABLE
+        ================================================= */
 
         #certificateTable th {
             font-size: 11px !important;
@@ -203,7 +266,9 @@
         }
 
 
-        /* VIEW + DOWNLOAD BUTTONS */
+        /* =================================================
+           VIEW + DOWNLOAD BUTTONS
+        ================================================= */
 
         .view-btn,
         .download-btn {
@@ -213,7 +278,9 @@
         }
 
 
-        /* REPORT SUMMARY */
+        /* =================================================
+           REPORT SUMMARY
+        ================================================= */
 
         .summary-area {
             gap: 12px !important;
@@ -233,7 +300,9 @@
         }
 
 
-        /* FOOTER */
+        /* =================================================
+           FOOTER
+        ================================================= */
 
         .footer {
             padding: 16px !important;
@@ -252,7 +321,9 @@
         }
 
 
-        /* RESPONSIVE */
+        /* =================================================
+           RESPONSIVE - TABLET
+        ================================================= */
 
         @media (max-width: 992px) {
 
@@ -275,8 +346,13 @@
             .profile-box {
                 gap: 15px !important;
             }
+
         }
 
+
+        /* =================================================
+           RESPONSIVE - MOBILE
+        ================================================= */
 
         @media (max-width: 768px) {
 
@@ -305,11 +381,49 @@
                 padding: 15px !important;
             }
 
+
+            /* MOBILE PERFECT CIRCLE */
+
             .profile-box {
                 flex-direction: column !important;
                 align-items: center !important;
                 text-align: center !important;
             }
+
+            .profile-left {
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+            }
+
+            .profile-left .profile-img,
+            .profile-img {
+
+                width: 75px !important;
+                height: 75px !important;
+
+                min-width: 75px !important;
+                min-height: 75px !important;
+
+                max-width: 75px !important;
+                max-height: 75px !important;
+
+                aspect-ratio: 1 / 1 !important;
+
+                border-radius: 50% !important;
+
+                object-fit: cover !important;
+
+                display: block !important;
+
+                overflow: hidden !important;
+
+                border: 4px solid #198754 !important;
+
+                flex-shrink: 0 !important;
+
+            }
+
 
             .report-search-actions {
                 flex-wrap: wrap !important;
@@ -319,8 +433,13 @@
             #searchInput {
                 width: 100% !important;
             }
+
         }
 
+
+        /* =================================================
+           SMALL MOBILE
+        ================================================= */
 
         @media (max-width: 500px) {
 
@@ -344,6 +463,42 @@
             .box-header h2 {
                 font-size: 16px !important;
             }
+
+        }
+
+
+        /* =================================================
+           PRINT STYLE
+        ================================================= */
+
+        @media print {
+
+            body {
+                background: #ffffff !important;
+            }
+
+            .top-buttons {
+                display: none !important;
+            }
+
+            .report-search-actions {
+                display: none !important;
+            }
+
+            .report-box {
+                page-break-inside: avoid;
+            }
+
+            .footer {
+                margin-top: 30px;
+                text-align: center;
+            }
+
+            .view-btn,
+            .download-btn {
+                display: none !important;
+            }
+
         }
 
     </style>
@@ -443,7 +598,6 @@
         </div>
 
 
-
         <div class="card blue">
 
             <i class="bi bi-award-fill"></i>
@@ -459,7 +613,6 @@
         </div>
 
 
-
         <div class="card orange">
 
             <i class="bi bi-building"></i>
@@ -473,7 +626,6 @@
             </p>
 
         </div>
-
 
 
         <div class="card purple">
@@ -500,6 +652,8 @@
 
     <div class="profile-box">
 
+
+        <!-- PROFILE IMAGE -->
 
         <div class="profile-left">
 
@@ -528,6 +682,8 @@
         </div>
 
 
+
+        <!-- PROFILE DETAILS -->
 
         <div class="profile-right">
 
@@ -794,7 +950,6 @@
             </div>
 
 
-
             <div class="mini-card">
 
                 <i class="bi bi-award-fill"></i>
@@ -810,7 +965,6 @@
             </div>
 
 
-
             <div class="mini-card">
 
                 <i class="bi bi-building-fill"></i>
@@ -824,7 +978,6 @@
                 </p>
 
             </div>
-
 
 
             <div class="mini-card">
@@ -874,7 +1027,6 @@
             </div>
 
 
-
             <!-- SEARCH + DOWNLOAD ALL -->
 
             <div class="report-search-actions">
@@ -883,15 +1035,13 @@
                     type="text"
                     id="searchInput"
                     placeholder="Search Student / Register No / Department / Certificate..."
-                    autocomplete="off"
-                >
+                    autocomplete="off">
 
 
                 <button
                     type="button"
                     onclick="downloadReports()"
-                    class="download-all-btn"
-                >
+                    class="download-all-btn">
 
                     <i class="bi bi-download"></i>
 
@@ -959,7 +1109,6 @@
                 </thead>
 
 
-
                 <tbody>
 
 
@@ -979,13 +1128,11 @@
                         </td>
 
 
-
                         <!-- DEPARTMENT -->
 
                         <td>
                             {{ certificate[1] }}
                         </td>
-
 
 
                         <!-- YEAR -->
@@ -995,7 +1142,6 @@
                         </td>
 
 
-
                         <!-- CERTIFICATE -->
 
                         <td>
@@ -1003,13 +1149,11 @@
                         </td>
 
 
-
                         <!-- CATEGORY -->
 
                         <td>
                             {{ certificate[4] }}
                         </td>
-
 
 
                         <!-- ACHIEVEMENT -->
@@ -1061,7 +1205,6 @@
                         </td>
 
 
-
                         <!-- UPLOAD DATE -->
 
                         <td>
@@ -1069,11 +1212,7 @@
                         </td>
 
 
-
-                        <!-- =================================================
-                             VIEW
-                             GOOGLE DRIVE VIEWER
-                        ================================================== -->
+                        <!-- VIEW -->
 
                         <td>
 
@@ -1084,8 +1223,7 @@
                                     href="#"
                                     data-drive-url="{{ certificate[6] }}"
                                     target="_blank"
-                                    rel="noopener noreferrer"
-                                >
+                                    rel="noopener noreferrer">
 
                                     <i class="bi bi-eye-fill"></i>
 
@@ -1104,11 +1242,7 @@
                         </td>
 
 
-
-                        <!-- =================================================
-                             DOWNLOAD
-                             FLASK DOWNLOAD ROUTE
-                        ================================================== -->
+                        <!-- DOWNLOAD -->
 
                         <td>
 
@@ -1119,8 +1253,7 @@
                                     href="{{ url_for(
                                         'download',
                                         filename=certificate[6]
-                                    ) }}"
-                                >
+                                    ) }}">
 
                                     <i class="bi bi-download"></i>
 
@@ -1149,13 +1282,12 @@
 
                         <td
                             colspan="9"
-                            style="text-align:center;padding:40px;"
-                        >
+                            style="text-align:center;padding:40px;">
 
                             <i
                                 class="bi bi-award"
-                                style="font-size:45px;"
-                            ></i>
+                                style="font-size:45px;">
+                            </i>
 
                             <h3>
                                 No Certificates Found
@@ -1218,7 +1350,6 @@
             </div>
 
 
-
             <div class="summary-card">
 
                 <h3>
@@ -1232,7 +1363,6 @@
             </div>
 
 
-
             <div class="summary-card">
 
                 <h3>
@@ -1244,7 +1374,6 @@
                 </span>
 
             </div>
-
 
 
             <div class="summary-card">
@@ -1290,7 +1419,6 @@
         </div>
 
 
-
         <div class="footer-right">
 
             <p>
@@ -1321,17 +1449,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchInput =
         document.getElementById("searchInput");
 
-
     const tableRows =
         document.querySelectorAll(
             "#certificateTable tbody tr"
         );
 
-
     if (!searchInput) {
         return;
     }
-
 
     searchInput.addEventListener(
         "keyup",
@@ -1342,12 +1467,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     .toLowerCase()
                     .trim();
 
-
             tableRows.forEach(function (row) {
 
                 const text =
                     row.innerText.toLowerCase();
-
 
                 if (
                     filter === "" ||
@@ -1374,15 +1497,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 <!-- =====================================================
-     GOOGLE DRIVE VIEW ONLY
-
-     IMPORTANT:
-
-     VIEW uses Google Drive.
-
-     DOWNLOAD DOES NOT USE GOOGLE DRIVE URL.
-
-     DOWNLOAD uses Flask /download route.
+     GOOGLE DRIVE VIEW
 ====================================================== -->
 
 <script>
@@ -1390,11 +1505,9 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
 
 
-    /*
-    ========================================================
-    EXTRACT GOOGLE DRIVE FILE ID
-    ========================================================
-    */
+    /* ================================================
+       EXTRACT GOOGLE DRIVE FILE ID
+    ================================================= */
 
     function getDriveFileId(url) {
 
@@ -1402,21 +1515,17 @@ document.addEventListener("DOMContentLoaded", function () {
             return null;
         }
 
-
         let fileId = null;
 
 
-        /*
-        Format:
-
-        https://drive.google.com/file/d/FILE_ID/view
+        /* FORMAT:
+           https://drive.google.com/file/d/FILE_ID/view
         */
 
         let match =
             url.match(
                 /\/file\/d\/([^\/?#]+)/
             );
-
 
         if (match && match[1]) {
 
@@ -1425,10 +1534,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        /*
-        Format:
-
-        https://drive.google.com/open?id=FILE_ID
+        /* FORMAT:
+           https://drive.google.com/open?id=FILE_ID
         */
 
         if (!fileId) {
@@ -1438,7 +1545,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     /[?&]id=([^&#]+)/
                 );
 
-
             if (match && match[1]) {
 
                 fileId = match[1];
@@ -1447,18 +1553,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-
         return fileId;
 
     }
 
 
-
-    /*
-    ========================================================
-    VIEW BUTTON ONLY
-    ========================================================
-    */
+    /* ================================================
+       VIEW BUTTON
+    ================================================= */
 
     const viewButtons =
         document.querySelectorAll(
@@ -1468,22 +1570,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     viewButtons.forEach(function (button) {
 
-
         const driveUrl =
             button.getAttribute(
                 "data-drive-url"
             );
-
 
         const fileId =
             getDriveFileId(driveUrl);
 
 
         if (fileId) {
-
-            /*
-            Google Drive VIEW URL
-            */
 
             button.href =
                 "https://drive.google.com/file/d/" +
@@ -1508,10 +1604,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function downloadReports() {
 
-
     const searchBox =
         document.getElementById("searchInput");
-
 
     if (!searchBox) {
         return;
@@ -1522,14 +1616,10 @@ function downloadReports() {
         searchBox.value.trim();
 
 
-    /*
-    ========================================================
-    EMPTY SEARCH
-
-    Download all certificates belonging
-    to this tutor.
-    ========================================================
-    */
+    /* ================================================
+       EMPTY SEARCH
+       DOWNLOAD ALL
+    ================================================= */
 
     if (searchText === "") {
 
@@ -1541,13 +1631,10 @@ function downloadReports() {
     }
 
 
-    /*
-    ========================================================
-    SEARCH ENTERED
-
-    Download only matching certificates.
-    ========================================================
-    */
+    /* ================================================
+       SEARCH ENTERED
+       DOWNLOAD MATCHING CERTIFICATES
+    ================================================= */
 
     window.location.href =
         "/export_zip?search=" +
@@ -1556,51 +1643,6 @@ function downloadReports() {
 }
 
 </script>
-
-
-
-<!-- =====================================================
-     PRINT STYLE
-====================================================== -->
-
-<style>
-
-@media print {
-
-    body {
-        background: #ffffff !important;
-    }
-
-
-    .top-buttons {
-        display: none !important;
-    }
-
-
-    .report-search-actions {
-        display: none !important;
-    }
-
-
-    .report-box {
-        page-break-inside: avoid;
-    }
-
-
-    .footer {
-        margin-top: 30px;
-        text-align: center;
-    }
-
-
-    .view-btn,
-    .download-btn {
-        display: none !important;
-    }
-
-}
-
-</style>
 
 
 </body>
