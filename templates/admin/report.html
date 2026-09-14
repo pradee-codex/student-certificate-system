@@ -14,13 +14,285 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
           rel="stylesheet">
 
+    <style>
+
+        *{
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:"Segoe UI",Arial,sans-serif;
+            font-size:12px;
+        }
+
+        /* ==============================
+           COMPACT REPORT PAGE
+        ============================== */
+
+        .container{
+            max-width:1200px !important;
+            padding:18px !important;
+        }
+
+        /* TOPBAR */
+
+        .topbar{
+            padding:14px 18px !important;
+            border-radius:12px !important;
+            margin-bottom:14px !important;
+        }
+
+        .topbar h1{
+            font-size:21px !important;
+            margin-bottom:4px !important;
+        }
+
+        .topbar p{
+            font-size:10px !important;
+            margin:0 !important;
+        }
+
+        .top-buttons{
+            gap:6px !important;
+        }
+
+        .top-buttons .btn{
+            padding:6px 10px !important;
+            font-size:10px !important;
+            border-radius:6px !important;
+        }
+
+        .top-buttons .btn i{
+            font-size:10px;
+        }
+
+
+        /* ==============================
+           SUMMARY CARDS
+        ============================== */
+
+        .cards{
+            gap:12px !important;
+            margin-bottom:14px !important;
+        }
+
+        .cards .card{
+            padding:15px !important;
+            border-radius:12px !important;
+        }
+
+        .cards .card i{
+            font-size:23px !important;
+        }
+
+        .cards .card h2{
+            font-size:23px !important;
+            margin:5px 0 !important;
+        }
+
+        .cards .card p{
+            font-size:10px !important;
+            margin:0 !important;
+        }
+
+
+        /* ==============================
+           REPORT BOX
+        ============================== */
+
+        .report-box{
+            padding:15px !important;
+            margin-bottom:14px !important;
+            border-radius:12px !important;
+        }
+
+        .box-header{
+            margin-bottom:8px !important;
+        }
+
+        .box-header h2{
+            font-size:17px !important;
+            margin:0 !important;
+        }
+
+        .box-header h2 i{
+            font-size:15px;
+        }
+
+
+        /* ==============================
+           REPORT TABLES
+        ============================== */
+
+        .report-box table{
+            width:100%;
+            font-size:10px !important;
+        }
+
+        .report-box table th{
+            font-size:10px !important;
+            padding:7px 8px !important;
+            white-space:nowrap;
+        }
+
+        .report-box table td{
+            font-size:10px !important;
+            padding:7px 8px !important;
+            vertical-align:middle;
+        }
+
+
+        /* ==============================
+           ACHIEVEMENT BADGES
+        ============================== */
+
+        .report-box .badge{
+            font-size:8px !important;
+            padding:4px 6px !important;
+            border-radius:5px;
+        }
+
+
+        /* ==============================
+           FOOTER
+        ============================== */
+
+        .footer{
+            padding:14px !important;
+            margin-top:14px !important;
+            border-radius:10px !important;
+        }
+
+        .footer p{
+            font-size:9px !important;
+            margin:0 !important;
+        }
+
+
+        /* ==============================
+           RESPONSIVE
+        ============================== */
+
+        @media(max-width:768px){
+
+            .container{
+                width:100% !important;
+                padding:10px !important;
+            }
+
+            .topbar{
+                padding:12px 14px !important;
+            }
+
+            .topbar h1{
+                font-size:18px !important;
+            }
+
+            .topbar p{
+                font-size:9px !important;
+            }
+
+            .top-buttons{
+                margin-top:8px;
+                flex-wrap:wrap;
+            }
+
+            .top-buttons .btn{
+                padding:5px 8px !important;
+                font-size:9px !important;
+            }
+
+            .cards{
+                gap:8px !important;
+            }
+
+            .cards .card{
+                padding:12px !important;
+            }
+
+            .cards .card i{
+                font-size:20px !important;
+            }
+
+            .cards .card h2{
+                font-size:20px !important;
+            }
+
+            .cards .card p{
+                font-size:9px !important;
+            }
+
+            .report-box{
+                padding:12px !important;
+                overflow-x:auto;
+            }
+
+            .box-header h2{
+                font-size:15px !important;
+            }
+
+            .report-box table th,
+            .report-box table td{
+                font-size:9px !important;
+                padding:6px !important;
+            }
+
+            .footer{
+                padding:12px !important;
+            }
+
+        }
+
+
+        /* ==============================
+           PRINT
+        ============================== */
+
+        @media print{
+
+            .top-buttons{
+                display:none !important;
+            }
+
+            body{
+                background:white !important;
+                font-size:10px !important;
+            }
+
+            .container{
+                width:100% !important;
+                max-width:100% !important;
+                margin:0 !important;
+                padding:0 !important;
+            }
+
+            .report-box{
+                page-break-inside:avoid;
+                box-shadow:none !important;
+            }
+
+            table{
+                width:100% !important;
+                border-collapse:collapse;
+            }
+
+            table th,
+            table td{
+                border:1px solid #000 !important;
+                padding:6px !important;
+            }
+
+        }
+
+    </style>
+
 </head>
 
 <body>
 
 <div class="container">
 
-    <!-- Header -->
+    <!-- HEADER -->
 
     <div class="topbar">
 
@@ -37,12 +309,12 @@
 
         </div>
 
+
         <div class="top-buttons">
 
             <a href="/admin" class="btn back">
 
                 <i class="bi bi-arrow-left-circle"></i>
-
                 Dashboard
 
             </a>
@@ -50,7 +322,6 @@
             <a href="/export_excel" class="btn excel">
 
                 <i class="bi bi-file-earmark-excel-fill"></i>
-
                 Excel
 
             </a>
@@ -58,7 +329,6 @@
             <a href="/export_pdf" class="btn pdf">
 
                 <i class="bi bi-file-earmark-pdf-fill"></i>
-
                 PDF
 
             </a>
@@ -66,7 +336,6 @@
             <button onclick="window.print()" class="btn print">
 
                 <i class="bi bi-printer-fill"></i>
-
                 Print
 
             </button>
@@ -75,7 +344,8 @@
 
     </div>
 
-    <!-- Summary Cards -->
+
+    <!-- SUMMARY CARDS -->
 
     <div class="cards">
 
@@ -89,6 +359,7 @@
 
         </div>
 
+
         <div class="card green">
 
             <i class="bi bi-award-fill"></i>
@@ -99,6 +370,7 @@
 
         </div>
 
+
         <div class="card orange">
 
             <i class="bi bi-building"></i>
@@ -108,6 +380,7 @@
             <p>Departments</p>
 
         </div>
+
 
         <div class="card purple">
 
@@ -121,7 +394,8 @@
 
     </div>
 
-    <!-- Department Report -->
+
+    <!-- DEPARTMENT REPORT -->
 
     <div class="report-box">
 
@@ -130,12 +404,12 @@
             <h2>
 
                 <i class="bi bi-building"></i>
-
                 Department Wise Report
 
             </h2>
 
         </div>
+
 
         <table>
 
@@ -150,6 +424,7 @@
 
             </thead>
 
+
             <tbody>
 
                 {% for dept in department_report %}
@@ -157,7 +432,6 @@
                 <tr>
 
                     <td>{{ dept[0] }}</td>
-
                     <td>{{ dept[1] }}</td>
 
                 </tr>
@@ -169,9 +443,9 @@
         </table>
 
     </div>
-        <!-- ==========================
-         Year Wise Report
-    =========================== -->
+
+
+    <!-- YEAR REPORT -->
 
     <div class="report-box">
 
@@ -180,12 +454,12 @@
             <h2>
 
                 <i class="bi bi-calendar3"></i>
-
                 Year Wise Report
 
             </h2>
 
         </div>
+
 
         <table>
 
@@ -194,12 +468,12 @@
                 <tr>
 
                     <th>Year</th>
-
                     <th>Total Students</th>
 
                 </tr>
 
             </thead>
+
 
             <tbody>
 
@@ -208,7 +482,6 @@
                 <tr>
 
                     <td>{{ year[0] }}</td>
-
                     <td>{{ year[1] }}</td>
 
                 </tr>
@@ -221,9 +494,8 @@
 
     </div>
 
-    <!-- ==========================
-         Certificate Category Report
-    =========================== -->
+
+    <!-- CATEGORY REPORT -->
 
     <div class="report-box">
 
@@ -232,12 +504,12 @@
             <h2>
 
                 <i class="bi bi-award-fill"></i>
-
                 Certificate Category Report
 
             </h2>
 
         </div>
+
 
         <table>
 
@@ -246,12 +518,12 @@
                 <tr>
 
                     <th>Category</th>
-
                     <th>Total Certificates</th>
 
                 </tr>
 
             </thead>
+
 
             <tbody>
 
@@ -260,7 +532,6 @@
                 <tr>
 
                     <td>{{ category[0] }}</td>
-
                     <td>{{ category[1] }}</td>
 
                 </tr>
@@ -273,9 +544,8 @@
 
     </div>
 
-    <!-- ==========================
-         Recent Certificate Uploads
-    =========================== -->
+
+    <!-- RECENT CERTIFICATES -->
 
     <div class="report-box">
 
@@ -284,37 +554,31 @@
             <h2>
 
                 <i class="bi bi-clock-history"></i>
-
                 Recent Certificate Uploads
 
             </h2>
 
         </div>
 
+
         <table>
 
             <thead>
 
                 <tr>
+
                     <th>Roll No</th>
-                    
                     <th>Student</th>
-
                     <th>Department</th>
-
                     <th>Year</th>
-
                     <th>Certificate</th>
-
                     <th>Category</th>
-
                     <th>Achievements</th>
-
-                    
 
                 </tr>
 
             </thead>
+
 
             <tbody>
 
@@ -332,19 +596,38 @@
 
                     <td>{{ certificate[4] }}</td>
 
-
                     <td>{{ certificate[5] }}</td>
-<td>
-    {% if certificate[6] == "Winner" %}
-        <span class="badge bg-success">🥇 Winner</span>
-    {% elif certificate[6] == "Runner Up" %}
-        <span class="badge bg-warning text-dark">🥈 Runner Up</span>
-    {% elif certificate[6] == "Participated" %}
-        <span class="badge bg-primary">🏅 Participated</span>
-    {% else %}
-        <span class="badge bg-secondary">Others</span>
-    {% endif %}
-</td>
+
+                    <td>
+
+                        {% if certificate[6] == "Winner" %}
+
+                            <span class="badge bg-success">
+                                🥇 Winner
+                            </span>
+
+                        {% elif certificate[6] == "Runner Up" %}
+
+                            <span class="badge bg-warning text-dark">
+                                🥈 Runner Up
+                            </span>
+
+                        {% elif certificate[6] == "Participated" %}
+
+                            <span class="badge bg-primary">
+                                🏅 Participated
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-secondary">
+                                Others
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
                 </tr>
 
                 {% endfor %}
@@ -354,65 +637,23 @@
         </table>
 
     </div>
-        <!-- ==========================
-         Footer
-    =========================== -->
+
+
+    <!-- FOOTER -->
 
     <div class="footer">
 
         <p>
+
             © 2026 Student Certificate Management System |
             Designed By PRADEEP From AIDS
+
         </p>
 
     </div>
 
 </div>
 
-<!-- ==========================
-Print Styles
-========================== -->
-
-<style>
-
-@media print{
-
-    .top-buttons{
-        display:none;
-    }
-
-    body{
-        background:white;
-    }
-
-    .container{
-        width:100%;
-        margin:0;
-        padding:0;
-    }
-
-    .report-box{
-        page-break-inside:avoid;
-    }
-
-    table{
-        width:100%;
-        border-collapse:collapse;
-    }
-
-    table th,
-    table td{
-        border:1px solid #000;
-        padding:8px;
-    }
-
-}
-
-</style>
-
-<!-- ==========================
-JavaScript
-========================== -->
 
 <script>
 

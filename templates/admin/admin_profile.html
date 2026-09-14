@@ -14,60 +14,168 @@
 
 <style>
 
-body{
-    background:#f4f7fa;
+*{
+    box-sizing:border-box;
 }
 
-.profile-card{
-    border:none;
-    border-radius:20px;
-    overflow:hidden;
-    box-shadow:0 10px 30px rgba(0,0,0,.15);
+body{
+    background:#f4f7fa;
+    font-family:"Segoe UI",Arial,sans-serif;
+    font-size:12px;
+    margin:0;
 }
+
+/* PROFILE CARD */
+
+.profile-card{
+    max-width:1000px;
+    margin:20px auto;
+    border:none;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 8px 22px rgba(0,0,0,.12);
+}
+
+/* PROFILE HEADER */
 
 .profile-header{
     background:#198754;
     color:white;
-    padding:30px;
+    padding:22px 25px;
 }
 
 .profile-img{
-
-    width:170px;
-    height:170px;
-
+    width:115px;
+    height:115px;
     border-radius:50%;
-
-    border:6px solid white;
-
+    border:4px solid white;
     object-fit:cover;
-
     background:white;
+}
 
+/* HEADER TEXT */
+
+.profile-header h2{
+    font-size:21px;
+    font-weight:600;
+    margin-bottom:6px;
+}
+
+.profile-header h5{
+    font-size:14px;
+    font-weight:500;
+    margin-top:8px !important;
+    margin-bottom:5px;
+}
+
+.profile-header p{
+    font-size:10px;
+    margin:0;
+}
+
+/* FORM BODY */
+
+.profile-card .card-body{
+    padding:22px 25px !important;
+}
+
+.form-label{
+    font-size:11px;
+    font-weight:600;
+    margin-bottom:5px;
+    color:#333;
 }
 
 .form-control{
-
-    height:50px;
-    border-radius:10px;
-
+    height:36px;
+    padding:6px 10px;
+    border-radius:6px;
+    font-size:11px;
 }
 
-.btn-save{
+.form-control:focus{
+    box-shadow:none;
+    border-color:#198754;
+}
 
+/* FORM SPACING */
+
+.profile-card .mb-4{
+    margin-bottom:13px !important;
+}
+
+/* SAVE BUTTON */
+
+.btn-save{
     background:#198754;
     color:white;
-    border-radius:10px;
-    padding:12px;
-
-    font-size:18px;
-
+    border:none;
+    border-radius:7px;
+    padding:7px 20px !important;
+    font-size:11px;
+    font-weight:600;
 }
 
 .btn-save:hover{
-
     background:#157347;
     color:white;
+}
+
+/* BACK BUTTON */
+
+.profile-card .btn-secondary{
+    padding:7px 20px !important;
+    border-radius:7px;
+    font-size:11px;
+}
+
+/* BUTTON AREA */
+
+.profile-card .text-center{
+    margin-top:10px !important;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .container{
+        margin-top:12px !important;
+        margin-bottom:12px !important;
+    }
+
+    .profile-card{
+        margin:0;
+        border-radius:12px;
+    }
+
+    .profile-header{
+        padding:18px;
+    }
+
+    .profile-img{
+        width:95px;
+        height:95px;
+        margin-bottom:10px;
+    }
+
+    .profile-header h2{
+        font-size:19px;
+    }
+
+    .profile-header h5{
+        font-size:13px;
+    }
+
+    .profile-card .card-body{
+        padding:18px !important;
+    }
+
+    .btn-save,
+    .profile-card .btn-secondary{
+        padding:7px 15px !important;
+        font-size:10px;
+    }
 
 }
 
@@ -81,6 +189,8 @@ body{
 
 <div class="card profile-card">
 
+<!-- PROFILE HEADER -->
+
 <div class="profile-header">
 
 <div class="row align-items-center">
@@ -91,13 +201,15 @@ body{
 
 <img
 src="{{ url_for('static', filename='uploads/profile/' + admin[5]) }}"
-class="profile-img">
+class="profile-img"
+alt="Admin Profile">
 
 {% else %}
 
 <img
 src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-class="profile-img">
+class="profile-img"
+alt="Default Admin">
 
 {% endif %}
 
@@ -113,7 +225,7 @@ Administrator Profile
 
 </h2>
 
-<h5 class="mt-3">
+<h5>
 
 Welcome,
 
@@ -121,7 +233,7 @@ Welcome,
 
 </h5>
 
-<p class="mb-0">
+<p>
 
 Manage your profile information
 
@@ -133,11 +245,16 @@ Manage your profile information
 
 </div>
 
-<div class="card-body p-5">
+
+<!-- PROFILE FORM -->
+
+<div class="card-body">
 
 <form action="/update_admin_profile" method="POST">
 
 <div class="row">
+
+<!-- FULL NAME -->
 
 <div class="col-md-6 mb-4">
 
@@ -156,6 +273,9 @@ required>
 
 </div>
 
+
+<!-- USERNAME -->
+
 <div class="col-md-6 mb-4">
 
 <label class="form-label">
@@ -172,6 +292,9 @@ readonly>
 
 </div>
 
+
+<!-- EMAIL -->
+
 <div class="col-md-6 mb-4">
 
 <label class="form-label">
@@ -187,6 +310,9 @@ class="form-control"
 value="{{ admin[3] if admin[3] else '' }}">
 
 </div>
+
+
+<!-- PHONE -->
 
 <div class="col-md-6 mb-4">
 
@@ -206,10 +332,13 @@ value="{{ admin[4] if admin[4] else '' }}">
 
 </div>
 
+
+<!-- BUTTONS -->
+
 <div class="text-center mt-4">
 
 <button
-class="btn btn-save px-5"
+class="btn btn-save"
 type="submit">
 
 <i class="bi bi-check-circle-fill"></i>
@@ -220,7 +349,7 @@ Update Profile
 
 <a
 href="/admin"
-class="btn btn-secondary px-5 ms-3">
+class="btn btn-secondary ms-2">
 
 <i class="bi bi-arrow-left-circle"></i>
 
