@@ -848,3 +848,31 @@ table tr:hover {
         left: 15px !important;
     }
 }
+.welcome-banner .right .student-photo {
+    position: absolute !important;
+
+    left: 25px !important;
+    top: 75px !important;
+
+    width: 60px !important;
+    height: 60px !important;
+
+    min-width: 60px !important;
+    max-width: 60px !important;
+
+    min-height: 60px !important;
+    max-height: 60px !important;
+
+    border-radius: 50% !important;
+    object-fit: cover !important;
+
+    border: 3px solid #ffffff !important;
+
+    background: #ffffff !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    display: block !important;
+    z-index: 5 !important;
+}
