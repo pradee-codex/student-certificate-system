@@ -728,10 +728,25 @@ table tr:hover {
 
     display: block !important;
 }
+
 /* ======================================
    DASHBOARD WELCOME PHOTO
-   SMALL CIRCLE
+   LEFT SIDE
 ====================================== */
+
+.welcome-banner {
+    position: relative;
+}
+
+.welcome-banner .right {
+    position: absolute;
+    left: 20px;
+    top: 95px;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
 
 .welcome-banner .right .student-photo {
     width: 75px !important;
@@ -749,7 +764,7 @@ table tr:hover {
     border: 3px solid #ffffff !important;
 
     padding: 0 !important;
-    margin: 0 auto !important;
+    margin: 0 !important;
 
     display: block !important;
 }
