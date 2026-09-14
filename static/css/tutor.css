@@ -522,3 +522,176 @@ table tr:hover{
 ::-webkit-scrollbar-thumb:hover{
     background:#059669;
 }
+/* ==========================================
+   EXTRA SMALL / COMPACT TUTOR DASHBOARD
+========================================== */
+
+.sidebar{
+    width:210px !important;
+    padding:14px !important;
+}
+
+.logo{
+    margin-bottom:20px !important;
+}
+
+.logo img{
+    width:55px !important;
+    height:55px !important;
+}
+
+.logo h2{
+    font-size:19px !important;
+    margin-top:7px !important;
+}
+
+.sidebar ul li{
+    margin:5px 0 !important;
+    padding:9px !important;
+    font-size:13px !important;
+}
+
+.sidebar ul li a{
+    font-size:13px !important;
+}
+
+.main-content{
+    margin-left:210px !important;
+    width:calc(100% - 210px) !important;
+    padding:15px !important;
+}
+
+.container{
+    padding:15px !important;
+}
+
+
+/* TOP BAR */
+
+.topbar{
+    height:60px !important;
+    padding:0 18px !important;
+}
+
+.topbar h2{
+    font-size:21px !important;
+}
+
+.admin-box{
+    gap:8px !important;
+}
+
+.admin-box img{
+    width:42px !important;
+    height:42px !important;
+}
+
+.admin-box h3{
+    font-size:14px !important;
+}
+
+.admin-box small{
+    font-size:10px !important;
+}
+
+
+/* WELCOME */
+
+.welcome-banner{
+    padding:18px !important;
+    border-radius:12px !important;
+    margin-bottom:15px !important;
+}
+
+.welcome-banner h1{
+    font-size:23px !important;
+}
+
+.welcome-banner p{
+    font-size:12px !important;
+    margin-top:5px !important;
+}
+
+.welcome-banner img{
+    width:120px !important;
+}
+
+
+/* STATISTICS */
+
+.stats{
+    gap:12px !important;
+    margin-bottom:15px !important;
+}
+
+.stat-card{
+    padding:16px !important;
+    border-radius:12px !important;
+}
+
+.stat-card i{
+    font-size:27px !important;
+}
+
+.stat-card h2{
+    font-size:25px !important;
+    margin:5px 0 !important;
+}
+
+.stat-card p{
+    font-size:12px !important;
+}
+
+
+/* TABLE CARD */
+
+.table-card{
+    padding:15px !important;
+    border-radius:12px !important;
+}
+
+.table-header{
+    margin-bottom:12px !important;
+    gap:10px !important;
+}
+
+.table-header h2{
+    font-size:19px !important;
+}
+
+.table-header input{
+    width:260px !important;
+    padding:8px 11px !important;
+    font-size:12px !important;
+}
+
+
+/* TABLE */
+
+table th{
+    padding:8px !important;
+    font-size:12px !important;
+}
+
+table td{
+    padding:8px !important;
+    font-size:11px !important;
+}
+
+
+/* BUTTONS */
+
+.view,
+.download,
+.delete{
+    padding:5px 8px !important;
+    border-radius:5px !important;
+    font-size:10px !important;
+}
+
+
+/* SCROLLBAR */
+
+::-webkit-scrollbar{
+    width:6px !important;
+}
