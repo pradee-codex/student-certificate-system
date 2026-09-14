@@ -8,18 +8,23 @@
 
     <title>Tutor Dashboard</title>
 
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet">
 
+    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
           rel="stylesheet">
 
+    <!-- Poppins Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
 <style>
@@ -272,6 +277,250 @@ body {
 
 
 /* =====================================================
+   STUDENT ANALYSIS SECTION
+===================================================== */
+
+.student-analysis {
+    background: white;
+    border-radius: 14px;
+    padding: 14px;
+    margin-top: 15px;
+    box-shadow: 0 5px 18px rgba(0,0,0,.07);
+}
+
+
+/* SEARCH BAR */
+
+.student-search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.student-search .search-icon {
+    color: #198754;
+    font-size: 15px;
+}
+
+.student-search input {
+    width: 220px;
+    height: 34px;
+    border: 1px solid #b7c9dc;
+    border-radius: 6px;
+    padding: 7px 12px;
+    font-size: 10px;
+    outline: none;
+}
+
+.student-search input:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 2px rgba(25,135,84,.10);
+}
+
+.student-search button {
+    height: 34px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 6px;
+    background: #087f5b;
+    color: white;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.student-search button:hover {
+    background: #066b4c;
+}
+
+
+/* STUDENT INFORMATION */
+
+.selected-student {
+    margin-top: 7px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 7px;
+}
+
+
+/* STUDENT PROFILE */
+
+.student-info-card {
+    background: #f5faf8;
+    border-radius: 8px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+}
+
+.student-avatar {
+    width: 38px;
+    height: 38px;
+    background: #e7f3ff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 9px;
+    flex-shrink: 0;
+}
+
+.student-avatar i {
+    font-size: 22px;
+    color: #2383c6;
+}
+
+.student-details h4 {
+    font-size: 10px;
+    color: #087f5b;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.student-details p {
+    font-size: 8px;
+    color: #6b7280;
+    margin: 0;
+}
+
+
+/* SMALL STAT CARDS */
+
+.analysis-stat {
+    border-radius: 8px;
+    padding: 8px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.analysis-stat i {
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+}
+
+.analysis-stat h5 {
+    font-size: 8px;
+    margin: 0 0 2px;
+    font-weight: 500;
+}
+
+.analysis-stat h3 {
+    font-size: 14px;
+    margin: 0;
+    font-weight: 700;
+}
+
+
+/* TOTAL CERTIFICATES */
+
+.stat-certificate {
+    background: #effaf5;
+}
+
+.stat-certificate i {
+    background: #d8f3e7;
+    color: #16a34a;
+}
+
+.stat-certificate h5 {
+    color: #198754;
+}
+
+
+/* WINNER */
+
+.stat-winner {
+    background: #eef6ff;
+}
+
+.stat-winner i {
+    background: #dcecff;
+    color: #287be5;
+}
+
+.stat-winner h5 {
+    color: #287be5;
+}
+
+
+/* PARTICIPATED */
+
+.stat-participated {
+    background: #f5f1ff;
+}
+
+.stat-participated i {
+    background: #e8ddff;
+    color: #7c4de8;
+}
+
+.stat-participated h5 {
+    color: #7c4de8;
+}
+
+
+/* =====================================================
+   GRAPHS
+===================================================== */
+
+.analysis-graphs {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 7px;
+    margin-top: 7px;
+}
+
+.graph-card {
+    background: white;
+    border: 1px solid #edf0f2;
+    border-radius: 8px;
+    padding: 8px;
+    min-height: 155px;
+}
+
+.graph-title {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 9px;
+    font-weight: 600;
+    color: #087f5b;
+    margin-bottom: 4px;
+}
+
+.graph-title i {
+    font-size: 10px;
+}
+
+.graph-container {
+    position: relative;
+    width: 100%;
+    height: 115px;
+}
+
+
+/* EMPTY MESSAGE */
+
+.no-student {
+    text-align: center;
+    padding: 15px;
+    color: #888;
+    font-size: 10px;
+}
+
+
+/* =====================================================
    CERTIFICATE TABLE
 ===================================================== */
 
@@ -392,7 +641,15 @@ footer small {
         padding: 15px;
     }
 
+    .selected-student {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
+    .analysis-graphs {
+        grid-template-columns: 1fr;
+    }
 }
+
 
 @media(max-width: 768px) {
 
@@ -432,6 +689,17 @@ footer small {
         width: 100% !important;
     }
 
+    .student-search {
+        justify-content: stretch;
+    }
+
+    .student-search input {
+        width: 100%;
+    }
+
+    .selected-student {
+        grid-template-columns: 1fr;
+    }
 }
 
 
@@ -627,6 +895,7 @@ footer small {
         <p class="text-muted mb-0">
 
             Welcome,
+
             <b>{{ tutor[0] }}</b>
 
         </p>
@@ -775,12 +1044,102 @@ footer small {
 </div>
 
 
+
+<!-- =====================================================
+     NEW STUDENT SEARCH + GRAPH SECTION
+===================================================== -->
+
+<div class="student-analysis">
+
+
+    <!-- SEARCH -->
+
+    <div class="student-search">
+
+        <i class="bi bi-search search-icon"></i>
+
+        <input
+            type="text"
+            id="studentAnalysisSearch"
+            placeholder="Search student name..."
+            autocomplete="off">
+
+        <button type="button" onclick="searchStudent()">
+            Search
+        </button>
+
+    </div>
+
+
+    <!-- SELECTED STUDENT -->
+
+    <div id="studentResult">
+
+        <div class="no-student">
+            Search a student to view certificate details
+        </div>
+
+    </div>
+
+
+    <!-- GRAPHS -->
+
+    <div class="analysis-graphs">
+
+
+        <!-- CATEGORY GRAPH -->
+
+        <div class="graph-card">
+
+            <div class="graph-title">
+
+                <i class="bi bi-bar-chart-fill"></i>
+
+                Certificate Category Distribution
+
+            </div>
+
+            <div class="graph-container">
+
+                <canvas id="studentCategoryChart"></canvas>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACHIEVEMENT GRAPH -->
+
+        <div class="graph-card">
+
+            <div class="graph-title">
+
+                <i class="bi bi-trophy-fill"></i>
+
+                Achievement Type
+
+            </div>
+
+            <div class="graph-container">
+
+                <canvas id="studentAchievementChart"></canvas>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
 <!-- =====================================================
      CERTIFICATE TABLE CARD
 ===================================================== -->
 
 <div class="card mt-3 shadow-lg border-0 rounded-4">
-
 
     <div class="card-body">
 
@@ -830,6 +1189,7 @@ footer small {
             </div>
 
         </div>
+
 
 
         <!-- =================================================
@@ -1043,6 +1403,7 @@ footer small {
 
                         <td>
 
+
                             {% if row[8] %}
 
                                 <a
@@ -1067,12 +1428,14 @@ footer small {
 
                             {% endif %}
 
+
                         </td>
 
 
                         <!-- DOWNLOAD -->
 
                         <td>
+
 
                             {% if row[8] %}
 
@@ -1095,6 +1458,7 @@ footer small {
                                 </span>
 
                             {% endif %}
+
 
                         </td>
 
@@ -1126,7 +1490,9 @@ footer small {
 
 
                             <h4 style="font-size:16px;">
+
                                 No Certificates Found
+
                             </h4>
 
 
@@ -1157,6 +1523,7 @@ footer small {
 </div>
 
 
+
 <!-- =====================================================
      FOOTER
 ===================================================== -->
@@ -1183,6 +1550,7 @@ footer small {
 
                     </h5>
 
+
                     <small class="text-muted">
 
                         Tutor Dashboard
@@ -1197,6 +1565,7 @@ footer small {
                     <small class="text-muted">
 
                         © 2026 Student Certificate Management System |
+
                         Designed By PRADEEP From AIDS
 
                     </small>
@@ -1218,11 +1587,662 @@ footer small {
 </div>
 
 
+
 <!-- =====================================================
-     SEARCH SCRIPT
+     JAVASCRIPT
 ===================================================== -->
 
 <script>
+
+/* =====================================================
+   STUDENT DATA FROM FLASK
+===================================================== */
+
+const studentsData = [
+
+{% for student in students %}
+
+    {
+        name: {{ student[0]|tojson }},
+        registerNo: {{ student[1]|tojson }}
+    }
+
+    {% if not loop.last %},{% endif %}
+
+{% endfor %}
+
+];
+
+
+/* =====================================================
+   CERTIFICATE DATA FROM FLASK
+===================================================== */
+
+const certificatesData = [
+
+{% for row in certificates %}
+
+    {
+        studentName: {{ row[0]|tojson }},
+        category: {{ row[4]|tojson }},
+        achievement: {{ row[5]|tojson }}
+    }
+
+    {% if not loop.last %},{% endif %}
+
+{% endfor %}
+
+];
+
+
+
+/* =====================================================
+   CHART VARIABLES
+===================================================== */
+
+let categoryChart = null;
+let achievementChart = null;
+
+
+
+/* =====================================================
+   SEARCH STUDENT
+===================================================== */
+
+function searchStudent() {
+
+    const input =
+        document.getElementById("studentAnalysisSearch");
+
+    const value =
+        input.value.trim().toLowerCase();
+
+
+    if (value === "") {
+
+        document.getElementById("studentResult").innerHTML = `
+
+            <div class="no-student">
+
+                Please enter a student name.
+
+            </div>
+
+        `;
+
+        destroyCharts();
+
+        return;
+
+    }
+
+
+    /* FIND STUDENT */
+
+    const student = studentsData.find(function(s) {
+
+        return s.name.toLowerCase().includes(value);
+
+    });
+
+
+    if (!student) {
+
+        document.getElementById("studentResult").innerHTML = `
+
+            <div class="no-student">
+
+                ❌ Student not found
+
+            </div>
+
+        `;
+
+        destroyCharts();
+
+        return;
+
+    }
+
+
+    /* GET CERTIFICATES */
+
+    const studentCertificates =
+        certificatesData.filter(function(c) {
+
+            return c.studentName.toLowerCase() ===
+                   student.name.toLowerCase();
+
+        });
+
+
+    /* TOTAL */
+
+    const total =
+        studentCertificates.length;
+
+
+    /* WINNER */
+
+    const winner =
+        studentCertificates.filter(function(c) {
+
+            return c.achievement === "Winner";
+
+        }).length;
+
+
+    /* PARTICIPATED */
+
+    const participated =
+        studentCertificates.filter(function(c) {
+
+            return c.achievement === "Participated";
+
+        }).length;
+
+
+
+    /* =================================================
+       DISPLAY STUDENT CARD
+    ================================================= */
+
+    document.getElementById("studentResult").innerHTML = `
+
+        <div class="selected-student">
+
+
+            <!-- STUDENT -->
+
+            <div class="student-info-card">
+
+                <div class="student-avatar">
+
+                    <i class="bi bi-person-fill"></i>
+
+                </div>
+
+
+                <div class="student-details">
+
+                    <h4>
+                        ${student.name}
+                    </h4>
+
+                    <p>
+                        Register No: ${student.registerNo}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TOTAL -->
+
+            <div class="analysis-stat stat-certificate">
+
+                <i class="bi bi-file-earmark-check-fill"></i>
+
+                <div>
+
+                    <h5>
+                        Total Certificates
+                    </h5>
+
+                    <h3>
+                        ${total}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- WINNER -->
+
+            <div class="analysis-stat stat-winner">
+
+                <i class="bi bi-trophy-fill"></i>
+
+                <div>
+
+                    <h5>
+                        Winner
+                    </h5>
+
+                    <h3>
+                        ${winner}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PARTICIPATED -->
+
+            <div class="analysis-stat stat-participated">
+
+                <i class="bi bi-people-fill"></i>
+
+                <div>
+
+                    <h5>
+                        Participated
+                    </h5>
+
+                    <h3>
+                        ${participated}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    `;
+
+
+
+    /* DRAW GRAPHS */
+
+    drawCategoryChart(studentCertificates);
+
+    drawAchievementChart(studentCertificates);
+
+}
+
+
+
+/* =====================================================
+   CATEGORY GRAPH
+===================================================== */
+
+function drawCategoryChart(data) {
+
+
+    const categoryCounts = {};
+
+
+    data.forEach(function(c) {
+
+        const category =
+            c.category || "Others";
+
+
+        if (!categoryCounts[category]) {
+
+            categoryCounts[category] = 0;
+
+        }
+
+
+        categoryCounts[category]++;
+
+    });
+
+
+    const labels =
+        Object.keys(categoryCounts);
+
+
+    const values =
+        Object.values(categoryCounts);
+
+
+    const ctx =
+        document.getElementById("studentCategoryChart")
+        .getContext("2d");
+
+
+    if (categoryChart) {
+
+        categoryChart.destroy();
+
+    }
+
+
+    categoryChart = new Chart(ctx, {
+
+        type: "bar",
+
+        data: {
+
+            labels: labels,
+
+            datasets: [{
+
+                label: "Number of Certificates",
+
+                data: values,
+
+                borderWidth: 0,
+
+                borderRadius: 3,
+
+                backgroundColor: [
+                    "#20a36a",
+                    "#3188e8",
+                    "#8b5de8",
+                    "#f0a51a",
+                    "#ef6c6c",
+                    "#6c8aa8"
+                ]
+
+            }]
+
+        },
+
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+                    display: false
+                }
+
+            },
+
+
+            scales: {
+
+                y: {
+
+                    beginAtZero: true,
+
+                    ticks: {
+
+                        font: {
+                            size: 7
+                        },
+
+                        stepSize: 1
+
+                    },
+
+                    title: {
+
+                        display: true,
+
+                        text: "Number of Certificates",
+
+                        font: {
+                            size: 7
+                        }
+
+                    }
+
+                },
+
+
+                x: {
+
+                    ticks: {
+
+                        font: {
+                            size: 7
+                        }
+
+                    },
+
+                    title: {
+
+                        display: true,
+
+                        text: "Categories",
+
+                        font: {
+                            size: 7
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+
+
+/* =====================================================
+   ACHIEVEMENT GRAPH
+===================================================== */
+
+function drawAchievementChart(data) {
+
+
+    const achievementCounts = {
+
+        "Winner": 0,
+
+        "Runner": 0,
+
+        "Participated": 0,
+
+        "Others": 0
+
+    };
+
+
+    data.forEach(function(c) {
+
+        const achievement =
+            c.achievement;
+
+
+        if (achievement === "Winner") {
+
+            achievementCounts["Winner"]++;
+
+        }
+
+        else if (achievement === "Runner") {
+
+            achievementCounts["Runner"]++;
+
+        }
+
+        else if (achievement === "Participated") {
+
+            achievementCounts["Participated"]++;
+
+        }
+
+        else {
+
+            achievementCounts["Others"]++;
+
+        }
+
+    });
+
+
+    const labels = [];
+
+    const values = [];
+
+
+    Object.keys(achievementCounts).forEach(function(key) {
+
+        if (achievementCounts[key] > 0) {
+
+            labels.push(key);
+
+            values.push(achievementCounts[key]);
+
+        }
+
+    });
+
+
+    const ctx =
+        document.getElementById("studentAchievementChart")
+        .getContext("2d");
+
+
+    if (achievementChart) {
+
+        achievementChart.destroy();
+
+    }
+
+
+    achievementChart = new Chart(ctx, {
+
+        type: "bar",
+
+        data: {
+
+            labels: labels,
+
+            datasets: [{
+
+                data: values,
+
+                borderWidth: 0,
+
+                borderRadius: 3,
+
+                backgroundColor: [
+
+                    "#f4ad20",
+
+                    "#e69b28",
+
+                    "#8055e8",
+
+                    "#7890a0"
+
+                ]
+
+            }]
+
+        },
+
+
+        options: {
+
+            indexAxis: "y",
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+                    display: false
+                }
+
+            },
+
+
+            scales: {
+
+                x: {
+
+                    beginAtZero: true,
+
+                    ticks: {
+
+                        font: {
+                            size: 7
+                        },
+
+                        stepSize: 1
+
+                    }
+
+                },
+
+
+                y: {
+
+                    ticks: {
+
+                        font: {
+                            size: 8
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+
+
+/* =====================================================
+   DESTROY CHARTS
+===================================================== */
+
+function destroyCharts() {
+
+
+    if (categoryChart) {
+
+        categoryChart.destroy();
+
+        categoryChart = null;
+
+    }
+
+
+    if (achievementChart) {
+
+        achievementChart.destroy();
+
+        achievementChart = null;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   ENTER KEY SEARCH
+===================================================== */
+
+document
+    .getElementById("studentAnalysisSearch")
+    .addEventListener("keypress", function(event) {
+
+        if (event.key === "Enter") {
+
+            searchStudent();
+
+        }
+
+    });
+
+
+
+/* =====================================================
+   EXISTING CERTIFICATE TABLE SEARCH
+===================================================== */
 
 const searchInput =
     document.getElementById("searchInput");
@@ -1252,7 +2272,9 @@ if (searchInput) {
 
                 row.style.display = "";
 
-            } else {
+            }
+
+            else {
 
                 row.style.display = "none";
 
@@ -1266,6 +2288,9 @@ if (searchInput) {
 
 </script>
 
+
+
+<!-- Bootstrap JS -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
 </script>
