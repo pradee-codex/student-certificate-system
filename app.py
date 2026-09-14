@@ -4460,11 +4460,118 @@ def view(filename):
     if "role" not in session:
         return redirect("/")
 
-    # Google Drive file
-    if filename.startswith("https://") or filename.startswith("http://"):
-        return redirect(filename)
+    # =====================================================
+    # GOOGLE DRIVE FILE
+    # =====================================================
 
-    # Old/local uploaded file
+    if (
+        filename.startswith("http://")
+        or filename.startswith("https://")
+    ):
+
+        if (
+            "drive.google.com" in filename
+            or "drive.usercontent.google.com" in filename
+        ):
+
+            import re
+            from io import BytesIO
+            from googleapiclient.http import MediaIoBaseDownload
+
+            file_id = None
+
+            # /file/d/FILE_ID/view
+            match = re.search(
+                r"/file/d/([^/]+)",
+                filename
+            )
+
+            if match:
+                file_id = match.group(1)
+
+            # ?id=FILE_ID
+            if not file_id:
+
+                match = re.search(
+                    r"[?&]id=([^&]+)",
+                    filename
+                )
+
+                if match:
+                    file_id = match.group(1)
+
+            if file_id:
+
+                try:
+
+                    from drive_service import get_drive_service
+
+                    service = get_drive_service()
+
+                    print("================================")
+                    print("GOOGLE DRIVE VIEW")
+                    print("File ID :", file_id)
+                    print("URL     :", filename)
+                    print("================================")
+
+                    # Get file information
+                    file_info = service.files().get(
+                        fileId=file_id,
+                        fields="id,name,mimeType"
+                    ).execute()
+
+                    original_name = file_info.get(
+                        "name",
+                        "certificate"
+                    )
+
+                    mime_type = file_info.get(
+                        "mimeType",
+                        "application/octet-stream"
+                    )
+
+                    # Get file from Google Drive
+                    request = service.files().get_media(
+                        fileId=file_id
+                    )
+
+                    file_stream = BytesIO()
+
+                    downloader = MediaIoBaseDownload(
+                        file_stream,
+                        request
+                    )
+
+                    done = False
+
+                    while not done:
+
+                        status, done = downloader.next_chunk()
+
+                    file_stream.seek(0)
+
+                    # OPEN IN BROWSER
+                    return send_file(
+                        file_stream,
+                        as_attachment=False,
+                        download_name=original_name,
+                        mimetype=mime_type
+                    )
+
+                except Exception as e:
+
+                    print("================================")
+                    print("GOOGLE DRIVE VIEW ERROR")
+                    print("File URL :", filename)
+                    print("Error    :", str(e))
+                    print("================================")
+
+                    return f"Unable to view certificate: {str(e)}", 500
+
+    # =====================================================
+    # OLD / LOCAL FILE
+    # =====================================================
+
     return send_from_directory(
         "static/uploads/certificates",
         filename
