@@ -577,3 +577,115 @@ table tr:hover {
 .analytics-box i {
     font-size: 28px;
     color: #198
+
+/* =====================================================
+   FORCE VIEW / DOWNLOAD / DELETE BUTTON STYLE
+   ===================================================== */
+
+#certificateTable td:nth-last-child(3) a,
+#certificateTable td:nth-last-child(3) button,
+#certificateTable td:nth-last-child(3) input[type="submit"],
+
+#certificateTable td:nth-last-child(2) a,
+#certificateTable td:nth-last-child(2) button,
+#certificateTable td:nth-last-child(2) input[type="submit"],
+
+#certificateTable td:nth-last-child(1) a,
+#certificateTable td:nth-last-child(1) button,
+#certificateTable td:nth-last-child(1) input[type="submit"] {
+
+    display: inline-flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    gap: 6px !important;
+
+    min-width: 88px !important;
+
+    height: 36px !important;
+
+    padding: 8px 14px !important;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #4f46e5
+    ) !important;
+
+    color: #ffffff !important;
+
+    border: none !important;
+
+    border-radius: 8px !important;
+
+    font-size: 11px !important;
+
+    font-weight: 600 !important;
+
+    text-decoration: none !important;
+
+    cursor: pointer !important;
+
+    white-space: nowrap !important;
+
+    box-shadow: none !important;
+
+    transform: none !important;
+}
+
+
+/* Icons */
+
+#certificateTable td:nth-last-child(3) i,
+#certificateTable td:nth-last-child(2) i,
+#certificateTable td:nth-last-child(1) i {
+
+    color: #ffffff !important;
+
+    font-size: 12px !important;
+}
+
+
+/* Hover */
+
+#certificateTable td:nth-last-child(3) a:hover,
+#certificateTable td:nth-last-child(3) button:hover,
+#certificateTable td:nth-last-child(3) input[type="submit"]:hover,
+
+#certificateTable td:nth-last-child(2) a:hover,
+#certificateTable td:nth-last-child(2) button:hover,
+#certificateTable td:nth-last-child(2) input[type="submit"]:hover,
+
+#certificateTable td:nth-last-child(1) a:hover,
+#certificateTable td:nth-last-child(1) button:hover,
+#certificateTable td:nth-last-child(1) input[type="submit"]:hover {
+
+    background: linear-gradient(
+        135deg,
+        #1d4ed8,
+        #4338ca
+    ) !important;
+
+    color: #ffffff !important;
+
+    transform: translateY(-2px) !important;
+
+    box-shadow:
+        0 6px 15px rgba(37,99,235,.25) !important;
+}
+
+
+/* Action columns */
+
+#certificateTable td:nth-last-child(3),
+#certificateTable td:nth-last-child(2),
+#certificateTable td:nth-last-child(1) {
+
+    text-align: center !important;
+
+    vertical-align: middle !important;
+
+    white-space: nowrap !important;
+}
