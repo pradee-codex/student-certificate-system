@@ -1736,15 +1736,17 @@ footer small {
 
                     <!-- EXPORT ZIP -->
 
-                    <a 
-    href="/export_zip" 
-    id="exportZipBtn"
-    class="btn btn-success rounded-pill px-3">
+                    <a
 
-    <i class="bi bi-download"></i>
-    Export ZIP
+                        href="/export_zip"
 
-</a>
+                        class="btn btn-success rounded-pill px-3">
+
+                        <i class="bi bi-download"></i>
+
+                        Export ZIP
+
+                    </a>
 
                 </div>
 
@@ -3346,60 +3348,6 @@ if (searchInput) {
 
 }
 
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-    const searchInput = document.getElementById("searchInput");
-    const exportZipBtn = document.getElementById("exportZipBtn");
-
-    if (searchInput) {
-        searchInput.addEventListener("input", function () {
-
-            let value = this.value.toLowerCase().trim();
-
-            let rows = document.querySelectorAll(
-                "#certificateTable tbody tr"
-            );
-
-            rows.forEach(function (row) {
-
-                let text = row.innerText.toLowerCase();
-
-                if (text.indexOf(value) > -1) {
-                    row.style.display = "";
-                } else {
-                    row.style.display = "none";
-                }
-
-            });
-        });
-    }
-
-    if (searchInput && exportZipBtn) {
-
-        function updateExportZipLink() {
-
-            const studentName = searchInput.value.trim();
-
-            if (studentName === "") {
-                exportZipBtn.href = "/export_zip";
-            } else {
-                exportZipBtn.href =
-                    "/export_zip?student_name=" +
-                    encodeURIComponent(studentName);
-            }
-        }
-
-        searchInput.addEventListener(
-            "input",
-            updateExportZipLink
-        );
-
-        updateExportZipLink();
-    }
-
-});
 </script>
 
 <!-- =====================================================
