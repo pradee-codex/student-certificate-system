@@ -714,17 +714,7 @@ def admin_export_zip():
 # Tutor Dashboard
 # ==========================
 
-@appData to Template
-    # =========================================================
 
-    return render_template(
-        "tutor/dashboard.html",
-        tutor=tutor,
-        total_students=total_students,
-        total_certificates=total_certificates,
-        students=students,
-        certificates=certificates
-    )
 #------------------------------------
 @app.route("/tutor")
 def tutor():
