@@ -2,26 +2,31 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Student Certificate Management System</title>
 
+
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet">
+
 
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
           rel="stylesheet">
 
+
     <!-- Your CSS -->
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
 
+
     <style>
 
-        /* ================================
+        /* =================================
            RESET
         ================================= */
 
@@ -42,7 +47,7 @@
         }
 
 
-        /* ================================
+        /* =================================
            LOGIN CONTAINER
         ================================= */
 
@@ -58,8 +63,8 @@
         }
 
 
-        /* ================================
-           SMALL LOGIN CARD
+        /* =================================
+           LOGIN CARD
         ================================= */
 
         .login-card {
@@ -74,12 +79,13 @@
         }
 
 
-        /* ================================
+        /* =================================
            LOGO
         ================================= */
 
         .login-card .logo {
             display: flex;
+
             justify-content: center;
             align-items: center;
 
@@ -97,10 +103,12 @@
             background: #ffffff;
 
             padding: 4px;
+
+            display: block;
         }
 
 
-        /* ================================
+        /* =================================
            TITLE
         ================================= */
 
@@ -129,22 +137,77 @@
         }
 
 
-        /* ================================
+        /* =================================
            FLASH MESSAGE
         ================================= */
 
         .login-card .alert {
-            font-size: 11px;
+            position: relative;
 
-            padding: 7px 10px;
+            font-size: 11px !important;
 
-            margin-bottom: 10px;
+            padding: 9px 38px 9px 12px !important;
 
-            border-radius: 7px;
+            margin-bottom: 12px !important;
+
+            border-radius: 8px !important;
+
+            min-height: 40px;
+
+            display: flex;
+
+            align-items: center;
         }
 
 
-        /* ================================
+        /* SUCCESS MESSAGE */
+
+        .login-card .alert-success {
+            background-color: #d1e7dd;
+
+            color: #0f5132;
+
+            border: 1px solid #badbcc;
+        }
+
+
+        /* ERROR MESSAGE */
+
+        .login-card .alert-danger {
+            background-color: #f8d7da;
+
+            color: #842029;
+
+            border: 1px solid #f5c2c7;
+        }
+
+
+        /* ALERT CLOSE BUTTON */
+
+        .login-card .alert .btn-close {
+            position: absolute;
+
+            right: 9px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            width: 18px;
+
+            height: 18px;
+
+            padding: 4px;
+
+            opacity: 0.8;
+        }
+
+        .login-card .alert .btn-close:hover {
+            opacity: 1;
+        }
+
+
+        /* =================================
            LABEL
         ================================= */
 
@@ -157,7 +220,7 @@
         }
 
 
-        /* ================================
+        /* =================================
            INPUT GROUP
         ================================= */
 
@@ -196,7 +259,7 @@
         }
 
 
-        /* ================================
+        /* =================================
            FORM SPACING
         ================================= */
 
@@ -205,7 +268,7 @@
         }
 
 
-        /* ================================
+        /* =================================
            FORGOT PASSWORD
         ================================= */
 
@@ -220,7 +283,7 @@
         }
 
 
-        /* ================================
+        /* =================================
            LOGIN BUTTON
         ================================= */
 
@@ -237,7 +300,7 @@
         }
 
 
-        /* ================================
+        /* =================================
            HR
         ================================= */
 
@@ -246,7 +309,7 @@
         }
 
 
-        /* ================================
+        /* =================================
            FOOTER
         ================================= */
 
@@ -259,8 +322,8 @@
         }
 
 
-        /* ================================
-           TABLET / MOBILE
+        /* =================================
+           TABLET
         ================================= */
 
         @media (max-width: 768px) {
@@ -279,6 +342,7 @@
 
             .login-card .logo img {
                 width: 68px !important;
+
                 height: 68px !important;
             }
 
@@ -292,8 +356,8 @@
         }
 
 
-        /* ================================
-           SMALL MOBILE
+        /* =================================
+           MOBILE
         ================================= */
 
         @media (max-width: 500px) {
@@ -306,6 +370,7 @@
 
             .login-card .logo img {
                 width: 62px !important;
+
                 height: 62px !important;
             }
 
@@ -335,6 +400,7 @@
 
             .login-card .input-group .btn {
                 height: 40px;
+
                 width: 40px;
             }
 
@@ -342,6 +408,12 @@
                 height: 40px !important;
 
                 font-size: 12px !important;
+            }
+
+            .login-card .alert {
+                font-size: 10px !important;
+
+                min-height: 38px;
             }
         }
 
@@ -351,6 +423,7 @@
 
 
 <body>
+
 
     <!-- =================================
          BACKGROUND
@@ -373,6 +446,7 @@
             ================================== -->
 
             <div class="text-center">
+
 
                 <div class="logo">
 
@@ -397,6 +471,7 @@
                     Secure Login Portal
                 </p>
 
+
             </div>
 
 
@@ -404,21 +479,45 @@
                  FLASH MESSAGE
             ================================== -->
 
-            {% with messages = get_flashed_messages() %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
 
                 {% if messages %}
 
-                    <div class="alert alert-danger alert-dismissible fade show">
+                    {% for category, message in messages %}
 
-                        {{ messages[0] }}
+                        <div
+                            class="alert
+                            {% if category == 'success' %}
+                                alert-success
+                            {% else %}
+                                alert-danger
+                            {% endif %}
+                            alert-dismissible fade show"
+                            role="alert">
 
-                        <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="alert">
-                        </button>
+                            {% if category == 'success' %}
 
-                    </div>
+                                <i class="bi bi-check-circle-fill me-2"></i>
+
+                            {% else %}
+
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+                            {% endif %}
+
+                            {{ message }}
+
+
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert"
+                                aria-label="Close">
+                            </button>
+
+                        </div>
+
+                    {% endfor %}
 
                 {% endif %}
 
@@ -440,11 +539,15 @@
                         Username
                     </label>
 
+
                     <div class="input-group">
 
                         <span class="input-group-text">
+
                             <i class="bi bi-person-fill"></i>
+
                         </span>
+
 
                         <input
                             type="text"
@@ -466,11 +569,16 @@
                         Password
                     </label>
 
+
                     <div class="input-group">
 
+
                         <span class="input-group-text">
+
                             <i class="bi bi-lock-fill"></i>
+
                         </span>
+
 
                         <input
                             id="password"
@@ -480,23 +588,28 @@
                             placeholder="Enter Password"
                             required>
 
+
                         <button
                             class="btn btn-outline-secondary"
                             type="button"
                             onclick="togglePassword()">
 
-                            <i id="eye"
-                               class="bi bi-eye">
+                            <i
+                                id="eye"
+                                class="bi bi-eye">
                             </i>
 
                         </button>
+
 
                     </div>
 
                 </div>
 
 
-                <!-- FORGOT PASSWORD -->
+                <!-- =================================
+                     FORGOT PASSWORD
+                ================================== -->
 
                 <div class="text-end mb-3">
 
@@ -513,7 +626,9 @@
                 </div>
 
 
-                <!-- LOGIN BUTTON -->
+                <!-- =================================
+                     LOGIN BUTTON
+                ================================== -->
 
                 <button
                     type="submit"
@@ -525,6 +640,7 @@
 
                 </button>
 
+
             </form>
 
 
@@ -533,6 +649,7 @@
             ================================== -->
 
             <hr>
+
 
             <div class="text-center">
 
@@ -598,19 +715,49 @@
         }
 
 
-        /* LOGIN LOADING */
+        /* =================================
+           LOGIN LOADING
+        ================================= */
 
         document.querySelector("form").addEventListener(
             "submit",
             function () {
 
-                document.querySelector(".login-btn").innerHTML =
-                    '<span class="spinner-border spinner-border-sm"></span> Logging in...';
+                let button =
+                    document.querySelector(".login-btn");
+
+                button.innerHTML =
+                    '<span class="spinner-border spinner-border-sm me-1"></span> Logging in...';
+
+                button.disabled = true;
 
             }
         );
 
+
+        /* =================================
+           AUTO HIDE SUCCESS MESSAGE
+           AFTER 4 SECONDS
+        ================================= */
+
+        setTimeout(function () {
+
+            let alert =
+                document.querySelector(".alert");
+
+            if (alert) {
+
+                let bsAlert =
+                    bootstrap.Alert.getOrCreateInstance(alert);
+
+                bsAlert.close();
+
+            }
+
+        }, 4000);
+
     </script>
+
 
 </body>
 
