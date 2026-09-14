@@ -1313,17 +1313,739 @@
 
         </div>
 
+<!-- =========================================================
+     STUDENT ACHIEVEMENT GRAPH
+========================================================= -->
+
+<div class="card-box" style="margin-bottom:14px;">
+
+    <div class="card-header-custom">
+
+        <div class="card-title">
+
+            <i class="bi bi-bar-chart-fill"></i>
+
+            <h3>
+                Student Achievement Graph
+            </h3>
+
+        </div>
+
+    </div>
+
+    <div class="chart-wrapper" style="height:260px;">
+
+        <canvas id="studentAchievementChart"></canvas>
+
+    </div>
+
+</div>
 
 
-        <!-- =================================================
-             STUDENT ACHIEVEMENT GRAPH
-        ================================================== -->
+</section>
 
-        <div
-            class="card-box"
-            style="margin-bottom:14px;"
-        >
+</main>
 
-            <div class="card-header-custom">
 
-                <div class="
+<!-- =========================================================
+     CHART JAVASCRIPT
+========================================================= -->
+
+<script>
+
+/* =========================================================
+   FLASK DATA
+========================================================= */
+
+const topStudentsData =
+    {{ top_students | tojson | safe }};
+
+const categoryReportData =
+    {{ category_report | tojson | safe }};
+
+const achievementReportData =
+    {{ achievement_report | tojson | safe }};
+
+const studentCertificateCounts =
+    {{ student_certificate_counts | tojson | safe }};
+
+const studentCategoryReport =
+    {{ student_category_report | tojson | safe }};
+
+const studentAchievementReport =
+    {{ student_achievement_report | tojson | safe }};
+
+
+/* =========================================================
+   TOP 10 STUDENTS
+========================================================= */
+
+const topCanvas =
+    document.getElementById("topStudentsChart");
+
+if (topCanvas && typeof Chart !== "undefined") {
+
+    new Chart(topCanvas, {
+
+        type: "bar",
+
+        data: {
+
+            labels: topStudentsData.map(
+                row => row[1] || "Unknown"
+            ),
+
+            datasets: [{
+
+                label: "Certificates",
+
+                data: topStudentsData.map(
+                    row => Number(row[3] || 0)
+                ),
+
+                borderRadius: 6
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+                    display: false
+                }
+
+            },
+
+            scales: {
+
+                x: {
+
+                    grid: {
+                        display: false
+                    },
+
+                    ticks: {
+                        font: {
+                            size: 9
+                        }
+                    }
+
+                },
+
+                y: {
+
+                    beginAtZero: true,
+
+                    ticks: {
+
+                        precision: 0,
+
+                        font: {
+                            size: 9
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+
+/* =========================================================
+   CATEGORY CHART
+========================================================= */
+
+const categoryCanvas =
+    document.getElementById("categoryChart");
+
+if (categoryCanvas && typeof Chart !== "undefined") {
+
+    new Chart(categoryCanvas, {
+
+        type: "doughnut",
+
+        data: {
+
+            labels: categoryReportData.map(
+                row => row[0] || "Unknown"
+            ),
+
+            datasets: [{
+
+                data: categoryReportData.map(
+                    row => Number(row[1] || 0)
+                ),
+
+                borderWidth: 2
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+
+                    position: "right",
+
+                    labels: {
+
+                        boxWidth: 12,
+
+                        font: {
+                            size: 9
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+
+/* =========================================================
+   ACHIEVEMENT CHART
+========================================================= */
+
+const achievementCanvas =
+    document.getElementById("achievementChart");
+
+if (achievementCanvas && typeof Chart !== "undefined") {
+
+    new Chart(achievementCanvas, {
+
+        type: "bar",
+
+        data: {
+
+            labels: achievementReportData.map(
+                row => row[0] || "Unknown"
+            ),
+
+            datasets: [{
+
+                label: "Certificates",
+
+                data: achievementReportData.map(
+                    row => Number(row[1] || 0)
+                ),
+
+                borderRadius: 6
+
+            }]
+
+        },
+
+        options: {
+
+            indexAxis: "y",
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+                    display: false
+                }
+
+            },
+
+            scales: {
+
+                x: {
+
+                    beginAtZero: true,
+
+                    ticks: {
+
+                        precision: 0,
+
+                        font: {
+                            size: 9
+                        }
+
+                    }
+
+                },
+
+                y: {
+
+                    ticks: {
+
+                        font: {
+                            size: 9
+                        }
+
+                    },
+
+                    grid: {
+                        display: false
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+
+/* =========================================================
+   STUDENT SEARCH
+========================================================= */
+
+let studentCategoryChart = null;
+
+let studentAchievementChart = null;
+
+
+window.searchStudent = function () {
+
+    const input =
+        document
+            .getElementById("studentSearch")
+            .value
+            .trim()
+            .toLowerCase();
+
+
+    const resultBox =
+        document.getElementById("studentResult");
+
+    const messageBox =
+        document.getElementById("searchMessage");
+
+    const noResult =
+        document.getElementById("noResult");
+
+
+    if (!input) {
+
+        resultBox.classList.remove("show");
+
+        messageBox.style.display = "block";
+
+        noResult.style.display = "none";
+
+        return;
+    }
+
+
+    const student =
+        studentCertificateCounts.find(row => {
+
+            const name =
+                String(row[1] || "").toLowerCase();
+
+            const registerNo =
+                String(row[2] || "").toLowerCase();
+
+            return (
+                name.includes(input) ||
+                registerNo.includes(input)
+            );
+
+        });
+
+
+    if (!student) {
+
+        resultBox.classList.remove("show");
+
+        messageBox.style.display = "none";
+
+        noResult.style.display = "block";
+
+        return;
+    }
+
+
+    const studentId = student[0];
+
+    const studentName = student[1];
+
+    const registerNo = student[2];
+
+    const total = Number(student[3] || 0);
+
+
+    document.getElementById(
+        "selectedStudentName"
+    ).textContent = studentName;
+
+
+    document.getElementById(
+        "selectedStudentRegister"
+    ).textContent =
+        "Register No: " + registerNo;
+
+
+    document.getElementById(
+        "selectedTotal"
+    ).textContent = total;
+
+
+    /* =====================================================
+       STUDENT ACHIEVEMENT COUNTS
+    ===================================================== */
+
+    const selectedAchievements =
+        studentAchievementReport.filter(row =>
+            String(row[0]) === String(studentId)
+        );
+
+
+    let winnerCount = 0;
+
+    let participatedCount = 0;
+
+
+    selectedAchievements.forEach(row => {
+
+        const achievement =
+            String(row[2] || "").toLowerCase();
+
+        const count =
+            Number(row[3] || 0);
+
+
+        if (
+            achievement.includes("winner") ||
+            achievement.includes("1st") ||
+            achievement.includes("first") ||
+            achievement.includes("champion")
+        ) {
+
+            winnerCount += count;
+
+        }
+
+
+        if (
+            achievement.includes("participat") ||
+            achievement.includes("participant")
+        ) {
+
+            participatedCount += count;
+
+        }
+
+    });
+
+
+    document.getElementById(
+        "selectedWinner"
+    ).textContent = winnerCount;
+
+
+    document.getElementById(
+        "selectedParticipated"
+    ).textContent = participatedCount;
+
+
+    resultBox.classList.add("show");
+
+    messageBox.style.display = "none";
+
+    noResult.style.display = "none";
+
+
+    /* =====================================================
+       STUDENT CATEGORY CHART
+    ===================================================== */
+
+    const selectedCategories =
+        studentCategoryReport.filter(row =>
+            String(row[0]) === String(studentId)
+        );
+
+
+    const categoryLabels =
+        selectedCategories.map(
+            row => row[2] || "Unknown"
+        );
+
+
+    const categoryValues =
+        selectedCategories.map(
+            row => Number(row[3] || 0)
+        );
+
+
+    const studentCategoryCanvas =
+        document.getElementById(
+            "studentCategoryChart"
+        );
+
+
+    if (studentCategoryChart) {
+        studentCategoryChart.destroy();
+    }
+
+
+    if (
+        studentCategoryCanvas &&
+        typeof Chart !== "undefined"
+    ) {
+
+        studentCategoryChart =
+            new Chart(
+                studentCategoryCanvas,
+                {
+
+                    type: "doughnut",
+
+                    data: {
+
+                        labels: categoryLabels,
+
+                        datasets: [{
+
+                            data: categoryValues,
+
+                            borderWidth: 2
+
+                        }]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        plugins: {
+
+                            legend: {
+
+                                position: "right",
+
+                                labels: {
+
+                                    boxWidth: 12,
+
+                                    font: {
+                                        size: 9
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+            );
+
+    }
+
+
+    /* =====================================================
+       STUDENT ACHIEVEMENT CHART
+    ===================================================== */
+
+    const achievementLabels =
+        selectedAchievements.map(
+            row => row[2] || "Unknown"
+        );
+
+
+    const achievementValues =
+        selectedAchievements.map(
+            row => Number(row[3] || 0)
+        );
+
+
+    const studentAchievementCanvas =
+        document.getElementById(
+            "studentAchievementChart"
+        );
+
+
+    if (studentAchievementChart) {
+        studentAchievementChart.destroy();
+    }
+
+
+    if (
+        studentAchievementCanvas &&
+        typeof Chart !== "undefined"
+    ) {
+
+        studentAchievementChart =
+            new Chart(
+                studentAchievementCanvas,
+                {
+
+                    type: "bar",
+
+                    data: {
+
+                        labels: achievementLabels,
+
+                        datasets: [{
+
+                            label: "Certificates",
+
+                            data: achievementValues,
+
+                            borderRadius: 6
+
+                        }]
+
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        plugins: {
+
+                            legend: {
+                                display: false
+                            }
+
+                        },
+
+                        scales: {
+
+                            x: {
+
+                                grid: {
+                                    display: false
+                                },
+
+                                ticks: {
+
+                                    font: {
+                                        size: 8
+                                    }
+
+                                }
+
+                            },
+
+                            y: {
+
+                                beginAtZero: true,
+
+                                ticks: {
+
+                                    precision: 0,
+
+                                    font: {
+                                        size: 9
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+            );
+
+    }
+
+};
+
+
+/* =========================================================
+   ENTER KEY SEARCH
+========================================================= */
+
+const searchInput =
+    document.getElementById("studentSearch");
+
+
+if (searchInput) {
+
+    searchInput.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "Enter") {
+
+                event.preventDefault();
+
+                searchStudent();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   DEBUG
+========================================================= */
+
+console.log(
+    "Tutor dashboard loaded"
+);
+
+console.log(
+    "Top Students:",
+    topStudentsData
+);
+
+console.log(
+    "Category Report:",
+    categoryReportData
+);
+
+console.log(
+    "Achievement Report:",
+    achievementReportData
+);
+
+console.log(
+    "Student Certificate Counts:",
+    studentCertificateCounts
+);
+
+</script>
+
+
+</body>
+</html>
