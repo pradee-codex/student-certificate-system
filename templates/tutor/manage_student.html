@@ -15,6 +15,275 @@
 <link rel="stylesheet"
 href="{{ url_for('static', filename='css/tutor.css') }}">
 
+<style>
+
+/* =========================================
+   COMPACT MANAGE STUDENTS
+   ========================================= */
+
+body {
+    font-size: 11px;
+}
+
+/* Main content */
+
+.main-content {
+    padding: 20px !important;
+}
+
+/* Sidebar */
+
+.sidebar {
+    width: 220px !important;
+}
+
+.sidebar .logo {
+    padding: 18px 12px !important;
+}
+
+.sidebar .logo i {
+    font-size: 28px !important;
+}
+
+.sidebar .logo h3 {
+    font-size: 16px !important;
+}
+
+.sidebar .logo p {
+    font-size: 9px !important;
+}
+
+.sidebar ul li a {
+    font-size: 12px !important;
+    padding: 10px 15px !important;
+}
+
+.sidebar ul li a i {
+    font-size: 14px !important;
+}
+
+/* Header */
+
+.topbar {
+    padding: 14px 18px !important;
+    border-radius: 12px !important;
+    margin-bottom: 15px !important;
+}
+
+.topbar h2 {
+    font-size: 21px !important;
+    margin-bottom: 3px !important;
+}
+
+.topbar h2 i {
+    font-size: 20px !important;
+}
+
+.topbar small {
+    font-size: 10px !important;
+}
+
+.profile {
+    font-size: 11px !important;
+}
+
+.profile i {
+    font-size: 25px !important;
+}
+
+/* Statistics */
+
+.row.g-4 {
+    --bs-gutter-x: 12px !important;
+    --bs-gutter-y: 12px !important;
+}
+
+.stat-card {
+    padding: 16px !important;
+    border-radius: 12px !important;
+    min-height: 120px !important;
+}
+
+.stat-card i {
+    font-size: 24px !important;
+    margin-bottom: 6px !important;
+}
+
+.stat-card h3 {
+    font-size: 23px !important;
+    margin: 4px 0 !important;
+}
+
+.stat-card p {
+    font-size: 10px !important;
+    margin: 0 !important;
+}
+
+/* Main cards */
+
+.card {
+    border-radius: 12px !important;
+    margin-top: 15px !important;
+}
+
+.card-header {
+    padding: 12px 16px !important;
+}
+
+.card-header h4 {
+    font-size: 16px !important;
+    margin: 0 !important;
+}
+
+.card-header h4 i {
+    font-size: 15px !important;
+}
+
+.card-body {
+    padding: 16px !important;
+}
+
+/* Form */
+
+.form-label,
+label {
+    font-size: 10px !important;
+    margin-bottom: 5px !important;
+    font-weight: 600;
+}
+
+.form-control,
+.form-select {
+    font-size: 10px !important;
+    padding: 7px 10px !important;
+    min-height: 34px !important;
+    border-radius: 6px !important;
+}
+
+.form-control::placeholder {
+    font-size: 10px !important;
+}
+
+.col-lg-6,
+.col-md-6 {
+    margin-bottom: 12px !important;
+}
+
+/* Create button */
+
+.btn {
+    font-size: 10px !important;
+    border-radius: 6px !important;
+}
+
+.btn-lg {
+    padding: 7px 18px !important;
+    font-size: 10px !important;
+}
+
+.btn-sm {
+    padding: 5px 8px !important;
+    font-size: 9px !important;
+}
+
+.btn i {
+    font-size: 10px !important;
+}
+
+/* Excel upload */
+
+.card-body small {
+    font-size: 9px !important;
+}
+
+hr {
+    margin: 14px 0 !important;
+}
+
+/* Student list header */
+
+#searchStudent {
+    width: 270px !important;
+    height: 34px !important;
+    font-size: 10px !important;
+    padding: 6px 10px !important;
+}
+
+/* Table */
+
+.table {
+    font-size: 10px !important;
+}
+
+.table th {
+    font-size: 10px !important;
+    padding: 8px 8px !important;
+    white-space: nowrap;
+}
+
+.table td {
+    font-size: 10px !important;
+    padding: 7px 8px !important;
+    white-space: nowrap;
+}
+
+.table th:first-child,
+.table td:first-child {
+    width: 45px;
+}
+
+/* Action buttons */
+
+.table .btn-sm {
+    padding: 4px 7px !important;
+    font-size: 9px !important;
+    margin: 1px !important;
+}
+
+.table .btn-sm i {
+    font-size: 10px !important;
+}
+
+/* Footer */
+
+.text-center.mt-4.mb-3 {
+    margin-top: 15px !important;
+    margin-bottom: 12px !important;
+}
+
+.text-center.mt-4.mb-3 small {
+    font-size: 9px !important;
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+    .sidebar {
+        width: 180px !important;
+    }
+
+    .main-content {
+        margin-left: 180px !important;
+        padding: 12px !important;
+    }
+
+    .topbar h2 {
+        font-size: 17px !important;
+    }
+
+    .profile {
+        display: none;
+    }
+
+    #searchStudent {
+        width: 180px !important;
+    }
+
+}
+
+</style>
+
 </head>
 
 <body>
@@ -62,6 +331,7 @@ href="{{ url_for('static', filename='css/tutor.css') }}">
 
     </aside>
 
+
     <!-- Main Content -->
 
     <main class="main-content">
@@ -95,6 +365,7 @@ href="{{ url_for('static', filename='css/tutor.css') }}">
 
         </div>
 
+
         <!-- Statistics -->
 
         <div class="row g-4 mt-2">
@@ -113,6 +384,7 @@ href="{{ url_for('static', filename='css/tutor.css') }}">
 
             </div>
 
+
             <div class="col-md-4">
 
                 <div class="stat-card blue">
@@ -126,6 +398,7 @@ href="{{ url_for('static', filename='css/tutor.css') }}">
                 </div>
 
             </div>
+
 
             <div class="col-md-4">
 
@@ -143,6 +416,7 @@ href="{{ url_for('static', filename='css/tutor.css') }}">
 
         </div>
 
+
         <!-- Student Form -->
 
         <div class="card shadow-lg border-0 mt-4">
@@ -159,426 +433,5 @@ href="{{ url_for('static', filename='css/tutor.css') }}">
 
             </div>
 
-            <div class="card-body">
 
-                <form action="/add_student" method="POST">
-
-                    <div class="row">
-<!-- Student Name -->
-
-<div class="col-lg-6 mb-4">
-
-    <label class="form-label">
-        Student Name
-    </label>
-
-    <input
-        type="text"
-        name="student_name"
-        class="form-control"
-        placeholder="Enter Student Name"
-        required>
-
-</div>
-
-<!-- Register Number -->
-
-<div class="col-lg-6 mb-4">
-
-    <label class="form-label">
-        Register Number
-    </label>
-
-    <input
-        type="text"
-        name="register_no"
-        class="form-control"
-        placeholder="Enter Register Number"
-        required>
-
-</div>
-
-<!-- Department -->
-
-<div class="col-lg-6 mb-4">
-
-    <label class="form-label">
-        Department
-    </label>
-
-    <input
-        type="text"
-        name="department"
-        class="form-control"
-        value="{{ department }}"
-        readonly>
-
-</div>
-<!-- Section -->
-<div class="col-md-6 mb-3">
-    <label>Section</label>
-
-    <select name="section" class="form-select" required>
-        <option value="">Select Section</option>
-        <option value="A">A</option>
-        <option value="B">B</option>
-        <option value="C">C</option>
-    </select>
-</div>
-
-<!-- Year -->
-
-<div class="col-lg-6 mb-4">
-
-    <label class="form-label">
-        Year
-    </label>
-
-    <select
-        name="year"
-        class="form-select"
-        required>
-
-        <option value="">Select Year</option>
-        <option value="I">I Year</option>
-        <option value="II">II Year</option>
-        <option value="III">III Year</option>
-        <option value="IV">IV Year</option>
-
-    </select>
-
-</div>
-
-<!-- Email -->
-
-<div class="col-lg-6 mb-4">
-
-    <label class="form-label">
-        Email Address
-    </label>
-
-    <input
-        type="email"
-        name="email"
-        class="form-control"
-        placeholder="Enter Email"
-        required>
-
-</div>
-
-<!-- Phone -->
-
-<div class="col-lg-6 mb-4">
-
-    <label class="form-label">
-        Phone Number
-    </label>
-
-    <input
-        type="text"
-        name="phone"
-        class="form-control"
-        placeholder="Enter 10 Digit Mobile Number"
-        maxlength="10"
-        required>
-
-</div>
-
-<!-- Username -->
-
-<div class="col-lg-6 mb-4">
-
-    <label class="form-label">
-        Username
-    </label>
-
-    <input
-        type="text"
-        name="username"
-        class="form-control"
-        placeholder="Create Username"
-        required>
-
-</div>
-
-<!-- Password -->
-
-<div class="col-lg-6 mb-4">
-
-    <label class="form-label">
-        Password
-    </label>
-
-    <input
-        type="password"
-        name="password"
-        class="form-control"
-        placeholder="Create Password"
-        required>
-
-</div>
-
-<!-- Buttons -->
-
-<div class="col-12 text-center mt-3">
-
-    <button
-        type="submit"
-        class="btn btn-success btn-lg px-5">
-
-        <i class="bi bi-person-plus-fill"></i>
-
-        Create Student
-
-    </button>
-
-    <a
-        href="/tutor"
-        class="btn btn-secondary btn-lg px-5 ms-3">
-
-        <i class="bi bi-arrow-left-circle"></i>
-
-        Back
-
-    </a>
-
-</div>
-
-</div>
-
-</form>
-
-</div>
-
-</div>
-
-<!-- ========================================= -->
-<!-- Import Students From Excel -->
-<!-- ========================================= -->
-
-<div class="card shadow-lg border-0 mt-4">
-
-    <div class="card-header bg-success text-white">
-
-        <h4>
-
-            <i class="bi bi-file-earmark-excel-fill"></i>
-
-            Import Students From Excel
-
-        </h4>
-
-    </div>
-
-    <div class="card-body">
-
-        <form
-            action="/upload_students"
-            method="POST"
-            enctype="multipart/form-data">
-
-            <div class="row align-items-end">
-
-                <div class="col-lg-8">
-
-                    <label class="form-label">
-
-                        Select Excel File
-
-                    </label>
-
-                    <input
-                        type="file"
-                        name="excel_file"
-                        class="form-control"
-                        accept=".xlsx,.xls,.csv"
-                        required>
-
-                    <small class="text-muted">
-                        Supported Formats :
-                        .xlsx 
-                    </small>
-
-                </div>
-
-                <div class="col-lg-4">
-
-                    <button
-                        type="submit"
-                        class="btn btn-success w-100">
-
-                        <i class="bi bi-upload"></i>
-
-                        Upload & Import Students
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </form>
-
-        <hr>
-
-       
-
-    </div>
-
-</div>
-<!-- Student List -->
-
-<div class="card shadow-lg border-0 mt-4">
-
-    <div class="card-header d-flex justify-content-between align-items-center">
-
-        <h4>
-
-            <i class="bi bi-people-fill"></i>
-
-            Student List
-
-        </h4>
-
-        <input
-            type="text"
-            id="searchStudent"
-            class="form-control w-25"
-            placeholder="🔍 Search Student">
-
-    </div>
-
-    <div class="card-body p-0">
-
-        <div class="table-responsive">
-
-            <table
-                class="table table-hover table-striped align-middle mb-0"
-                id="studentTable">
-
-                <thead class="table-success">
-
-                    <tr>
-
-                        
-                         <th>ID</th>
-                        <th>Student Name</th>
-
-                        <th>Register No</th>
-
-                        <th>Department</th>
-
-                        <th>Year</th>
-
-                        
-                        <th>Email</th>
-                        
-                        <th>Phone</th>
-
-                        <th>Username</th>
-
-                        <th class="text-center">Actions</th>
-
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                {% for student in students %}
-
-                    <tr>
-
-                        <td>{{ student[0] }}</td>
-
-                        <td>{{ student[1] }}</td>
-
-                        <td>{{ student[2] }}</td>
-
-                        <td>{{ student[3] }}</td>
-
-                        <td>{{ student[4] }}</td>
-
-                        <td>{{ student[5] }}</td>
-
-                        <td>{{ student[6] }}</td>
-
-                        <td>{{ student[7] }}</td>
-
-                        <td class="text-center">
- <a href="/edit_student/{{ student[0] }}" class="btn btn-warning btn-sm">
-    <i class="bi bi-pencil-square"></i>
-</a>
-
-                            <a href="/delete_student/{{ student[0] }}"
-   class="btn btn-danger btn-sm"
-   onclick="return confirm('Are you sure you want to delete this student?');">
-    <i class="bi bi-trash-fill"></i>
-</a>
-
-                        </td>
-
-                    </tr>
-
-                {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-</div>
-<!-- Footer -->
-
-<div class="text-center mt-4 mb-3">
-
-    <small class="text-muted">
-
-        © 2026 Student Certificate Management System | Designed By PRADEEP From AIDS
-
-    </small>
-
-</div>
-
-</div>
-</div>
-
-<!-- Search Student -->
-
-<script>
-
-document.getElementById("searchStudent").addEventListener("keyup", function () {
-
-    let value = this.value.toLowerCase();
-
-    let rows = document.querySelectorAll("#studentTable tbody tr");
-
-    rows.forEach(function(row){
-
-        let text = row.innerText.toLowerCase();
-
-        if(text.indexOf(value) > -1){
-
-            row.style.display = "";
-
-        }else{
-
-            row.style.display = "none";
-
-        }
-
-    });
-
-});
-
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-
-</html>
+            <div
