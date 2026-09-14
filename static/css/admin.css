@@ -1,19 +1,14 @@
 /* =========================================================
-   ADMIN DASHBOARD CSS
+   ADMIN DASHBOARD CSS - COMPACT VERSION
    Student Certificate Management System
 ========================================================= */
-
-
-/* ==========================
-   GOOGLE FONT
-========================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 
-/* ==========================
+/* =========================
    RESET
-========================== */
+========================= */
 
 * {
     margin: 0;
@@ -23,9 +18,9 @@
 }
 
 
-/* ==========================
+/* =========================
    HTML / BODY
-========================== */
+========================= */
 
 html,
 body {
@@ -35,7 +30,7 @@ body {
 body {
     background: #f0fdf4;
     color: #1f2937;
-    font-size: 17px;
+    font-size: 11px;
 }
 
 
@@ -48,7 +43,7 @@ body {
     top: 0;
     left: 0;
 
-    width: 280px;
+    width: 220px;
     height: 100vh;
 
     background: linear-gradient(
@@ -59,40 +54,34 @@ body {
 
     color: #fff;
 
-    padding: 30px 20px;
+    padding: 20px 14px;
 
     overflow-y: auto;
 
-    box-shadow: 6px 0 25px rgba(0, 0, 0, .15);
+    box-shadow: 4px 0 18px rgba(0, 0, 0, .12);
 
     z-index: 1000;
 }
 
 
-/* ==========================
+/* =========================
    LOGO
-========================== */
+========================= */
 
 .logo {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 25px;
 }
 
-
-/* =========================================================
-   LOGO IMAGE - PERFECT CIRCLE
-========================================================= */
-
 .logo img {
+    width: 70px !important;
+    height: 70px !important;
 
-    width: 95px !important;
-    height: 95px !important;
+    min-width: 70px !important;
+    min-height: 70px !important;
 
-    min-width: 95px !important;
-    min-height: 95px !important;
-
-    max-width: 95px !important;
-    max-height: 95px !important;
+    max-width: 70px !important;
+    max-height: 70px !important;
 
     aspect-ratio: 1 / 1 !important;
 
@@ -100,7 +89,7 @@ body {
 
     background: #fff;
 
-    padding: 8px;
+    padding: 6px;
 
     object-fit: contain !important;
 
@@ -113,19 +102,18 @@ body {
     flex-shrink: 0;
 }
 
-
 .logo h2 {
-    margin-top: 18px;
+    margin-top: 10px;
 
-    font-size: 28px;
+    font-size: 19px;
 
-    font-weight: 700;
+    font-weight: 600;
 }
 
 
-/* ==========================
+/* =========================================================
    SIDEBAR MENU
-========================== */
+========================================================= */
 
 .sidebar ul {
     list-style: none;
@@ -134,27 +122,27 @@ body {
 }
 
 .sidebar ul li {
-    margin: 14px 0;
+    margin: 7px 0;
 
-    border-radius: 14px;
+    border-radius: 9px;
 
-    transition: .3s;
+    transition: .2s;
 }
 
 .sidebar ul li a {
     display: block;
 
-    padding: 16px 18px;
+    padding: 10px 12px;
 
     color: #fff;
 
     text-decoration: none;
 
-    font-size: 18px;
+    font-size: 12px;
 
-    font-weight: 600;
+    font-weight: 500;
 
-    border-radius: 14px;
+    border-radius: 9px;
 }
 
 .sidebar ul li:hover,
@@ -163,9 +151,9 @@ body {
 }
 
 .sidebar i {
-    margin-right: 12px;
+    margin-right: 8px;
 
-    font-size: 20px;
+    font-size: 14px;
 }
 
 
@@ -174,7 +162,7 @@ body {
 ========================================================= */
 
 .main {
-    margin-left: 280px;
+    margin-left: 220px;
 
     min-height: 100vh;
 
@@ -188,7 +176,7 @@ body {
 ========================================================= */
 
 .topbar {
-    min-height: 90px;
+    min-height: 65px;
 
     background: #fff;
 
@@ -198,9 +186,9 @@ body {
 
     align-items: center;
 
-    padding: 15px 35px;
+    padding: 10px 22px;
 
-    box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .06);
 
     flex-shrink: 0;
 }
@@ -208,9 +196,9 @@ body {
 .topbar h2 {
     color: #065f46;
 
-    font-size: 34px;
+    font-size: 22px;
 
-    font-weight: 700;
+    font-weight: 600;
 }
 
 
@@ -223,30 +211,24 @@ body {
 
     align-items: center;
 
-    gap: 15px;
+    gap: 9px;
 }
 
-
-/* =========================================================
-   ADMIN PROFILE IMAGE - PERFECT CIRCLE
-========================================================= */
-
 .admin-box img {
+    width: 42px !important;
+    height: 42px !important;
 
-    width: 65px !important;
-    height: 65px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
 
-    min-width: 65px !important;
-    min-height: 65px !important;
-
-    max-width: 65px !important;
-    max-height: 65px !important;
+    max-width: 42px !important;
+    max-height: 42px !important;
 
     aspect-ratio: 1 / 1 !important;
 
     border-radius: 50% !important;
 
-    border: 4px solid #10b981;
+    border: 2px solid #10b981;
 
     object-fit: cover !important;
 
@@ -257,15 +239,18 @@ body {
     flex-shrink: 0;
 }
 
-
 .admin-box h3 {
-    font-size: 22px;
+    font-size: 13px;
 
     color: #065f46;
+
+    font-weight: 600;
 }
 
 .admin-box small {
     color: #666;
+
+    font-size: 9px;
 }
 
 
@@ -276,7 +261,7 @@ body {
 .container {
     width: 100%;
 
-    padding: 35px;
+    padding: 20px;
 
     flex: 1;
 }
@@ -295,9 +280,9 @@ body {
 
     color: #fff;
 
-    border-radius: 22px;
+    border-radius: 12px;
 
-    padding: 40px;
+    padding: 20px 22px;
 
     display: flex;
 
@@ -305,28 +290,28 @@ body {
 
     align-items: center;
 
-    margin-bottom: 35px;
+    margin-bottom: 18px;
 
     box-shadow:
-        0 15px 30px rgba(16, 185, 129, .25);
+        0 8px 18px rgba(16, 185, 129, .18);
 }
 
 .welcome-banner h1 {
-    font-size: 42px;
+    font-size: 24px;
 
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .welcome-banner p {
-    margin-top: 12px;
+    margin-top: 5px;
 
-    font-size: 20px;
+    font-size: 11px;
 }
 
 .welcome-banner img {
-    width: 240px;
+    width: 130px;
 
-    max-width: 40%;
+    max-width: 30%;
 }
 
 
@@ -339,90 +324,90 @@ body {
 
     grid-template-columns: repeat(3, 1fr);
 
-    gap: 25px;
+    gap: 14px;
 
-    margin-bottom: 35px;
+    margin-bottom: 18px;
 }
 
 .stat-card {
     background: #fff;
 
-    border-radius: 20px;
+    border-radius: 12px;
 
-    padding: 35px;
+    padding: 18px;
 
     text-align: center;
 
     box-shadow:
-        0 10px 30px rgba(0, 0, 0, .08);
+        0 6px 18px rgba(0, 0, 0, .06);
 
-    transition: .3s;
+    transition: .2s;
 
-    border-top: 6px solid #10b981;
+    border-top: 3px solid #10b981;
 }
 
 .stat-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-3px);
 
     box-shadow:
-        0 18px 40px rgba(16, 185, 129, .25);
+        0 10px 22px rgba(16, 185, 129, .18);
 }
 
 .stat-card i {
-    font-size: 55px;
+    font-size: 28px;
 
     color: #10b981;
 }
 
 .stat-card h2 {
-    margin: 15px 0;
+    margin: 8px 0;
 
-    font-size: 45px;
+    font-size: 26px;
 
     color: #065f46;
-
-    font-weight: 700;
-}
-
-.stat-card p {
-    font-size: 20px;
-
-    color: #555;
 
     font-weight: 600;
 }
 
+.stat-card p {
+    font-size: 10px;
+
+    color: #555;
+
+    font-weight: 500;
+}
+
 
 /* =========================================================
-   DOWNLOAD CARD BUTTON
+   DOWNLOAD BUTTON
 ========================================================= */
 
 .download-btn {
     display: inline-block;
 
-    margin-top: 18px;
+    margin-top: 10px;
 
     background: #059669;
 
     color: #fff;
 
-    padding: 14px 22px;
+    padding: 7px 12px;
 
-    border-radius: 12px;
+    border-radius: 7px;
 
     text-decoration: none;
 
-    font-size: 17px;
+    font-size: 10px;
 
-    font-weight: 600;
+    font-weight: 500;
 
-    transition: .3s;
+    transition: .2s;
 }
 
 .download-btn:hover {
     background: #047857;
 
-    transform: scale(1.05);
+    transform: translateY(-1px);
 }
 
 
@@ -433,14 +418,14 @@ body {
 .table-card {
     background: #fff;
 
-    border-radius: 20px;
+    border-radius: 12px;
 
-    padding: 30px;
+    padding: 16px;
 
-    margin-bottom: 35px;
+    margin-bottom: 18px;
 
     box-shadow:
-        0 10px 30px rgba(0, 0, 0, .08);
+        0 6px 18px rgba(0, 0, 0, .06);
 
     overflow-x: auto;
 }
@@ -459,17 +444,17 @@ body {
 
     justify-content: space-between;
 
-    gap: 20px;
+    gap: 12px;
 
-    margin-bottom: 25px;
+    margin-bottom: 14px;
 }
 
 .table-header h2 {
     color: #065f46;
 
-    font-size: 30px;
+    font-size: 17px;
 
-    font-weight: 700;
+    font-weight: 600;
 
     white-space: nowrap;
 }
@@ -484,26 +469,26 @@ body {
 
     align-items: center;
 
-    gap: 10px;
+    gap: 6px;
 
     margin-left: auto;
 }
 
 
 /* =========================================================
-   SEARCH INPUT
+   SEARCH
 ========================================================= */
 
 #searchInput {
-    width: 330px;
+    width: 270px;
 
-    height: 52px;
+    height: 34px;
 
-    padding: 0 18px;
+    padding: 0 11px;
 
-    border: 2px solid #b8f1d8;
+    border: 1px solid #b8f1d8;
 
-    border-radius: 12px;
+    border-radius: 7px;
 
     outline: none;
 
@@ -511,13 +496,13 @@ body {
 
     color: #333;
 
-    font-size: 15px;
+    font-size: 10px;
 
     font-family: inherit;
 
     box-sizing: border-box;
 
-    transition: .3s;
+    transition: .2s;
 }
 
 #searchInput::placeholder {
@@ -528,30 +513,30 @@ body {
     border-color: #10b981;
 
     box-shadow:
-        0 0 10px rgba(16, 185, 129, .20);
+        0 0 7px rgba(16, 185, 129, .15);
 }
 
 
 /* =========================================================
-   DOWNLOAD ALL BUTTON
+   DOWNLOAD ALL
 ========================================================= */
 
 .download-all-btn {
-    height: 52px;
+    height: 34px;
 
-    padding: 0 20px;
+    padding: 0 12px;
 
     border: none;
 
-    border-radius: 10px;
+    border-radius: 7px;
 
     background: #16a34a;
 
     color: #fff;
 
-    font-size: 15px;
+    font-size: 10px;
 
-    font-weight: 600;
+    font-weight: 500;
 
     font-family: inherit;
 
@@ -563,7 +548,7 @@ body {
 
     justify-content: center;
 
-    gap: 7px;
+    gap: 5px;
 
     white-space: nowrap;
 
@@ -578,12 +563,8 @@ body {
     transform: translateY(-1px);
 }
 
-.download-all-btn:active {
-    transform: translateY(0);
-}
-
 .download-all-btn i {
-    font-size: 16px;
+    font-size: 12px;
 }
 
 
@@ -596,7 +577,7 @@ table {
 
     border-collapse: collapse;
 
-    border-radius: 15px;
+    border-radius: 9px;
 
     overflow: hidden;
 }
@@ -606,9 +587,11 @@ table th {
 
     color: #fff;
 
-    padding: 18px;
+    padding: 8px;
 
-    font-size: 17px;
+    font-size: 10px;
+
+    font-weight: 500;
 
     text-align: left;
 
@@ -616,11 +599,11 @@ table th {
 }
 
 table td {
-    padding: 18px;
+    padding: 8px;
 
     border-bottom: 1px solid #ecfdf5;
 
-    font-size: 16px;
+    font-size: 10px;
 }
 
 table tbody tr:nth-child(even) {
@@ -630,7 +613,7 @@ table tbody tr:nth-child(even) {
 table tbody tr:hover {
     background: #ecfdf5;
 
-    transition: .3s;
+    transition: .2s;
 }
 
 
@@ -645,7 +628,7 @@ table tbody tr:hover {
 
     justify-content: center;
 
-    gap: 6px;
+    gap: 4px;
 
     background: #059669;
 
@@ -653,13 +636,13 @@ table tbody tr:hover {
 
     text-decoration: none;
 
-    padding: 10px 16px;
+    padding: 5px 8px;
 
-    border-radius: 10px;
+    border-radius: 6px;
 
-    font-size: 15px;
+    font-size: 9px;
 
-    transition: .3s;
+    transition: .2s;
 
     white-space: nowrap;
 }
@@ -684,7 +667,7 @@ table tbody tr:hover {
 
     justify-content: center;
 
-    gap: 6px;
+    gap: 4px;
 
     background: #22c55e;
 
@@ -692,13 +675,13 @@ table tbody tr:hover {
 
     text-decoration: none;
 
-    padding: 10px 16px;
+    padding: 5px 8px;
 
-    border-radius: 10px;
+    border-radius: 6px;
 
-    font-size: 15px;
+    font-size: 9px;
 
-    transition: .3s;
+    transition: .2s;
 
     white-space: nowrap;
 }
@@ -719,23 +702,20 @@ table tbody tr:hover {
 .stat-card,
 .table-card,
 .welcome-banner {
-    animation: fadeUp .6s ease;
+    animation: fadeUp .4s ease;
 }
 
 @keyframes fadeUp {
 
     from {
         opacity: 0;
-
-        transform: translateY(25px);
+        transform: translateY(12px);
     }
 
     to {
         opacity: 1;
-
         transform: translateY(0);
     }
-
 }
 
 
@@ -744,8 +724,8 @@ table tbody tr:hover {
 ========================================================= */
 
 ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 7px;
+    height: 7px;
 }
 
 ::-webkit-scrollbar-track {
@@ -774,7 +754,7 @@ table tbody tr:hover {
 
     border-top: 1px solid #dcefe8;
 
-    padding: 22px 35px;
+    padding: 14px 20px;
 
     margin-top: auto;
 
@@ -784,9 +764,9 @@ table tbody tr:hover {
 
     align-items: center;
 
-    gap: 20px;
+    gap: 15px;
 
-    font-size: 14px;
+    font-size: 9px;
 
     color: #526b64;
 
@@ -800,7 +780,7 @@ table tbody tr:hover {
 
     align-items: center;
 
-    gap: 8px;
+    gap: 6px;
 
     flex-wrap: wrap;
 }
@@ -808,7 +788,7 @@ table tbody tr:hover {
 .footer-left strong {
     color: #006b52;
 
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .footer-left span {
@@ -819,6 +799,8 @@ table tbody tr:hover {
     color: #718780;
 
     white-space: nowrap;
+
+    font-size: 9px;
 }
 
 
@@ -833,13 +815,12 @@ table tbody tr:hover {
     }
 
     .table-header h2 {
-        font-size: 26px;
+        font-size: 16px;
     }
 
     #searchInput {
-        width: 280px;
+        width: 240px;
     }
-
 }
 
 
@@ -856,41 +837,25 @@ table tbody tr:hover {
 
         height: auto;
 
-        padding: 20px;
+        padding: 15px;
 
         overflow: visible;
     }
 
     .logo {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
-
-
-    /* RESPONSIVE LOGO CIRCLE */
 
     .logo img {
+        width: 65px !important;
+        height: 65px !important;
 
-        width: 85px !important;
-        height: 85px !important;
+        min-width: 65px !important;
+        min-height: 65px !important;
 
-        min-width: 85px !important;
-        min-height: 85px !important;
-
-        max-width: 85px !important;
-        max-height: 85px !important;
-
-        aspect-ratio: 1 / 1 !important;
-
-        border-radius: 50% !important;
-
-        object-fit: contain !important;
-
-        display: block;
-
-        margin: 0 auto;
-
+        max-width: 65px !important;
+        max-height: 65px !important;
     }
-
 
     .sidebar ul {
         display: flex;
@@ -899,7 +864,7 @@ table tbody tr:hover {
 
         justify-content: center;
 
-        gap: 8px;
+        gap: 5px;
     }
 
     .sidebar ul li {
@@ -907,9 +872,9 @@ table tbody tr:hover {
     }
 
     .sidebar ul li a {
-        padding: 12px 15px;
+        padding: 8px 10px;
 
-        font-size: 15px;
+        font-size: 10px;
     }
 
     .main {
@@ -923,58 +888,46 @@ table tbody tr:hover {
 
         height: auto;
 
-        padding: 20px;
+        padding: 15px;
 
-        gap: 15px;
+        gap: 10px;
 
         text-align: center;
     }
 
     .topbar h2 {
-        font-size: 28px;
+        font-size: 19px;
     }
 
     .admin-box {
         justify-content: center;
     }
 
-
-    /* RESPONSIVE ADMIN PROFILE CIRCLE */
-
     .admin-box img {
+        width: 40px !important;
+        height: 40px !important;
 
-        width: 60px !important;
-        height: 60px !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
 
-        min-width: 60px !important;
-        min-height: 60px !important;
-
-        max-width: 60px !important;
-        max-height: 60px !important;
-
-        aspect-ratio: 1 / 1 !important;
-
-        border-radius: 50% !important;
-
-        object-fit: cover !important;
-
+        max-width: 40px !important;
+        max-height: 40px !important;
     }
-
 
     .welcome-banner {
         flex-direction: column;
 
         text-align: center;
 
-        padding: 30px;
+        padding: 18px;
     }
 
     .welcome-banner img {
-        width: 180px;
+        width: 120px;
 
-        max-width: 70%;
+        max-width: 60%;
 
-        margin-top: 20px;
+        margin-top: 12px;
     }
 
     .stats {
@@ -986,7 +939,7 @@ table tbody tr:hover {
 
         align-items: stretch;
 
-        gap: 15px;
+        gap: 10px;
     }
 
     .table-header h2 {
@@ -1012,7 +965,7 @@ table tbody tr:hover {
     }
 
     table {
-        min-width: 900px;
+        min-width: 850px;
     }
 
     .admin-footer {
@@ -1022,7 +975,7 @@ table tbody tr:hover {
 
         text-align: center;
 
-        padding: 18px 20px;
+        padding: 12px 15px;
     }
 
     .footer-left {
@@ -1032,7 +985,6 @@ table tbody tr:hover {
     .footer-right {
         white-space: normal;
     }
-
 }
 
 
@@ -1043,66 +995,54 @@ table tbody tr:hover {
 @media (max-width: 600px) {
 
     body {
-        font-size: 15px;
+        font-size: 10px;
     }
 
     .logo h2 {
-        font-size: 22px;
+        font-size: 18px;
     }
 
     .topbar h2 {
-        font-size: 24px;
+        font-size: 18px;
     }
-
-
-    /* MOBILE ADMIN PROFILE */
 
     .admin-box img {
+        width: 38px !important;
+        height: 38px !important;
 
-        width: 55px !important;
-        height: 55px !important;
+        min-width: 38px !important;
+        min-height: 38px !important;
 
-        min-width: 55px !important;
-        min-height: 55px !important;
-
-        max-width: 55px !important;
-        max-height: 55px !important;
-
-        aspect-ratio: 1 / 1 !important;
-
-        border-radius: 50% !important;
-
-        object-fit: cover !important;
-
+        max-width: 38px !important;
+        max-height: 38px !important;
     }
 
-
     .admin-box h3 {
-        font-size: 18px;
+        font-size: 12px;
     }
 
     .welcome-banner h1 {
-        font-size: 30px;
+        font-size: 21px;
     }
 
     .welcome-banner p {
-        font-size: 16px;
+        font-size: 10px;
     }
 
     .stat-card {
-        padding: 25px;
+        padding: 15px;
     }
 
     .stat-card h2 {
-        font-size: 36px;
+        font-size: 24px;
     }
 
     .stat-card p {
-        font-size: 18px;
+        font-size: 10px;
     }
 
     .table-card {
-        padding: 20px;
+        padding: 14px;
     }
 
     .download-all-btn {
@@ -1118,5 +1058,4 @@ table tbody tr:hover {
     #searchInput {
         width: 100%;
     }
-
 }
