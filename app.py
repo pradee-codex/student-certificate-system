@@ -5719,6 +5719,50 @@ def download_all():
         download_name="Certificates.zip",
         
     )
+#============================
+@app.route("/delete_certificate/<path:filename>", methods=["POST"])
+def delete_certificate(filename):
+
+    if session.get("role") != "student":
+        return redirect("/")
+
+    cursor = mysql.connection.cursor()
+
+    try:
+
+        # Delete only the certificate belonging to
+        # the currently logged-in student
+
+        cursor.execute("""
+            DELETE FROM certificates
+            WHERE certificate_file = %s
+            AND student_id = (
+                SELECT student_id
+                FROM students
+                WHERE user_id = %s
+            )
+        """, (
+            filename,
+            session["user_id"]
+        ))
+
+        mysql.connection.commit()
+
+        flash("Certificate deleted successfully.")
+
+    except Exception as e:
+
+        mysql.connection.rollback()
+
+        print("DELETE CERTIFICATE ERROR:", e)
+
+        flash("Unable to delete certificate.")
+
+    finally:
+
+        cursor.close()
+
+    return redirect("/student")
 
 # ==========================
 # Export Excel

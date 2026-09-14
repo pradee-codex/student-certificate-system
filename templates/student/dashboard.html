@@ -517,6 +517,8 @@
 
                                 <th>Download</th>
 
+                                <th>Delete</th>
+
                             </tr>
 
                         </thead>
@@ -535,7 +537,9 @@
                                 <!-- S.No -->
 
                                 <td>
+
                                     {{ loop.index }}
+
                                 </td>
 
 
@@ -543,7 +547,9 @@
                                 <!-- Certificate -->
 
                                 <td>
+
                                     {{ certificate[0] }}
+
                                 </td>
 
 
@@ -551,7 +557,9 @@
                                 <!-- Category -->
 
                                 <td>
+
                                     {{ certificate[1] }}
+
                                 </td>
 
 
@@ -606,7 +614,6 @@
 
                                 <!-- =================================================
                                      VIEW
-                                     FLASK VIEW ROUTE
                                 ================================================== -->
 
                                 <td>
@@ -642,7 +649,6 @@
 
                                 <!-- =================================================
                                      DOWNLOAD
-                                     FLASK DOWNLOAD ROUTE
                                 ================================================== -->
 
                                 <td>
@@ -673,6 +679,47 @@
                                 </td>
 
 
+
+                                <!-- =================================================
+                                     DELETE
+                                ================================================== -->
+
+                                <td>
+
+                                    {% if certificate[4] %}
+
+                                    <form
+                                        action="{{ url_for(
+                                            'delete_certificate',
+                                            filename=certificate[4]
+                                        ) }}"
+                                        method="POST"
+                                        style="display:inline;">
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Are you sure you want to delete this certificate?');">
+
+                                            <i class="bi bi-trash-fill"></i>
+
+                                            Delete
+
+                                        </button>
+
+                                    </form>
+
+                                    {% else %}
+
+                                    <span class="text-muted">
+                                        No File
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
                             </tr>
 
                             {% endfor %}
@@ -685,7 +732,7 @@
                             <tr>
 
                                 <td
-                                    colspan="7"
+                                    colspan="8"
                                     class="text-center p-5">
 
                                     <img
@@ -908,5 +955,13 @@
 
 window.onload = function() {
 
-    console.log(
-       
+    console.log("Student Dashboard Loaded");
+
+};
+
+</script>
+
+
+</body>
+
+</html>
