@@ -689,3 +689,17 @@ table tr:hover {
 
     white-space: nowrap !important;
 }
+/* ======================================
+   PROFILE PHOTO - SMALL CIRCLE
+====================================== */
+
+.profile-card img {
+    width: 90px !important;
+    height: 90px !important;
+    max-width: 90px !important;
+    max-height: 90px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    border: 3px solid #fff !important;
+    display: block !important;
+}
