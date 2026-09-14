@@ -761,26 +761,41 @@ def tutor():
 
 
     # =========================================================
-    # Dashboard - Total Students
+    # COMMON STUDENT FILTER
     # =========================================================
 
     if class_year is None or section is None:
 
-        cursor.execute("""
-            SELECT COUNT(*)
-            FROM students
-            WHERE department=%s
-        """, (department,))
+        student_where = """
+            students.department=%s
+        """
+
+        student_params = (department,)
 
     else:
 
-        cursor.execute("""
-            SELECT COUNT(*)
-            FROM students
-            WHERE department=%s
-            AND year=%s
-            AND section=%s
-        """, (department, class_year, section))
+        student_where = """
+            students.department=%s
+            AND students.year=%s
+            AND students.section=%s
+        """
+
+        student_params = (
+            department,
+            class_year,
+            section
+        )
+
+
+    # =========================================================
+    # Dashboard - Total Students
+    # =========================================================
+
+    cursor.execute(f"""
+        SELECT COUNT(*)
+        FROM students
+        WHERE {student_where}
+    """, student_params)
 
     total_students = cursor.fetchone()[0]
 
@@ -789,27 +804,15 @@ def tutor():
     # Dashboard - Total Certificates
     # =========================================================
 
-    if class_year is None or section is None:
+    cursor.execute(f"""
+        SELECT COUNT(*)
+        FROM certificates
 
-        cursor.execute("""
-            SELECT COUNT(*)
-            FROM certificates
-            INNER JOIN students
-                ON certificates.student_id = students.student_id
-            WHERE students.department=%s
-        """, (department,))
+        INNER JOIN students
+            ON certificates.student_id = students.student_id
 
-    else:
-
-        cursor.execute("""
-            SELECT COUNT(*)
-            FROM certificates
-            INNER JOIN students
-                ON certificates.student_id = students.student_id
-            WHERE students.department=%s
-            AND students.year=%s
-            AND students.section=%s
-        """, (department, class_year, section))
+        WHERE {student_where}
+    """, student_params)
 
     total_certificates = cursor.fetchone()[0]
 
@@ -818,35 +821,20 @@ def tutor():
     # Student List
     # =========================================================
 
-    if class_year is None or section is None:
+    cursor.execute(f"""
+        SELECT
+            students.student_name,
+            students.register_no,
+            students.department,
+            students.year,
+            students.email
 
-        cursor.execute("""
-            SELECT
-                student_name,
-                register_no,
-                department,
-                year,
-                email
-            FROM students
-            WHERE department=%s
-            ORDER BY student_name
-        """, (department,))
+        FROM students
 
-    else:
+        WHERE {student_where}
 
-        cursor.execute("""
-            SELECT
-                student_name,
-                register_no,
-                department,
-                year,
-                email
-            FROM students
-            WHERE department=%s
-            AND year=%s
-            AND section=%s
-            ORDER BY student_name
-        """, (department, class_year, section))
+        ORDER BY students.student_name
+    """, student_params)
 
     students = cursor.fetchall()
 
@@ -855,95 +843,242 @@ def tutor():
     # Certificate List
     # =========================================================
 
-    if class_year is None or section is None:
+    cursor.execute(f"""
+        SELECT
+            students.student_name,
+            students.department,
+            students.year,
+            certificates.certificate_title,
+            certificate_categories.category_name,
+            certificates.achievement,
+            students.profile_photo,
+            certificates.upload_date,
+            certificates.certificate_file
 
-        cursor.execute("""
-            SELECT
-                students.student_name,
-                students.department,
-                students.year,
-                certificates.certificate_title,
-                certificate_categories.category_name,
-                certificates.achievement,
-                students.profile_photo,
-                certificates.upload_date,
-                certificates.certificate_file
+        FROM certificates
 
-            FROM certificates
+        INNER JOIN students
+            ON certificates.student_id = students.student_id
 
-            INNER JOIN students
-                ON certificates.student_id = students.student_id
+        INNER JOIN certificate_categories
+            ON certificates.category_id =
+               certificate_categories.category_id
 
-            INNER JOIN certificate_categories
-                ON certificates.category_id =
-                   certificate_categories.category_id
+        WHERE {student_where}
 
-            WHERE students.department=%s
-
-            ORDER BY certificates.upload_date DESC
-        """, (department,))
-
-    else:
-
-        cursor.execute("""
-            SELECT
-                students.student_name,
-                students.department,
-                students.year,
-                certificates.certificate_title,
-                certificate_categories.category_name,
-                certificates.achievement,
-                students.profile_photo,
-                certificates.upload_date,
-                certificates.certificate_file
-
-            FROM certificates
-
-            INNER JOIN students
-                ON certificates.student_id = students.student_id
-
-            INNER JOIN certificate_categories
-                ON certificates.category_id =
-                   certificate_categories.category_id
-
-            WHERE students.department=%s
-            AND students.year=%s
-            AND students.section=%s
-
-            ORDER BY certificates.upload_date DESC
-        """, (department, class_year, section))
+        ORDER BY certificates.upload_date DESC
+    """, student_params)
 
     certificates = cursor.fetchall()
 
 
     # =========================================================
-    # Debug
+    # STUDENT-WISE CERTIFICATE COUNT
+    # =========================================================
+    # This is used for:
+    # Search student -> show their total certificate count
     # =========================================================
 
+    cursor.execute(f"""
+        SELECT
+            students.student_name,
+            students.register_no,
+            students.department,
+            COUNT(certificates.student_id) AS total_certificates
+
+        FROM students
+
+        LEFT JOIN certificates
+            ON students.student_id = certificates.student_id
+
+        WHERE {student_where}
+
+        GROUP BY
+            students.student_id,
+            students.student_name,
+            students.register_no,
+            students.department
+
+        ORDER BY total_certificates DESC
+    """, student_params)
+
+    student_certificate_counts = cursor.fetchall()
+
+
+    # =========================================================
+    # TOP STUDENTS
+    # =========================================================
+
+    top_students = student_certificate_counts[:10]
+
+
+    # =========================================================
+    # CERTIFICATE CATEGORY DISTRIBUTION
+    # =========================================================
+
+    cursor.execute(f"""
+        SELECT
+            certificate_categories.category_name,
+            COUNT(certificates.certificate_id)
+
+        FROM certificates
+
+        INNER JOIN students
+            ON certificates.student_id = students.student_id
+
+        INNER JOIN certificate_categories
+            ON certificates.category_id =
+               certificate_categories.category_id
+
+        WHERE {student_where}
+
+        GROUP BY
+            certificate_categories.category_id,
+            certificate_categories.category_name
+
+        ORDER BY COUNT(certificates.certificate_id) DESC
+    """, student_params)
+
+    category_report = cursor.fetchall()
+
+
+    # =========================================================
+    # ACHIEVEMENT TYPE DISTRIBUTION
+    # =========================================================
+
+    cursor.execute(f"""
+        SELECT
+            certificates.achievement,
+            COUNT(certificates.certificate_id)
+
+        FROM certificates
+
+        INNER JOIN students
+            ON certificates.student_id = students.student_id
+
+        WHERE {student_where}
+
+        GROUP BY certificates.achievement
+
+        ORDER BY COUNT(certificates.certificate_id) DESC
+    """, student_params)
+
+    achievement_report = cursor.fetchall()
+
+
+    # =========================================================
+    # STUDENT + CATEGORY REPORT
+    # =========================================================
+
+    cursor.execute(f"""
+        SELECT
+            students.student_name,
+            certificate_categories.category_name,
+            COUNT(certificates.certificate_id)
+
+        FROM certificates
+
+        INNER JOIN students
+            ON certificates.student_id = students.student_id
+
+        INNER JOIN certificate_categories
+            ON certificates.category_id =
+               certificate_categories.category_id
+
+        WHERE {student_where}
+
+        GROUP BY
+            students.student_id,
+            students.student_name,
+            certificate_categories.category_id,
+            certificate_categories.category_name
+
+        ORDER BY
+            students.student_name
+    """, student_params)
+
+    student_category_report = cursor.fetchall()
+
+
+    # =========================================================
+    # STUDENT + ACHIEVEMENT REPORT
+    # =========================================================
+
+    cursor.execute(f"""
+        SELECT
+            students.student_name,
+            certificates.achievement,
+            COUNT(certificates.certificate_id)
+
+        FROM certificates
+
+        INNER JOIN students
+            ON certificates.student_id = students.student_id
+
+        WHERE {student_where}
+
+        GROUP BY
+            students.student_id,
+            students.student_name,
+            certificates.achievement
+
+        ORDER BY
+            students.student_name
+    """, student_params)
+
+    student_achievement_report = cursor.fetchall()
+
+
+    # =========================================================
+    # DEBUG
+    # =========================================================
+
+    print("====================================")
     print("TOTAL STUDENTS:", total_students)
     print("TOTAL CERTIFICATES:", total_certificates)
-    print("CERTIFICATES:", certificates)
-    print("CERTIFICATE COUNT:", len(certificates))
+    print("STUDENT CERTIFICATE COUNTS:",
+          student_certificate_counts)
+    print("CATEGORY REPORT:", category_report)
+    print("ACHIEVEMENT REPORT:", achievement_report)
+    print("====================================")
 
+
+    # =========================================================
+    # CLOSE CURSOR
+    # =========================================================
 
     cursor.close()
 
 
     # =========================================================
-    # Render Dashboard
+    # RENDER DASHBOARD
     # =========================================================
 
     return render_template(
         "tutor/dashboard.html",
+
+        # Tutor
         tutor=tutor,
         tutor_name=tutor_name,
         department=department,
         class_year=class_year,
         section=section,
+
+        # Dashboard
         total_students=total_students,
         total_certificates=total_certificates,
+
+        # Lists
         students=students,
-        certificates=certificates
+        certificates=certificates,
+
+        # Graph / Search Data
+        top_students=top_students,
+        student_certificate_counts=student_certificate_counts,
+        category_report=category_report,
+        achievement_report=achievement_report,
+        student_category_report=student_category_report,
+        student_achievement_report=student_achievement_report
     )
 #=====================================================
     
