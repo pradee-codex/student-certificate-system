@@ -113,37 +113,23 @@
             justify-content: center !important;
         }
 
-
         .profile-left .profile-img,
         .profile-img {
-
             width: 75px !important;
             height: 75px !important;
-
             min-width: 75px !important;
             min-height: 75px !important;
-
             max-width: 75px !important;
             max-height: 75px !important;
-
             aspect-ratio: 1 / 1 !important;
-
             border-radius: 50% !important;
-
             object-fit: cover !important;
-
             display: block !important;
-
             overflow: hidden !important;
-
             border: 4px solid #198754 !important;
-
             background: #ffffff !important;
-
             box-sizing: border-box !important;
-
             flex-shrink: 0 !important;
-
         }
 
 
@@ -275,6 +261,8 @@
             padding: 6px 9px !important;
             font-size: 10px !important;
             border-radius: 6px !important;
+            text-decoration: none !important;
+            display: inline-block !important;
         }
 
 
@@ -346,7 +334,6 @@
             .profile-box {
                 gap: 15px !important;
             }
-
         }
 
 
@@ -398,32 +385,20 @@
 
             .profile-left .profile-img,
             .profile-img {
-
                 width: 75px !important;
                 height: 75px !important;
-
                 min-width: 75px !important;
                 min-height: 75px !important;
-
                 max-width: 75px !important;
                 max-height: 75px !important;
-
                 aspect-ratio: 1 / 1 !important;
-
                 border-radius: 50% !important;
-
                 object-fit: cover !important;
-
                 display: block !important;
-
                 overflow: hidden !important;
-
                 border: 4px solid #198754 !important;
-
                 flex-shrink: 0 !important;
-
             }
-
 
             .report-search-actions {
                 flex-wrap: wrap !important;
@@ -433,7 +408,6 @@
             #searchInput {
                 width: 100% !important;
             }
-
         }
 
 
@@ -463,7 +437,6 @@
             .box-header h2 {
                 font-size: 16px !important;
             }
-
         }
 
 
@@ -498,7 +471,6 @@
             .download-btn {
                 display: none !important;
             }
-
         }
 
     </style>
@@ -575,7 +547,6 @@
     </div>
 
 
-
     <!-- =====================================================
          SUMMARY CARDS
     ====================================================== -->
@@ -645,7 +616,6 @@
     </div>
 
 
-
     <!-- =====================================================
          TUTOR PROFILE
     ====================================================== -->
@@ -682,7 +652,6 @@
         </div>
 
 
-
         <!-- PROFILE DETAILS -->
 
         <div class="profile-right">
@@ -690,7 +659,6 @@
             <h2>
 
                 <i class="bi bi-person-badge-fill"></i>
-
                 Tutor Information
 
             </h2>
@@ -756,7 +724,6 @@
     </div>
 
 
-
     <!-- =====================================================
          DEPARTMENT REPORT
     ====================================================== -->
@@ -766,11 +733,8 @@
         <div class="box-header">
 
             <h2>
-
                 <i class="bi bi-building-fill"></i>
-
                 Department Wise Report
-
             </h2>
 
         </div>
@@ -834,7 +798,6 @@
     </div>
 
 
-
     <!-- =====================================================
          YEAR REPORT
     ====================================================== -->
@@ -844,11 +807,8 @@
         <div class="box-header">
 
             <h2>
-
                 <i class="bi bi-calendar-check-fill"></i>
-
                 Year Wise Report
-
             </h2>
 
         </div>
@@ -912,7 +872,6 @@
     </div>
 
 
-
     <!-- =====================================================
          QUICK STATISTICS
     ====================================================== -->
@@ -922,11 +881,8 @@
         <div class="box-header">
 
             <h2>
-
                 <i class="bi bi-graph-up-arrow"></i>
-
                 Quick Statistics
-
             </h2>
 
         </div>
@@ -999,7 +955,6 @@
     </div>
 
 
-
     <!-- =====================================================
          RECENT CERTIFICATE UPLOADS
     ====================================================== -->
@@ -1015,7 +970,6 @@
                 <h2>
 
                     <i class="bi bi-clock-history"></i>
-
                     Recent Certificate Uploads
 
                 </h2>
@@ -1044,7 +998,6 @@
                     class="download-all-btn">
 
                     <i class="bi bi-download"></i>
-
                     Download All
 
                 </button>
@@ -1052,7 +1005,6 @@
             </div>
 
         </div>
-
 
 
         <!-- =================================================
@@ -1212,21 +1164,27 @@
                         </td>
 
 
-                        <!-- VIEW -->
+                        <!-- =================================================
+                             VIEW
+                             IMPORTANT:
+                             DO NOT DIRECTLY OPEN GOOGLE DRIVE URL
+                             USE FLASK VIEW ROUTE
+                        ================================================== -->
 
                         <td>
 
                             {% if certificate[6] %}
 
                                 <a
-                                    class="view-btn drive-view-btn"
-                                    href="#"
-                                    data-drive-url="{{ certificate[6] }}"
+                                    class="view-btn"
+                                    href="{{ url_for(
+                                        'view',
+                                        filename=certificate[6]
+                                    ) }}"
                                     target="_blank"
                                     rel="noopener noreferrer">
 
                                     <i class="bi bi-eye-fill"></i>
-
                                     View
 
                                 </a>
@@ -1242,7 +1200,10 @@
                         </td>
 
 
-                        <!-- DOWNLOAD -->
+                        <!-- =================================================
+                             DOWNLOAD
+                             EXISTING DOWNLOAD ROUTE - UNCHANGED
+                        ================================================== -->
 
                         <td>
 
@@ -1256,7 +1217,6 @@
                                     ) }}">
 
                                     <i class="bi bi-download"></i>
-
                                     Download
 
                                 </a>
@@ -1314,7 +1274,6 @@
     </div>
 
 
-
     <!-- =====================================================
          REPORT SUMMARY
     ====================================================== -->
@@ -1326,7 +1285,6 @@
             <h2>
 
                 <i class="bi bi-clipboard-data-fill"></i>
-
                 Report Summary
 
             </h2>
@@ -1394,7 +1352,6 @@
     </div>
 
 
-
     <!-- =====================================================
          FOOTER
     ====================================================== -->
@@ -1407,7 +1364,6 @@
             <h3>
 
                 <i class="bi bi-mortarboard-fill"></i>
-
                 Student Certificate Management System
 
             </h3>
@@ -1431,11 +1387,11 @@
 
         </div>
 
+
     </div>
 
 
 </div>
-
 
 
 <!-- =====================================================
@@ -1449,14 +1405,17 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchInput =
         document.getElementById("searchInput");
 
+
     const tableRows =
         document.querySelectorAll(
             "#certificateTable tbody tr"
         );
 
+
     if (!searchInput) {
         return;
     }
+
 
     searchInput.addEventListener(
         "keyup",
@@ -1467,10 +1426,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     .toLowerCase()
                     .trim();
 
+
             tableRows.forEach(function (row) {
 
                 const text =
                     row.innerText.toLowerCase();
+
 
                 if (
                     filter === "" ||
@@ -1495,107 +1456,6 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 
-
-<!-- =====================================================
-     GOOGLE DRIVE VIEW
-====================================================== -->
-
-<script>
-
-document.addEventListener("DOMContentLoaded", function () {
-
-
-    /* ================================================
-       EXTRACT GOOGLE DRIVE FILE ID
-    ================================================= */
-
-    function getDriveFileId(url) {
-
-        if (!url) {
-            return null;
-        }
-
-        let fileId = null;
-
-
-        /* FORMAT:
-           https://drive.google.com/file/d/FILE_ID/view
-        */
-
-        let match =
-            url.match(
-                /\/file\/d\/([^\/?#]+)/
-            );
-
-        if (match && match[1]) {
-
-            fileId = match[1];
-
-        }
-
-
-        /* FORMAT:
-           https://drive.google.com/open?id=FILE_ID
-        */
-
-        if (!fileId) {
-
-            match =
-                url.match(
-                    /[?&]id=([^&#]+)/
-                );
-
-            if (match && match[1]) {
-
-                fileId = match[1];
-
-            }
-
-        }
-
-        return fileId;
-
-    }
-
-
-    /* ================================================
-       VIEW BUTTON
-    ================================================= */
-
-    const viewButtons =
-        document.querySelectorAll(
-            ".drive-view-btn"
-        );
-
-
-    viewButtons.forEach(function (button) {
-
-        const driveUrl =
-            button.getAttribute(
-                "data-drive-url"
-            );
-
-        const fileId =
-            getDriveFileId(driveUrl);
-
-
-        if (fileId) {
-
-            button.href =
-                "https://drive.google.com/file/d/" +
-                encodeURIComponent(fileId) +
-                "/view";
-
-        }
-
-    });
-
-});
-
-</script>
-
-
-
 <!-- =====================================================
      DOWNLOAD REPORTS
 ====================================================== -->
@@ -1606,6 +1466,7 @@ function downloadReports() {
 
     const searchBox =
         document.getElementById("searchInput");
+
 
     if (!searchBox) {
         return;
@@ -1627,7 +1488,6 @@ function downloadReports() {
             "/export_zip";
 
         return;
-
     }
 
 
