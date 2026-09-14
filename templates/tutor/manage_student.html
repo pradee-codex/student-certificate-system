@@ -19,64 +19,28 @@ href="{{ url_for('static', filename='css/tutor.css') }}">
 
 /* =========================================
    COMPACT MANAGE STUDENTS
+   Only size/spacing changed
+   Layout kept from tutor.css
    ========================================= */
 
 body {
-    font-size: 11px;
+    font-size: 11px !important;
 }
 
-/* Main content */
-
-.main-content {
-    padding: 20px !important;
-}
-
-/* Sidebar */
-
-.sidebar {
-    width: 220px !important;
-}
-
-.sidebar .logo {
-    padding: 18px 12px !important;
-}
-
-.sidebar .logo i {
-    font-size: 28px !important;
-}
-
-.sidebar .logo h3 {
-    font-size: 16px !important;
-}
-
-.sidebar .logo p {
-    font-size: 9px !important;
-}
-
-.sidebar ul li a {
-    font-size: 12px !important;
-    padding: 10px 15px !important;
-}
-
-.sidebar ul li a i {
-    font-size: 14px !important;
-}
-
-/* Header */
+/* TOPBAR */
 
 .topbar {
     padding: 14px 18px !important;
-    border-radius: 12px !important;
-    margin-bottom: 15px !important;
+    margin-bottom: 14px !important;
 }
 
 .topbar h2 {
     font-size: 21px !important;
-    margin-bottom: 3px !important;
+    margin: 0 0 3px 0 !important;
 }
 
 .topbar h2 i {
-    font-size: 20px !important;
+    font-size: 19px !important;
 }
 
 .topbar small {
@@ -88,10 +52,13 @@ body {
 }
 
 .profile i {
-    font-size: 25px !important;
+    font-size: 24px !important;
 }
 
-/* Statistics */
+
+/* =========================================
+   STATISTICS
+   ========================================= */
 
 .row.g-4 {
     --bs-gutter-x: 12px !important;
@@ -99,14 +66,14 @@ body {
 }
 
 .stat-card {
-    padding: 16px !important;
+    padding: 15px !important;
+    min-height: 115px !important;
     border-radius: 12px !important;
-    min-height: 120px !important;
 }
 
 .stat-card i {
     font-size: 24px !important;
-    margin-bottom: 6px !important;
+    margin-bottom: 5px !important;
 }
 
 .stat-card h3 {
@@ -119,44 +86,50 @@ body {
     margin: 0 !important;
 }
 
-/* Main cards */
+
+/* =========================================
+   CARDS
+   ========================================= */
 
 .card {
-    border-radius: 12px !important;
     margin-top: 15px !important;
+    border-radius: 12px !important;
 }
 
 .card-header {
-    padding: 12px 16px !important;
+    padding: 11px 15px !important;
 }
 
 .card-header h4 {
-    font-size: 16px !important;
+    font-size: 15px !important;
     margin: 0 !important;
 }
 
 .card-header h4 i {
-    font-size: 15px !important;
+    font-size: 14px !important;
 }
 
 .card-body {
-    padding: 16px !important;
+    padding: 15px !important;
 }
 
-/* Form */
+
+/* =========================================
+   FORM
+   ========================================= */
 
 .form-label,
 label {
     font-size: 10px !important;
-    margin-bottom: 5px !important;
+    margin-bottom: 4px !important;
     font-weight: 600;
 }
 
 .form-control,
 .form-select {
     font-size: 10px !important;
-    padding: 7px 10px !important;
-    min-height: 34px !important;
+    padding: 7px 9px !important;
+    min-height: 33px !important;
     border-radius: 6px !important;
 }
 
@@ -164,12 +137,18 @@ label {
     font-size: 10px !important;
 }
 
+
+/* Form spacing */
+
 .col-lg-6,
 .col-md-6 {
-    margin-bottom: 12px !important;
+    margin-bottom: 10px !important;
 }
 
-/* Create button */
+
+/* =========================================
+   BUTTONS
+   ========================================= */
 
 .btn {
     font-size: 10px !important;
@@ -182,7 +161,7 @@ label {
 }
 
 .btn-sm {
-    padding: 5px 8px !important;
+    padding: 4px 7px !important;
     font-size: 9px !important;
 }
 
@@ -190,90 +169,80 @@ label {
     font-size: 10px !important;
 }
 
-/* Excel upload */
+
+/* =========================================
+   EXCEL UPLOAD
+   ========================================= */
 
 .card-body small {
     font-size: 9px !important;
 }
 
 hr {
-    margin: 14px 0 !important;
+    margin: 12px 0 !important;
 }
 
-/* Student list header */
+
+/* =========================================
+   STUDENT LIST
+   ========================================= */
 
 #searchStudent {
-    width: 270px !important;
-    height: 34px !important;
-    font-size: 10px !important;
+    width: 250px !important;
+    height: 33px !important;
     padding: 6px 10px !important;
-}
-
-/* Table */
-
-.table {
     font-size: 10px !important;
 }
 
-.table th {
+
+/* =========================================
+   TABLE
+   ========================================= */
+
+#studentTable {
     font-size: 10px !important;
-    padding: 8px 8px !important;
-    white-space: nowrap;
 }
 
-.table td {
+#studentTable th {
     font-size: 10px !important;
     padding: 7px 8px !important;
     white-space: nowrap;
 }
 
-.table th:first-child,
-.table td:first-child {
-    width: 45px;
+#studentTable td {
+    font-size: 10px !important;
+    padding: 7px 8px !important;
+    white-space: nowrap;
 }
 
-/* Action buttons */
-
-.table .btn-sm {
+#studentTable .btn-sm {
     padding: 4px 7px !important;
     font-size: 9px !important;
-    margin: 1px !important;
 }
 
-.table .btn-sm i {
-    font-size: 10px !important;
-}
 
-/* Footer */
+/* =========================================
+   FOOTER
+   ========================================= */
 
 .text-center.mt-4.mb-3 {
-    margin-top: 15px !important;
-    margin-bottom: 12px !important;
+    margin-top: 14px !important;
+    margin-bottom: 10px !important;
 }
 
 .text-center.mt-4.mb-3 small {
     font-size: 9px !important;
 }
 
-/* Mobile */
+
+/* =========================================
+   MOBILE
+   ========================================= */
 
 @media (max-width: 768px) {
 
-    .sidebar {
-        width: 180px !important;
-    }
-
-    .main-content {
-        margin-left: 180px !important;
-        padding: 12px !important;
-    }
-
     .topbar h2 {
-        font-size: 17px !important;
-    }
-
-    .profile {
-        display: none;
+        font-size: 18px !important;
     }
 
     #searchStudent {
@@ -285,6 +254,7 @@ hr {
 </style>
 
 </head>
+
 
 <body>
 
@@ -304,6 +274,7 @@ hr {
 
         </div>
 
+
         <ul>
 
             <li>
@@ -313,12 +284,14 @@ hr {
                 </a>
             </li>
 
+
             <li class="active">
                 <a href="/manage_student">
                     <i class="bi bi-person-plus-fill"></i>
                     Manage Students
                 </a>
             </li>
+
 
             <li>
                 <a href="/logout">
@@ -332,11 +305,12 @@ hr {
     </aside>
 
 
-    <!-- Main Content -->
+    <!-- MAIN CONTENT -->
 
     <main class="main-content">
 
-        <!-- Header -->
+
+        <!-- HEADER -->
 
         <div class="topbar">
 
@@ -353,6 +327,7 @@ hr {
 
             </div>
 
+
             <div class="profile">
 
                 <i class="bi bi-person-circle"></i>
@@ -366,9 +341,10 @@ hr {
         </div>
 
 
-        <!-- Statistics -->
+        <!-- STATISTICS -->
 
         <div class="row g-4 mt-2">
+
 
             <div class="col-md-4">
 
@@ -376,9 +352,13 @@ hr {
 
                     <i class="bi bi-people-fill"></i>
 
-                    <h3>{{ students|length }}</h3>
+                    <h3>
+                        {{ students|length }}
+                    </h3>
 
-                    <p>Total Students</p>
+                    <p>
+                        Total Students
+                    </p>
 
                 </div>
 
@@ -391,9 +371,13 @@ hr {
 
                     <i class="bi bi-award-fill"></i>
 
-                    <h3>{{ department }}</h3>
+                    <h3>
+                        {{ department }}
+                    </h3>
 
-                    <p>Department</p>
+                    <p>
+                        Department
+                    </p>
 
                 </div>
 
@@ -406,9 +390,13 @@ hr {
 
                     <i class="bi bi-person-check-fill"></i>
 
-                    <h3>Active</h3>
+                    <h3>
+                        Active
+                    </h3>
 
-                    <p>Tutor Account</p>
+                    <p>
+                        Tutor Account
+                    </p>
 
                 </div>
 
@@ -417,9 +405,10 @@ hr {
         </div>
 
 
-        <!-- Student Form -->
+        <!-- CREATE STUDENT -->
 
         <div class="card shadow-lg border-0 mt-4">
+
 
             <div class="card-header">
 
@@ -434,4 +423,96 @@ hr {
             </div>
 
 
-            <div
+            <div class="card-body">
+
+
+                <form
+                    action="/add_student"
+                    method="POST">
+
+
+                    <div class="row">
+
+
+                        <!-- STUDENT NAME -->
+
+                        <div class="col-lg-6 mb-4">
+
+                            <label class="form-label">
+                                Student Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="student_name"
+                                class="form-control"
+                                placeholder="Enter Student Name"
+                                required>
+
+                        </div>
+
+
+                        <!-- REGISTER NUMBER -->
+
+                        <div class="col-lg-6 mb-4">
+
+                            <label class="form-label">
+                                Register Number
+                            </label>
+
+                            <input
+                                type="text"
+                                name="register_no"
+                                class="form-control"
+                                placeholder="Enter Register Number"
+                                required>
+
+                        </div>
+
+
+                        <!-- DEPARTMENT -->
+
+                        <div class="col-lg-6 mb-4">
+
+                            <label class="form-label">
+                                Department
+                            </label>
+
+                            <input
+                                type="text"
+                                name="department"
+                                class="form-control"
+                                value="{{ department }}"
+                                readonly>
+
+                        </div>
+
+
+                        <!-- SECTION -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <label>
+                                Section
+                            </label>
+
+                            <select
+                                name="section"
+                                class="form-select"
+                                required>
+
+                                <option value="">
+                                    Select Section
+                                </option>
+
+                                <option value="A">
+                                    A
+                                </option>
+
+                                <option value="B">
+                                    B
+                                </option>
+
+                                <option value="C">
+                                    C
+                                </option>
