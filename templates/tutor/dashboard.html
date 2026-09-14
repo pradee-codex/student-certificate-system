@@ -2,36 +2,25 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Tutor Dashboard</title>
-
 
     <!-- BOOTSTRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet">
 
-
     <!-- BOOTSTRAP ICONS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
           rel="stylesheet">
 
-
     <!-- GOOGLE FONT -->
-    <link rel="preconnect"
-          href="https://fonts.googleapis.com">
-
-    <link rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
-
 
     <!-- CHART JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -291,7 +280,7 @@ body {
 
 
 /* =====================================================
-   STUDENT CERTIFICATE SEARCH
+   STUDENT SEARCH
 ===================================================== */
 
 .student-search-card {
@@ -358,8 +347,7 @@ body {
 
 
 /* =====================================================
-   SEARCH RESULTS AREA
-   HIDDEN UNTIL SEARCH
+   SEARCH ANALYTICS
 ===================================================== */
 
 #studentAnalytics {
@@ -395,7 +383,7 @@ body {
 
 
 /* =====================================================
-   MINI STAT CARDS
+   MINI STATS
 ===================================================== */
 
 .student-mini-stats {
@@ -530,7 +518,7 @@ body {
 
 
 /* =====================================================
-   EXISTING SEARCH
+   EXISTING TABLE SEARCH
 ===================================================== */
 
 #searchInput {
@@ -697,7 +685,6 @@ footer small {
 }
 
 </style>
-
 </head>
 
 
@@ -712,9 +699,7 @@ footer small {
 
 <div class="sidebar">
 
-
     <!-- LOGO -->
-
     <div class="logo text-center">
 
         <img src="{{ url_for('static', filename='uploads/hod/logo.png') }}"
@@ -732,7 +717,6 @@ footer small {
 
 
     <!-- PROFILE -->
-
     <div class="profile">
 
         {% if tutor[4] %}
@@ -762,11 +746,9 @@ footer small {
             {{ tutor[0] }}
         </h4>
 
-
         <span class="badge bg-light text-success">
             Tutor
         </span>
-
 
         <p>
             {{ tutor[1] }}
@@ -776,84 +758,53 @@ footer small {
 
 
     <!-- MENU -->
-
     <ul>
 
         <li class="active">
-
             <a href="/tutor">
-
                 <i class="bi bi-speedometer2"></i>
-
                 Dashboard
-
             </a>
-
         </li>
 
 
         <li>
-
             <a href="/manage_student">
-
                 <i class="bi bi-people-fill"></i>
-
                 Students
-
             </a>
-
         </li>
 
 
         <li>
-
             <a href="/tutor_reports">
-
                 <i class="bi bi-bar-chart-fill"></i>
-
                 Reports
-
             </a>
-
         </li>
 
 
         <li>
-
             <a href="/certificate_categories">
-
                 <i class="bi bi-grid-fill"></i>
-
                 Categories
-
             </a>
-
         </li>
 
 
         <li>
-
             <a href="/tutor_profile">
-
                 <i class="bi bi-person-circle"></i>
-
                 Profile
-
             </a>
-
         </li>
 
 
         <li>
-
             <a href="/logout">
-
                 <i class="bi bi-box-arrow-right"></i>
-
                 Logout
-
             </a>
-
         </li>
 
     </ul>
@@ -869,7 +820,6 @@ footer small {
 
 
     <!-- TOP BAR -->
-
     <div class="topbar">
 
         <div>
@@ -879,11 +829,8 @@ footer small {
             </h1>
 
             <p class="text-muted mb-0">
-
                 Welcome,
-
                 <b>{{ tutor[0] }}</b>
-
             </p>
 
         </div>
@@ -892,16 +839,11 @@ footer small {
         <div class="top-icons">
 
             <div class="icon-box">
-
                 <i class="bi bi-bell-fill"></i>
-
             </div>
 
-
             <div class="icon-box">
-
                 <i class="bi bi-person-circle"></i>
-
             </div>
 
         </div>
@@ -917,15 +859,12 @@ footer small {
 
 
         <!-- TOTAL STUDENTS -->
-
         <div class="col-lg-3 col-md-6">
 
             <div class="dashboard-card">
 
                 <div class="icon students">
-
                     <i class="bi bi-people-fill"></i>
-
                 </div>
 
                 <h3>
@@ -946,15 +885,12 @@ footer small {
 
 
         <!-- CERTIFICATES -->
-
         <div class="col-lg-3 col-md-6">
 
             <div class="dashboard-card">
 
                 <div class="icon certificates">
-
                     <i class="bi bi-patch-check-fill"></i>
-
                 </div>
 
                 <h3>
@@ -975,15 +911,12 @@ footer small {
 
 
         <!-- DEPARTMENT -->
-
         <div class="col-lg-3 col-md-6">
 
             <div class="dashboard-card">
 
                 <div class="icon department">
-
                     <i class="bi bi-building"></i>
-
                 </div>
 
                 <h3>
@@ -1004,21 +937,17 @@ footer small {
 
 
         <!-- COMPLETION -->
-
         <div class="col-lg-3 col-md-6">
 
             <div class="dashboard-card">
 
                 <div class="icon progress">
-
                     <i class="bi bi-graph-up-arrow"></i>
-
                 </div>
 
                 <h3>
                     Completion
                 </h3>
-
 
                 {% if total_students == 0 %}
 
@@ -1029,18 +958,15 @@ footer small {
                 {% else %}
 
                     <h1>
-
                         {{
                             (
                                 (total_certificates / total_students)
                                 * 100
                             )|round|int
                         }}%
-
                     </h1>
 
                 {% endif %}
-
 
                 <p class="text-muted">
                     Certificate Status
@@ -1053,25 +979,21 @@ footer small {
     </div>
 
 
-    <!-- =====================================================
+    <!-- =================================================
          STUDENT CERTIFICATE SEARCH
-    ===================================================== -->
+    ================================================= -->
 
     <div class="student-search-card">
 
 
         <!-- TITLE -->
-
         <div class="student-search-title">
 
             <div>
 
                 <h2>
-
                     <i class="bi bi-person-vcard-fill"></i>
-
                     Student Certificate Search
-
                 </h2>
 
                 <p>
@@ -1084,7 +1006,6 @@ footer small {
 
 
         <!-- SEARCH BOX -->
-
         <div class="student-search-box">
 
             <i class="bi bi-search"></i>
@@ -1099,42 +1020,35 @@ footer small {
 
 
         <!-- =================================================
-             EVERYTHING BELOW IS HIDDEN INITIALLY
+             ANALYTICS
         ================================================= -->
 
         <div id="studentAnalytics">
 
 
             <!-- STUDENT RESULT -->
-
-            <div
-                class="student-result"
-                id="studentResult">
+            <div class="student-result"
+                 id="studentResult">
 
                 <h4 id="studentResultName">
                     Student Name
                 </h4>
 
                 <p>
-
                     Register No:
-
                     <strong id="studentResultRegister">
                         -
                     </strong>
-
                 </p>
 
             </div>
 
 
             <!-- MINI STATISTICS -->
-
             <div class="student-mini-stats">
 
 
                 <!-- TOTAL -->
-
                 <div class="student-mini-stat stat-total">
 
                     <i class="bi bi-award-fill"></i>
@@ -1151,7 +1065,6 @@ footer small {
 
 
                 <!-- WINNER -->
-
                 <div class="student-mini-stat stat-winner">
 
                     <i class="bi bi-trophy-fill"></i>
@@ -1168,7 +1081,6 @@ footer small {
 
 
                 <!-- PARTICIPATED -->
-
                 <div class="student-mini-stat stat-participated">
 
                     <i class="bi bi-people-fill"></i>
@@ -1187,22 +1099,16 @@ footer small {
 
 
             <!-- CHARTS -->
-
             <div class="student-charts">
 
 
                 <!-- CATEGORY -->
-
                 <div class="student-chart-box">
 
                     <h5>
-
                         <i class="bi bi-pie-chart-fill"></i>
-
                         Certificate Category Distribution
-
                     </h5>
-
 
                     <div class="student-chart-container">
 
@@ -1214,17 +1120,12 @@ footer small {
 
 
                 <!-- ACHIEVEMENT -->
-
                 <div class="student-chart-box">
 
                     <h5>
-
                         <i class="bi bi-bar-chart-fill"></i>
-
                         Achievement Type
-
                     </h5>
-
 
                     <div class="student-chart-container">
 
@@ -1236,14 +1137,11 @@ footer small {
 
             </div>
 
-
         </div>
 
 
         <!-- NO STUDENT -->
-
-        <div
-            id="studentEmpty">
+        <div id="studentEmpty">
 
             <i class="bi bi-person-x"></i>
 
@@ -1254,13 +1152,12 @@ footer small {
 
         </div>
 
-
     </div>
 
 
-    <!-- =====================================================
+    <!-- =================================================
          STUDENT CERTIFICATES TABLE
-    ===================================================== -->
+    ================================================= -->
 
     <div class="card mt-3 shadow-lg border-0 rounded-4">
 
@@ -1268,9 +1165,7 @@ footer small {
 
 
             <!-- TABLE HEADER -->
-
             <div class="d-flex justify-content-between align-items-center mb-3 certificate-header">
-
 
                 <div>
 
@@ -1283,9 +1178,7 @@ footer small {
                     </h2>
 
                     <small class="text-muted">
-
                         View and Download Student Certificates
-
                     </small>
 
                 </div>
@@ -1295,7 +1188,6 @@ footer small {
 
 
                     <!-- TABLE SEARCH -->
-
                     <input
                         type="text"
                         id="searchInput"
@@ -1305,13 +1197,11 @@ footer small {
 
 
                     <!-- EXPORT ZIP -->
-
                     <a
                         href="/export_zip"
                         class="btn btn-success rounded-pill px-3">
 
                         <i class="bi bi-download"></i>
-
                         Export ZIP
 
                     </a>
@@ -1322,7 +1212,6 @@ footer small {
 
 
             <!-- TABLE -->
-
             <div class="table-responsive">
 
                 <table
@@ -1382,7 +1271,6 @@ footer small {
 
 
                             <!-- STUDENT -->
-
                             <td>
 
                                 <div class="d-flex align-items-center">
@@ -1422,18 +1310,13 @@ footer small {
                                     <div class="ms-2">
 
                                         <h6 class="mb-0 fw-bold">
-
                                             {{ row[0] }}
-
                                         </h6>
-
 
                                         <small class="text-muted">
 
                                             {% if row[7] %}
-
                                                 {{ row[7].strftime('%d-%m-%Y') }}
-
                                             {% endif %}
 
                                         </small>
@@ -1446,87 +1329,66 @@ footer small {
 
 
                             <!-- DEPARTMENT -->
-
                             <td>
 
                                 <span class="badge bg-primary">
-
                                     {{ row[1] }}
-
                                 </span>
 
                             </td>
 
 
                             <!-- YEAR -->
-
                             <td>
-
                                 {{ row[2] }}
-
                             </td>
 
 
                             <!-- CERTIFICATE -->
-
                             <td>
 
                                 <b>
-
                                     {{ row[3] }}
-
                                 </b>
 
                             </td>
 
 
                             <!-- CATEGORY -->
-
                             <td>
 
                                 <span class="badge bg-success">
-
                                     {{ row[4] }}
-
                                 </span>
 
                             </td>
 
 
                             <!-- ACHIEVEMENT -->
-
                             <td>
 
                                 {% if row[5] == "Winner" %}
 
                                     <span class="badge bg-success">
-
                                         🏆 Winner
-
                                     </span>
 
                                 {% elif row[5] == "Runner" %}
 
                                     <span class="badge bg-warning text-dark">
-
                                         🥈 Runner
-
                                     </span>
 
                                 {% elif row[5] == "Participated" %}
 
                                     <span class="badge bg-primary">
-
                                         🎖 Participated
-
                                     </span>
 
                                 {% else %}
 
                                     <span class="badge bg-secondary">
-
                                         📜 Others
-
                                     </span>
 
                                 {% endif %}
@@ -1535,7 +1397,6 @@ footer small {
 
 
                             <!-- VIEW -->
-
                             <td>
 
                                 {% if row[8] %}
@@ -1547,7 +1408,6 @@ footer small {
                                         rel="noopener noreferrer">
 
                                         <i class="bi bi-eye-fill"></i>
-
                                         View
 
                                     </a>
@@ -1564,7 +1424,6 @@ footer small {
 
 
                             <!-- DOWNLOAD -->
-
                             <td>
 
                                 {% if row[8] %}
@@ -1577,7 +1436,6 @@ footer small {
                                         class="btn btn-success btn-sm">
 
                                         <i class="bi bi-download"></i>
-
                                         Download
 
                                     </a>
@@ -1591,7 +1449,6 @@ footer small {
                                 {% endif %}
 
                             </td>
-
 
                         </tr>
 
@@ -1646,9 +1503,9 @@ footer small {
     </div>
 
 
-    <!-- =====================================================
+    <!-- =================================================
          FOOTER
-    ===================================================== -->
+    ================================================= -->
 
     <footer class="mt-4">
 
@@ -1669,9 +1526,7 @@ footer small {
                         </h5>
 
                         <small class="text-muted">
-
                             Tutor Dashboard
-
                         </small>
 
                     </div>
@@ -1682,7 +1537,6 @@ footer small {
                         <small class="text-muted">
 
                             © 2026 Student Certificate Management System |
-
                             Designed By PRADEEP From AIDS
 
                         </small>
@@ -1723,60 +1577,50 @@ document.addEventListener(
                 "studentSearchInput"
             );
 
-
         const studentAnalytics =
             document.getElementById(
                 "studentAnalytics"
             );
-
 
         const studentResult =
             document.getElementById(
                 "studentResult"
             );
 
-
         const studentResultName =
             document.getElementById(
                 "studentResultName"
             );
-
 
         const studentResultRegister =
             document.getElementById(
                 "studentResultRegister"
             );
 
-
         const totalCertificates =
             document.getElementById(
                 "totalCertificates"
             );
-
 
         const winnerCount =
             document.getElementById(
                 "winnerCount"
             );
 
-
         const participatedCount =
             document.getElementById(
                 "participatedCount"
             );
-
 
         const studentEmpty =
             document.getElementById(
                 "studentEmpty"
             );
 
-
         const categoryCanvas =
             document.getElementById(
                 "categoryChart"
             );
-
 
         const achievementCanvas =
             document.getElementById(
@@ -1797,7 +1641,6 @@ document.addEventListener(
         ================================================= */
 
         let categoryChart = null;
-
         let achievementChart = null;
 
 
@@ -1828,10 +1671,13 @@ document.addEventListener(
 
         /* =================================================
            FIND STUDENT
+           
+           IMPORTANT FIX:
+           Flat certificate records should be grouped
+           by student name/register number.
         ================================================= */
 
         function findStudent(searchValue) {
-
 
             searchValue =
                 searchValue
@@ -1840,25 +1686,29 @@ document.addEventListener(
 
 
             if (!searchValue) {
-
                 return null;
-
             }
 
 
             if (!Array.isArray(studentData)) {
-
                 return null;
-
             }
 
 
-            /* GROUPED DATA */
+            /* =============================================
+               FIRST CHECK GROUPED DATA
+            ============================================= */
 
             const groupedStudent =
                 studentData.find(
                     function(student) {
 
+                        if (
+                            !student ||
+                            !Array.isArray(student.records)
+                        ) {
+                            return false;
+                        }
 
                         const name =
                             getValue(
@@ -1872,7 +1722,6 @@ document.addEventListener(
                             .toString()
                             .toLowerCase();
 
-
                         const register =
                             getValue(
                                 student,
@@ -1884,7 +1733,6 @@ document.addEventListener(
                             )
                             .toString()
                             .toLowerCase();
-
 
                         return (
                             name.includes(searchValue)
@@ -1921,25 +1769,24 @@ document.addEventListener(
                         ),
 
                     records:
-                        Array.isArray(
-                            groupedStudent.records
-                        )
-                        ?
                         groupedStudent.records
-                        :
-                        []
 
                 };
 
             }
 
 
-            /* FLAT DATA */
+            /* =============================================
+               FLAT DATA
+               
+               THIS IS THE IMPORTANT FIX.
+               Do NOT return only the first record.
+               Get ALL certificates belonging to student.
+            ============================================= */
 
             const matchingRecords =
                 studentData.filter(
                     function(record) {
-
 
                         const name =
                             getValue(
@@ -1953,7 +1800,6 @@ document.addEventListener(
                             .toString()
                             .toLowerCase();
 
-
                         const register =
                             getValue(
                                 record,
@@ -1966,7 +1812,6 @@ document.addEventListener(
                             .toString()
                             .toLowerCase();
 
-
                         return (
                             name.includes(searchValue)
                             ||
@@ -1978,9 +1823,7 @@ document.addEventListener(
 
 
             if (matchingRecords.length === 0) {
-
                 return null;
-
             }
 
 
@@ -2024,9 +1867,7 @@ document.addEventListener(
 
         function createCharts(records) {
 
-
             const categoryCounts = {};
-
             const achievementCounts = {};
 
 
@@ -2105,6 +1946,7 @@ document.addEventListener(
             if (categoryChart) {
 
                 categoryChart.destroy();
+                categoryChart = null;
 
             }
 
@@ -2112,13 +1954,17 @@ document.addEventListener(
             if (achievementChart) {
 
                 achievementChart.destroy();
+                achievementChart = null;
 
             }
 
 
             /* CATEGORY CHART */
 
-            if (categoryCanvas) {
+            if (
+                categoryCanvas &&
+                Object.keys(categoryCounts).length > 0
+            ) {
 
                 categoryChart =
                     new Chart(
@@ -2135,7 +1981,6 @@ document.addEventListener(
                                     ),
 
                                 datasets: [
-
                                     {
 
                                         data:
@@ -2146,7 +1991,6 @@ document.addEventListener(
                                         borderWidth: 1
 
                                     }
-
                                 ]
 
                             },
@@ -2177,7 +2021,10 @@ document.addEventListener(
 
             /* ACHIEVEMENT CHART */
 
-            if (achievementCanvas) {
+            if (
+                achievementCanvas &&
+                Object.keys(achievementCounts).length > 0
+            ) {
 
                 achievementChart =
                     new Chart(
@@ -2194,7 +2041,6 @@ document.addEventListener(
                                     ),
 
                                 datasets: [
-
                                     {
 
                                         label:
@@ -2208,7 +2054,6 @@ document.addEventListener(
                                         borderWidth: 1
 
                                     }
-
                                 ]
 
                             },
@@ -2261,10 +2106,8 @@ document.addEventListener(
 
         function clearStudentResults() {
 
-
             studentAnalytics.style.display =
                 "none";
-
 
             studentEmpty.style.display =
                 "none";
@@ -2273,10 +2116,8 @@ document.addEventListener(
             totalCertificates.innerText =
                 "0";
 
-
             winnerCount.innerText =
                 "0";
-
 
             participatedCount.innerText =
                 "0";
@@ -2285,7 +2126,6 @@ document.addEventListener(
             if (categoryChart) {
 
                 categoryChart.destroy();
-
                 categoryChart = null;
 
             }
@@ -2294,7 +2134,6 @@ document.addEventListener(
             if (achievementChart) {
 
                 achievementChart.destroy();
-
                 achievementChart = null;
 
             }
@@ -2336,10 +2175,8 @@ document.addEventListener(
 
             if (!student) {
 
-
                 studentAnalytics.style.display =
                     "none";
-
 
                 studentEmpty.style.display =
                     "block";
@@ -2348,10 +2185,8 @@ document.addEventListener(
                 totalCertificates.innerText =
                     "0";
 
-
                 winnerCount.innerText =
                     "0";
-
 
                 participatedCount.innerText =
                     "0";
@@ -2360,7 +2195,6 @@ document.addEventListener(
                 if (categoryChart) {
 
                     categoryChart.destroy();
-
                     categoryChart = null;
 
                 }
@@ -2369,11 +2203,9 @@ document.addEventListener(
                 if (achievementChart) {
 
                     achievementChart.destroy();
-
                     achievementChart = null;
 
                 }
-
 
                 return;
 
@@ -2385,10 +2217,8 @@ document.addEventListener(
             studentEmpty.style.display =
                 "none";
 
-
             studentAnalytics.style.display =
                 "block";
-
 
             studentResult.style.display =
                 "block";
@@ -2425,7 +2255,6 @@ document.addEventListener(
             ================================================= */
 
             let winners = 0;
-
             let participated = 0;
 
 
@@ -2445,55 +2274,27 @@ document.addEventListener(
                             ]
                         )
                         .toString()
-                        .toLowerCase();
+                        .toLowerCase()
+                        .trim();
 
 
                     if (
-
                         achievement.includes("winner")
-
                         ||
-
                         achievement.includes("win")
-
                         ||
-
                         achievement.includes("1st")
-
                         ||
-
-                        achievement.includes("2nd")
-
-                        ||
-
-                        achievement.includes("3rd")
-
-                        ||
-
                         achievement.includes("first")
-
                         ||
-
-                        achievement.includes("second")
-
-                        ||
-
-                        achievement.includes("third")
-
-                        ||
-
                         achievement.includes("prize")
-
                         ||
-
                         achievement.includes("rank")
-
                     ) {
 
                         winners++;
 
                     }
-
                     else {
 
                         participated++;
@@ -2506,7 +2307,6 @@ document.addEventListener(
 
             winnerCount.innerText =
                 winners;
-
 
             participatedCount.innerText =
                 participated;
@@ -2532,9 +2332,7 @@ document.addEventListener(
 
         }
 
-
     }
-
 );
 
 
@@ -2550,11 +2348,9 @@ const searchInput =
 
 if (searchInput) {
 
-
     searchInput.addEventListener(
         "keyup",
         function () {
-
 
             let value =
                 this.value
@@ -2571,7 +2367,6 @@ if (searchInput) {
             rows.forEach(
                 function(row) {
 
-
                     let text =
                         row.innerText
                         .toLowerCase();
@@ -2585,7 +2380,6 @@ if (searchInput) {
                             "";
 
                     }
-
                     else {
 
                         row.style.display =
@@ -2613,5 +2407,4 @@ if (searchInput) {
 
 
 </body>
-
 </html>
