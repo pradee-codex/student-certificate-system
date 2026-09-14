@@ -28,7 +28,9 @@ body{
 }
 
 
-/* PROFILE CARD */
+/* =========================================
+   PROFILE CARD
+========================================= */
 
 .profile-card{
     max-width:1000px;
@@ -40,7 +42,9 @@ body{
 }
 
 
-/* PROFILE HEADER */
+/* =========================================
+   PROFILE HEADER
+========================================= */
 
 .profile-header{
     background:linear-gradient(135deg,#198754,#0d6efd);
@@ -49,20 +53,43 @@ body{
 }
 
 
-/* PROFILE IMAGE */
+/* =========================================
+   PROFILE IMAGE - PERFECT CIRCLE
+========================================= */
 
 .profile-img{
     width:125px;
     height:125px;
+
+    /* PERFECT CIRCLE */
     border-radius:50%;
-    border:4px solid #fff;
+
+    /* Keep image inside circle */
     object-fit:cover;
+
+    /* Prevent any overflow */
+    overflow:hidden;
+
+    /* White border */
+    border:4px solid #fff;
+
+    /* White background */
     background:#fff;
+
+    /* Shadow */
     box-shadow:0 6px 18px rgba(0,0,0,.20);
+
+    /* Make sure browser doesn't stretch it */
+    display:block;
+
+    /* Center image */
+    margin:0 auto;
 }
 
 
-/* IMAGE UPLOAD */
+/* =========================================
+   IMAGE UPLOAD
+========================================= */
 
 .upload-btn{
     margin-top:10px;
@@ -80,7 +107,9 @@ body{
 }
 
 
-/* PROFILE TITLE */
+/* =========================================
+   PROFILE TITLE
+========================================= */
 
 .profile-header h2{
     font-size:22px;
@@ -98,14 +127,18 @@ body{
 }
 
 
-/* FORM BODY */
+/* =========================================
+   FORM BODY
+========================================= */
 
 .profile-card .card-body{
     padding:25px !important;
 }
 
 
-/* LABEL */
+/* =========================================
+   LABEL
+========================================= */
 
 .form-label{
     font-size:11px;
@@ -114,7 +147,9 @@ body{
 }
 
 
-/* INPUT */
+/* =========================================
+   INPUT
+========================================= */
 
 .form-control{
     font-size:11px;
@@ -123,7 +158,9 @@ body{
 }
 
 
-/* SAVE BUTTON */
+/* =========================================
+   SAVE BUTTON
+========================================= */
 
 .btn-save{
     background:#198754;
@@ -140,7 +177,9 @@ body{
 }
 
 
-/* BACK BUTTON */
+/* =========================================
+   BACK BUTTON
+========================================= */
 
 .btn-back{
     padding:8px 22px;
@@ -149,14 +188,18 @@ body{
 }
 
 
-/* FORM SPACING */
+/* =========================================
+   FORM SPACING
+========================================= */
 
 .profile-card .mb-3{
     margin-bottom:14px !important;
 }
 
 
-/* MOBILE */
+/* =========================================
+   MOBILE
+========================================= */
 
 @media (max-width:768px){
 
@@ -168,9 +211,16 @@ body{
         padding:20px;
     }
 
+    /* MOBILE PERFECT CIRCLE */
+
     .profile-img{
         width:105px;
         height:105px;
+        border-radius:50%;
+        object-fit:cover;
+        overflow:hidden;
+        display:block;
+        margin:0 auto;
     }
 
     .profile-header h2{
@@ -222,6 +272,8 @@ body{
                     alt="Tutor Profile">
 
 
+                <!-- IMAGE UPLOAD FORM -->
+
                 <form
                     action="/upload_tutor_photo"
                     method="POST"
@@ -253,7 +305,9 @@ body{
             </div>
 
 
-            <!-- PROFILE DETAILS -->
+            <!-- =================================================
+                 PROFILE DETAILS
+            ================================================== -->
 
             <div class="col-md-9">
 
@@ -413,9 +467,12 @@ body{
             </div>
 
 
-            <!-- BUTTONS -->
+            <!-- =================================================
+                 BUTTONS
+            ================================================== -->
 
             <div class="text-center mt-3">
+
 
                 <button
                     type="submit"
@@ -437,6 +494,7 @@ body{
                     Back
 
                 </a>
+
 
             </div>
 
@@ -481,7 +539,9 @@ function previewImage(event){
 
 
 
-<!-- BOOTSTRAP JS -->
+<!-- =====================================================
+     BOOTSTRAP JS
+====================================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
