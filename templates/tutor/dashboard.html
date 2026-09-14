@@ -493,6 +493,30 @@ body {
 
 
 /* =====================================================
+   NO CHART DATA MESSAGE
+===================================================== */
+
+.no-chart-data {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #999;
+    font-size: 11px;
+    background: #fff;
+    border-radius: 8px;
+}
+
+.no-chart-data i {
+    display: block;
+    font-size: 25px;
+    margin-bottom: 6px;
+}
+
+
+/* =====================================================
    CERTIFICATE TABLE
 ===================================================== */
 
@@ -694,7 +718,6 @@ footer small {
 
 <body>
 
-
 <div class="wrapper">
 
 
@@ -773,7 +796,6 @@ footer small {
 
     <ul>
 
-
         <li class="active">
 
             <a href="/tutor">
@@ -851,7 +873,6 @@ footer small {
 
         </li>
 
-
     </ul>
 
 </div>
@@ -870,7 +891,6 @@ footer small {
 
     <div class="topbar">
 
-
         <div>
 
             <h1>
@@ -880,6 +900,7 @@ footer small {
             <p class="text-muted mb-0">
 
                 Welcome,
+
                 <b>{{ tutor[0] }}</b>
 
             </p>
@@ -903,7 +924,6 @@ footer small {
             </div>
 
         </div>
-
 
     </div>
 
@@ -1049,9 +1069,7 @@ footer small {
 
         </div>
 
-
     </div>
-
 
 
     <!-- =====================================================
@@ -1093,7 +1111,7 @@ footer small {
             <input
                 type="text"
                 id="studentSearchInput"
-                placeholder="Enter student name..."
+                placeholder="Enter student name or register number..."
                 autocomplete="off">
 
         </div>
@@ -1105,11 +1123,9 @@ footer small {
             class="student-result"
             id="studentResult">
 
-
             <h4 id="studentResultName">
                 Student Name
             </h4>
-
 
             <p>
 
@@ -1121,9 +1137,7 @@ footer small {
 
             </p>
 
-
         </div>
-
 
 
         <!-- MINI STATISTICS -->
@@ -1181,9 +1195,7 @@ footer small {
 
             </div>
 
-
         </div>
-
 
 
         <!-- =================================================
@@ -1205,7 +1217,6 @@ footer small {
 
                 </h5>
 
-
                 <div class="student-chart-container">
 
                     <canvas id="categoryChart"></canvas>
@@ -1213,7 +1224,6 @@ footer small {
                 </div>
 
             </div>
-
 
 
             <!-- ACHIEVEMENT -->
@@ -1228,7 +1238,6 @@ footer small {
 
                 </h5>
 
-
                 <div class="student-chart-container">
 
                     <canvas id="achievementChart"></canvas>
@@ -1237,9 +1246,7 @@ footer small {
 
             </div>
 
-
         </div>
-
 
 
         <!-- EMPTY -->
@@ -1248,21 +1255,16 @@ footer small {
             class="student-empty"
             id="studentEmpty">
 
-
             <i class="bi bi-person-x"></i>
-
 
             <p>
                 No student found.
                 Please enter a valid student name.
             </p>
 
-
         </div>
 
-
     </div>
-
 
 
     <!-- =====================================================
@@ -1270,7 +1272,6 @@ footer small {
     ===================================================== -->
 
     <div class="card mt-3 shadow-lg border-0 rounded-4">
-
 
         <div class="card-body">
 
@@ -1290,7 +1291,6 @@ footer small {
 
                     </h2>
 
-
                     <small class="text-muted">
 
                         View and Download Student Certificates
@@ -1298,7 +1298,6 @@ footer small {
                     </small>
 
                 </div>
-
 
 
                 <div class="d-flex align-items-center">
@@ -1326,12 +1325,9 @@ footer small {
 
                     </a>
 
-
                 </div>
 
-
             </div>
-
 
 
             <!-- =================================================
@@ -1340,14 +1336,12 @@ footer small {
 
             <div class="table-responsive">
 
-
                 <table
                     class="table table-hover align-middle"
                     id="certificateTable">
 
 
                     <thead class="table-success">
-
 
                         <tr>
 
@@ -1385,9 +1379,7 @@ footer small {
 
                         </tr>
 
-
                     </thead>
-
 
 
                     <tbody>
@@ -1398,7 +1390,6 @@ footer small {
 
                         {% for row in certificates %}
 
-
                         <tr>
 
 
@@ -1406,12 +1397,10 @@ footer small {
 
                             <td>
 
-
                                 <div class="d-flex align-items-center">
 
 
                                     {% if row[6] %}
-
 
                                         <img
                                             src="{{ url_for(
@@ -1427,9 +1416,7 @@ footer small {
                                                 filename='uploads/profile/default.png'
                                             ) }}'">
 
-
                                     {% else %}
-
 
                                         <img
                                             src="{{ url_for(
@@ -1441,13 +1428,10 @@ footer small {
                                             class="rounded-circle"
                                             style="object-fit:cover;">
 
-
                                     {% endif %}
 
 
-
                                     <div class="ms-2">
-
 
                                         <h6 class="mb-0 fw-bold">
 
@@ -1455,9 +1439,7 @@ footer small {
 
                                         </h6>
 
-
                                         <small class="text-muted">
-
 
                                             {% if row[7] %}
 
@@ -1465,18 +1447,13 @@ footer small {
 
                                             {% endif %}
 
-
                                         </small>
-
 
                                     </div>
 
-
                                 </div>
 
-
                             </td>
-
 
 
                             <!-- DEPARTMENT -->
@@ -1492,7 +1469,6 @@ footer small {
                             </td>
 
 
-
                             <!-- YEAR -->
 
                             <td>
@@ -1502,19 +1478,15 @@ footer small {
                             </td>
 
 
-
                             <!-- CERTIFICATE -->
 
                             <td>
 
                                 <b>
-
                                     {{ row[3] }}
-
                                 </b>
 
                             </td>
-
 
 
                             <!-- CATEGORY -->
@@ -1530,7 +1502,6 @@ footer small {
                             </td>
 
 
-
                             <!-- ACHIEVEMENT -->
 
                             <td>
@@ -1538,16 +1509,13 @@ footer small {
 
                                 {% if row[5] == "Winner" %}
 
-
                                     <span class="badge bg-success">
 
                                         🏆 Winner
 
                                     </span>
 
-
                                 {% elif row[5] == "Runner" %}
-
 
                                     <span class="badge bg-warning text-dark">
 
@@ -1555,9 +1523,7 @@ footer small {
 
                                     </span>
 
-
                                 {% elif row[5] == "Participated" %}
-
 
                                     <span class="badge bg-primary">
 
@@ -1565,9 +1531,7 @@ footer small {
 
                                     </span>
 
-
                                 {% else %}
-
 
                                     <span class="badge bg-secondary">
 
@@ -1575,21 +1539,17 @@ footer small {
 
                                     </span>
 
-
                                 {% endif %}
 
 
                             </td>
 
 
-
                             <!-- VIEW -->
 
                             <td>
 
-
                                 {% if row[8] %}
-
 
                                     <a
                                         href="{{ row[8] }}"
@@ -1597,39 +1557,28 @@ footer small {
                                         target="_blank"
                                         rel="noopener noreferrer">
 
-
                                         <i class="bi bi-eye-fill"></i>
 
                                         View
 
-
                                     </a>
-
 
                                 {% else %}
 
-
                                     <span class="text-muted">
-
                                         No File
-
                                     </span>
-
 
                                 {% endif %}
 
-
                             </td>
-
 
 
                             <!-- DOWNLOAD -->
 
                             <td>
 
-
                                 {% if row[8] %}
-
 
                                     <a
                                         href="{{ url_for(
@@ -1638,33 +1587,24 @@ footer small {
                                         ) }}"
                                         class="btn btn-success btn-sm">
 
-
                                         <i class="bi bi-download"></i>
 
                                         Download
 
-
                                     </a>
-
 
                                 {% else %}
 
-
                                     <span class="text-muted">
-
                                         No File
-
                                     </span>
 
-
                                 {% endif %}
-
 
                             </td>
 
 
                         </tr>
-
 
                         {% endfor %}
 
@@ -1674,11 +1614,9 @@ footer small {
 
                         <tr>
 
-
                             <td
                                 colspan="8"
                                 class="text-center p-4">
-
 
                                 <img
                                     src="{{ url_for(
@@ -1687,17 +1625,12 @@ footer small {
                                     ) }}"
                                     width="120">
 
-
                                 <br>
                                 <br>
-
 
                                 <h4 style="font-size:16px;">
-
                                     No Certificates Found
-
                                 </h4>
-
 
                                 <p
                                     class="text-muted"
@@ -1707,9 +1640,7 @@ footer small {
 
                                 </p>
 
-
                             </td>
-
 
                         </tr>
 
@@ -1719,18 +1650,13 @@ footer small {
 
                     </tbody>
 
-
                 </table>
-
 
             </div>
 
-
         </div>
 
-
     </div>
-
 
 
     <!-- =====================================================
@@ -1739,18 +1665,13 @@ footer small {
 
     <footer class="mt-4">
 
-
         <div class="card border-0 shadow-sm">
-
 
             <div class="card-body">
 
-
                 <div class="row align-items-center">
 
-
                     <div class="col-md-6">
-
 
                         <h5 class="text-success mb-1">
 
@@ -1760,49 +1681,39 @@ footer small {
 
                         </h5>
 
-
                         <small class="text-muted">
 
                             Tutor Dashboard
 
                         </small>
 
-
                     </div>
-
 
 
                     <div class="col-md-6 text-end">
 
-
                         <small class="text-muted">
 
                             © 2026 Student Certificate Management System |
+
                             Designed By PRADEEP From AIDS
 
                         </small>
 
-
                     </div>
-
 
                 </div>
 
-
             </div>
 
-
         </div>
-
 
     </footer>
 
 
 </div>
 
-
 </div>
-
 
 
 <!-- =====================================================
@@ -1811,337 +1722,187 @@ footer small {
 
 <script>
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+document.addEventListener("DOMContentLoaded", function () {
 
 
-        /* =================================================
-           ELEMENTS
-        ================================================= */
+    /* =================================================
+       ELEMENTS
+    ================================================= */
 
-        const studentSearchInput =
-            document.getElementById(
-                "studentSearchInput"
-            );
+    const studentSearchInput =
+        document.getElementById("studentSearchInput");
 
+    const studentResult =
+        document.getElementById("studentResult");
 
-        const studentResult =
-            document.getElementById(
-                "studentResult"
-            );
+    const studentResultName =
+        document.getElementById("studentResultName");
 
+    const studentResultRegister =
+        document.getElementById("studentResultRegister");
 
-        const studentResultName =
-            document.getElementById(
-                "studentResultName"
-            );
+    const totalCertificates =
+        document.getElementById("totalCertificates");
 
+    const winnerCount =
+        document.getElementById("winnerCount");
 
-        const studentResultRegister =
-            document.getElementById(
-                "studentResultRegister"
-            );
+    const participatedCount =
+        document.getElementById("participatedCount");
 
+    const studentEmpty =
+        document.getElementById("studentEmpty");
 
-        const totalCertificates =
-            document.getElementById(
-                "totalCertificates"
-            );
+    const categoryCanvas =
+        document.getElementById("categoryChart");
 
-
-        const winnerCount =
-            document.getElementById(
-                "winnerCount"
-            );
+    const achievementCanvas =
+        document.getElementById("achievementChart");
 
 
-        const participatedCount =
-            document.getElementById(
-                "participatedCount"
-            );
+    /* =================================================
+       FLASK DATA
+    ================================================= */
+
+    const studentData =
+        {{ student_chart_data | default([], true) | tojson }};
 
 
-        const studentEmpty =
-            document.getElementById(
-                "studentEmpty"
-            );
+    console.log("====================================");
+    console.log("STUDENT CHART DATA:", studentData);
+    console.log("====================================");
 
 
-        const categoryCanvas =
-            document.getElementById(
-                "categoryChart"
-            );
+    /* =================================================
+       CHART VARIABLES
+    ================================================= */
+
+    let categoryChart = null;
+
+    let achievementChart = null;
 
 
-        const achievementCanvas =
-            document.getElementById(
-                "achievementChart"
-            );
+    /* =================================================
+       HELPER
+    ================================================= */
 
+    function getValue(object, keys) {
 
+        for (let key of keys) {
 
-        /* =================================================
-           FLASK DATA
-        ================================================= */
-
-        const studentData =
-            {{ student_chart_data|default([], true)|tojson }};
-
-
-
-        /* =================================================
-           CHART VARIABLES
-        ================================================= */
-
-        let categoryChart = null;
-
-        let achievementChart = null;
-
-
-
-        /* =================================================
-           HELPER
-        ================================================= */
-
-        function getValue(
-            object,
-            keys
-        ) {
-
-            for (
-                let key of keys
+            if (
+                object &&
+                object[key] !== undefined &&
+                object[key] !== null
             ) {
 
-                if (
-                    object &&
-                    object[key] !== undefined &&
-                    object[key] !== null
-                ) {
-
-                    return object[key];
-
-                }
+                return object[key];
 
             }
 
-            return "";
-
         }
 
+        return "";
+
+    }
 
 
-        /* =================================================
-           FIND STUDENT
-        ================================================= */
+    /* =================================================
+       FIND STUDENT
+    ================================================= */
 
-        function findStudent(
+    function findStudent(searchValue) {
+
+
+        searchValue =
             searchValue
-        ) {
-
-
-            searchValue =
-                searchValue
                 .toLowerCase()
                 .trim();
 
 
-            if (
-                !searchValue
-            ) {
+        if (!searchValue) {
 
-                return null;
+            return null;
 
-            }
+        }
 
 
-            if (
-                !Array.isArray(studentData)
-            ) {
+        if (!Array.isArray(studentData)) {
 
-                return null;
+            return null;
 
-            }
+        }
 
 
+        /* =================================================
+           GROUPED DATA
+        ================================================= */
 
-            /* ---------------------------------------------
-               GROUPED DATA
-            --------------------------------------------- */
-
-            const groupedStudent =
-                studentData.find(
-                    function(student) {
+        const groupedStudent =
+            studentData.find(function(student) {
 
 
-                        const name =
-                            getValue(
-                                student,
-                                [
-                                    "name",
-                                    "student_name",
-                                    "Student_Name"
-                                ]
-                            )
-                            .toString()
-                            .toLowerCase();
+                /*
+                 * IMPORTANT FIX
+                 *
+                 * Only treat data as grouped data
+                 * when records actually exists.
+                 */
+
+                if (
+                    !student ||
+                    !Array.isArray(student.records)
+                ) {
+
+                    return false;
+
+                }
 
 
-                        const register =
-                            getValue(
-                                student,
-                                [
-                                    "register_no",
-                                    "register",
-                                    "Register_No"
-                                ]
-                            )
-                            .toString()
-                            .toLowerCase();
+                const name =
+                    getValue(
+                        student,
+                        [
+                            "name",
+                            "student_name",
+                            "Student_Name"
+                        ]
+                    )
+                    .toString()
+                    .toLowerCase();
 
 
-                        return (
+                const register =
+                    getValue(
+                        student,
+                        [
+                            "register_no",
+                            "register",
+                            "Register_No"
+                        ]
+                    )
+                    .toString()
+                    .toLowerCase();
 
-                            name.includes(
-                                searchValue
-                            )
 
-                            ||
+                return (
 
-                            register.includes(
-                                searchValue
-                            )
+                    name.includes(searchValue) ||
 
-                        );
+                    register.includes(searchValue)
 
-                    }
                 );
 
+            });
 
 
-            if (
-                groupedStudent
-            ) {
-
-
-                return {
-
-                    name:
-                        getValue(
-                            groupedStudent,
-                            [
-                                "name",
-                                "student_name",
-                                "Student_Name"
-                            ]
-                        ),
-
-
-                    register:
-                        getValue(
-                            groupedStudent,
-                            [
-                                "register_no",
-                                "register",
-                                "Register_No"
-                            ]
-                        ),
-
-
-                    records:
-
-                        Array.isArray(
-                            groupedStudent.records
-                        )
-
-                        ?
-
-                        groupedStudent.records
-
-                        :
-
-                        []
-
-                };
-
-            }
-
-
-
-            /* ---------------------------------------------
-               FLAT DATA
-            --------------------------------------------- */
-
-            const matchingRecords =
-                studentData.filter(
-                    function(record) {
-
-
-                        const name =
-                            getValue(
-                                record,
-                                [
-                                    "name",
-                                    "student_name",
-                                    "Student_Name"
-                                ]
-                            )
-                            .toString()
-                            .toLowerCase();
-
-
-                        const register =
-                            getValue(
-                                record,
-                                [
-                                    "register_no",
-                                    "register",
-                                    "Register_No"
-                                ]
-                            )
-                            .toString()
-                            .toLowerCase();
-
-
-                        return (
-
-                            name.includes(
-                                searchValue
-                            )
-
-                            ||
-
-                            register.includes(
-                                searchValue
-                            )
-
-                        );
-
-                    }
-                );
-
-
-
-            if (
-                matchingRecords.length === 0
-            ) {
-
-                return null;
-
-            }
-
-
-
-            const first =
-                matchingRecords[0];
-
+        if (groupedStudent) {
 
             return {
 
-
                 name:
                     getValue(
-                        first,
+                        groupedStudent,
                         [
                             "name",
                             "student_name",
@@ -2149,10 +1910,9 @@ document.addEventListener(
                         ]
                     ),
 
-
                 register:
                     getValue(
-                        first,
+                        groupedStudent,
                         [
                             "register_no",
                             "register",
@@ -2160,579 +1920,701 @@ document.addEventListener(
                         ]
                     ),
 
-
                 records:
-                    matchingRecords
-
+                    groupedStudent.records
 
             };
 
         }
 
 
+        /* =================================================
+           FLAT DATA
+           
+           YOUR FLASK DATA IS FLAT.
+           
+           Example:
+           
+           {
+               name: "PRADEEP R",
+               register_no: "...",
+               category: "...",
+               achievement: "..."
+           }
+        ================================================= */
+
+        const matchingRecords =
+            studentData.filter(function(record) {
+
+
+                const name =
+                    getValue(
+                        record,
+                        [
+                            "name",
+                            "student_name",
+                            "Student_Name"
+                        ]
+                    )
+                    .toString()
+                    .toLowerCase();
+
+
+                const register =
+                    getValue(
+                        record,
+                        [
+                            "register_no",
+                            "register",
+                            "Register_No"
+                        ]
+                    )
+                    .toString()
+                    .toLowerCase();
+
+
+                return (
+
+                    name.includes(searchValue) ||
+
+                    register.includes(searchValue)
+
+                );
+
+            });
+
+
+        if (matchingRecords.length === 0) {
+
+            return null;
+
+        }
+
+
+        const first =
+            matchingRecords[0];
+
+
+        return {
+
+            name:
+                getValue(
+                    first,
+                    [
+                        "name",
+                        "student_name",
+                        "Student_Name"
+                    ]
+                ),
+
+            register:
+                getValue(
+                    first,
+                    [
+                        "register_no",
+                        "register",
+                        "Register_No"
+                    ]
+                ),
+
+            records:
+                matchingRecords
+
+        };
+
+    }
+
+
+    /* =================================================
+       REMOVE NO DATA MESSAGE
+    ================================================= */
+
+    function removeChartMessages() {
+
+        const messages =
+            document.querySelectorAll(
+                ".no-chart-data"
+            );
+
+        messages.forEach(function(message) {
+
+            message.remove();
+
+        });
+
+    }
+
+
+    /* =================================================
+       SHOW NO CHART DATA
+    ================================================= */
+
+    function showNoChartData() {
+
+        removeChartMessages();
+
+
+        const categoryContainer =
+            categoryCanvas.parentElement;
+
+        const achievementContainer =
+            achievementCanvas.parentElement;
+
+
+        const categoryMessage =
+            document.createElement("div");
+
+        categoryMessage.className =
+            "no-chart-data";
+
+        categoryMessage.innerHTML =
+            `
+            <div>
+                <i class="bi bi-bar-chart"></i>
+                No certificate data available
+            </div>
+            `;
+
+
+        const achievementMessage =
+            document.createElement("div");
+
+        achievementMessage.className =
+            "no-chart-data";
+
+        achievementMessage.innerHTML =
+            `
+            <div>
+                <i class="bi bi-bar-chart"></i>
+                No achievement data available
+            </div>
+            `;
+
+
+        categoryContainer.appendChild(
+            categoryMessage
+        );
+
+        achievementContainer.appendChild(
+            achievementMessage
+        );
+
+    }
+
+
+    /* =================================================
+       CREATE CHARTS
+    ================================================= */
+
+    function createCharts(records) {
+
+
+        removeChartMessages();
+
+
+        /* =================================================
+           DESTROY OLD CHARTS
+        ================================================= */
+
+        if (categoryChart) {
+
+            categoryChart.destroy();
+
+            categoryChart = null;
+
+        }
+
+
+        if (achievementChart) {
+
+            achievementChart.destroy();
+
+            achievementChart = null;
+
+        }
+
+
+        /* =================================================
+           NO RECORDS
+        ================================================= */
+
+        if (
+            !Array.isArray(records) ||
+            records.length === 0
+        ) {
+
+            showNoChartData();
+
+            return;
+
+        }
+
+
+        /* =================================================
+           COUNTS
+        ================================================= */
+
+        const categoryCounts = {};
+
+        const achievementCounts = {};
+
+
+        records.forEach(function(record) {
+
+
+            /* =================================================
+               CATEGORY
+            ================================================= */
+
+            let category =
+                getValue(
+                    record,
+                    [
+                        "category",
+                        "certificate_category",
+                        "Certificate_Type",
+                        "type"
+                    ]
+                );
+
+
+            category =
+                category
+                ? category.toString().trim()
+                : "Others";
+
+
+            categoryCounts[category] =
+                (categoryCounts[category] || 0) + 1;
+
+
+            /* =================================================
+               ACHIEVEMENT
+            ================================================= */
+
+            let achievement =
+                getValue(
+                    record,
+                    [
+                        "achievement",
+                        "achievement_type",
+                        "Achievement",
+                        "result",
+                        "position"
+                    ]
+                );
+
+
+            achievement =
+                achievement
+                ? achievement.toString().trim()
+                : "Others";
+
+
+            achievementCounts[achievement] =
+                (achievementCounts[achievement] || 0) + 1;
+
+        });
+
+
+        /* =================================================
+           CATEGORY CHART
+        ================================================= */
+
+        if (categoryCanvas) {
+
+            categoryChart =
+                new Chart(
+                    categoryCanvas,
+                    {
+
+                        type: "doughnut",
+
+                        data: {
+
+                            labels:
+                                Object.keys(
+                                    categoryCounts
+                                ),
+
+                            datasets: [
+
+                                {
+
+                                    data:
+                                        Object.values(
+                                            categoryCounts
+                                        ),
+
+                                    borderWidth: 1
+
+                                }
+
+                            ]
+
+                        },
+
+                        options: {
+
+                            responsive: true,
+
+                            maintainAspectRatio: false,
+
+                            plugins: {
+
+                                legend: {
+
+                                    position: "bottom"
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+                );
+
+        }
+
+
+        /* =================================================
+           ACHIEVEMENT CHART
+        ================================================= */
+
+        if (achievementCanvas) {
+
+            achievementChart =
+                new Chart(
+                    achievementCanvas,
+                    {
+
+                        type: "bar",
+
+                        data: {
+
+                            labels:
+                                Object.keys(
+                                    achievementCounts
+                                ),
+
+                            datasets: [
+
+                                {
+
+                                    label:
+                                        "Certificates",
+
+                                    data:
+                                        Object.values(
+                                            achievementCounts
+                                        ),
+
+                                    borderWidth: 1
+
+                                }
+
+                            ]
+
+                        },
+
+                        options: {
+
+                            responsive: true,
+
+                            maintainAspectRatio: false,
+
+                            scales: {
+
+                                y: {
+
+                                    beginAtZero: true,
+
+                                    ticks: {
+
+                                        precision: 0
+
+                                    }
+
+                                }
+
+                            },
+
+                            plugins: {
+
+                                legend: {
+
+                                    display: false
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+                );
+
+        }
+
+    }
+
+
+    /* =================================================
+       CLEAR CHARTS
+    ================================================= */
+
+    function clearCharts() {
+
+
+        removeChartMessages();
+
+
+        if (categoryChart) {
+
+            categoryChart.destroy();
+
+            categoryChart = null;
+
+        }
+
+
+        if (achievementChart) {
+
+            achievementChart.destroy();
+
+            achievementChart = null;
+
+        }
+
+    }
+
+
+    /* =================================================
+       SEARCH FUNCTION
+    ================================================= */
+
+    function performStudentSearch() {
+
+
+        const value =
+            studentSearchInput.value.trim();
+
+
+        /* =================================================
+           EMPTY SEARCH
+        ================================================= */
+
+        if (!value) {
+
+            studentResult.style.display =
+                "none";
+
+            studentEmpty.style.display =
+                "none";
+
+            totalCertificates.innerText =
+                "0";
+
+            winnerCount.innerText =
+                "0";
+
+            participatedCount.innerText =
+                "0";
+
+            clearCharts();
+
+            return;
+
+        }
+
+
+        /* =================================================
+           FIND STUDENT
+        ================================================= */
+
+        const student =
+            findStudent(value);
+
+
+        /* =================================================
+           NOT FOUND
+        ================================================= */
+
+        if (!student) {
+
+            studentResult.style.display =
+                "none";
+
+            studentEmpty.style.display =
+                "block";
+
+            totalCertificates.innerText =
+                "0";
+
+            winnerCount.innerText =
+                "0";
+
+            participatedCount.innerText =
+                "0";
+
+            clearCharts();
+
+            return;
+
+        }
+
+
+        /* =================================================
+           FOUND
+        ================================================= */
+
+        studentEmpty.style.display =
+            "none";
+
+
+        studentResult.style.display =
+            "block";
+
+
+        studentResultName.innerText =
+            student.name || "Student";
+
+
+        studentResultRegister.innerText =
+            student.register || "-";
+
+
+        const records =
+            Array.isArray(student.records)
+            ? student.records
+            : [];
+
+
+        console.log(
+            "SEARCHED STUDENT:",
+            student.name
+        );
+
+
+        console.log(
+            "REGISTER NO:",
+            student.register
+        );
+
+
+        console.log(
+            "STUDENT RECORDS:",
+            records
+        );
+
+
+        /* =================================================
+           TOTAL CERTIFICATES
+        ================================================= */
+
+        totalCertificates.innerText =
+            records.length;
+
+
+        /* =================================================
+           WINNER / PARTICIPATED
+        ================================================= */
+
+        let winners = 0;
+
+        let participated = 0;
+
+
+        records.forEach(function(record) {
+
+
+            const achievement =
+                getValue(
+                    record,
+                    [
+                        "achievement",
+                        "achievement_type",
+                        "Achievement",
+                        "result",
+                        "position"
+                    ]
+                )
+                .toString()
+                .toLowerCase()
+                .trim();
+
+
+            if (
+
+                achievement.includes("winner") ||
+
+                achievement.includes("win") ||
+
+                achievement.includes("1st") ||
+
+                achievement.includes("2nd") ||
+
+                achievement.includes("3rd") ||
+
+                achievement.includes("first") ||
+
+                achievement.includes("second") ||
+
+                achievement.includes("third") ||
+
+                achievement.includes("prize") ||
+
+                achievement.includes("rank")
+
+            ) {
+
+                winners++;
+
+            }
+
+            else {
+
+                participated++;
+
+            }
+
+        });
+
+
+        winnerCount.innerText =
+            winners;
+
+
+        participatedCount.innerText =
+            participated;
+
 
         /* =================================================
            CREATE CHARTS
         ================================================= */
 
-        function createCharts(
-            records
-        ) {
-
-
-            const categoryCounts = {};
-
-            const achievementCounts = {};
-
-
-
-            records.forEach(
-                function(record) {
-
-
-                    /* CATEGORY */
-
-                    let category =
-                        getValue(
-                            record,
-                            [
-                                "category",
-                                "certificate_category",
-                                "Certificate_Type",
-                                "type"
-                            ]
-                        );
-
-
-                    category =
-                        category
-                        ?
-
-                        category.toString()
-
-                        :
-
-                        "Other";
-
-
-                    categoryCounts[category] =
-                        (
-                            categoryCounts[category]
-                            || 0
-                        ) + 1;
-
-
-
-                    /* ACHIEVEMENT */
-
-                    let achievement =
-                        getValue(
-                            record,
-                            [
-                                "achievement",
-                                "achievement_type",
-                                "Achievement",
-                                "result",
-                                "position"
-                            ]
-                        );
-
-
-                    achievement =
-                        achievement
-                        ?
-
-                        achievement.toString()
-
-                        :
-
-                        "Participated";
-
-
-                    achievementCounts[
-                        achievement
-                    ] =
-                        (
-                            achievementCounts[
-                                achievement
-                            ]
-                            || 0
-                        ) + 1;
-
-
-                }
-            );
-
-
-
-            /* DESTROY OLD */
-
-            if (
-                categoryChart
-            ) {
-
-                categoryChart.destroy();
-
-            }
-
-
-            if (
-                achievementChart
-            ) {
-
-                achievementChart.destroy();
-
-            }
-
-
-
-            /* CATEGORY CHART */
-
-            if (
-                categoryCanvas
-            ) {
-
-
-                categoryChart =
-                    new Chart(
-                        categoryCanvas,
-                        {
-
-                            type: "doughnut",
-
-
-                            data: {
-
-                                labels:
-                                    Object.keys(
-                                        categoryCounts
-                                    ),
-
-
-                                datasets: [
-
-                                    {
-
-                                        data:
-                                            Object.values(
-                                                categoryCounts
-                                            ),
-
-                                        borderWidth: 1
-
-                                    }
-
-                                ]
-
-                            },
-
-
-                            options: {
-
-                                responsive: true,
-
-                                maintainAspectRatio: false,
-
-
-                                plugins: {
-
-                                    legend: {
-
-                                        position:
-                                            "bottom"
-
-                                    }
-
-                                }
-
-                            }
-
-                        }
-                    );
-
-            }
-
-
-
-            /* ACHIEVEMENT CHART */
-
-            if (
-                achievementCanvas
-            ) {
-
-
-                achievementChart =
-                    new Chart(
-                        achievementCanvas,
-                        {
-
-                            type: "bar",
-
-
-                            data: {
-
-                                labels:
-                                    Object.keys(
-                                        achievementCounts
-                                    ),
-
-
-                                datasets: [
-
-                                    {
-
-                                        label:
-                                            "Certificates",
-
-
-                                        data:
-                                            Object.values(
-                                                achievementCounts
-                                            ),
-
-
-                                        borderWidth: 1
-
-                                    }
-
-                                ]
-
-                            },
-
-
-                            options: {
-
-                                responsive: true,
-
-                                maintainAspectRatio: false,
-
-
-                                scales: {
-
-                                    y: {
-
-                                        beginAtZero: true,
-
-                                        ticks: {
-
-                                            precision: 0
-
-                                        }
-
-                                    }
-
-                                },
-
-
-                                plugins: {
-
-                                    legend: {
-
-                                        display: false
-
-                                    }
-
-                                }
-
-                            }
-
-                        }
-                    );
-
-            }
-
-        }
-
-
-
-        /* =================================================
-           SEARCH FUNCTION
-        ================================================= */
-
-        function performStudentSearch() {
-
-
-            const value =
-                studentSearchInput
-                .value
-                .trim();
-
-
-
-            /* EMPTY */
-
-            if (
-                !value
-            ) {
-
-
-                studentResult.style.display =
-                    "none";
-
-
-                studentEmpty.style.display =
-                    "none";
-
-
-                totalCertificates.innerText =
-                    "0";
-
-
-                winnerCount.innerText =
-                    "0";
-
-
-                participatedCount.innerText =
-                    "0";
-
-
-                return;
-
-            }
-
-
-
-            /* FIND */
-
-            const student =
-                findStudent(
-                    value
-                );
-
-
-
-            /* NOT FOUND */
-
-            if (
-                !student
-            ) {
-
-
-                studentResult.style.display =
-                    "none";
-
-
-                studentEmpty.style.display =
-                    "block";
-
-
-                totalCertificates.innerText =
-                    "0";
-
-
-                winnerCount.innerText =
-                    "0";
-
-
-                participatedCount.innerText =
-                    "0";
-
-
-                return;
-
-            }
-
-
-
-            /* FOUND */
-
-            studentEmpty.style.display =
-                "none";
-
-
-            studentResult.style.display =
-                "block";
-
-
-            studentResultName.innerText =
-                student.name ||
-                "Student";
-
-
-            studentResultRegister.innerText =
-                student.register ||
-                "-";
-
-
-
-            const records =
-                Array.isArray(
-                    student.records
-                )
-
-                ?
-
-                student.records
-
-                :
-
-                [];
-
-
-
-            /* TOTAL */
-
-            totalCertificates.innerText =
-                records.length;
-
-
-
-            /* =================================================
-               WINNER / PARTICIPATED
-            ================================================= */
-
-            let winners = 0;
-
-            let participated = 0;
-
-
-
-            records.forEach(
-                function(record) {
-
-
-                    const achievement =
-                        getValue(
-                            record,
-                            [
-                                "achievement",
-                                "achievement_type",
-                                "Achievement",
-                                "result",
-                                "position"
-                            ]
-                        )
-                        .toString()
-                        .toLowerCase();
-
-
-
-                    if (
-
-                        achievement.includes(
-                            "winner"
-                        )
-
-                        ||
-
-                        achievement.includes(
-                            "win"
-                        )
-
-                        ||
-
-                        achievement.includes(
-                            "1st"
-                        )
-
-                        ||
-
-                        achievement.includes(
-                            "2nd"
-                        )
-
-                        ||
-
-                        achievement.includes(
-                            "3rd"
-                        )
-
-                        ||
-
-                        achievement.includes(
-                            "first"
-                        )
-
-                        ||
-
-                        achievement.includes(
-                            "second"
-                        )
-
-                        ||
-
-                        achievement.includes(
-                            "third"
-                        )
-
-                        ||
-
-                        achievement.includes(
-                            "prize"
-                        )
-
-                        ||
-
-                        achievement.includes(
-                            "rank"
-                        )
-
-                    ) {
-
-
-                        winners++;
-
-
-                    }
-
-                    else {
-
-
-                        participated++;
-
-
-                    }
-
-
-                }
-            );
-
-
-
-            winnerCount.innerText =
-                winners;
-
-
-            participatedCount.innerText =
-                participated;
-
-
-
-            /* CHARTS */
-
-            createCharts(
-                records
-            );
-
-
-        }
-
-
-
-        /* =================================================
-           SEARCH EVENT
-        ================================================= */
-
-        if (
-            studentSearchInput
-        ) {
-
-
-            studentSearchInput.addEventListener(
-                "input",
-                performStudentSearch
-            );
-
-
-        }
-
+        createCharts(records);
 
     }
 
-);
+
+    /* =================================================
+       SEARCH EVENT
+    ================================================= */
+
+    if (studentSearchInput) {
+
+        studentSearchInput.addEventListener(
+            "input",
+            performStudentSearch
+        );
+
+    }
+
+});
 
 </script>
-
 
 
 <!-- =====================================================
@@ -2742,14 +2624,10 @@ document.addEventListener(
 <script>
 
 const searchInput =
-    document.getElementById(
-        "searchInput"
-    );
+    document.getElementById("searchInput");
 
 
-if (
-    searchInput
-) {
+if (searchInput) {
 
 
     searchInput.addEventListener(
@@ -2759,8 +2637,8 @@ if (
 
             let value =
                 this.value
-                .toLowerCase()
-                .trim();
+                    .toLowerCase()
+                    .trim();
 
 
             let rows =
@@ -2769,50 +2647,38 @@ if (
                 );
 
 
-            rows.forEach(
-                function(row) {
+            rows.forEach(function(row) {
 
 
-                    let text =
-                        row.innerText
+                let text =
+                    row.innerText
                         .toLowerCase();
 
 
-                    if (
-                        text.indexOf(
-                            value
-                        ) > -1
-                    ) {
+                if (
+                    text.indexOf(value) > -1
+                ) {
 
-
-                        row.style.display =
-                            "";
-
-
-                    }
-
-                    else {
-
-
-                        row.style.display =
-                            "none";
-
-
-                    }
-
+                    row.style.display =
+                        "";
 
                 }
-            );
 
+                else {
+
+                    row.style.display =
+                        "none";
+
+                }
+
+            });
 
         }
     );
 
-
 }
 
 </script>
-
 
 
 <!-- =====================================================
