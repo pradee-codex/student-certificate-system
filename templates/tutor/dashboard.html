@@ -24,6 +24,10 @@
 
 <style>
 
+/* =====================================================
+   GLOBAL
+===================================================== */
+
 * {
     margin: 0;
     padding: 0;
@@ -33,6 +37,7 @@
 
 body {
     background: #eef2f7;
+    font-size: 13px;
 }
 
 .wrapper {
@@ -41,301 +46,350 @@ body {
 }
 
 
-/* ===========================
-SIDEBAR
-=========================== */
+/* =====================================================
+   SIDEBAR
+===================================================== */
 
 .sidebar {
-
-    width: 270px;
+    width: 220px;
     background: #198754;
     color: white;
     position: fixed;
     height: 100%;
     overflow: auto;
-    box-shadow: 5px 0 20px rgba(0,0,0,.12);
-
+    box-shadow: 4px 0 15px rgba(0,0,0,.10);
 }
 
 .logo {
-
-    padding: 25px;
-
+    padding: 18px;
 }
 
 .logo-img {
-
-    width: 75px;
-    height: 75px;
+    width: 60px;
+    height: 60px;
     object-fit: contain;
-
 }
 
 .logo h2 {
-
+    font-size: 20px;
     font-weight: 700;
-    margin-top: 10px;
-
+    margin-top: 7px;
 }
 
 .logo p {
-
-    font-size: 14px;
+    font-size: 10px;
     opacity: .8;
-
+    margin-bottom: 0;
 }
 
+
+/* PROFILE */
+
 .profile {
-
     text-align: center;
-    padding: 15px 20px;
-
+    padding: 8px 15px;
 }
 
 .profile-img {
-
-    width: 95px;
-    height: 95px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
-    border: 4px solid white;
+    border: 3px solid white;
     object-fit: cover;
     background: white;
-
 }
 
 .profile h4 {
-
-    margin-top: 15px;
+    margin-top: 8px;
+    font-size: 14px;
     font-weight: 600;
+    margin-bottom: 5px;
+}
 
+.profile .badge {
+    font-size: 9px;
+    padding: 5px 8px;
 }
 
 .profile p {
-
-    margin-top: 10px;
-
+    margin-top: 6px;
+    margin-bottom: 0;
+    font-size: 10px;
 }
 
-.sidebar ul {
 
+/* SIDEBAR MENU */
+
+.sidebar ul {
     list-style: none;
     padding: 0;
-    margin-top: 25px;
-
+    margin-top: 15px;
 }
 
 .sidebar ul li {
-
-    margin: 8px 18px;
-
+    margin: 4px 12px;
 }
 
 .sidebar ul li a {
-
     display: block;
-    padding: 14px 18px;
+    padding: 10px 13px;
     color: white;
     text-decoration: none;
-    border-radius: 12px;
-    font-size: 17px;
+    border-radius: 8px;
+    font-size: 12px;
     transition: .3s;
-
 }
 
 .sidebar ul li a:hover,
 .sidebar ul li.active a {
-
     background: white;
     color: #198754;
     font-weight: 600;
-
 }
 
 .sidebar ul li a i {
-
-    margin-right: 12px;
-
+    margin-right: 8px;
+    font-size: 13px;
 }
 
 
-/* ===========================
-MAIN CONTENT
-=========================== */
+/* =====================================================
+   MAIN CONTENT
+===================================================== */
 
 .main-content {
-
-    margin-left: 270px;
-    width: calc(100% - 270px);
-    padding: 30px;
-
+    margin-left: 220px;
+    width: calc(100% - 220px);
+    padding: 20px;
 }
 
-.topbar {
 
+/* =====================================================
+   TOP BAR
+===================================================== */
+
+.topbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: white;
-    padding: 20px 30px;
-    border-radius: 18px;
-    box-shadow: 0 8px 25px rgba(0,0,0,.08);
-
+    padding: 14px 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 18px rgba(0,0,0,.07);
 }
 
 .topbar h1 {
-
-    font-size: 30px;
-    font-weight: 700;
+    font-size: 22px;
+    font-weight: 600;
     color: #198754;
+    margin-bottom: 3px;
+}
 
+.topbar p {
+    font-size: 11px;
 }
 
 .top-icons {
-
     display: flex;
     align-items: center;
-    gap: 15px;
-
+    gap: 8px;
 }
 
 .icon-box {
-
-    width: 45px;
-    height: 45px;
+    width: 36px;
+    height: 36px;
     background: #f5f5f5;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 20px;
-
+    font-size: 15px;
 }
 
 
-/* ===========================
-DASHBOARD CARDS
-=========================== */
+/* =====================================================
+   DASHBOARD CARDS
+===================================================== */
 
 .dashboard-card {
-
     background: white;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    padding: 18px;
+    border-radius: 13px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.07);
     text-align: center;
     transition: .3s;
-
 }
 
 .dashboard-card:hover {
-
-    transform: translateY(-5px);
-
+    transform: translateY(-3px);
 }
 
 .icon {
-
-    width: 80px;
-    height: 80px;
+    width: 55px;
+    height: 55px;
     margin: auto;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 34px;
+    font-size: 24px;
     color: white;
-    margin-bottom: 15px;
-
+    margin-bottom: 10px;
 }
 
 .students {
-
     background: #2563eb;
-
 }
 
 .certificates {
-
     background: #16a34a;
-
 }
 
 .department {
-
     background: #f59e0b;
-
 }
 
 .progress {
-
     background: #7c3aed;
+}
 
+.dashboard-card h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.dashboard-card h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.dashboard-card p {
+    font-size: 10px;
+    margin-bottom: 0;
 }
 
 
-/* ===========================
-CERTIFICATE TABLE
-=========================== */
+/* =====================================================
+   CERTIFICATE TABLE
+===================================================== */
 
 .card {
-
     background: white;
+}
 
+.card-body {
+    padding: 18px;
+}
+
+.certificate-header {
+    margin-bottom: 12px !important;
+}
+
+.certificate-header h2 {
+    font-size: 18px !important;
+    margin-bottom: 2px !important;
+}
+
+.certificate-header small {
+    font-size: 10px;
+}
+
+
+/* SEARCH */
+
+#searchInput {
+    width: 230px !important;
+    font-size: 11px;
+    padding: 7px 12px;
+}
+
+.certificate-header .btn {
+    font-size: 11px;
+    padding: 7px 14px !important;
+}
+
+
+/* TABLE */
+
+.table {
+    font-size: 11px;
+    margin-bottom: 0;
 }
 
 .table th {
-
     white-space: nowrap;
-
+    font-size: 10px;
+    padding: 8px;
+    font-weight: 600;
 }
 
 .table td {
-
     vertical-align: middle;
-
+    font-size: 10px;
+    padding: 8px;
 }
 
-.view-btn {
-
-    text-decoration: none;
-
+.table td img {
+    width: 40px !important;
+    height: 40px !important;
 }
 
-.download-btn {
+.table h6 {
+    font-size: 10px;
+}
 
-    text-decoration: none;
+.table small {
+    font-size: 8px;
+}
 
+.table .badge {
+    font-size: 8px;
+    padding: 5px 7px;
+}
+
+.table .btn {
+    font-size: 9px;
+    padding: 5px 8px;
 }
 
 
-/* ===========================
-FOOTER
-=========================== */
+/* =====================================================
+   FOOTER
+===================================================== */
 
 footer {
+    margin-bottom: 20px;
+}
 
-    margin-bottom: 30px;
+footer .card-body {
+    padding: 14px 18px;
+}
 
+footer h5 {
+    font-size: 13px;
+}
+
+footer small {
+    font-size: 9px;
 }
 
 
-/* ===========================
-RESPONSIVE
-=========================== */
+/* =====================================================
+   RESPONSIVE
+===================================================== */
 
 @media(max-width: 992px) {
 
     .sidebar {
-
-        width: 220px;
-
+        width: 200px;
     }
 
     .main-content {
-
-        margin-left: 220px;
-        width: calc(100% - 220px);
-
+        margin-left: 200px;
+        width: calc(100% - 200px);
+        padding: 15px;
     }
 
 }
@@ -343,49 +397,63 @@ RESPONSIVE
 @media(max-width: 768px) {
 
     .sidebar {
-
         position: relative;
         width: 100%;
         height: auto;
-
     }
 
     .wrapper {
-
         display: block;
-
     }
 
     .main-content {
-
         margin-left: 0;
         width: 100%;
-        padding: 15px;
-
+        padding: 12px;
     }
 
     .topbar {
-
         flex-direction: column;
-        gap: 15px;
+        gap: 10px;
         align-items: flex-start;
+    }
 
+    .topbar h1 {
+        font-size: 20px;
     }
 
     .certificate-header {
-
         flex-direction: column;
-        gap: 15px;
+        gap: 10px;
         align-items: stretch !important;
-
     }
 
     #searchInput {
-
         width: 100% !important;
-
     }
 
+}
+
+
+/* =====================================================
+   EXTRA COMPACT
+===================================================== */
+
+.row.mt-4 {
+    margin-top: 15px !important;
+}
+
+.g-4 {
+    --bs-gutter-x: 1rem;
+    --bs-gutter-y: 1rem;
+}
+
+.rounded-4 {
+    border-radius: 12px !important;
+}
+
+.shadow-lg {
+    box-shadow: 0 5px 18px rgba(0,0,0,.07) !important;
 }
 
 </style>
@@ -395,16 +463,14 @@ RESPONSIVE
 
 <body>
 
-
 <div class="wrapper">
 
 
-<!-- ===========================
-SIDEBAR
-=========================== -->
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
 
 <div class="sidebar">
-
 
     <div class="logo text-center">
 
@@ -536,20 +602,19 @@ SIDEBAR
 
     </ul>
 
-
 </div>
 
 
-<!-- ===========================
-MAIN CONTENT
-=========================== -->
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
 
 <div class="main-content">
 
 
-<!-- ===========================
-TOP BAR
-=========================== -->
+<!-- =====================================================
+     TOP BAR
+===================================================== -->
 
 <div class="topbar">
 
@@ -589,14 +654,14 @@ TOP BAR
 </div>
 
 
-<!-- ===========================
-DASHBOARD CARDS
-=========================== -->
+<!-- =====================================================
+     DASHBOARD CARDS
+===================================================== -->
 
-<div class="row mt-4 g-4">
+<div class="row mt-3 g-3">
 
 
-    <!-- Students -->
+    <!-- STUDENTS -->
 
     <div class="col-lg-3 col-md-6">
 
@@ -621,7 +686,7 @@ DASHBOARD CARDS
     </div>
 
 
-    <!-- Certificates -->
+    <!-- CERTIFICATES -->
 
     <div class="col-lg-3 col-md-6">
 
@@ -646,7 +711,7 @@ DASHBOARD CARDS
     </div>
 
 
-    <!-- Department -->
+    <!-- DEPARTMENT -->
 
     <div class="col-lg-3 col-md-6">
 
@@ -671,7 +736,7 @@ DASHBOARD CARDS
     </div>
 
 
-    <!-- Completion -->
+    <!-- COMPLETION -->
 
     <div class="col-lg-3 col-md-6">
 
@@ -710,11 +775,11 @@ DASHBOARD CARDS
 </div>
 
 
-<!-- ===========================
-CERTIFICATE TABLE CARD
-=========================== -->
+<!-- =====================================================
+     CERTIFICATE TABLE CARD
+===================================================== -->
 
-<div class="card mt-4 shadow-lg border-0 rounded-4">
+<div class="card mt-3 shadow-lg border-0 rounded-4">
 
 
     <div class="card-body">
@@ -748,14 +813,13 @@ CERTIFICATE TABLE CARD
                 <input
                     type="text"
                     id="searchInput"
-                    class="form-control rounded-pill me-3"
+                    class="form-control rounded-pill me-2"
                     placeholder="🔍 Search Student Name..."
-                    style="width:270px;"
                     autocomplete="off">
 
 
                 <a href="/export_zip"
-                   class="btn btn-success rounded-pill px-4">
+                   class="btn btn-success rounded-pill px-3">
 
                     <i class="bi bi-download"></i>
 
@@ -765,13 +829,12 @@ CERTIFICATE TABLE CARD
 
             </div>
 
-
         </div>
 
 
-        <!-- ===========================
-        TABLE
-        =========================== -->
+        <!-- =================================================
+             TABLE
+        ================================================= -->
 
         <div class="table-responsive">
 
@@ -818,9 +881,7 @@ CERTIFICATE TABLE CARD
                     <tr>
 
 
-                        <!-- ===========================
-                        STUDENT
-                        =========================== -->
+                        <!-- STUDENT -->
 
                         <td>
 
@@ -834,8 +895,8 @@ CERTIFICATE TABLE CARD
                                             'static',
                                             filename='uploads/profile/' ~ row[6]
                                         ) }}"
-                                        width="55"
-                                        height="55"
+                                        width="40"
+                                        height="40"
                                         class="rounded-circle"
                                         style="object-fit:cover;"
                                         onerror="this.src='{{ url_for(
@@ -850,8 +911,8 @@ CERTIFICATE TABLE CARD
                                             'static',
                                             filename='uploads/profile/default.png'
                                         ) }}"
-                                        width="55"
-                                        height="55"
+                                        width="40"
+                                        height="40"
                                         class="rounded-circle"
                                         style="object-fit:cover;">
 
@@ -978,10 +1039,7 @@ CERTIFICATE TABLE CARD
                         </td>
 
 
-                        <!-- =================================================
-                        VIEW
-                        DIRECT GOOGLE DRIVE
-                        ================================================= -->
+                        <!-- VIEW -->
 
                         <td>
 
@@ -1012,10 +1070,7 @@ CERTIFICATE TABLE CARD
                         </td>
 
 
-                        <!-- =================================================
-                        DOWNLOAD
-                        USE FLASK DOWNLOAD ROUTE
-                        ================================================= -->
+                        <!-- DOWNLOAD -->
 
                         <td>
 
@@ -1055,7 +1110,7 @@ CERTIFICATE TABLE CARD
 
                     <tr>
 
-                        <td colspan="8" class="text-center p-5">
+                        <td colspan="8" class="text-center p-4">
 
 
                             <img
@@ -1063,19 +1118,19 @@ CERTIFICATE TABLE CARD
                                     'static',
                                     filename='images/no_data.png'
                                 ) }}"
-                                width="150">
+                                width="120">
 
 
                             <br>
                             <br>
 
 
-                            <h4>
+                            <h4 style="font-size:16px;">
                                 No Certificates Found
                             </h4>
 
 
-                            <p class="text-muted">
+                            <p class="text-muted" style="font-size:10px;">
 
                                 No student certificates have been uploaded.
 
@@ -1095,21 +1150,18 @@ CERTIFICATE TABLE CARD
 
             </table>
 
-
         </div>
 
-
     </div>
-
 
 </div>
 
 
-<!-- ===========================
-FOOTER
-=========================== -->
+<!-- =====================================================
+     FOOTER
+===================================================== -->
 
-<footer class="mt-5">
+<footer class="mt-4">
 
 
     <div class="card border-0 shadow-sm">
@@ -1123,7 +1175,6 @@ FOOTER
 
                 <div class="col-md-6">
 
-
                     <h5 class="text-success mb-1">
 
                         <i class="bi bi-award-fill"></i>
@@ -1132,19 +1183,16 @@ FOOTER
 
                     </h5>
 
-
                     <small class="text-muted">
 
                         Tutor Dashboard
 
                     </small>
 
-
                 </div>
 
 
                 <div class="col-md-6 text-end">
-
 
                     <small class="text-muted">
 
@@ -1153,18 +1201,14 @@ FOOTER
 
                     </small>
 
-
                 </div>
 
 
             </div>
 
-
         </div>
 
-
     </div>
-
 
 </footer>
 
@@ -1174,9 +1218,9 @@ FOOTER
 </div>
 
 
-<!-- ===========================
-SEARCH SCRIPT
-=========================== -->
+<!-- =====================================================
+     SEARCH SCRIPT
+===================================================== -->
 
 <script>
 
@@ -1187,7 +1231,6 @@ const searchInput =
 if (searchInput) {
 
     searchInput.addEventListener("keyup", function () {
-
 
         let value =
             this.value.toLowerCase().trim();
@@ -1201,7 +1244,6 @@ if (searchInput) {
 
         rows.forEach(function(row) {
 
-
             let text =
                 row.innerText.toLowerCase();
 
@@ -1210,17 +1252,13 @@ if (searchInput) {
 
                 row.style.display = "";
 
-            }
-
-            else {
+            } else {
 
                 row.style.display = "none";
 
             }
 
-
         });
-
 
     });
 
