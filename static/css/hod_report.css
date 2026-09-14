@@ -21,23 +21,26 @@ body {
    ===================================================== */
 
 .sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 240px;
-    height: 100vh;
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
 
-    background: #198754;
-    color: white;
+    width: 240px !important;
+    height: 100vh !important;
 
-    padding: 25px 15px;
+    background: #198754 !important;
+    color: white !important;
+
+    padding: 25px 15px !important;
 
     box-shadow: 3px 0 15px rgba(0, 0, 0, 0.08);
 
-    z-index: 1000;
+    z-index: 9999 !important;
 }
 
 .sidebar-title {
+    color: white !important;
+
     font-size: 20px;
     font-weight: 700;
 
@@ -45,6 +48,7 @@ body {
 
     display: flex;
     align-items: center;
+
     gap: 10px;
 }
 
@@ -53,13 +57,13 @@ body {
 }
 
 .sidebar a {
-    display: flex;
-    align-items: center;
+    display: flex !important;
+    align-items: center !important;
 
     gap: 13px;
 
-    color: white;
-    text-decoration: none;
+    color: white !important;
+    text-decoration: none !important;
 
     padding: 13px 15px;
     margin: 7px 0;
@@ -78,7 +82,7 @@ body {
 
 .sidebar a:hover,
 .sidebar a.active {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.18) !important;
 }
 
 
@@ -87,9 +91,11 @@ body {
    ===================================================== */
 
 .main-content {
-    margin-left: 240px;
+    margin-left: 240px !important;
 
-    padding: 25px 30px;
+    width: calc(100% - 240px) !important;
+
+    padding: 25px 30px !important;
 
     min-height: 100vh;
 }
@@ -127,11 +133,20 @@ body {
 .topbar p {
     font-size: 13px;
     color: #777;
+
+    margin: 0;
 }
+
+
+/* =====================================================
+   PROFILE
+   ===================================================== */
 
 .profile-section {
     display: flex;
+
     align-items: center;
+
     gap: 12px;
 }
 
@@ -144,6 +159,8 @@ body {
     object-fit: cover;
 
     border: 2px solid #198754;
+
+    background: #f1f1f1;
 }
 
 .profile-section strong {
@@ -170,7 +187,7 @@ body {
 .summary-grid {
     display: grid;
 
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
 
     gap: 18px;
 
@@ -187,6 +204,7 @@ body {
     padding: 22px;
 
     display: flex;
+
     align-items: center;
 
     gap: 18px;
@@ -217,6 +235,7 @@ body {
     color: #198754;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
@@ -260,7 +279,9 @@ body {
     margin-bottom: 25px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
@@ -321,6 +342,7 @@ body {
     display: flex;
 
     align-items: center;
+
     justify-content: space-between;
 
     margin-bottom: 18px;
@@ -420,6 +442,7 @@ body {
     display: inline-flex;
 
     align-items: center;
+
     justify-content: center;
 
     min-width: 32px;
@@ -472,6 +495,7 @@ body {
     position: absolute;
 
     left: 14px;
+
     top: 50%;
 
     transform: translateY(-50%);
@@ -588,36 +612,40 @@ body {
 
 
 /* =====================================================
-   RESPONSIVE - TABLET
+   TABLET
    ===================================================== */
 
 @media (max-width: 1100px) {
 
     .summary-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .main-content {
-        padding: 20px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
 }
 
 
 /* =====================================================
-   RESPONSIVE - MOBILE
+   MOBILE
    ===================================================== */
 
 @media (max-width: 768px) {
 
     .sidebar {
-        position: relative;
+        position: relative !important;
 
-        width: 100%;
+        width: 100% !important;
 
-        height: auto;
+        height: auto !important;
 
-        padding: 12px;
+        padding: 12px !important;
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+
+        width: 100% !important;
+
+        padding: 15px !important;
     }
 
     .sidebar-title {
@@ -627,17 +655,11 @@ body {
     }
 
     .sidebar a {
-        display: inline-flex;
+        display: inline-flex !important;
 
         margin: 3px;
 
         padding: 9px 12px;
-    }
-
-    .main-content {
-        margin-left: 0;
-
-        padding: 15px;
     }
 
     .topbar {
