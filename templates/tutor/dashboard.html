@@ -5,434 +5,1134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Tutor Dashboard - Certificate Portal</title>
+    <title>Tutor Dashboard</title>
 
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+    <!-- BOOTSTRAP -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-        rel="stylesheet">
+    <!-- BOOTSTRAP ICONS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+    <!-- GOOGLE FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- CHART JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <style>
 
-        * {
-            box-sizing: border-box;
-        }
+<style>
 
-        body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background: #f4f7f6;
-            color: #333;
-        }
+/* =====================================================
+   GLOBAL
+===================================================== */
 
-        /* ================= SIDEBAR ================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
 
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 240px;
-            height: 100vh;
-            background: #198754;
-            padding: 25px 15px;
-            z-index: 1000;
-        }
+body {
+    background: #eef2f7;
+    font-size: 13px;
+}
 
-        .sidebar .logo {
-            color: white;
-            font-size: 21px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 35px;
-        }
+.wrapper {
+    display: flex;
+    min-height: 100vh;
+}
 
-        .sidebar a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: white;
-            text-decoration: none;
-            padding: 13px 15px;
-            margin-bottom: 8px;
-            border-radius: 10px;
-            font-size: 14px;
-            transition: 0.3s;
-        }
 
-        .sidebar a:hover,
-        .sidebar a.active {
-            background: rgba(255,255,255,0.18);
-        }
+/* =====================================================
+   SIDEBAR
+===================================================== */
 
-        .sidebar i {
-            font-size: 18px;
-        }
+.sidebar {
+    width: 220px;
+    background: #198754;
+    color: white;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+    box-shadow: 4px 0 15px rgba(0,0,0,.10);
+}
 
-        /* ================= MAIN ================= */
+.logo {
+    padding: 18px;
+}
 
-        .main {
-            margin-left: 240px;
-            padding: 25px;
-        }
+.logo-img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
 
-        .topbar {
-            background: white;
-            border-radius: 15px;
-            padding: 18px 22px;
-            margin-bottom: 22px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.06);
-        }
+.logo h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 7px;
+}
 
-        .topbar h3 {
-            margin: 0;
-            font-size: 22px;
-            font-weight: 600;
-        }
+.logo p {
+    font-size: 10px;
+    opacity: .8;
+    margin-bottom: 0;
+}
 
-        .topbar p {
-            margin: 4px 0 0;
-            font-size: 13px;
-            color: #777;
-        }
 
-        .profile-btn {
-            background: #198754;
-            color: white;
-            text-decoration: none;
-            padding: 9px 15px;
-            border-radius: 9px;
-            font-size: 13px;
-        }
+/* =====================================================
+   PROFILE
+===================================================== */
 
-        .profile-btn:hover {
-            color: white;
-            background: #157347;
-        }
+.profile {
+    text-align: center;
+    padding: 8px 15px;
+}
 
-        /* ================= CARDS ================= */
+.profile-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 3px solid white;
+    object-fit: cover;
+    background: white;
+}
 
-        .dashboard-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.06);
-            height: 100%;
-        }
+.profile h4 {
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
 
-        .dashboard-card h5 {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
+.profile .badge {
+    font-size: 9px;
+    padding: 5px 8px;
+}
 
-        .dashboard-card .number {
-            font-size: 27px;
-            font-weight: 700;
-            color: #198754;
-        }
+.profile p {
+    margin-top: 6px;
+    margin-bottom: 0;
+    font-size: 10px;
+}
 
-        /* ================= SEARCH ================= */
 
-        .search-box {
-            background: white;
-            border-radius: 15px;
-            padding: 18px;
-            margin-bottom: 20px;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.06);
-        }
+/* =====================================================
+   SIDEBAR MENU
+===================================================== */
 
-        .search-box input {
-            border-radius: 9px;
-            padding: 10px 14px;
-            border: 1px solid #ddd;
-            font-size: 13px;
-        }
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+}
 
-        .search-box input:focus {
-            border-color: #198754;
-            box-shadow: none;
-        }
+.sidebar ul li {
+    margin: 4px 12px;
+}
 
-        /* ================= TABLE ================= */
+.sidebar ul li a {
+    display: block;
+    padding: 10px 13px;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 12px;
+    transition: .3s;
+}
 
-        .table-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.06);
-        }
+.sidebar ul li a:hover,
+.sidebar ul li.active a {
+    background: white;
+    color: #198754;
+    font-weight: 600;
+}
 
-        .table-card h5 {
-            font-size: 17px;
-            font-weight: 600;
-            margin-bottom: 18px;
-        }
+.sidebar ul li a i {
+    margin-right: 8px;
+    font-size: 13px;
+}
 
-        .table-responsive {
-            border-radius: 10px;
-        }
 
-        table {
-            margin-bottom: 0 !important;
-        }
+/* =====================================================
+   MAIN CONTENT
+===================================================== */
 
-        .table th {
-            background: #198754;
-            color: white;
-            font-size: 12px;
-            font-weight: 600;
-            white-space: nowrap;
-            vertical-align: middle;
-        }
+.main-content {
+    margin-left: 220px;
+    width: calc(100% - 220px);
+    padding: 20px;
+}
 
-        .table td {
-            font-size: 12px;
-            vertical-align: middle;
-        }
 
-        .table .btn {
-            font-size: 11px;
-            padding: 6px 10px;
-            border-radius: 7px;
-            white-space: nowrap;
-        }
+/* =====================================================
+   TOP BAR
+===================================================== */
 
-        .table .btn-primary {
-            background: #0d6efd;
-        }
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 14px 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 18px rgba(0,0,0,.07);
+}
 
-        .table .btn-success {
-            background: #198754;
-        }
+.topbar h1 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #198754;
+    margin-bottom: 3px;
+}
 
-        .table .btn-danger {
-            background: #dc3545;
-            border-color: #dc3545;
-        }
+.topbar p {
+    font-size: 11px;
+}
 
-        .table .btn-danger:hover {
-            background: #bb2d3b;
-            border-color: #bb2d3b;
-        }
+.top-icons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-        /* ================= PROFILE IMAGE ================= */
+.icon-box {
+    width: 36px;
+    height: 36px;
+    background: #f5f5f5;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+}
 
-        .student-photo {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
 
-        /* ================= CHART ================= */
+/* =====================================================
+   DASHBOARD CARDS
+===================================================== */
 
-        .chart-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.06);
-            height: 100%;
-        }
+.dashboard-card {
+    background: white;
+    padding: 18px;
+    border-radius: 13px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.07);
+    text-align: center;
+    transition: .3s;
+}
 
-        .chart-card h5 {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
+.dashboard-card:hover {
+    transform: translateY(-3px);
+}
 
-        .chart-container {
-            position: relative;
-            height: 280px;
-        }
+.icon {
+    width: 55px;
+    height: 55px;
+    margin: auto;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    color: white;
+    margin-bottom: 10px;
+}
 
-        /* ================= FLASH ================= */
+.students {
+    background: #2563eb;
+}
 
-        .flash-container {
-            margin-bottom: 20px;
-        }
+.certificates {
+    background: #16a34a;
+}
 
-        /* ================= MOBILE ================= */
+.department {
+    background: #f59e0b;
+}
 
-        @media (max-width: 900px) {
+.progress {
+    background: #7c3aed;
+}
 
-            .sidebar {
-                width: 200px;
-            }
+.dashboard-card h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
 
-            .main {
-                margin-left: 200px;
-            }
-        }
+.dashboard-card h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
 
-        @media (max-width: 700px) {
+.dashboard-card p {
+    font-size: 10px;
+    margin-bottom: 0;
+}
 
-            .sidebar {
-                position: relative;
-                width: 100%;
-                height: auto;
-            }
 
-            .sidebar .logo {
-                margin-bottom: 15px;
-            }
+/* =====================================================
+   STUDENT SEARCH
+===================================================== */
 
-            .main {
-                margin-left: 0;
-                padding: 15px;
-            }
+.student-search-card {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.07);
+}
 
-            .topbar {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-            }
-        }
+.student-search-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
 
-    </style>
+.student-search-title h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #198754;
+    margin-bottom: 3px;
+}
+
+.student-search-title p {
+    font-size: 10px;
+    color: #777;
+    margin: 0;
+}
+
+
+/* =====================================================
+   SEARCH INPUT
+===================================================== */
+
+.student-search-box {
+    position: relative;
+    margin-bottom: 0;
+}
+
+.student-search-box i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #198754;
+    font-size: 15px;
+}
+
+.student-search-box input {
+    width: 100%;
+    height: 50px;
+    border: 1px solid #dfe5eb;
+    border-radius: 10px;
+    padding: 8px 15px 8px 42px;
+    font-size: 13px;
+    outline: none;
+}
+
+.student-search-box input:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 3px rgba(25,135,84,.10);
+}
+
+
+/* =====================================================
+   SEARCH ANALYTICS
+===================================================== */
+
+#studentAnalytics {
+    display: none;
+    margin-top: 18px;
+}
+
+
+/* =====================================================
+   STUDENT RESULT
+===================================================== */
+
+.student-result {
+    background: #f8fffb;
+    border: 1px solid #d8f3e4;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 18px;
+}
+
+.student-result h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #198754;
+    margin-bottom: 4px;
+}
+
+.student-result p {
+    font-size: 10px;
+    color: #666;
+    margin-bottom: 0;
+}
+
+
+/* =====================================================
+   MINI STATS
+===================================================== */
+
+.student-mini-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.student-mini-stat {
+    padding: 15px;
+    border-radius: 11px;
+    background: #f8f9fa;
+    text-align: center;
+    border: 1px solid #edf0f2;
+}
+
+.student-mini-stat i {
+    font-size: 20px;
+    margin-bottom: 7px;
+    display: block;
+}
+
+.student-mini-stat h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.student-mini-stat p {
+    font-size: 9px;
+    color: #777;
+    margin: 0;
+}
+
+.stat-total i,
+.stat-total h3 {
+    color: #198754;
+}
+
+.stat-winner i,
+.stat-winner h3 {
+    color: #f59e0b;
+}
+
+.stat-participated i,
+.stat-participated h3 {
+    color: #2563eb;
+}
+
+
+/* =====================================================
+   CHARTS
+===================================================== */
+
+.student-charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.student-chart-box {
+    background: #fff;
+    border: 1px solid #edf0f2;
+    border-radius: 11px;
+    padding: 15px;
+    min-height: 300px;
+}
+
+.student-chart-box h5 {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.student-chart-container {
+    position: relative;
+    height: 245px;
+}
+
+
+/* =====================================================
+   EMPTY SEARCH
+===================================================== */
+
+#studentEmpty {
+    display: none;
+    text-align: center;
+    padding: 30px 10px;
+    color: #888;
+    margin-top: 15px;
+}
+
+#studentEmpty i {
+    font-size: 35px;
+    display: block;
+    margin-bottom: 8px;
+    color: #adb5bd;
+}
+
+#studentEmpty p {
+    font-size: 11px;
+    margin: 0;
+}
+
+
+/* =====================================================
+   CERTIFICATE TABLE
+===================================================== */
+
+.card {
+    background: white;
+}
+
+.card-body {
+    padding: 18px;
+}
+
+.certificate-header {
+    margin-bottom: 12px !important;
+}
+
+.certificate-header h2 {
+    font-size: 18px !important;
+    margin-bottom: 2px !important;
+}
+
+.certificate-header small {
+    font-size: 10px;
+}
+
+
+/* =====================================================
+   EXISTING TABLE SEARCH
+===================================================== */
+
+#searchInput {
+    width: 230px !important;
+    font-size: 11px;
+    padding: 7px 12px;
+}
+
+.certificate-header .btn {
+    font-size: 11px;
+    padding: 7px 14px !important;
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table {
+    font-size: 11px;
+    margin-bottom: 0;
+}
+
+.table th {
+    white-space: nowrap;
+    font-size: 10px;
+    padding: 8px;
+    font-weight: 600;
+}
+
+.table td {
+    vertical-align: middle;
+    font-size: 10px;
+    padding: 8px;
+}
+
+.table td img {
+    width: 40px !important;
+    height: 40px !important;
+}
+
+.table h6 {
+    font-size: 10px;
+}
+
+.table small {
+    font-size: 8px;
+}
+
+.table .badge {
+    font-size: 8px;
+    padding: 5px 7px;
+}
+
+.table .btn {
+    font-size: 9px;
+    padding: 5px 8px;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer {
+    margin-bottom: 20px;
+}
+
+footer .card-body {
+    padding: 14px 18px;
+}
+
+footer h5 {
+    font-size: 13px;
+}
+
+footer small {
+    font-size: 9px;
+}
+
+
+/* =====================================================
+   EXTRA
+===================================================== */
+
+.rounded-4 {
+    border-radius: 12px !important;
+}
+
+.shadow-lg {
+    box-shadow: 0 5px 18px rgba(0,0,0,.07) !important;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width: 992px) {
+
+    .sidebar {
+        width: 200px;
+    }
+
+    .main-content {
+        margin-left: 200px;
+        width: calc(100% - 200px);
+        padding: 15px;
+    }
+}
+
+
+@media(max-width: 768px) {
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    .wrapper {
+        display: block;
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 12px;
+    }
+
+    .topbar {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .topbar h1 {
+        font-size: 20px;
+    }
+
+    .certificate-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch !important;
+    }
+
+    #searchInput {
+        width: 100% !important;
+    }
+
+    .student-mini-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .student-charts {
+        grid-template-columns: 1fr;
+    }
+
+    .student-search-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}
+
+</style>
 </head>
+
 
 <body>
 
-<!-- ========================================================= -->
-<!-- SIDEBAR -->
-<!-- ========================================================= -->
+<div class="wrapper">
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
 
 <div class="sidebar">
 
-    <div class="logo">
-        <i class="bi bi-award-fill"></i>
-        Certificate Portal
+    <!-- LOGO -->
+    <div class="logo text-center">
+
+        <img src="{{ url_for('static', filename='uploads/hod/logo.png') }}"
+             class="logo-img"
+             alt="Logo"
+             onerror="this.style.display='none';">
+
+        <h2>SCMS</h2>
+
+        <p>
+            Certificate Management
+        </p>
+
     </div>
 
-    <a href="/tutor" class="active">
-        <i class="bi bi-speedometer2"></i>
-        Dashboard
-    </a>
 
-    <a href="/upload_students">
-        <i class="bi bi-person-plus-fill"></i>
-        Manage Students
-    </a>
+    <!-- PROFILE -->
+    <div class="profile">
 
-    <a href="/tutor_reports">
-        <i class="bi bi-bar-chart-fill"></i>
-        Reports
-    </a>
+        {% if tutor[4] %}
 
-    <a href="/tutor_export_pdf">
-        <i class="bi bi-file-earmark-pdf-fill"></i>
-        Export PDF
-    </a>
+            <img src="{{ url_for(
+                'static',
+                filename='uploads/profile/' ~ tutor[4]
+            ) }}"
+            class="profile-img"
+            onerror="this.src='{{ url_for(
+                'static',
+                filename='uploads/profile/default.png'
+            ) }}'">
 
-    <a href="/tutor_export_excel">
-        <i class="bi bi-file-earmark-excel-fill"></i>
-        Export Excel
-    </a>
+        {% else %}
 
-    <a href="/logout">
-        <i class="bi bi-box-arrow-right"></i>
-        Logout
-    </a>
+            <img src="{{ url_for(
+                'static',
+                filename='uploads/profile/default.png'
+            ) }}"
+            class="profile-img">
+
+        {% endif %}
+
+
+        <h4>
+            {{ tutor[0] }}
+        </h4>
+
+        <span class="badge bg-light text-success">
+            Tutor
+        </span>
+
+        <p>
+            {{ tutor[1] }}
+        </p>
+
+    </div>
+
+
+    <!-- MENU -->
+    <ul>
+
+        <li class="active">
+            <a href="/tutor">
+                <i class="bi bi-speedometer2"></i>
+                Dashboard
+            </a>
+        </li>
+
+
+        <li>
+            <a href="/manage_student">
+                <i class="bi bi-people-fill"></i>
+                Students
+            </a>
+        </li>
+
+
+        <li>
+            <a href="/tutor_reports">
+                <i class="bi bi-bar-chart-fill"></i>
+                Reports
+            </a>
+        </li>
+
+
+        <li>
+            <a href="/certificate_categories">
+                <i class="bi bi-grid-fill"></i>
+                Categories
+            </a>
+        </li>
+
+
+        <li>
+            <a href="/tutor_profile">
+                <i class="bi bi-person-circle"></i>
+                Profile
+            </a>
+        </li>
+
+
+        <li>
+            <a href="/logout">
+                <i class="bi bi-box-arrow-right"></i>
+                Logout
+            </a>
+        </li>
+
+    </ul>
 
 </div>
 
 
-<!-- ========================================================= -->
-<!-- MAIN -->
-<!-- ========================================================= -->
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
 
-<div class="main">
+<div class="main-content">
 
-    <!-- TOPBAR -->
 
+    <!-- TOP BAR -->
     <div class="topbar">
 
         <div>
-            <h3>
-                Tutor Dashboard
-            </h3>
 
-            <p>
-                Manage student certificates
+            <h1>
+                Tutor Dashboard
+            </h1>
+
+            <p class="text-muted mb-0">
+                Welcome,
+                <b>{{ tutor[0] }}</b>
             </p>
+
         </div>
 
-        <a
-            href="/tutor_profile"
-            class="profile-btn">
 
-            <i class="bi bi-person-circle"></i>
-            Profile
+        <div class="top-icons">
 
-        </a>
+            <div class="icon-box">
+                <i class="bi bi-bell-fill"></i>
+            </div>
+
+            <div class="icon-box">
+                <i class="bi bi-person-circle"></i>
+            </div>
+
+        </div>
 
     </div>
 
 
-    <!-- ===================================================== -->
-    <!-- FLASH MESSAGES -->
-    <!-- ===================================================== -->
+    <!-- =================================================
+         DASHBOARD CARDS
+    ================================================= -->
 
-    <div class="flash-container">
+    <div class="row mt-3 g-3">
 
-        {% with messages = get_flashed_messages() %}
 
-            {% if messages %}
+        <!-- TOTAL STUDENTS -->
+        <div class="col-lg-3 col-md-6">
 
-                {% for message in messages %}
+            <div class="dashboard-card">
 
-                    <div
-                        class="alert alert-info alert-dismissible fade show"
-                        role="alert">
+                <div class="icon students">
+                    <i class="bi bi-people-fill"></i>
+                </div>
 
-                        {{ message }}
+                <h3>
+                    Total Students
+                </h3>
 
-                        <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="alert">
-                        </button>
+                <h1>
+                    {{ total_students }}
+                </h1>
+
+                <p class="text-muted">
+                    Assigned Students
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- CERTIFICATES -->
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <div class="icon certificates">
+                    <i class="bi bi-patch-check-fill"></i>
+                </div>
+
+                <h3>
+                    Certificates
+                </h3>
+
+                <h1>
+                    {{ total_certificates }}
+                </h1>
+
+                <p class="text-muted">
+                    Uploaded Certificates
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- DEPARTMENT -->
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <div class="icon department">
+                    <i class="bi bi-building"></i>
+                </div>
+
+                <h3>
+                    Department
+                </h3>
+
+                <h1>
+                    {{ tutor[1] }}
+                </h1>
+
+                <p class="text-muted">
+                    Academic Department
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- COMPLETION -->
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <div class="icon progress">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+
+                <h3>
+                    Completion
+                </h3>
+
+                {% if total_students == 0 %}
+
+                    <h1>
+                        0%
+                    </h1>
+
+                {% else %}
+
+                    <h1>
+                        {{
+                            (
+                                (total_certificates / total_students)
+                                * 100
+                            )|round|int
+                        }}%
+                    </h1>
+
+                {% endif %}
+
+                <p class="text-muted">
+                    Certificate Status
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         STUDENT CERTIFICATE SEARCH
+    ================================================= -->
+
+    <div class="student-search-card">
+
+
+        <!-- TITLE -->
+        <div class="student-search-title">
+
+            <div>
+
+                <h2>
+                    <i class="bi bi-person-vcard-fill"></i>
+                    Student Certificate Search
+                </h2>
+
+                <p>
+                    Search a student to view certificate statistics
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- SEARCH BOX -->
+        <div class="student-search-box">
+
+            <i class="bi bi-search"></i>
+
+            <input
+                type="text"
+                id="studentSearchInput"
+                placeholder="Enter student name or register number..."
+                autocomplete="off">
+
+        </div>
+
+
+        <!-- =================================================
+             ANALYTICS
+        ================================================= -->
+
+        <div id="studentAnalytics">
+
+
+            <!-- STUDENT RESULT -->
+            <div class="student-result"
+                 id="studentResult">
+
+                <h4 id="studentResultName">
+                    Student Name
+                </h4>
+
+                <p>
+                    Register No:
+                    <strong id="studentResultRegister">
+                        -
+                    </strong>
+                </p>
+
+            </div>
+
+
+            <!-- MINI STATISTICS -->
+            <div class="student-mini-stats">
+
+
+                <!-- TOTAL -->
+                <div class="student-mini-stat stat-total">
+
+                    <i class="bi bi-award-fill"></i>
+
+                    <h3 id="totalCertificates">
+                        0
+                    </h3>
+
+                    <p>
+                        Total Certificates
+                    </p>
+
+                </div>
+
+
+                <!-- WINNER -->
+                <div class="student-mini-stat stat-winner">
+
+                    <i class="bi bi-trophy-fill"></i>
+
+                    <h3 id="winnerCount">
+                        0
+                    </h3>
+
+                    <p>
+                        Winner
+                    </p>
+
+                </div>
+
+
+                <!-- PARTICIPATED -->
+                <div class="student-mini-stat stat-participated">
+
+                    <i class="bi bi-people-fill"></i>
+
+                    <h3 id="participatedCount">
+                        0
+                    </h3>
+
+                    <p>
+                        Participated
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- CHARTS -->
+            <div class="student-charts">
+
+
+                <!-- CATEGORY -->
+                <div class="student-chart-box">
+
+                    <h5>
+                        <i class="bi bi-pie-chart-fill"></i>
+                        Certificate Category Distribution
+                    </h5>
+
+                    <div class="student-chart-container">
+
+                        <canvas id="categoryChart"></canvas>
 
                     </div>
 
-                {% endfor %}
-
-            {% endif %}
-
-        {% endwith %}
-
-    </div>
+                </div>
 
 
-    <!-- ===================================================== -->
-    <!-- DASHBOARD CARDS -->
-    <!-- ===================================================== -->
+                <!-- ACHIEVEMENT -->
+                <div class="student-chart-box">
 
-    <div class="row g-3 mb-4">
+                    <h5>
+                        <i class="bi bi-bar-chart-fill"></i>
+                        Achievement Type
+                    </h5>
 
-        <div class="col-md-4">
+                    <div class="student-chart-container">
 
-            <div class="dashboard-card">
+                        <canvas id="achievementChart"></canvas>
 
-                <h5>
-                    <i class="bi bi-people-fill"></i>
-                    Students
-                </h5>
+                    </div>
 
-                <div class="number">
-                    {{ students|length }}
                 </div>
 
             </div>
@@ -440,194 +1140,132 @@
         </div>
 
 
-        <div class="col-md-4">
+        <!-- NO STUDENT -->
+        <div id="studentEmpty">
 
-            <div class="dashboard-card">
+            <i class="bi bi-person-x"></i>
 
-                <h5>
-                    <i class="bi bi-award-fill"></i>
-                    Certificates
-                </h5>
-
-                <div class="number">
-                    {{ certificates|length }}
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="col-md-4">
-
-            <div class="dashboard-card">
-
-                <h5>
-                    <i class="bi bi-folder-fill"></i>
-                    Categories
-                </h5>
-
-                <div class="number">
-                    {{ categories|length if categories is defined else 0 }}
-                </div>
-
-            </div>
+            <p>
+                No student found.
+                Please enter a valid student name or register number.
+            </p>
 
         </div>
 
     </div>
 
 
-    <!-- ===================================================== -->
-    <!-- SEARCH -->
-    <!-- ===================================================== -->
+    <!-- =================================================
+         STUDENT CERTIFICATES TABLE
+    ================================================= -->
 
-    <div class="search-box">
+    <div class="card mt-3 shadow-lg border-0 rounded-4">
 
-        <div class="row g-2">
-
-            <div class="col-md-8">
-
-                <input
-                    type="text"
-                    id="studentSearch"
-                    class="form-control"
-                    placeholder="Search student name or register number...">
-
-            </div>
-
-            <div class="col-md-4">
-
-                <button
-                    type="button"
-                    class="btn btn-success w-100"
-                    onclick="clearSearch()">
-
-                    <i class="bi bi-arrow-clockwise"></i>
-                    Clear Search
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
+        <div class="card-body">
 
 
-    <!-- ===================================================== -->
-    <!-- CHARTS -->
-    <!-- ===================================================== -->
+            <!-- TABLE HEADER -->
+            <div class="d-flex justify-content-between align-items-center mb-3 certificate-header">
 
-    <div class="row g-3 mb-4">
+                <div>
 
-        <div class="col-lg-6">
+                    <h2 class="text-success fw-bold">
 
-            <div class="chart-card">
+                        <i class="bi bi-award-fill"></i>
 
-                <h5>
-                    <i class="bi bi-pie-chart-fill"></i>
-                    Certificate Categories
-                </h5>
+                        Student Certificates
 
-                <div class="chart-container">
+                    </h2>
 
-                    <canvas id="categoryChart"></canvas>
+                    <small class="text-muted">
+                        View and Download Student Certificates
+                    </small>
+
+                </div>
+
+
+                <div class="d-flex align-items-center">
+
+
+                    <!-- TABLE SEARCH -->
+                    <input
+                        type="text"
+                        id="searchInput"
+                        class="form-control rounded-pill me-2"
+                        placeholder="🔍 Search Student Name..."
+                        autocomplete="off">
+
+
+                    <!-- EXPORT ZIP -->
+                    <a
+                        href="/export_zip"
+                        class="btn btn-success rounded-pill px-3">
+
+                        <i class="bi bi-download"></i>
+                        Export ZIP
+
+                    </a>
 
                 </div>
 
             </div>
 
-        </div>
+
+            <!-- TABLE -->
+            <div class="table-responsive">
+
+                <table
+                    class="table table-hover align-middle"
+                    id="certificateTable">
 
 
-        <div class="col-lg-6">
+                    <thead class="table-success">
 
-            <div class="chart-card">
+                        <tr>
 
-                <h5>
-                    <i class="bi bi-bar-chart-fill"></i>
-                    Achievements
-                </h5>
+                            <th>
+                                Student
+                            </th>
 
-                <div class="chart-container">
+                            <th>
+                                Department
+                            </th>
 
-                    <canvas id="achievementChart"></canvas>
+                            <th>
+                                Year
+                            </th>
 
-                </div>
+                            <th>
+                                Certificate
+                            </th>
 
-            </div>
+                            <th>
+                                Category
+                            </th>
 
-        </div>
+                            <th>
+                                Achievement
+                            </th>
 
-    </div>
+                            <th>
+                                View
+                            </th>
 
+                            <th>
+                                Download
+                            </th>
 
-    <!-- ===================================================== -->
-    <!-- CERTIFICATE TABLE -->
-    <!-- ===================================================== -->
+                            <th>
+                                Delete
+                            </th>
 
-    <div class="table-card">
+                        </tr>
 
-        <h5>
-            <i class="bi bi-award-fill"></i>
-            Student Certificates
-        </h5>
-
-        <div class="table-responsive">
-
-            <table
-                class="table table-bordered table-hover align-middle"
-                id="certificateTable">
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            Student
-                        </th>
-
-                        <th>
-                            Department
-                        </th>
-
-                        <th>
-                            Year
-                        </th>
-
-                        <th>
-                            Certificate
-                        </th>
-
-                        <th>
-                            Category
-                        </th>
-
-                        <th>
-                            Achievement
-                        </th>
-
-                        <th>
-                            View
-                        </th>
-
-                        <th>
-                            Download
-                        </th>
-
-                        <!-- NEW DELETE COLUMN -->
-
-                        <th>
-                            Delete
-                        </th>
-
-                    </tr>
-
-                </thead>
+                    </thead>
 
 
-                <tbody id="certificateTableBody">
+                    <tbody>
+
 
                     {% if certificates %}
 
@@ -635,27 +1273,59 @@
 
                         <tr>
 
-                            <!-- STUDENT -->
 
+                            <!-- STUDENT -->
                             <td>
 
-                                <div class="d-flex align-items-center gap-2">
+                                <div class="d-flex align-items-center">
+
 
                                     {% if row[6] %}
 
                                         <img
                                             src="{{ url_for(
                                                 'static',
-                                                filename='uploads/profile_photos/' ~ row[6]
+                                                filename='uploads/profile/' ~ row[6]
                                             ) }}"
-                                            class="student-photo"
-                                            onerror="this.style.display='none';">
+                                            width="40"
+                                            height="40"
+                                            class="rounded-circle"
+                                            style="object-fit:cover;"
+                                            onerror="this.src='{{ url_for(
+                                                'static',
+                                                filename='uploads/profile/default.png'
+                                            ) }}'">
+
+                                    {% else %}
+
+                                        <img
+                                            src="{{ url_for(
+                                                'static',
+                                                filename='uploads/profile/default.png'
+                                            ) }}"
+                                            width="40"
+                                            height="40"
+                                            class="rounded-circle"
+                                            style="object-fit:cover;">
 
                                     {% endif %}
 
-                                    <span>
-                                        {{ row[0] }}
-                                    </span>
+
+                                    <div class="ms-2">
+
+                                        <h6 class="mb-0 fw-bold">
+                                            {{ row[0] }}
+                                        </h6>
+
+                                        <small class="text-muted">
+
+                                            {% if row[7] %}
+                                                {{ row[7].strftime('%d-%m-%Y') }}
+                                            {% endif %}
+
+                                        </small>
+
+                                    </div>
 
                                 </div>
 
@@ -663,51 +1333,80 @@
 
 
                             <!-- DEPARTMENT -->
-
                             <td>
-                                {{ row[1] or 'N/A' }}
+
+                                <span class="badge bg-primary">
+                                    {{ row[1] }}
+                                </span>
+
                             </td>
 
 
                             <!-- YEAR -->
-
                             <td>
-                                {{ row[2] or 'N/A' }}
+                                {{ row[2] }}
                             </td>
 
 
                             <!-- CERTIFICATE -->
-
                             <td>
-                                {{ row[3] or 'N/A' }}
+
+                                <b>
+                                    {{ row[3] }}
+                                </b>
+
                             </td>
 
 
                             <!-- CATEGORY -->
-
                             <td>
-                                {{ row[4] or 'N/A' }}
+
+                                <span class="badge bg-success">
+                                    {{ row[4] }}
+                                </span>
+
                             </td>
 
 
                             <!-- ACHIEVEMENT -->
-
                             <td>
-                                {{ row[5] or 'N/A' }}
+
+                                {% if row[5] == "Winner" %}
+
+                                    <span class="badge bg-success">
+                                        🏆 Winner
+                                    </span>
+
+                                {% elif row[5] == "Runner" %}
+
+                                    <span class="badge bg-warning text-dark">
+                                        🥈 Runner
+                                    </span>
+
+                                {% elif row[5] == "Participated" %}
+
+                                    <span class="badge bg-primary">
+                                        🎖 Participated
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-secondary">
+                                        📜 Others
+                                    </span>
+
+                                {% endif %}
+
                             </td>
 
 
                             <!-- VIEW -->
-
                             <td>
 
                                 {% if row[8] %}
 
                                     <a
-                                        href="{{ url_for(
-                                            'view',
-                                            filename=row[8]
-                                        ) }}"
+                                        href="{{ url_for('view', filename=row[8]) }}"
                                         class="btn btn-primary btn-sm"
                                         target="_blank"
                                         rel="noopener noreferrer">
@@ -729,7 +1428,6 @@
 
 
                             <!-- DOWNLOAD -->
-
                             <td>
 
                                 {% if row[8] %}
@@ -757,50 +1455,30 @@
                             </td>
 
 
-                            <!-- ================================================= -->
+
                             <!-- DELETE -->
-                            <!-- ================================================= -->
-
                             <td>
-
                                 {% if row[8] %}
-
                                     <form
-                                        action="{{ url_for(
-                                            'delete_certificate',
-                                            filename=row[8]
-                                        ) }}"
+                                        action="{{ url_for('delete_certificate', filename=row[8]) }}"
                                         method="POST"
                                         style="display:inline;"
-                                        onsubmit="return confirm(
-                                            'Are you sure you want to delete this certificate?'
-                                        );">
-
+                                        onsubmit="return confirm('Are you sure you want to delete this certificate?');">
                                         <button
                                             type="submit"
                                             class="btn btn-danger btn-sm"
                                             title="Delete Certificate">
-
                                             <i class="bi bi-trash-fill"></i>
                                             Delete
-
                                         </button>
-
                                     </form>
-
                                 {% else %}
-
-                                    <span class="text-muted">
-                                        No File
-                                    </span>
-
+                                    <span class="text-muted">No File</span>
                                 {% endif %}
-
-                            </td>
-
-                        </tr>
+                            </td>                        </tr>
 
                         {% endfor %}
+
 
                     {% else %}
 
@@ -810,14 +1488,27 @@
                                 colspan="9"
                                 class="text-center p-4">
 
-                                <i
-                                    class="bi bi-folder-x"
-                                    style="font-size:30px;">
-                                </i>
+                                <img
+                                    src="{{ url_for(
+                                        'static',
+                                        filename='images/no_data.png'
+                                    ) }}"
+                                    width="120">
 
-                                <div class="mt-2">
-                                    No certificates found.
-                                </div>
+                                <br>
+                                <br>
+
+                                <h4 style="font-size:16px;">
+                                    No Certificates Found
+                                </h4>
+
+                                <p
+                                    class="text-muted"
+                                    style="font-size:10px;">
+
+                                    No student certificates have been uploaded.
+
+                                </p>
 
                             </td>
 
@@ -825,280 +1516,918 @@
 
                     {% endif %}
 
-                </tbody>
 
-            </table>
+                    </tbody>
+
+                </table>
+
+            </div>
 
         </div>
 
     </div>
 
+
+    <!-- =================================================
+         FOOTER
+    ================================================= -->
+
+    <footer class="mt-4">
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body">
+
+                <div class="row align-items-center">
+
+                    <div class="col-md-6">
+
+                        <h5 class="text-success mb-1">
+
+                            <i class="bi bi-award-fill"></i>
+
+                            Student Certificate Management System
+
+                        </h5>
+
+                        <small class="text-muted">
+                            Tutor Dashboard
+                        </small>
+
+                    </div>
+
+
+                    <div class="col-md-6 text-end">
+
+                        <small class="text-muted">
+
+                            © 2026 Student Certificate Management System |
+                            Designed By PRADEEP From AIDS
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+</div>
+
 </div>
 
 
-<!-- ========================================================= -->
-<!-- JAVASCRIPT -->
-<!-- ========================================================= -->
-
-<script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-</script>
-
+<!-- =====================================================
+     STUDENT SEARCH + ANALYTICS SCRIPT
+===================================================== -->
 
 <script>
 
-    /* =========================================================
-       SEARCH
-    ========================================================= */
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-    const searchInput =
-        document.getElementById("studentSearch");
 
-    const tableBody =
-        document.getElementById("certificateTableBody");
+        /* =================================================
+           ELEMENTS
+        ================================================= */
 
+        const studentSearchInput =
+            document.getElementById(
+                "studentSearchInput"
+            );
 
-    if (searchInput) {
+        const studentAnalytics =
+            document.getElementById(
+                "studentAnalytics"
+            );
 
-        searchInput.addEventListener(
-            "keyup",
-            function () {
+        const studentResult =
+            document.getElementById(
+                "studentResult"
+            );
 
-                const value =
-                    this.value.toLowerCase().trim();
+        const studentResultName =
+            document.getElementById(
+                "studentResultName"
+            );
 
-                const rows =
-                    tableBody.querySelectorAll("tr");
+        const studentResultRegister =
+            document.getElementById(
+                "studentResultRegister"
+            );
 
+        const totalCertificates =
+            document.getElementById(
+                "totalCertificates"
+            );
 
-                rows.forEach(function(row) {
+        const winnerCount =
+            document.getElementById(
+                "winnerCount"
+            );
 
-                    const text =
-                        row.innerText.toLowerCase();
+        const participatedCount =
+            document.getElementById(
+                "participatedCount"
+            );
 
-                    if (text.includes(value)) {
+        const studentEmpty =
+            document.getElementById(
+                "studentEmpty"
+            );
 
-                        row.style.display = "";
+        const categoryCanvas =
+            document.getElementById(
+                "categoryChart"
+            );
 
-                    } else {
+        const achievementCanvas =
+            document.getElementById(
+                "achievementChart"
+            );
 
-                        row.style.display = "none";
 
-                    }
+        /* =================================================
+           FLASK DATA
+        ================================================= */
 
-                });
+        const studentData =
+            {{ student_chart_data|default([], true)|tojson }};
 
-            }
-        );
 
-    }
+        /* =================================================
+           CHART VARIABLES
+        ================================================= */
 
+        let categoryChart = null;
+        let achievementChart = null;
 
-    function clearSearch() {
 
-        if (searchInput) {
+        /* =================================================
+           HELPER
+        ================================================= */
 
-            searchInput.value = "";
+        function getValue(object, keys) {
 
-            const rows =
-                tableBody.querySelectorAll("tr");
+            for (let key of keys) {
 
-            rows.forEach(function(row) {
+                if (
+                    object &&
+                    object[key] !== undefined &&
+                    object[key] !== null
+                ) {
 
-                row.style.display = "";
-
-            });
-
-        }
-
-    }
-
-
-    /* =========================================================
-       CHART DATA
-    ========================================================= */
-
-    let chartData = {{ student_chart_data | default([]) | tojson }};
-
-
-    let categoryCounts = {};
-    let achievementCounts = {};
-
-
-    /*
-        Supports both:
-
-        [
-            {
-                category: "...",
-                achievement: "..."
-            }
-        ]
-
-        and flat/list-style data.
-    */
-
-
-    if (Array.isArray(chartData)) {
-
-        chartData.forEach(function(item) {
-
-            if (typeof item === "object" && item !== null) {
-
-                let category =
-                    item.category ||
-                    item.category_name ||
-                    item[0] ||
-                    "Unknown";
-
-                let achievement =
-                    item.achievement ||
-                    item[1] ||
-                    "Unknown";
-
-
-                categoryCounts[category] =
-                    (categoryCounts[category] || 0) + 1;
-
-
-                achievementCounts[achievement] =
-                    (achievementCounts[achievement] || 0) + 1;
-
-            }
-
-        });
-
-    }
-
-
-    /* =========================================================
-       CATEGORY CHART
-    ========================================================= */
-
-    const categoryCanvas =
-        document.getElementById("categoryChart");
-
-
-    if (categoryCanvas) {
-
-        new Chart(
-            categoryCanvas,
-            {
-                type: "doughnut",
-
-                data: {
-
-                    labels:
-                        Object.keys(categoryCounts),
-
-                    datasets: [
-
-                        {
-                            data:
-                                Object.values(categoryCounts)
-                        }
-
-                    ]
-
-                },
-
-                options: {
-
-                    responsive: true,
-
-                    maintainAspectRatio: false,
-
-                    plugins: {
-
-                        legend: {
-
-                            position: "bottom"
-
-                        }
-
-                    }
+                    return object[key];
 
                 }
 
             }
-        );
 
-    }
+            return "";
 
-
-    /* =========================================================
-       ACHIEVEMENT CHART
-    ========================================================= */
-
-    const achievementCanvas =
-        document.getElementById("achievementChart");
+        }
 
 
-    if (achievementCanvas) {
+        /* =================================================
+           FIND STUDENT
+           
+           IMPORTANT FIX:
+           Flat certificate records should be grouped
+           by student name/register number.
+        ================================================= */
 
-        new Chart(
-            achievementCanvas,
-            {
-                type: "bar",
+        function findStudent(searchValue) {
 
-                data: {
+            searchValue =
+                searchValue
+                .toLowerCase()
+                .trim();
 
-                    labels:
-                        Object.keys(achievementCounts),
 
-                    datasets: [
+            if (!searchValue) {
+                return null;
+            }
 
-                        {
-                            label: "Certificates",
 
-                            data:
-                                Object.values(achievementCounts)
+            if (!Array.isArray(studentData)) {
+                return null;
+            }
 
+
+            /* =============================================
+               FIRST CHECK GROUPED DATA
+            ============================================= */
+
+            const groupedStudent =
+                studentData.find(
+                    function(student) {
+
+                        if (
+                            !student ||
+                            !Array.isArray(student.records)
+                        ) {
+                            return false;
                         }
 
-                    ]
+                        const name =
+                            getValue(
+                                student,
+                                [
+                                    "name",
+                                    "student_name",
+                                    "Student_Name"
+                                ]
+                            )
+                            .toString()
+                            .toLowerCase();
 
-                },
+                        const register =
+                            getValue(
+                                student,
+                                [
+                                    "register_no",
+                                    "register",
+                                    "Register_No"
+                                ]
+                            )
+                            .toString()
+                            .toLowerCase();
 
-                options: {
+                        return (
+                            name.includes(searchValue)
+                            ||
+                            register.includes(searchValue)
+                        );
 
-                    responsive: true,
+                    }
+                );
 
-                    maintainAspectRatio: false,
 
-                    scales: {
+            if (groupedStudent) {
 
-                        y: {
+                return {
 
-                            beginAtZero: true,
+                    name:
+                        getValue(
+                            groupedStudent,
+                            [
+                                "name",
+                                "student_name",
+                                "Student_Name"
+                            ]
+                        ),
 
-                            ticks: {
+                    register:
+                        getValue(
+                            groupedStudent,
+                            [
+                                "register_no",
+                                "register",
+                                "Register_No"
+                            ]
+                        ),
 
-                                precision: 0
+                    records:
+                        groupedStudent.records
+
+                };
+
+            }
+
+
+            /* =============================================
+               FLAT DATA
+               
+               THIS IS THE IMPORTANT FIX.
+               Do NOT return only the first record.
+               Get ALL certificates belonging to student.
+            ============================================= */
+
+            const matchingRecords =
+                studentData.filter(
+                    function(record) {
+
+                        const name =
+                            getValue(
+                                record,
+                                [
+                                    "name",
+                                    "student_name",
+                                    "Student_Name"
+                                ]
+                            )
+                            .toString()
+                            .toLowerCase();
+
+                        const register =
+                            getValue(
+                                record,
+                                [
+                                    "register_no",
+                                    "register",
+                                    "Register_No"
+                                ]
+                            )
+                            .toString()
+                            .toLowerCase();
+
+                        return (
+                            name.includes(searchValue)
+                            ||
+                            register.includes(searchValue)
+                        );
+
+                    }
+                );
+
+
+            if (matchingRecords.length === 0) {
+                return null;
+            }
+
+
+            const first =
+                matchingRecords[0];
+
+
+            return {
+
+                name:
+                    getValue(
+                        first,
+                        [
+                            "name",
+                            "student_name",
+                            "Student_Name"
+                        ]
+                    ),
+
+                register:
+                    getValue(
+                        first,
+                        [
+                            "register_no",
+                            "register",
+                            "Register_No"
+                        ]
+                    ),
+
+                records:
+                    matchingRecords
+
+            };
+
+        }
+
+
+        /* =================================================
+           CREATE CHARTS
+        ================================================= */
+
+        function createCharts(records) {
+
+            const categoryCounts = {};
+            const achievementCounts = {};
+
+
+            records.forEach(
+                function(record) {
+
+
+                    /* CATEGORY */
+
+                    let category =
+                        getValue(
+                            record,
+                            [
+                                "category",
+                                "certificate_category",
+                                "Certificate_Type",
+                                "type"
+                            ]
+                        );
+
+
+                    category =
+                        category
+                        ?
+                        category.toString()
+                        :
+                        "Other";
+
+
+                    categoryCounts[category] =
+                        (
+                            categoryCounts[category]
+                            || 0
+                        ) + 1;
+
+
+                    /* ACHIEVEMENT */
+
+                    let achievement =
+                        getValue(
+                            record,
+                            [
+                                "achievement",
+                                "achievement_type",
+                                "Achievement",
+                                "result",
+                                "position"
+                            ]
+                        );
+
+
+                    achievement =
+                        achievement
+                        ?
+                        achievement.toString()
+                        :
+                        "Participated";
+
+
+                    achievementCounts[
+                        achievement
+                    ] =
+                        (
+                            achievementCounts[
+                                achievement
+                            ]
+                            || 0
+                        ) + 1;
+
+                }
+            );
+
+
+            /* DESTROY OLD CHARTS */
+
+            if (categoryChart) {
+
+                categoryChart.destroy();
+                categoryChart = null;
+
+            }
+
+
+            if (achievementChart) {
+
+                achievementChart.destroy();
+                achievementChart = null;
+
+            }
+
+
+            /* CATEGORY CHART */
+
+            if (
+                categoryCanvas &&
+                Object.keys(categoryCounts).length > 0
+            ) {
+
+                categoryChart =
+                    new Chart(
+                        categoryCanvas,
+                        {
+
+                            type: "doughnut",
+
+                            data: {
+
+                                labels:
+                                    Object.keys(
+                                        categoryCounts
+                                    ),
+
+                                datasets: [
+                                    {
+
+                                        data:
+                                            Object.values(
+                                                categoryCounts
+                                            ),
+
+                                        borderWidth: 1
+
+                                    }
+                                ]
+
+                            },
+
+                            options: {
+
+                                responsive: true,
+
+                                maintainAspectRatio: false,
+
+                                plugins: {
+
+                                    legend: {
+
+                                        position: "bottom"
+
+                                    }
+
+                                }
 
                             }
 
                         }
+                    );
 
-                    },
+            }
 
-                    plugins: {
 
-                        legend: {
+            /* ACHIEVEMENT CHART */
 
-                            display: false
+            if (
+                achievementCanvas &&
+                Object.keys(achievementCounts).length > 0
+            ) {
+
+                achievementChart =
+                    new Chart(
+                        achievementCanvas,
+                        {
+
+                            type: "bar",
+
+                            data: {
+
+                                labels:
+                                    Object.keys(
+                                        achievementCounts
+                                    ),
+
+                                datasets: [
+                                    {
+
+                                        label:
+                                            "Certificates",
+
+                                        data:
+                                            Object.values(
+                                                achievementCounts
+                                            ),
+
+                                        borderWidth: 1
+
+                                    }
+                                ]
+
+                            },
+
+                            options: {
+
+                                responsive: true,
+
+                                maintainAspectRatio: false,
+
+                                scales: {
+
+                                    y: {
+
+                                        beginAtZero: true,
+
+                                        ticks: {
+
+                                            precision: 0
+
+                                        }
+
+                                    }
+
+                                },
+
+                                plugins: {
+
+                                    legend: {
+
+                                        display: false
+
+                                    }
+
+                                }
+
+                            }
 
                         }
+                    );
+
+            }
+
+        }
+
+
+        /* =================================================
+           CLEAR RESULTS
+        ================================================= */
+
+        function clearStudentResults() {
+
+            studentAnalytics.style.display =
+                "none";
+
+            studentEmpty.style.display =
+                "none";
+
+
+            totalCertificates.innerText =
+                "0";
+
+            winnerCount.innerText =
+                "0";
+
+            participatedCount.innerText =
+                "0";
+
+
+            if (categoryChart) {
+
+                categoryChart.destroy();
+                categoryChart = null;
+
+            }
+
+
+            if (achievementChart) {
+
+                achievementChart.destroy();
+                achievementChart = null;
+
+            }
+
+        }
+
+
+        /* =================================================
+           SEARCH FUNCTION
+        ================================================= */
+
+        function performStudentSearch() {
+
+
+            const value =
+                studentSearchInput
+                .value
+                .trim();
+
+
+            /* EMPTY SEARCH */
+
+            if (!value) {
+
+                clearStudentResults();
+
+                return;
+
+            }
+
+
+            /* FIND STUDENT */
+
+            const student =
+                findStudent(value);
+
+
+            /* NOT FOUND */
+
+            if (!student) {
+
+                studentAnalytics.style.display =
+                    "none";
+
+                studentEmpty.style.display =
+                    "block";
+
+
+                totalCertificates.innerText =
+                    "0";
+
+                winnerCount.innerText =
+                    "0";
+
+                participatedCount.innerText =
+                    "0";
+
+
+                if (categoryChart) {
+
+                    categoryChart.destroy();
+                    categoryChart = null;
+
+                }
+
+
+                if (achievementChart) {
+
+                    achievementChart.destroy();
+                    achievementChart = null;
+
+                }
+
+                return;
+
+            }
+
+
+            /* FOUND */
+
+            studentEmpty.style.display =
+                "none";
+
+            studentAnalytics.style.display =
+                "block";
+
+            studentResult.style.display =
+                "block";
+
+
+            studentResultName.innerText =
+                student.name ||
+                "Student";
+
+
+            studentResultRegister.innerText =
+                student.register ||
+                "-";
+
+
+            const records =
+                Array.isArray(
+                    student.records
+                )
+                ?
+                student.records
+                :
+                [];
+
+
+            /* TOTAL */
+
+            totalCertificates.innerText =
+                records.length;
+
+
+            /* =================================================
+               WINNER / PARTICIPATED
+            ================================================= */
+
+            let winners = 0;
+            let participated = 0;
+
+
+            records.forEach(
+                function(record) {
+
+
+                    const achievement =
+                        getValue(
+                            record,
+                            [
+                                "achievement",
+                                "achievement_type",
+                                "Achievement",
+                                "result",
+                                "position"
+                            ]
+                        )
+                        .toString()
+                        .toLowerCase()
+                        .trim();
+
+
+                    if (
+                        achievement.includes("winner")
+                        ||
+                        achievement.includes("win")
+                        ||
+                        achievement.includes("1st")
+                        ||
+                        achievement.includes("first")
+                        ||
+                        achievement.includes("prize")
+                        ||
+                        achievement.includes("rank")
+                    ) {
+
+                        winners++;
+
+                    }
+                    else {
+
+                        participated++;
 
                     }
 
                 }
+            );
 
-            }
-        );
+
+            winnerCount.innerText =
+                winners;
+
+            participatedCount.innerText =
+                participated;
+
+
+            /* CREATE CHARTS */
+
+            createCharts(records);
+
+        }
+
+
+        /* =================================================
+           SEARCH EVENT
+        ================================================= */
+
+        if (studentSearchInput) {
+
+            studentSearchInput.addEventListener(
+                "input",
+                performStudentSearch
+            );
+
+        }
 
     }
+);
 
+
+/* =====================================================
+   EXISTING TABLE SEARCH
+===================================================== */
+
+const searchInput =
+    document.getElementById(
+        "searchInput"
+    );
+
+
+if (searchInput) {
+
+    searchInput.addEventListener(
+        "keyup",
+        function () {
+
+            let value =
+                this.value
+                .toLowerCase()
+                .trim();
+
+
+            let rows =
+                document.querySelectorAll(
+                    "#certificateTable tbody tr"
+                );
+
+
+            rows.forEach(
+                function(row) {
+
+                    let text =
+                        row.innerText
+                        .toLowerCase();
+
+
+                    if (
+                        text.indexOf(value) > -1
+                    ) {
+
+                        row.style.display =
+                            "";
+
+                    }
+                    else {
+
+                        row.style.display =
+                            "none";
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+}
+
+</script>
+
+
+<!-- =====================================================
+     BOOTSTRAP JS
+===================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
 </script>
 
 
