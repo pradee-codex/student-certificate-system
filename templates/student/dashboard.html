@@ -18,6 +18,7 @@
 
 <body>
 
+
 <!-- =========================================================
      SIDEBAR
 ========================================================= -->
@@ -26,55 +27,92 @@
 
     <div class="logo">
 
-        <img src="{{ url_for('static', filename='images/logo.png') }}"
-             onerror="this.src='{{ url_for('static', filename='images/default.png') }}'">
+        <img
+            src="{{ url_for('static', filename='images/logo.png') }}"
+            onerror="this.src='{{ url_for('static', filename='images/default.png') }}'">
 
         <h2>Certificate Portal</h2>
 
     </div>
 
+
     <ul>
 
         <li class="active">
+
             <a href="/student">
+
                 <i class="bi bi-grid-fill"></i>
+
                 Dashboard
+
             </a>
+
         </li>
 
+
         <li>
+
             <a href="#upload">
+
                 <i class="bi bi-cloud-arrow-up-fill"></i>
+
                 Upload Certificate
+
             </a>
+
         </li>
 
+
         <li>
+
             <a href="#certificates">
+
                 <i class="bi bi-file-earmark-text-fill"></i>
+
                 My Certificates
+
             </a>
+
         </li>
 
+
         <li>
+
             <a href="#analytics">
+
                 <i class="bi bi-bar-chart-fill"></i>
+
                 Analytics
+
             </a>
+
         </li>
 
+
         <li>
+
             <a href="/student_profile">
+
                 <i class="bi bi-person-circle"></i>
+
                 My Profile
+
             </a>
+
         </li>
 
+
         <li>
+
             <a href="/logout">
+
                 <i class="bi bi-box-arrow-right"></i>
+
                 Logout
+
             </a>
+
         </li>
 
     </ul>
@@ -82,11 +120,13 @@
 </div>
 
 
+
 <!-- =========================================================
      MAIN
 ========================================================= -->
 
 <div class="main">
+
 
     <!-- =====================================================
          TOPBAR
@@ -96,28 +136,33 @@
 
         <div class="search">
 
-            <input type="text"
-                   placeholder="Search your certificates...">
+            <input
+                type="text"
+                placeholder="Search your certificates...">
 
         </div>
+
 
         <div class="user-box">
 
             {% if student[8] %}
 
-            <img src="{{ url_for(
-                'static',
-                filename='uploads/profile/' + student[8]
-            ) }}">
+            <img
+                src="{{ url_for(
+                    'static',
+                    filename='uploads/profile/' + student[8]
+                ) }}">
 
             {% else %}
 
-            <img src="{{ url_for(
-                'static',
-                filename='images/default.png'
-            ) }}">
+            <img
+                src="{{ url_for(
+                    'static',
+                    filename='images/default.png'
+                ) }}">
 
             {% endif %}
+
 
             <div>
 
@@ -130,6 +175,7 @@
         </div>
 
     </div>
+
 
 
     <!-- =====================================================
@@ -162,35 +208,40 @@
 
                 {% if student[8] %}
 
-                <img src="{{ url_for(
-                    'static',
-                    filename='uploads/profile/' + student[8]
-                ) }}"
-                class="student-photo">
+                <img
+                    src="{{ url_for(
+                        'static',
+                        filename='uploads/profile/' + student[8]
+                    ) }}"
+                    class="student-photo">
 
                 {% else %}
 
-                <img src="{{ url_for(
-                    'static',
-                    filename='images/default.png'
-                ) }}"
-                class="student-photo">
+                <img
+                    src="{{ url_for(
+                        'static',
+                        filename='images/default.png'
+                    ) }}"
+                    class="student-photo">
 
                 {% endif %}
 
 
-                <form action="/upload_student_photo"
-                      method="POST"
-                      enctype="multipart/form-data">
+                <form
+                    action="/upload_student_photo"
+                    method="POST"
+                    enctype="multipart/form-data">
 
-                    <input type="file"
-                           name="profile_photo"
-                           class="form-control mt-3"
-                           accept=".jpg,.jpeg,.png"
-                           required>
+                    <input
+                        type="file"
+                        name="profile_photo"
+                        class="form-control mt-3"
+                        accept=".jpg,.jpeg,.png"
+                        required>
 
-                    <button type="submit"
-                            class="btn btn-success mt-2">
+                    <button
+                        type="submit"
+                        class="btn btn-success mt-2">
 
                         <i class="bi bi-upload"></i>
 
@@ -203,6 +254,7 @@
             </div>
 
         </div>
+
 
 
         <!-- =================================================
@@ -226,9 +278,10 @@
 
             <div class="card-body">
 
-                <form action="/upload_certificate"
-                      method="POST"
-                      enctype="multipart/form-data">
+                <form
+                    action="/upload_certificate"
+                    method="POST"
+                    enctype="multipart/form-data">
 
                     <div class="row">
 
@@ -249,6 +302,7 @@
                                 required>
 
                         </div>
+
 
 
                         <!-- Category -->
@@ -279,6 +333,7 @@
                             </select>
 
                         </div>
+
 
 
                         <!-- Achievement -->
@@ -319,6 +374,7 @@
                         </div>
 
 
+
                         <!-- Upload File -->
 
                         <div class="col-md-12 mb-3">
@@ -336,6 +392,7 @@
                                 required>
 
                         </div>
+
 
 
                         <!-- Upload Button -->
@@ -363,6 +420,7 @@
         </div>
 
 
+
         <!-- =================================================
              CERTIFICATE PREVIEW SCRIPT
         ================================================== -->
@@ -382,10 +440,14 @@
                 reader.onload = function(e) {
 
                     let preview =
-                        document.getElementById("certificatePreview");
+                        document.getElementById(
+                            "certificatePreview"
+                        );
 
                     if (preview) {
+
                         preview.src = e.target.result;
+
                     }
 
                 };
@@ -397,6 +459,7 @@
         }
 
         </script>
+
 
 
         <!-- =================================================
@@ -425,6 +488,7 @@
                     onkeyup="searchTable()">
 
             </div>
+
 
 
             <div class="card-body">
@@ -458,6 +522,7 @@
                         </thead>
 
 
+
                         <tbody>
 
                         {% if certificates %}
@@ -466,11 +531,13 @@
 
                             <tr>
 
+
                                 <!-- S.No -->
 
                                 <td>
                                     {{ loop.index }}
                                 </td>
+
 
 
                                 <!-- Certificate -->
@@ -480,11 +547,13 @@
                                 </td>
 
 
+
                                 <!-- Category -->
 
                                 <td>
                                     {{ certificate[1] }}
                                 </td>
+
 
 
                                 <!-- Upload Date -->
@@ -498,6 +567,7 @@
                                     {% endif %}
 
                                 </td>
+
 
 
                                 <!-- Achievement -->
@@ -533,9 +603,10 @@
                                 </td>
 
 
+
                                 <!-- =================================================
                                      VIEW
-                                     GOOGLE DRIVE VIEW LINK
+                                     FLASK VIEW ROUTE
                                 ================================================== -->
 
                                 <td>
@@ -543,7 +614,10 @@
                                     {% if certificate[4] %}
 
                                     <a
-                                        href="{{ certificate[4] }}"
+                                        href="{{ url_for(
+                                            'view',
+                                            filename=certificate[4]
+                                        ) }}"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         class="btn btn-success btn-sm">
@@ -565,6 +639,7 @@
                                 </td>
 
 
+
                                 <!-- =================================================
                                      DOWNLOAD
                                      FLASK DOWNLOAD ROUTE
@@ -575,7 +650,10 @@
                                     {% if certificate[4] %}
 
                                     <a
-                                        href="{{ url_for('download', filename=certificate[4]) }}"
+                                        href="{{ url_for(
+                                            'download',
+                                            filename=certificate[4]
+                                        ) }}"
                                         class="btn btn-primary btn-sm">
 
                                         <i class="bi bi-download"></i>
@@ -594,6 +672,7 @@
 
                                 </td>
 
+
                             </tr>
 
                             {% endfor %}
@@ -605,7 +684,8 @@
 
                             <tr>
 
-                                <td colspan="7"
+                                <td
+                                    colspan="7"
                                     class="text-center p-5">
 
                                     <img
@@ -641,6 +721,7 @@
             </div>
 
         </div>
+
 
 
         <!-- =================================================
@@ -689,6 +770,7 @@
         </script>
 
 
+
         <!-- =================================================
              ANALYTICS
         ================================================== -->
@@ -734,6 +816,7 @@
                     </div>
 
 
+
                     <!-- Technical -->
 
                     <div class="col-lg-4 col-md-4 col-sm-12">
@@ -760,6 +843,7 @@
                         </div>
 
                     </div>
+
 
 
                     <!-- Other -->
@@ -796,6 +880,7 @@
         </div>
 
 
+
         <!-- =================================================
              FOOTER
         ================================================== -->
@@ -803,6 +888,7 @@
         <footer class="footer">
 
             &copy; 2026 Student Certificate Management System
+
             | Designed by Pradeep From AIDS
 
         </footer>
@@ -811,6 +897,7 @@
     </div>
 
 </div>
+
 
 
 <!-- =========================================================
@@ -822,14 +909,4 @@
 window.onload = function() {
 
     console.log(
-        "Student Dashboard Loaded Successfully"
-    );
-
-};
-
-</script>
-
-
-</body>
-
-</html>
+       
