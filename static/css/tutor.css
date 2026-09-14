@@ -15,6 +15,7 @@ body{
     background:#eefaf3;
 }
 
+
 /* ==========================
    Sidebar
 ========================== */
@@ -23,31 +24,31 @@ body{
     position:fixed;
     left:0;
     top:0;
-    width:270px;
+    width:240px;
     height:100vh;
     background:linear-gradient(180deg,#065f46,#10b981);
     color:#fff;
-    padding:25px;
+    padding:18px;
     overflow:auto;
     box-shadow:5px 0 20px rgba(0,0,0,.15);
 }
 
 .logo{
     text-align:center;
-    margin-bottom:40px;
+    margin-bottom:28px;
 }
 
 .logo img{
-    width:90px;
-    height:90px;
+    width:70px;
+    height:70px;
     border-radius:50%;
     background:#fff;
-    padding:8px;
+    padding:6px;
 }
 
 .logo h2{
-    margin-top:15px;
-    font-size:26px;
+    margin-top:10px;
+    font-size:23px;
     font-weight:700;
 }
 
@@ -56,11 +57,11 @@ body{
 }
 
 .sidebar ul li{
-    margin:12px 0;
-    padding:16px;
-    border-radius:12px;
+    margin:8px 0;
+    padding:12px;
+    border-radius:10px;
     transition:.3s;
-    font-size:18px;
+    font-size:15px;
 }
 
 .sidebar ul li:hover,
@@ -72,8 +73,9 @@ body{
     color:#fff;
     text-decoration:none;
     display:block;
-    font-size:18px;
+    font-size:15px;
 }
+
 
 /* ==========================
    Main
@@ -84,10 +86,10 @@ body{
 }
 
 .main-content{
-    margin-left:270px;
-    width:calc(100% - 270px);
+    margin-left:240px;
+    width:calc(100% - 240px);
     min-height:100vh;
-    padding:30px;
+    padding:22px;
     background:#eefaf3;
     overflow-x:auto;
 }
@@ -99,49 +101,51 @@ body{
 
 .topbar{
     background:#fff;
-    height:90px;
+    height:72px;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:0 35px;
+    padding:0 25px;
     box-shadow:0 5px 20px rgba(0,0,0,.08);
 }
 
 .topbar h2{
     color:#065f46;
-    font-size:32px;
+    font-size:26px;
     font-weight:700;
 }
 
 .admin-box{
     display:flex;
     align-items:center;
-    gap:15px;
+    gap:10px;
 }
 
 .admin-box img{
-    width:65px;
-    height:65px;
+    width:50px;
+    height:50px;
     border-radius:50%;
-    border:3px solid #10b981;
+    border:2px solid #10b981;
 }
 
 .admin-box h3{
-    font-size:20px;
+    font-size:17px;
 }
 
 .admin-box small{
-    font-size:15px;
+    font-size:12px;
     color:#666;
 }
+
 
 /* ==========================
    Container
 ========================== */
 
 .container{
-    padding:30px;
+    padding:22px;
 }
+
 
 /* ==========================
    Welcome Banner
@@ -150,31 +154,29 @@ body{
 .welcome-banner{
     background:linear-gradient(135deg,#10b981,#059669);
     color:#fff;
-    border-radius:20px;
-    padding:35px;
+    border-radius:16px;
+    padding:25px;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:30px;
+    margin-bottom:22px;
     box-shadow:0 15px 30px rgba(0,0,0,.15);
 }
 
 .welcome-banner h1{
-    font-size:38px;
+    font-size:30px;
 }
 
 .welcome-banner p{
-    margin-top:10px;
-    font-size:18px;
+    margin-top:8px;
+    font-size:15px;
 }
 
 .welcome-banner img{
-    width:220px;
+    width:170px;
 }
 
-/* ==========================
-   Part 2 Starts Here
-========================== */
+
 /* ==========================
    Statistics Cards
 ========================== */
@@ -182,39 +184,40 @@ body{
 .stats{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:22px;
-    margin-bottom:30px;
+    gap:16px;
+    margin-bottom:22px;
 }
 
 .stat-card{
     background:#fff;
-    border-radius:18px;
-    padding:30px;
+    border-radius:15px;
+    padding:22px;
     text-align:center;
     box-shadow:0 10px 25px rgba(0,0,0,.08);
     transition:.3s;
 }
 
 .stat-card:hover{
-    transform:translateY(-6px);
+    transform:translateY(-4px);
 }
 
 .stat-card i{
-    font-size:45px;
+    font-size:35px;
     color:#10b981;
 }
 
 .stat-card h2{
-    margin:12px 0;
-    font-size:36px;
+    margin:8px 0;
+    font-size:30px;
     color:#065f46;
     font-weight:700;
 }
 
 .stat-card p{
-    font-size:18px;
+    font-size:15px;
     color:#555;
 }
+
 
 /* ==========================
    Table Card
@@ -222,8 +225,8 @@ body{
 
 .table-card{
     background:#fff;
-    border-radius:18px;
-    padding:25px;
+    border-radius:15px;
+    padding:20px;
     box-shadow:0 10px 25px rgba(0,0,0,.08);
 }
 
@@ -231,22 +234,22 @@ body{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:25px;
+    margin-bottom:18px;
 }
 
 .table-header h2{
     color:#065f46;
-    font-size:28px;
+    font-size:23px;
     font-weight:700;
 }
 
 .table-header input{
-    width:360px;
-    padding:14px 18px;
+    width:300px;
+    padding:10px 14px;
     border:2px solid #10b981;
-    border-radius:12px;
+    border-radius:10px;
     outline:none;
-    font-size:17px;
+    font-size:14px;
     transition:.3s;
 }
 
@@ -254,6 +257,7 @@ body{
     border-color:#059669;
     box-shadow:0 0 10px rgba(16,185,129,.25);
 }
+
 
 /* ==========================
    Table
@@ -267,20 +271,21 @@ table{
 table th{
     background:#10b981;
     color:#fff;
-    padding:18px;
-    font-size:17px;
+    padding:11px;
+    font-size:14px;
     font-weight:600;
 }
 
 table td{
-    padding:18px;
-    font-size:16px;
+    padding:11px;
+    font-size:13px;
     border-bottom:1px solid #e5e7eb;
 }
 
 table tr:hover{
     background:#f0fdf4;
 }
+
 
 /* ==========================
    Buttons
@@ -290,11 +295,11 @@ table tr:hover{
 .download,
 .delete{
     display:inline-block;
-    padding:10px 16px;
-    border-radius:8px;
+    padding:7px 11px;
+    border-radius:7px;
     text-decoration:none;
     color:#fff;
-    font-size:15px;
+    font-size:12px;
     font-weight:600;
     transition:.3s;
 }
@@ -323,184 +328,186 @@ table tr:hover{
     background:#b91c1c;
 }
 
-/* ==========================
-   Part 3 Starts Here
-========================== */
+
 /* ==========================
    Responsive
 ========================== */
 
 @media (max-width:1024px){
 
-.stats{
-    grid-template-columns:repeat(2,1fr);
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .table-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:12px;
+    }
+
+    .table-header input{
+        width:100%;
+    }
+
 }
 
-.table-header{
-    flex-direction:column;
-    align-items:flex-start;
-    gap:15px;
-}
-
-.table-header input{
-    width:100%;
-}
-
-}
 
 @media (max-width:768px){
 
-.sidebar{
-    width:100%;
-    height:auto;
-    position:relative;
+    .sidebar{
+        width:100%;
+        height:auto;
+        position:relative;
+    }
+
+    .main-content{
+        margin-left:0;
+        width:100%;
+    }
+
+    .topbar{
+        flex-direction:column;
+        justify-content:center;
+        align-items:flex-start;
+        height:auto;
+        padding:18px;
+        gap:12px;
+    }
+
+    .topbar h2{
+        font-size:24px;
+    }
+
+    .container{
+        padding:15px;
+    }
+
+    .welcome-banner{
+        flex-direction:column;
+        text-align:center;
+        padding:22px;
+    }
+
+    .welcome-banner h1{
+        font-size:26px;
+    }
+
+    .welcome-banner p{
+        font-size:14px;
+    }
+
+    .welcome-banner img{
+        width:150px;
+        margin-top:15px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .stat-card{
+        padding:20px;
+    }
+
+    .stat-card h2{
+        font-size:28px;
+    }
+
+    .stat-card p{
+        font-size:14px;
+    }
+
+    .table-card{
+        padding:15px;
+        overflow-x:auto;
+    }
+
+    table{
+        min-width:900px;
+    }
+
+    table th{
+        font-size:13px;
+        padding:10px;
+    }
+
+    table td{
+        font-size:12px;
+        padding:10px;
+    }
+
+    .view,
+    .download,
+    .delete{
+        padding:7px 10px;
+        font-size:11px;
+    }
+
 }
 
-.main{
-    margin-left:0;
-}
-
-.topbar{
-    flex-direction:column;
-    justify-content:center;
-    align-items:flex-start;
-    height:auto;
-    padding:20px;
-    gap:15px;
-}
-
-.topbar h2{
-    font-size:28px;
-}
-
-.container{
-    padding:20px;
-}
-
-.welcome-banner{
-    flex-direction:column;
-    text-align:center;
-    padding:25px;
-}
-
-.welcome-banner h1{
-    font-size:30px;
-}
-
-.welcome-banner p{
-    font-size:16px;
-}
-
-.welcome-banner img{
-    width:180px;
-    margin-top:20px;
-}
-
-.stats{
-    grid-template-columns:1fr;
-}
-
-.stat-card{
-    padding:25px;
-}
-
-.stat-card h2{
-    font-size:30px;
-}
-
-.stat-card p{
-    font-size:16px;
-}
-
-.table-card{
-    padding:18px;
-    overflow-x:auto;
-}
-
-table{
-    min-width:1000px;
-}
-
-table th{
-    font-size:16px;
-    padding:15px;
-}
-
-table td{
-    font-size:15px;
-    padding:15px;
-}
-
-.view,
-.download,
-.delete{
-    padding:8px 14px;
-    font-size:14px;
-}
-
-}
 
 @media (max-width:480px){
 
-.logo img{
-    width:70px;
-    height:70px;
+    .logo img{
+        width:60px;
+        height:60px;
+    }
+
+    .logo h2{
+        font-size:20px;
+    }
+
+    .sidebar ul li{
+        font-size:14px;
+        padding:12px;
+    }
+
+    .sidebar ul li a{
+        font-size:14px;
+    }
+
+    .topbar h2{
+        font-size:22px;
+    }
+
+    .admin-box img{
+        width:45px;
+        height:45px;
+    }
+
+    .admin-box h3{
+        font-size:16px;
+    }
+
+    .admin-box small{
+        font-size:11px;
+    }
+
+    .welcome-banner h1{
+        font-size:24px;
+    }
+
+    .welcome-banner p{
+        font-size:14px;
+    }
+
+    .table-header h2{
+        font-size:20px;
+    }
+
+    .table-header input{
+        font-size:13px;
+    }
+
 }
 
-.logo h2{
-    font-size:22px;
-}
-
-.sidebar ul li{
-    font-size:16px;
-    padding:14px;
-}
-
-.sidebar ul li a{
-    font-size:16px;
-}
-
-.topbar h2{
-    font-size:24px;
-}
-
-.admin-box img{
-    width:55px;
-    height:55px;
-}
-
-.admin-box h3{
-    font-size:18px;
-}
-
-.admin-box small{
-    font-size:13px;
-}
-
-.welcome-banner h1{
-    font-size:26px;
-}
-
-.welcome-banner p{
-    font-size:15px;
-}
-
-.table-header h2{
-    font-size:22px;
-}
-
-.table-header input{
-    font-size:15px;
-}
-
-}
 
 /* ==========================
    Scrollbar
 ========================== */
 
 ::-webkit-scrollbar{
-    width:10px;
+    width:8px;
 }
 
 ::-webkit-scrollbar-track{
