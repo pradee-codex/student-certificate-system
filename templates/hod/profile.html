@@ -8,241 +8,428 @@
 
     <title>HOD Profile</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
 
     <style>
 
-        body{
-            background:#eef2f7;
+        /* =====================================================
+           HOD PROFILE - COMPACT DESIGN
+           ===================================================== */
+
+        body {
+            background: #eef2f7;
+            font-size: 12px;
         }
 
-        .profile-card{
-            max-width:1100px;
-            margin:40px auto;
-            border:none;
-            border-radius:18px;
-            overflow:hidden;
-            box-shadow:0 10px 30px rgba(0,0,0,.15);
+        .hod-profile-page {
+            min-height: 100vh;
+            padding: 20px;
         }
 
-        .profile-header{
-            background:#198754;
-            color:white;
-            padding:35px;
+        /* ---------- PROFILE CARD ---------- */
+
+        .profile-card {
+            max-width: 1000px;
+            margin: 20px auto;
+            border: none;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0,0,0,.12);
         }
 
-        .profile-img{
-            width:160px;
-            height:160px;
-            border-radius:50%;
-            object-fit:cover;
-            border:5px solid white;
-            background:white;
+        /* ---------- HEADER ---------- */
+
+        .profile-header {
+            background: #198754;
+            color: white;
+            padding: 22px 25px;
         }
 
-        .btn-save{
-            background:#198754;
-            color:white;
-            padding:10px 30px;
-            border-radius:8px;
+        .profile-header .row {
+            min-height: 135px;
         }
 
-        .btn-back{
-            padding:10px 30px;
-            border-radius:8px;
+        /* ---------- PROFILE IMAGE ---------- */
+
+        .profile-img {
+            width: 115px;
+            height: 115px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            background: white;
+        }
+
+        /* ---------- PHOTO BUTTON ---------- */
+
+        .photo-label {
+            font-size: 10px;
+            padding: 6px 12px !important;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .photo-label i {
+            font-size: 11px;
+        }
+
+        .photo-input {
+            font-size: 10px;
+            width: 170px;
+        }
+
+        /* ---------- HEADER TEXT ---------- */
+
+        .profile-header h1 {
+            font-size: 23px;
+            margin-bottom: 7px;
+        }
+
+        .profile-header h4 {
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        .profile-header p {
+            font-size: 10px;
+            margin-bottom: 0;
+        }
+
+        /* ---------- BODY ---------- */
+
+        .profile-card .card-body {
+            padding: 22px 25px !important;
+        }
+
+        /* ---------- FORM ---------- */
+
+        .form-label {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .form-control {
+            height: 36px;
+            padding: 6px 10px;
+            font-size: 11px;
+            border-radius: 6px;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+        }
+
+        .mb-4 {
+            margin-bottom: 13px !important;
+        }
+
+        /* ---------- BUTTONS ---------- */
+
+        .btn-save,
+        .btn-back {
+            padding: 7px 20px;
+            font-size: 11px;
+            border-radius: 6px;
+        }
+
+        .btn-save {
+            background: #198754;
+            color: white;
+            border: 1px solid #198754;
+        }
+
+        .btn-save:hover {
+            background: #157347;
+            color: white;
+        }
+
+        .btn-back {
+            padding: 7px 20px;
+        }
+
+        /* ---------- MOBILE ---------- */
+
+        @media (max-width: 768px) {
+
+            .hod-profile-page {
+                padding: 10px;
+            }
+
+            .profile-card {
+                margin: 10px auto;
+            }
+
+            .profile-header {
+                padding: 18px;
+            }
+
+            .profile-header .row {
+                text-align: center;
+            }
+
+            .profile-img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .profile-header h1 {
+                font-size: 20px;
+                margin-top: 12px;
+            }
+
+            .profile-header h4 {
+                font-size: 14px;
+            }
+
+            .profile-card .card-body {
+                padding: 18px !important;
+            }
+
+        }
+
+        @media (max-width: 576px) {
+
+            .profile-header h1 {
+                font-size: 18px;
+            }
+
+            .profile-img {
+                width: 90px;
+                height: 90px;
+            }
+
+            .photo-input {
+                width: 150px;
+            }
+
+            .btn-save,
+            .btn-back {
+                padding: 7px 15px;
+                font-size: 10px;
+            }
+
         }
 
     </style>
 
 </head>
 
+
 <body>
+
+<div class="hod-profile-page">
 
 <form action="/update_hod_profile"
       method="POST"
       enctype="multipart/form-data">
 
-<div class="card profile-card">
+    <div class="card profile-card">
 
-    <div class="profile-header">
 
-        <div class="row align-items-center">
+        <!-- =================================================
+             PROFILE HEADER
+        ================================================== -->
 
-            <div class="col-md-3 text-center">
+        <div class="profile-header">
 
-               {% if hod[6] %}
-<img src="{{ url_for('static', filename='uploads/profile/' + hod[6]) }}"
-     class="profile-img">
-{% else %}
-<img src="{{ url_for('static', filename='uploads/profile/default.png') }}"
-     class="profile-img">
-{% endif %}
+            <div class="row align-items-center">
 
-                <br><br>
 
-                <label class="btn btn-light">
+                <!-- PROFILE PHOTO -->
 
-                    <i class="bi bi-camera-fill"></i>
+                <div class="col-md-3 text-center">
 
-                    Change Photo
+                    {% if hod[6] %}
+
+                        <img
+                            src="{{ url_for('static', filename='uploads/profile/' + hod[6]) }}"
+                            class="profile-img">
+
+                    {% else %}
+
+                        <img
+                            src="{{ url_for('static', filename='uploads/profile/default.png') }}"
+                            class="profile-img">
+
+                    {% endif %}
+
+
+                    <div class="mt-2">
+
+                        <label class="btn btn-light photo-label">
+
+                            <i class="bi bi-camera-fill"></i>
+
+                            Change Photo
+
+                            <input
+                                type="file"
+                                name="profile_photo"
+                                accept=".jpg,.jpeg,.png"
+                                class="form-control photo-input mt-1">
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PROFILE INFORMATION -->
+
+                <div class="col-md-9">
+
+                    <h1>
+
+                        <i class="bi bi-person-circle"></i>
+
+                        HOD Profile
+
+                    </h1>
+
+                    <h4>
+
+                        Welcome, {{ hod[1] }}
+
+                    </h4>
+
+                    <p>
+
+                        Department :
+                        {{ hod[2] }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             PROFILE FORM
+        ================================================== -->
+
+        <div class="card-body">
+
+            <div class="row">
+
+
+                <!-- FULL NAME -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label class="form-label">
+
+                        Full Name
+
+                    </label>
 
                     <input
-                        type="file"
-                        name="profile_photo"
-                        accept=".jpg,.jpeg,.png"
-                        class="form-control mt-2">
+                        type="text"
+                        name="name"
+                        class="form-control"
+                        value="{{ hod[1] }}"
+                        required>
 
-                </label>
+                </div>
 
-            </div>
 
-            <div class="col-md-9">
+                <!-- DEPARTMENT -->
 
-                <h1>
+                <div class="col-md-6 mb-4">
 
-                    <i class="bi bi-person-circle"></i>
+                    <label class="form-label">
 
-                    HOD Profile
+                        Department
 
-                </h1>
+                    </label>
 
-                <h4>
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ hod[2] }}"
+                        readonly>
 
-                    Welcome, {{ hod[1] }}
+                </div>
 
-                </h4>
 
-                <p>
+                <!-- EMAIL -->
 
-                    Department :
-                    {{ hod[2] }}
+                <div class="col-md-6 mb-4">
 
-                </p>
+                    <label class="form-label">
 
-            </div>
+                        Email
 
-        </div>
+                    </label>
 
-    </div>
+                    <input
+                        type="email"
+                        name="email"
+                        class="form-control"
+                        value="{{ hod[3] }}">
 
-    <div class="card-body p-5">
+                </div>
 
-        <div class="row">
 
-            <div class="col-md-6 mb-4">
+                <!-- PHONE -->
 
-                <label class="form-label">
+                <div class="col-md-6 mb-4">
 
-                    Full Name
+                    <label class="form-label">
 
-                </label>
+                        Phone Number
 
-                <input
-                    type="text"
-                    name="name"
-                    class="form-control"
-                    value="{{ hod[1] }}"
-                    required>
+                    </label>
 
-            </div>
+                    <input
+                        type="text"
+                        name="phone"
+                        class="form-control"
+                        value="{{ hod[4] }}">
 
-            <div class="col-md-6 mb-4">
+                </div>
 
-                <label class="form-label">
 
-                    Department
+                <!-- USERNAME -->
 
-                </label>
+                <div class="col-md-6 mb-4">
 
-                <input
-                    type="text"
-                    class="form-control"
-                    value="{{ hod[2] }}"
-                    readonly>
+                    <label class="form-label">
 
-            </div>
+                        Username
 
-            <div class="col-md-6 mb-4">
+                    </label>
 
-                <label class="form-label">
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ hod[5] }}"
+                        readonly>
 
-                    Email
+                </div>
 
-                </label>
-
-                <input
-                    type="email"
-                    name="email"
-                    class="form-control"
-                    value="{{ hod[3] }}">
 
             </div>
 
-            <div class="col-md-6 mb-4">
 
-                <label class="form-label">
+            <!-- BUTTONS -->
 
-                    Phone Number
+            <div class="text-center mt-2">
 
-                </label>
+                <button
+                    type="submit"
+                    class="btn btn-save">
 
-                <input
-                    type="text"
-                    name="phone"
-                    class="form-control"
-                    value="{{ hod[4] }}">
+                    <i class="bi bi-check-circle-fill"></i>
 
-            </div>
+                    Update Profile
 
-            <div class="col-md-6 mb-4">
-
-                <label class="form-label">
-
-                    Username
-
-                </label>
-
-                <input
-                    type="text"
-                    class="form-control"
-                    value="{{ hod[5] }}"
-                    readonly>
-
-            </div>
-
-        </div>
-
-        <div class="text-center mt-3">
-
-            <button
-                type="submit"
-                class="btn btn-save">
-
-                <i class="bi bi-check-circle-fill"></i>
-
-                Update Profile
-
-            </button>
-
-            <a href="/hod"
-               class="btn btn-secondary btn-back ms-2">
-
-                <i class="bi bi-arrow-left-circle-fill"></i>
-
-                Back
-
-            </a>
-
-        </div>
-
-    </div>
-
-</div>
-
-</form>
-
-</body>
-
-</html>
+                </
