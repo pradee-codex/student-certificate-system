@@ -761,37 +761,13 @@ def tutor():
 
 
     # =========================================================
-    # Common Student Filter
-    # =========================================================
-
-    if class_year is None or section is None:
-
-        student_filter = """
-            students.department=%s
-        """
-
-        student_params = (department,)
-
-    else:
-
-        student_filter = """
-            students.department=%s
-            AND students.year=%s
-            AND students.section=%s
-        """
-
-        student_params = (
-            department,
-            class_year,
-            section
-        )
-
-
-    # =========================================================
     # Dashboard - Total Students
     # =========================================================
 
     if class_year is None or section is None:
+
+        # No year/section assigned
+        # Show all students from tutor department
 
         cursor.execute("""
             SELECT COUNT(*)
@@ -801,17 +777,16 @@ def tutor():
 
     else:
 
+        # Year and section assigned
+        # Show only students from that class
+
         cursor.execute("""
             SELECT COUNT(*)
             FROM students
             WHERE department=%s
             AND year=%s
             AND section=%s
-        """, (
-            department,
-            class_year,
-            section
-        ))
+        """, (department, class_year, section))
 
     total_students = cursor.fetchone()[0]
 
@@ -822,6 +797,9 @@ def tutor():
 
     if class_year is None or section is None:
 
+        # No year/section
+        # Count all certificates from tutor department
+
         cursor.execute("""
             SELECT COUNT(*)
             FROM certificates
@@ -834,6 +812,9 @@ def tutor():
 
     else:
 
+        # Year and section assigned
+        # Count only certificates from that class
+
         cursor.execute("""
             SELECT COUNT(*)
             FROM certificates
@@ -844,29 +825,9 @@ def tutor():
             WHERE students.department=%s
             AND students.year=%s
             AND students.section=%s
-        """, (
-            department,
-            class_year,
-            section
-        ))
+        """, (department, class_year, section))
 
     total_certificates = cursor.fetchone()[0]
-
-
-    # =========================================================
-    # Average Certificates Per Student
-    # =========================================================
-
-    if total_students > 0:
-
-        average_certificates = round(
-            total_certificates / total_students,
-            1
-        )
-
-    else:
-
-        average_certificates = 0
 
 
     # =========================================================
@@ -874,6 +835,8 @@ def tutor():
     # =========================================================
 
     if class_year is None or section is None:
+
+        # Show ALL students from tutor department
 
         cursor.execute("""
             SELECT
@@ -890,6 +853,8 @@ def tutor():
         """, (department,))
 
     else:
+
+        # Show students only from tutor's year and section
 
         cursor.execute("""
             SELECT
@@ -905,11 +870,7 @@ def tutor():
             AND section=%s
 
             ORDER BY student_name
-        """, (
-            department,
-            class_year,
-            section
-        ))
+        """, (department, class_year, section))
 
     students = cursor.fetchall()
 
@@ -920,6 +881,9 @@ def tutor():
 
     if class_year is None or section is None:
 
+        # No year/section
+        # Show ALL certificates from tutor department
+
         cursor.execute("""
             SELECT
                 students.student_name,
@@ -948,6 +912,9 @@ def tutor():
 
     else:
 
+        # Year and section assigned
+        # Show only certificates from that class
+
         cursor.execute("""
             SELECT
                 students.student_name,
@@ -974,478 +941,24 @@ def tutor():
             AND students.section=%s
 
             ORDER BY certificates.upload_date DESC
-        """, (
-            department,
-            class_year,
-            section
-        ))
+        """, (department, class_year, section))
 
     certificates = cursor.fetchall()
-
-
-    # =========================================================
-    # TOP 10 CERTIFICATE ACHIEVERS
-    # =========================================================
-
-    if class_year is None or section is None:
-
-        cursor.execute("""
-            SELECT
-                students.student_id,
-                students.student_name,
-                students.register_no,
-                COUNT(certificates.student_id) AS certificate_count
-
-            FROM students
-
-            LEFT JOIN certificates
-                ON students.student_id =
-                   certificates.student_id
-
-            WHERE students.department=%s
-
-            GROUP BY
-                students.student_id,
-                students.student_name,
-                students.register_no
-
-            ORDER BY certificate_count DESC,
-                     students.student_name ASC
-
-            LIMIT 10
-        """, (department,))
-
-    else:
-
-        cursor.execute("""
-            SELECT
-                students.student_id,
-                students.student_name,
-                students.register_no,
-                COUNT(certificates.student_id) AS certificate_count
-
-            FROM students
-
-            LEFT JOIN certificates
-                ON students.student_id =
-                   certificates.student_id
-
-            WHERE students.department=%s
-            AND students.year=%s
-            AND students.section=%s
-
-            GROUP BY
-                students.student_id,
-                students.student_name,
-                students.register_no
-
-            ORDER BY certificate_count DESC,
-                     students.student_name ASC
-
-            LIMIT 10
-        """, (
-            department,
-            class_year,
-            section
-        ))
-
-    top_students = cursor.fetchall()
-
-
-    # =========================================================
-    # ALL STUDENT CERTIFICATE COUNTS
-    # Used for Student Search
-    # =========================================================
-
-    if class_year is None or section is None:
-
-        cursor.execute("""
-            SELECT
-                students.student_id,
-                students.student_name,
-                students.register_no,
-                COUNT(certificates.student_id)
-                    AS certificate_count
-
-            FROM students
-
-            LEFT JOIN certificates
-                ON students.student_id =
-                   certificates.student_id
-
-            WHERE students.department=%s
-
-            GROUP BY
-                students.student_id,
-                students.student_name,
-                students.register_no
-
-            ORDER BY students.student_name
-        """, (department,))
-
-    else:
-
-        cursor.execute("""
-            SELECT
-                students.student_id,
-                students.student_name,
-                students.register_no,
-                COUNT(certificates.student_id)
-                    AS certificate_count
-
-            FROM students
-
-            LEFT JOIN certificates
-                ON students.student_id =
-                   certificates.student_id
-
-            WHERE students.department=%s
-            AND students.year=%s
-            AND students.section=%s
-
-            GROUP BY
-                students.student_id,
-                students.student_name,
-                students.register_no
-
-            ORDER BY students.student_name
-        """, (
-            department,
-            class_year,
-            section
-        ))
-
-    student_certificate_counts = cursor.fetchall()
-
-
-    # =========================================================
-    # CATEGORY-WISE CERTIFICATE COUNT
-    # =========================================================
-
-    if class_year is None or section is None:
-
-        cursor.execute("""
-            SELECT
-                certificate_categories.category_name,
-                COUNT(certificates.category_id)
-                    AS certificate_count
-
-            FROM certificates
-
-            INNER JOIN students
-                ON certificates.student_id =
-                   students.student_id
-
-            INNER JOIN certificate_categories
-                ON certificates.category_id =
-                   certificate_categories.category_id
-
-            WHERE students.department=%s
-
-            GROUP BY
-                certificate_categories.category_id,
-                certificate_categories.category_name
-
-            ORDER BY certificate_count DESC
-        """, (department,))
-
-    else:
-
-        cursor.execute("""
-            SELECT
-                certificate_categories.category_name,
-                COUNT(certificates.category_id)
-                    AS certificate_count
-
-            FROM certificates
-
-            INNER JOIN students
-                ON certificates.student_id =
-                   students.student_id
-
-            INNER JOIN certificate_categories
-                ON certificates.category_id =
-                   certificate_categories.category_id
-
-            WHERE students.department=%s
-            AND students.year=%s
-            AND students.section=%s
-
-            GROUP BY
-                certificate_categories.category_id,
-                certificate_categories.category_name
-
-            ORDER BY certificate_count DESC
-        """, (
-            department,
-            class_year,
-            section
-        ))
-
-    category_report = cursor.fetchall()
-
-
-    # =========================================================
-    # ACHIEVEMENT-WISE CERTIFICATE COUNT
-    # =========================================================
-
-    if class_year is None or section is None:
-
-        cursor.execute("""
-            SELECT
-                certificates.achievement,
-                COUNT(*) AS achievement_count
-
-            FROM certificates
-
-            INNER JOIN students
-                ON certificates.student_id =
-                   students.student_id
-
-            WHERE students.department=%s
-            AND certificates.achievement IS NOT NULL
-            AND certificates.achievement != ''
-
-            GROUP BY certificates.achievement
-
-            ORDER BY achievement_count DESC
-        """, (department,))
-
-    else:
-
-        cursor.execute("""
-            SELECT
-                certificates.achievement,
-                COUNT(*) AS achievement_count
-
-            FROM certificates
-
-            INNER JOIN students
-                ON certificates.student_id =
-                   students.student_id
-
-            WHERE students.department=%s
-            AND students.year=%s
-            AND students.section=%s
-            AND certificates.achievement IS NOT NULL
-            AND certificates.achievement != ''
-
-            GROUP BY certificates.achievement
-
-            ORDER BY achievement_count DESC
-        """, (
-            department,
-            class_year,
-            section
-        ))
-
-    achievement_report = cursor.fetchall()
-
-
-    # =========================================================
-    # STUDENT CATEGORY DETAILS
-    # Used when a student is searched
-    # =========================================================
-
-    if class_year is None or section is None:
-
-        cursor.execute("""
-            SELECT
-                students.student_id,
-                students.student_name,
-                certificate_categories.category_name,
-                COUNT(certificates.certificate_id)
-                    AS certificate_count
-
-            FROM students
-
-            INNER JOIN certificates
-                ON students.student_id =
-                   certificates.student_id
-
-            INNER JOIN certificate_categories
-                ON certificates.category_id =
-                   certificate_categories.category_id
-
-            WHERE students.department=%s
-
-            GROUP BY
-                students.student_id,
-                students.student_name,
-                certificate_categories.category_id,
-                certificate_categories.category_name
-
-            ORDER BY students.student_name,
-                     certificate_count DESC
-        """, (department,))
-
-    else:
-
-        cursor.execute("""
-            SELECT
-                students.student_id,
-                students.student_name,
-                certificate_categories.category_name,
-                COUNT(certificates.certificate_id)
-                    AS certificate_count
-
-            FROM students
-
-            INNER JOIN certificates
-                ON students.student_id =
-                   certificates.student_id
-
-            INNER JOIN certificate_categories
-                ON certificates.category_id =
-                   certificate_categories.category_id
-
-            WHERE students.department=%s
-            AND students.year=%s
-            AND students.section=%s
-
-            GROUP BY
-                students.student_id,
-                students.student_name,
-                certificate_categories.category_id,
-                certificate_categories.category_name
-
-            ORDER BY students.student_name,
-                     certificate_count DESC
-        """, (
-            department,
-            class_year,
-            section
-        ))
-
-    student_category_report = cursor.fetchall()
-
-
-    # =========================================================
-    # STUDENT ACHIEVEMENT DETAILS
-    # Used when a student is searched
-    # =========================================================
-
-    if class_year is None or section is None:
-
-        cursor.execute("""
-            SELECT
-                students.student_id,
-                students.student_name,
-                certificates.achievement,
-                COUNT(*) AS achievement_count
-
-            FROM students
-
-            INNER JOIN certificates
-                ON students.student_id =
-                   certificates.student_id
-
-            WHERE students.department=%s
-            AND certificates.achievement IS NOT NULL
-            AND certificates.achievement != ''
-
-            GROUP BY
-                students.student_id,
-                students.student_name,
-                certificates.achievement
-
-            ORDER BY students.student_name,
-                     achievement_count DESC
-        """, (department,))
-
-    else:
-
-        cursor.execute("""
-            SELECT
-                students.student_id,
-                students.student_name,
-                certificates.achievement,
-                COUNT(*) AS achievement_count
-
-            FROM students
-
-            INNER JOIN certificates
-                ON students.student_id =
-                   certificates.student_id
-
-            WHERE students.department=%s
-            AND students.year=%s
-            AND students.section=%s
-            AND certificates.achievement IS NOT NULL
-            AND certificates.achievement != ''
-
-            GROUP BY
-                students.student_id,
-                students.student_name,
-                certificates.achievement
-
-            ORDER BY students.student_name,
-                     achievement_count DESC
-        """, (
-            department,
-            class_year,
-            section
-        ))
-
-    student_achievement_report = cursor.fetchall()
 
 
     # =========================================================
     # Debug
     # =========================================================
 
-    print("====================================")
-    print("TUTOR DASHBOARD")
     print("TOTAL STUDENTS:", total_students)
     print("TOTAL CERTIFICATES:", total_certificates)
-    print("AVERAGE:", average_certificates)
-    print("TOP STUDENTS:", top_students)
-    print("CATEGORY REPORT:", category_report)
-    print("ACHIEVEMENT REPORT:", achievement_report)
-    print("====================================")
+    print("CERTIFICATES:", certificates)
+    print("CERTIFICATE COUNT:", len(certificates))
 
-
-    # =========================================================
-    # Close Database
-    # =========================================================
 
     cursor.close()
 
 
-    # =========================================================
-    # Render Dashboard
-    # =========================================================
-
-    return render_template(
-        "tutor/dashboard.html",
-
-        tutor=tutor,
-        tutor_name=tutor_name,
-        department=department,
-        class_year=class_year,
-        section=section,
-
-        total_students=total_students,
-        total_certificates=total_certificates,
-        average_certificates=average_certificates,
-
-        students=students,
-        certificates=certificates,
-
-        # Top 10 graph
-        top_students=top_students,
-
-        # Search student
-        student_certificate_counts=student_certificate_counts,
-
-        # Main graphs
-        category_report=category_report,
-        achievement_report=achievement_report,
-
-        # Individual student graphs
-        student_category_report=student_category_report,
-        student_achievement_report=student_achievement_report
-    )
 # =========================================================
     
 
