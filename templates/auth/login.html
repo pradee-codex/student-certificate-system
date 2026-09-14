@@ -7,23 +7,425 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
-<title>
-Student Certificate Management System
-</title>
+<title>Student Certificate Management System</title>
 
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 rel="stylesheet">
-
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
 rel="stylesheet">
 
-
 <link rel="stylesheet"
 href="{{ url_for('static', filename='css/style.css') }}">
 
+
+<style>
+
+/* =====================================================
+   COMPACT LOGIN PAGE
+   ===================================================== */
+
+*{
+    box-sizing:border-box;
+}
+
+
+/* PAGE */
+
+html,
+body{
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+}
+
+
+/* BACKGROUND */
+
+body{
+    overflow:hidden;
+}
+
+
+/* =====================================================
+   LOGIN CONTAINER
+   ===================================================== */
+
+.login-container{
+
+    min-height:100vh;
+
+    width:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+}
+
+
+/* =====================================================
+   LOGIN CARD - SMALLER
+   ===================================================== */
+
+.login-card{
+
+    width:100%;
+
+    max-width:560px !important;
+
+    padding:28px 42px !important;
+
+    border-radius:24px !important;
+
+    margin:auto;
+
+}
+
+
+/* =====================================================
+   LOGO
+   ===================================================== */
+
+.login-card .logo{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    margin-bottom:12px !important;
+
+}
+
+
+.login-card .logo img{
+
+    width:110px !important;
+
+    height:110px !important;
+
+    border-radius:50% !important;
+
+    object-fit:contain;
+
+    background:#fff;
+
+    padding:6px;
+
+}
+
+
+/* =====================================================
+   TITLE
+   ===================================================== */
+
+.login-card h2{
+
+    font-size:32px !important;
+
+    line-height:1.1;
+
+    margin:5px 0 2px !important;
+
+    font-weight:700;
+
+}
+
+
+.login-card h5{
+
+    font-size:22px !important;
+
+    margin:0 0 4px !important;
+
+    font-weight:600;
+
+}
+
+
+.login-card p{
+
+    font-size:13px !important;
+
+    margin-bottom:18px !important;
+
+}
+
+
+/* =====================================================
+   FLASH MESSAGE
+   ===================================================== */
+
+.login-card .alert{
+
+    font-size:12px;
+
+    padding:9px 12px;
+
+    margin-bottom:14px;
+
+    border-radius:8px;
+
+}
+
+
+/* =====================================================
+   LABEL
+   ===================================================== */
+
+.login-card .form-label{
+
+    font-size:13px !important;
+
+    font-weight:600;
+
+    margin-bottom:5px !important;
+
+}
+
+
+/* =====================================================
+   INPUT GROUP
+   ===================================================== */
+
+.login-card .input-group{
+
+    height:48px;
+
+}
+
+
+.login-card .input-group-text{
+
+    width:48px;
+
+    justify-content:center;
+
+    font-size:15px;
+
+    border-radius:10px 0 0 10px !important;
+
+}
+
+
+.login-card .form-control{
+
+    height:48px !important;
+
+    font-size:13px !important;
+
+    padding:8px 12px !important;
+
+}
+
+
+.login-card .input-group .btn{
+
+    height:48px;
+
+    width:48px;
+
+    padding:0;
+
+    font-size:15px;
+
+    border-radius:0 10px 10px 0 !important;
+
+}
+
+
+/* =====================================================
+   FORM SPACING
+   ===================================================== */
+
+.login-card .mb-3{
+
+    margin-bottom:13px !important;
+
+}
+
+
+/* =====================================================
+   FORGOT PASSWORD
+   ===================================================== */
+
+.login-card .text-end{
+
+    margin-bottom:14px !important;
+
+}
+
+
+.login-card .text-end a{
+
+    font-size:12px !important;
+
+    font-weight:500;
+
+}
+
+
+/* =====================================================
+   LOGIN BUTTON
+   ===================================================== */
+
+.login-card .login-btn{
+
+    height:48px !important;
+
+    padding:8px 15px !important;
+
+    border-radius:10px !important;
+
+    font-size:14px !important;
+
+    font-weight:600;
+
+}
+
+
+/* =====================================================
+   HR
+   ===================================================== */
+
+.login-card hr{
+
+    margin:18px 0 12px !important;
+
+}
+
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+
+.login-card small{
+
+    font-size:9px !important;
+
+    line-height:1.4;
+
+    display:block;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media(max-width:768px){
+
+    .login-container{
+
+        padding:15px;
+
+    }
+
+
+    .login-card{
+
+        max-width:450px !important;
+
+        padding:24px 28px !important;
+
+        border-radius:20px !important;
+
+    }
+
+
+    .login-card .logo img{
+
+        width:90px !important;
+
+        height:90px !important;
+
+    }
+
+
+    .login-card h2{
+
+        font-size:27px !important;
+
+    }
+
+
+    .login-card h5{
+
+        font-size:19px !important;
+
+    }
+
+}
+
+
+@media(max-width:500px){
+
+    .login-card{
+
+        max-width:95% !important;
+
+        padding:22px 20px !important;
+
+    }
+
+
+    .login-card .logo img{
+
+        width:80px !important;
+
+        height:80px !important;
+
+    }
+
+
+    .login-card h2{
+
+        font-size:24px !important;
+
+    }
+
+
+    .login-card h5{
+
+        font-size:17px !important;
+
+    }
+
+
+    .login-card p{
+
+        font-size:11px !important;
+
+    }
+
+
+    .login-card .form-control{
+
+        font-size:12px !important;
+
+    }
+
+
+    .login-card .login-btn{
+
+        height:45px !important;
+
+        font-size:13px !important;
+
+    }
+
+}
+
+</style>
 
 </head>
 
@@ -31,28 +433,36 @@ href="{{ url_for('static', filename='css/style.css') }}">
 <body>
 
 
+<!-- =====================================================
+     BACKGROUND
+     ===================================================== -->
+
 <div class="background"></div>
 
 
+<!-- =====================================================
+     LOGIN CONTAINER
+     ===================================================== -->
 
 <div class="login-container">
-
 
 
 <div class="login-card">
 
 
-
-
-
-<!-- Logo -->
-
+<!-- =====================================================
+     LOGO + TITLE
+     ===================================================== -->
 
 <div class="text-center">
 
 
 <div class="logo">
-    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="College Logo">
+
+<img
+src="{{ url_for('static', filename='images/logo.png') }}"
+alt="College Logo">
+
 </div>
 
 
@@ -67,86 +477,55 @@ Management System
 
 
 <p class="text-muted">
-
 Secure Login Portal
-
 </p>
 
 
 </div>
 
 
-
-
-
-
-
-<!-- Flash Message -->
-
+<!-- =====================================================
+     FLASH MESSAGE
+     ===================================================== -->
 
 {% with messages = get_flashed_messages() %}
 
 {% if messages %}
 
-
 <div class="alert alert-danger alert-dismissible fade show">
-
 
 {{ messages[0] }}
 
-
-
-<button type="button"
-
+<button
+type="button"
 class="btn-close"
-
 data-bs-dismiss="alert">
-
 </button>
 
-
-
 </div>
-
 
 {% endif %}
 
 {% endwith %}
 
 
-
-
-
-
-
-
-
-<!-- Login Form -->
-
+<!-- =====================================================
+     LOGIN FORM
+     ===================================================== -->
 
 <form action="/login" method="POST">
 
 
-
-
-
-
-<!-- Username -->
-
+<!-- USERNAME -->
 
 <div class="mb-3">
 
-
 <label class="form-label">
-
 Username
-
 </label>
 
 
-
 <div class="input-group">
-
 
 
 <span class="input-group-text">
@@ -156,53 +535,29 @@ Username
 </span>
 
 
-
-
-
 <input
-
 type="text"
-
 class="form-control"
-
 name="username"
-
 placeholder="Enter Username"
-
 required>
 
 
-
+</div>
 
 </div>
 
 
-</div>
-
-
-
-
-
-
-
-
-
-<!-- Password -->
-
+<!-- PASSWORD -->
 
 <div class="mb-3">
 
-
 <label class="form-label">
-
 Password
-
 </label>
 
 
-
 <div class="input-group">
-
 
 
 <span class="input-group-text">
@@ -212,236 +567,145 @@ Password
 </span>
 
 
-
-
-
 <input
-
 id="password"
-
 type="password"
-
 class="form-control"
-
 name="password"
-
 placeholder="Enter Password"
-
 required>
 
 
-
-
-
 <button
-
 class="btn btn-outline-secondary"
-
 type="button"
-
 onclick="togglePassword()">
 
-
-
-<i id="eye"
-
-class="bi bi-eye">
-
-</i>
-
-
+<i id="eye" class="bi bi-eye"></i>
 
 </button>
 
 
-
-
+</div>
 
 </div>
 
 
-</div>
-
-
-
-
-
-
-
-
-
-<!-- Forgot Password -->
-
+<!-- FORGOT PASSWORD -->
 
 <div class="text-end mb-3">
 
-
-<a href="/forgot_password"
+<a
+href="/forgot_password"
 class="text-decoration-none">
-
 
 <i class="bi bi-key-fill"></i>
 
 Forgot Password?
 
-
 </a>
-
-
 
 </div>
 
 
-
-
-
-
-
-
-
-<!-- Login Button -->
-
+<!-- LOGIN BUTTON -->
 
 <button
-
 type="submit"
-
 class="btn btn-primary login-btn w-100">
-
-
 
 <i class="bi bi-box-arrow-in-right"></i>
 
-
 Login
 
-
-
 </button>
-
-
-
 
 
 </form>
 
 
-
-
-
-
-
 <hr>
 
 
-
-
-
+<!-- FOOTER -->
 
 <div class="text-center">
 
-
 <small>
 
-© 2026 Student Certificate Management System | Designed By PRADEEP From AIDS
+© 2026 Student Certificate Management System
+<br>
+Designed By PRADEEP From AIDS
 
 </small>
 
-
-</div>
-
-
-
-
-
-
 </div>
 
 
 </div>
 
+</div>
 
 
+<!-- =====================================================
+     BOOTSTRAP JS
+     ===================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
+<!-- =====================================================
+     PASSWORD TOGGLE + LOGIN LOADING
+     ===================================================== -->
+
+<script>
+
+function togglePassword(){
+
+    let password =
+        document.getElementById("password");
+
+    let eye =
+        document.getElementById("eye");
 
 
+    if(password.type === "password"){
+
+        password.type = "text";
+
+        eye.className =
+            "bi bi-eye-slash";
+
+    }
+
+    else{
+
+        password.type = "password";
+
+        eye.className =
+            "bi bi-eye";
+
+    }
+
+}
 
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> 
- 
- 
- 
- 
- 
- 
-<script> 
- 
- 
-function togglePassword(){ 
- 
- 
- 
-let password = document.getElementById("password"); 
- 
- 
-let eye = document.getElementById("eye"); 
- 
- 
- 
-if(password.type === "password"){ 
- 
- 
-password.type="text"; 
- 
- 
-eye.className="bi bi-eye-slash"; 
- 
- 
-} 
- 
-else{ 
- 
- 
-password.type="password"; 
- 
- 
-eye.className="bi bi-eye"; 
- 
- 
-} 
- 
- 
- 
-} 
- 
- 
- 
- 
- 
- 
- 
-document.querySelector("form").addEventListener("submit",function(){ 
- 
- 
- 
-document.querySelector(".login-btn").innerHTML = 
- 
- 
-'<span class="spinner-border spinner-border-sm"></span> Logging in...'; 
- 
- 
- 
-}); 
- 
- 
- 
-</script> 
- 
- 
- 
- 
- 
-</body> 
- 
+/* LOGIN LOADING */
+
+document.querySelector("form").addEventListener(
+    "submit",
+    function(){
+
+        document.querySelector(".login-btn").innerHTML =
+
+        '<span class="spinner-border spinner-border-sm"></span> Logging in...';
+
+    }
+);
+
+</script>
+
+
+</body>
+
 </html>
