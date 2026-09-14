@@ -3461,7 +3461,7 @@ def export_zip():
 # HOD Dashboard
 # ==========================
 
-@app.route("/hod")
+d")
 def hod():
 
     if session.get("role") != "hod":
@@ -3618,7 +3618,7 @@ def hod():
         tutors=tutors,
         certificates=certificates
     )
-
+#-----------------------------------------
 @app.route("/hod_profile")
 def hod_profile():
 
