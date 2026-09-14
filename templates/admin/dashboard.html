@@ -518,7 +518,7 @@
 
                         <!-- ==================================================
                              VIEW CERTIFICATE
-                             GOOGLE DRIVE
+                             FIXED GOOGLE DRIVE VIEW
                         ================================================== -->
 
                         <td>
@@ -527,7 +527,7 @@
 
                                 <a
                                     class="view"
-                                    href="{{ certificate[6] }}"
+                                    href="{{ url_for('view', filename=certificate[6]) }}"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
