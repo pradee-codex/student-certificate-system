@@ -3,273 +3,585 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Manage Tutors</title>
+    <title>Manage Tutors</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/hod.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/hod.css') }}">
+
+    <style>
+
+        /* ======================================
+           Compact Manage Tutors Page
+        ====================================== */
+
+        body {
+            background: #f3f8f4;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            overflow-x: hidden;
+        }
+
+        .manage-tutor-container {
+            max-width: 1200px;
+            margin: 22px auto !important;
+        }
+
+        /* ======================================
+           Main Card
+        ====================================== */
+
+        .manage-tutor-card {
+            border-radius: 12px !important;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, .08) !important;
+        }
+
+        /* ======================================
+           Header
+        ====================================== */
+
+        .manage-tutor-card .card-header {
+            padding: 14px 18px;
+        }
+
+        .manage-tutor-card .card-header h3 {
+            margin: 0;
+            font-size: 19px;
+            font-weight: 700;
+        }
+
+        .manage-tutor-card .card-header i {
+            font-size: 18px;
+            margin-right: 5px;
+        }
+
+        /* ======================================
+           Body
+        ====================================== */
+
+        .manage-tutor-card .card-body {
+            padding: 18px;
+        }
+
+        /* ======================================
+           Form
+        ====================================== */
+
+        .manage-tutor-card .form-label {
+            font-size: 10px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .manage-tutor-card .form-control,
+        .manage-tutor-card .form-select {
+            height: 35px;
+            padding: 6px 10px;
+            font-size: 11px;
+            border-radius: 6px;
+        }
+
+        .manage-tutor-card .mb-3 {
+            margin-bottom: 12px !important;
+        }
+
+        /* ======================================
+           Buttons
+        ====================================== */
+
+        .manage-tutor-card .btn {
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .manage-tutor-card .btn-lg {
+            padding: 7px 17px;
+            font-size: 10px;
+        }
+
+        .manage-tutor-card .btn-sm {
+            padding: 5px 9px;
+            font-size: 9px;
+            border-radius: 15px;
+        }
+
+        .manage-tutor-card .btn i {
+            font-size: 11px;
+            margin-right: 3px;
+        }
+
+        /* ======================================
+           Button Area
+        ====================================== */
+
+        .manage-tutor-card .text-center {
+            margin-top: 8px !important;
+        }
+
+        /* ======================================
+           Divider
+        ====================================== */
+
+        .manage-tutor-card hr {
+            margin: 20px 0 !important;
+        }
+
+        /* ======================================
+           Tutor List Heading
+        ====================================== */
+
+        .tutor-list-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #198754;
+            margin-bottom: 12px;
+        }
+
+        .tutor-list-title i {
+            font-size: 15px;
+            margin-right: 4px;
+        }
+
+        /* ======================================
+           Table
+        ====================================== */
+
+        .manage-tutor-card .table {
+            margin-bottom: 0;
+            font-size: 10px;
+        }
+
+        .manage-tutor-card .table th {
+            padding: 8px 7px;
+            font-size: 9px;
+            font-weight: 600;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        .manage-tutor-card .table td {
+            padding: 7px;
+            font-size: 10px;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        .manage-tutor-card .table th:last-child,
+        .manage-tutor-card .table td:last-child {
+            text-align: center;
+        }
+
+        /* ======================================
+           Responsive
+        ====================================== */
+
+        @media (max-width: 992px) {
+
+            .manage-tutor-container {
+                margin: 15px auto !important;
+                padding: 0 10px;
+            }
+
+            .manage-tutor-card .card-body {
+                padding: 14px;
+            }
+
+            .manage-tutor-card .card-header h3 {
+                font-size: 17px;
+            }
+
+            .manage-tutor-card .table th,
+            .manage-tutor-card .table td {
+                font-size: 9px;
+                padding: 6px;
+            }
+
+        }
+
+        @media (max-width: 576px) {
+
+            .manage-tutor-container {
+                padding: 0 7px;
+            }
+
+            .manage-tutor-card .card-body {
+                padding: 11px;
+            }
+
+            .manage-tutor-card .form-control,
+            .manage-tutor-card .form-select {
+                height: 34px;
+                font-size: 10px;
+            }
+
+            .manage-tutor-card .btn-lg {
+                padding: 6px 13px;
+                font-size: 9px;
+            }
+
+        }
+
+    </style>
 
 </head>
 
 <body>
 
-<div class="container-fluid mt-4">
+<div class="container-fluid manage-tutor-container">
 
-<div class="card shadow-lg border-0">
+    <div class="card border-0 manage-tutor-card">
 
-<div class="card-header bg-success text-white">
+        <!-- ======================================
+             Header
+        ====================================== -->
 
-<h3>
-<i class="bi bi-person-workspace"></i>
-Manage Tutors
-</h3>
+        <div class="card-header bg-success text-white">
+
+            <h3>
+                <i class="bi bi-person-workspace"></i>
+                Manage Tutors
+            </h3>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <!-- ======================================
+                 Add Tutor Form
+            ====================================== -->
+
+            <form action="/add_tutor" method="POST">
+
+                <div class="row">
+
+                    <!-- Tutor Name -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Tutor Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="tutor_name"
+                            class="form-control"
+                            required>
+
+                    </div>
+
+
+                    <!-- Department -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Department
+                        </label>
+
+                        <input
+                            type="text"
+                            name="department"
+                            class="form-control"
+                            value="{{ department }}"
+                            readonly>
+
+                    </div>
+
+
+                    <!-- Class Year -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Class Year
+                        </label>
+
+                        <select
+                            name="class_year"
+                            class="form-select"
+                            required>
+
+                            <option value="">
+                                Select Year
+                            </option>
+
+                            <option value="I">
+                                I Year
+                            </option>
+
+                            <option value="II">
+                                II Year
+                            </option>
+
+                            <option value="III">
+                                III Year
+                            </option>
+
+                            <option value="IV">
+                                IV Year
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Section -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Section
+                        </label>
+
+                        <select
+                            name="section"
+                            class="form-select"
+                            required>
+
+                            <option value="">
+                                Select Section
+                            </option>
+
+                            <option value="A">
+                                A
+                            </option>
+
+                            <option value="B">
+                                B
+                            </option>
+
+                            <option value="C">
+                                C
+                            </option>
+
+                            <option value="None">
+                                None
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Email -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            class="form-control"
+                            required>
+
+                    </div>
+
+
+                    <!-- Username -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Username
+                        </label>
+
+                        <input
+                            type="text"
+                            name="username"
+                            class="form-control"
+                            required>
+
+                    </div>
+
+
+                    <!-- Password -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            name="password"
+                            class="form-control"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ======================================
+                     Buttons
+                ====================================== -->
+
+                <div class="text-center mt-4">
+
+                    <button
+                        type="submit"
+                        class="btn btn-success btn-lg">
+
+                        <i class="bi bi-plus-circle-fill"></i>
+                        Create Tutor
+
+                    </button>
+
+
+                    <a
+                        href="/hod"
+                        class="btn btn-secondary btn-lg ms-2">
+
+                        <i class="bi bi-arrow-left-circle-fill"></i>
+                        Back
+
+                    </a>
+
+                </div>
+
+            </form>
+
+
+            <hr class="my-4">
+
+
+            <!-- ======================================
+                 Tutor List
+            ====================================== -->
+
+            <h4 class="tutor-list-title">
+
+                <i class="bi bi-list-ul"></i>
+                Tutor List
+
+            </h4>
+
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover align-middle">
+
+                    <thead class="table-success">
+
+                        <tr>
+
+                            <th>ID</th>
+                            <th>Tutor Name</th>
+                            <th>Department</th>
+                            <th>Class Year</th>
+                            <th>Section</th>
+                            <th>Email</th>
+                            <th>Username</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for tutor in tutors %}
+
+                        <tr>
+
+                            <td>
+                                {{ tutor[0] }}
+                            </td>
+
+                            <td>
+                                {{ tutor[1] }}
+                            </td>
+
+                            <td>
+                                {{ tutor[2] }}
+                            </td>
+
+                            <td>
+                                {{ tutor[3] }}
+                            </td>
+
+                            <td>
+                                {{ tutor[4] }}
+                            </td>
+
+                            <td>
+                                {{ tutor[5] }}
+                            </td>
+
+                            <td>
+                                {{ tutor[6] }}
+                            </td>
+
+
+                            <!-- Edit -->
+
+                            <td>
+
+                                <a
+                                    href="{{ url_for('edit_tutor', tutor_id=tutor[0]) }}"
+                                    class="btn btn-warning btn-sm">
+
+                                    <i class="bi bi-pencil-square"></i>
+                                    Edit
+
+                                </a>
+
+                            </td>
+
+
+                            <!-- Delete -->
+
+                            <td>
+
+                                <a
+                                    href="{{ url_for('delete_tutor', tutor_id=tutor[0]) }}"
+                                    class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Are you sure you want to delete this tutor?')">
+
+                                    <i class="bi bi-trash-fill"></i>
+                                    Delete
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
-<div class="card-body">
 
-<form action="/add_tutor" method="POST">
-
-<div class="row">
-
-<div class="col-md-6 mb-3">
-<label class="form-label">Tutor Name</label>
-
-<input
-type="text"
-name="tutor_name"
-class="form-control"
-required>
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">Department</label>
-
-<input
-type="text"
-name="department"
-class="form-control"
-value="{{ department }}"
-readonly>
-
-</div>
-
-<!-- Class Year -->
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-Class Year
-</label>
-
-<select
-name="class_year"
-class="form-select"
-required>
-
-<option value="">Select Year</option>
-<option value="I">I Year</option>
-<option value="II">II Year</option>
-<option value="III">III Year</option>
-<option value="IV">IV Year</option>
-
-</select>
-
-</div>
-
-<!-- Section -->
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-Section
-</label>
-
-<select
-name="section"
-class="form-select"
-required>
-
-<option value="">Select Section</option>
-<option value="A">A</option>
-<option value="B">B</option>
-<option value="C">C</option>
-<option value="None">None</option>
-
-</select>
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-Email
-</label>
-
-<input
-type="email"
-name="email"
-class="form-control"
-required>
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-Username
-</label>
-
-<input
-type="text"
-name="username"
-class="form-control"
-required>
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-Password
-</label>
-
-<input
-type="password"
-name="password"
-class="form-control"
-required>
-
-</div>
-
-</div>
-
-<div class="text-center mt-4">
-
-<button
-type="submit"
-class="btn btn-success btn-lg">
-
-<i class="bi bi-plus-circle-fill"></i>
-
-Create Tutor
-
-</button>
-
-<a
-href="/hod"
-class="btn btn-secondary btn-lg ms-2">
-
-<i class="bi bi-arrow-left-circle-fill"></i>
-
-Back
-
-</a>
-
-</div>
-
-</form>
-
-<hr class="my-4">
-
-<h4>
-
-<i class="bi bi-list-ul"></i>
-
-Tutor List
-
-</h4>
-
-<div class="table-responsive">
-
-<table class="table table-bordered table-hover align-middle">
-
-<thead class="table-success">
-
-<tr>
-
-<th>ID</th>
-<th>Tutor Name</th>
-<th>Department</th>
-<th>Class Year</th>
-<th>Section</th>
-<th>Email</th>
-<th>Username</th>
-<th>Edit</th>
-<th>Delete</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-{% for tutor in tutors %}
-
-<tr>
-
-<td>{{ tutor[0] }}</td>
-
-<td>{{ tutor[1] }}</td>
-
-<td>{{ tutor[2] }}</td>
-
-<td>{{ tutor[3] }}</td>
-
-<td>{{ tutor[4] }}</td>
-
-<td>{{ tutor[5] }}</td>
-
-<td>{{ tutor[6] }}</td>
-
-<td>
-<a href="{{ url_for('edit_tutor', tutor_id=tutor[0]) }}"
-class="btn btn-warning btn-sm">
-
-<i class="bi bi-pencil-square"></i>
-
-Edit
-
-</a>
-</td>
-
-<td>
-
-<a href="{{ url_for('delete_tutor', tutor_id=tutor[0]) }}"
-class="btn btn-danger btn-sm"
-onclick="return confirm('Are you sure you want to delete this tutor?')">
-
-<i class="bi bi-trash-fill"></i>
-
-Delete
-
-</a>
-
-</td>
-
-</tr>
-
-{% endfor %}
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

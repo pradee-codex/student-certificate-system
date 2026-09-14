@@ -3,203 +3,410 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Manage HOD</title>
+    <title>Manage HOD</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/admin.css') }}">
+
+    <style>
+
+        /* ======================================
+           Compact Manage HOD Page
+        ====================================== */
+
+        body {
+            background: #f3f8f4;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+        }
+
+        .manage-hod-container {
+            max-width: 1050px;
+            margin: 25px auto !important;
+        }
+
+        /* Main Card */
+
+        .manage-hod-card {
+            border-radius: 12px !important;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, .08) !important;
+        }
+
+        /* Header */
+
+        .manage-hod-card .card-header {
+            padding: 14px 18px;
+        }
+
+        .manage-hod-card .card-header h3 {
+            margin: 0;
+            font-size: 19px;
+            font-weight: 700;
+        }
+
+        .manage-hod-card .card-header i {
+            font-size: 18px;
+            margin-right: 5px;
+        }
+
+        /* Body */
+
+        .manage-hod-card .card-body {
+            padding: 18px;
+        }
+
+        /* Labels */
+
+        .manage-hod-card .form-label {
+            font-size: 10px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        /* Inputs */
+
+        .manage-hod-card .form-control {
+            height: 35px;
+            padding: 6px 10px;
+            font-size: 11px;
+            border-radius: 6px;
+        }
+
+        .manage-hod-card .mb-3 {
+            margin-bottom: 12px !important;
+        }
+
+        /* Buttons */
+
+        .manage-hod-card .btn {
+            padding: 6px 14px;
+            font-size: 10px;
+            font-weight: 600;
+            border-radius: 20px;
+        }
+
+        .manage-hod-card .btn-lg {
+            padding: 7px 17px;
+            font-size: 10px;
+        }
+
+        .manage-hod-card .btn i {
+            font-size: 11px;
+            margin-right: 3px;
+        }
+
+        /* Button Area */
+
+        .manage-hod-card .text-center {
+            margin-top: 8px !important;
+        }
+
+        /* Divider */
+
+        .manage-hod-card hr {
+            margin: 20px 0 !important;
+        }
+
+        /* HOD List Heading */
+
+        .hod-list-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #198754;
+            margin-bottom: 12px;
+        }
+
+        .hod-list-title i {
+            font-size: 15px;
+            margin-right: 4px;
+        }
+
+        /* Table */
+
+        .manage-hod-card .table {
+            margin-bottom: 0;
+            font-size: 10px;
+        }
+
+        .manage-hod-card .table th {
+            padding: 8px 9px;
+            font-size: 10px;
+            font-weight: 600;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        .manage-hod-card .table td {
+            padding: 7px 9px;
+            font-size: 10px;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .manage-hod-card .table thead {
+            vertical-align: middle;
+        }
+
+        /* ======================================
+           Responsive
+        ====================================== */
+
+        @media (max-width: 768px) {
+
+            .manage-hod-container {
+                margin: 15px auto !important;
+                padding: 0 10px;
+            }
+
+            .manage-hod-card .card-body {
+                padding: 14px;
+            }
+
+            .manage-hod-card .card-header h3 {
+                font-size: 17px;
+            }
+
+            .manage-hod-card .form-control {
+                height: 34px;
+            }
+
+            .manage-hod-card .btn-lg {
+                padding: 6px 13px;
+                font-size: 9px;
+            }
+
+            .manage-hod-card .table th,
+            .manage-hod-card .table td {
+                font-size: 9px;
+                padding: 6px;
+            }
+        }
+
+    </style>
 
 </head>
 
 <body>
 
-<div class="container mt-5">
+<div class="container manage-hod-container">
 
-<div class="card shadow-lg border-0">
+    <div class="card border-0 manage-hod-card">
 
-<div class="card-header bg-success text-white">
+        <!-- Header -->
 
-<h3>
+        <div class="card-header bg-success text-white">
 
-<i class="bi bi-person-badge-fill"></i>
+            <h3>
+                <i class="bi bi-person-badge-fill"></i>
+                Manage HOD
+            </h3>
 
-Manage HOD
+        </div>
 
-</h3>
+        <!-- Body -->
 
-</div>
+        <div class="card-body">
 
-<div class="card-body">
+            <!-- Add HOD Form -->
 
-<form action="/add_hod" method="POST">
+            <form action="/add_hod" method="POST">
 
-<div class="row">
+                <div class="row">
 
-<div class="col-md-6 mb-3">
+                    <div class="col-md-6 mb-3">
 
-<label class="form-label">HOD Name</label>
+                        <label class="form-label">
+                            HOD Name
+                        </label>
 
-<input
-type="text"
-name="hod_name"
-class="form-control"
-required>
+                        <input
+                            type="text"
+                            name="hod_name"
+                            class="form-control"
+                            required>
 
-</div>
+                    </div>
 
-<div class="col-md-6 mb-3">
 
-<label class="form-label">Department</label>
+                    <div class="col-md-6 mb-3">
 
-<input
-type="text"
-name="department"
-class="form-control"
-required>
+                        <label class="form-label">
+                            Department
+                        </label>
 
-</div>
+                        <input
+                            type="text"
+                            name="department"
+                            class="form-control"
+                            required>
 
-<div class="col-md-6 mb-3">
+                    </div>
 
-<label class="form-label">Email</label>
 
-<input
-type="email"
-name="email"
-class="form-control"
-required>
+                    <div class="col-md-6 mb-3">
 
-</div>
+                        <label class="form-label">
+                            Email
+                        </label>
 
-<div class="col-md-6 mb-3">
+                        <input
+                            type="email"
+                            name="email"
+                            class="form-control"
+                            required>
 
-<label class="form-label">Phone</label>
+                    </div>
 
-<input
-type="text"
-name="phone"
-class="form-control"
-required>
 
-</div>
-<div class="col-md-6 mb-3">
+                    <div class="col-md-6 mb-3">
 
-<label class="form-label">Username</label>
+                        <label class="form-label">
+                            Phone
+                        </label>
 
-<input
-type="text"
-name="username"
-class="form-control"
-required>
+                        <input
+                            type="text"
+                            name="phone"
+                            class="form-control"
+                            required>
 
-</div>
+                    </div>
 
-<div class="col-md-6 mb-3">
 
-<label class="form-label">Password</label>
+                    <div class="col-md-6 mb-3">
 
-<input
-type="password"
-name="password"
-class="form-control"
-required>
+                        <label class="form-label">
+                            Username
+                        </label>
 
-</div>
+                        <input
+                            type="text"
+                            name="username"
+                            class="form-control"
+                            required>
 
-</div>
+                    </div>
 
-<div class="text-center mt-3">
 
-<button
-type="submit"
-class="btn btn-success btn-lg">
+                    <div class="col-md-6 mb-3">
 
-<i class="bi bi-plus-circle-fill"></i>
+                        <label class="form-label">
+                            Password
+                        </label>
 
-Create HOD
+                        <input
+                            type="password"
+                            name="password"
+                            class="form-control"
+                            required>
 
-</button>
+                    </div>
 
-<a
-href="/admin"
-class="btn btn-secondary btn-lg ms-2">
+                </div>
 
-<i class="bi bi-arrow-left-circle-fill"></i>
 
-Back
+                <!-- Buttons -->
 
-</a>
+                <div class="text-center mt-3">
 
-</div>
+                    <button
+                        type="submit"
+                        class="btn btn-success btn-lg">
 
-</form>
+                        <i class="bi bi-plus-circle-fill"></i>
+                        Create HOD
 
-<hr class="my-4">
+                    </button>
 
-<h4>
 
-<i class="bi bi-list-ul"></i>
+                    <a
+                        href="/admin"
+                        class="btn btn-secondary btn-lg ms-2">
 
-HOD List
+                        <i class="bi bi-arrow-left-circle-fill"></i>
+                        Back
 
-</h4>
+                    </a>
 
-<div class="table-responsive">
+                </div>
 
-<table class="table table-bordered table-hover">
+            </form>
 
-<thead class="table-success">
 
-<tr>
+            <hr class="my-4">
 
-<th>ID</th>
-<th>HOD Name</th>
-<th>Department</th>
-<th>Email</th>
-<th>Phone</th>
-<th>Username</th>
 
-</tr>
+            <!-- HOD List -->
 
-</thead>
+            <h4 class="hod-list-title">
 
-<tbody>
+                <i class="bi bi-list-ul"></i>
+                HOD List
 
-{% for hod in hods %}
+            </h4>
 
-<tr>
 
-<td>{{ hod[0] }}</td>
+            <div class="table-responsive">
 
-<td>{{ hod[1] }}</td>
+                <table class="table table-bordered table-hover">
 
-<td>{{ hod[2] }}</td>
+                    <thead class="table-success">
 
-<td>{{ hod[3] }}</td>
+                        <tr>
 
-<td>{{ hod[4] }}</td>
+                            <th>ID</th>
+                            <th>HOD Name</th>
+                            <th>Department</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Username</th>
 
-<td>{{ hod[5] }}</td>
+                        </tr>
 
-</tr>
+                    </thead>
 
-{% endfor %}
 
-</tbody>
+                    <tbody>
 
-</table>
+                        {% for hod in hods %}
 
-</div>
+                        <tr>
 
-</div>
+                            <td>{{ hod[0] }}</td>
 
-</div>
+                            <td>{{ hod[1] }}</td>
+
+                            <td>{{ hod[2] }}</td>
+
+                            <td>{{ hod[3] }}</td>
+
+                            <td>{{ hod[4] }}</td>
+
+                            <td>{{ hod[5] }}</td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
