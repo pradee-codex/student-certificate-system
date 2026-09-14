@@ -215,7 +215,7 @@ body {
 
 .profile-card {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 14px;
     padding: 15px;
     border-radius: 12px;
@@ -225,13 +225,24 @@ body {
     margin-bottom: 18px;
 }
 
+/* Dashboard profile photo ONLY */
+
 .profile-card img {
-    width: 75px;
-    height: 75px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #fff;
-    display: block;
+    width: 75px !important;
+    height: 75px !important;
+    min-width: 75px !important;
+    max-width: 75px !important;
+    min-height: 75px !important;
+    max-height: 75px !important;
+
+    border-radius: 50% !important;
+    object-fit: cover !important;
+
+    border: 3px solid #fff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+
+    display: block !important;
 }
 
 .profile-info {
@@ -425,7 +436,6 @@ table tr:hover {
     color: #ffffff !important;
 
     font-size: 12px;
-
 }
 
 
@@ -465,7 +475,6 @@ table tr:hover {
     text-align: center;
 
     white-space: nowrap;
-
 }
 
 
@@ -480,7 +489,6 @@ table tr:hover {
     margin: 0;
 
     padding: 0;
-
 }
 
 
@@ -576,11 +584,13 @@ table tr:hover {
 
 .analytics-box i {
     font-size: 28px;
-    color: #198
+    color: #198754;
+}
+
 
 /* =====================================================
    FORCE VIEW / DOWNLOAD / DELETE BUTTON STYLE
-   ===================================================== */
+===================================================== */
 
 #certificateTable td:nth-last-child(3) a,
 #certificateTable td:nth-last-child(3) button,
@@ -689,17 +699,32 @@ table tr:hover {
 
     white-space: nowrap !important;
 }
+
+
 /* ======================================
-   PROFILE PHOTO - SMALL CIRCLE
+   FINAL PROFILE PHOTO OVERRIDE
+   DASHBOARD ONLY
 ====================================== */
 
 .profile-card img {
-    width: 90px !important;
-    height: 90px !important;
-    max-width: 90px !important;
-    max-height: 90px !important;
+    width: 75px !important;
+    height: 75px !important;
+
+    min-width: 75px !important;
+    max-width: 75px !important;
+
+    min-height: 75px !important;
+    max-height: 75px !important;
+
     border-radius: 50% !important;
+
     object-fit: cover !important;
-    border: 3px solid #fff !important;
+
+    border: 3px solid #ffffff !important;
+
+    padding: 0 !important;
+
+    margin: 0 !important;
+
     display: block !important;
 }
