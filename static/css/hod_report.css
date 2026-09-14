@@ -21,11 +21,8 @@ html {
 
 body {
     font-family: "Poppins", Arial, sans-serif;
-
     background: #f3f7f5;
-
     color: #222;
-
     min-height: 100vh;
 }
 
@@ -36,7 +33,6 @@ body {
 
 .sidebar {
     position: fixed !important;
-
     left: 0 !important;
     top: 0 !important;
 
@@ -53,8 +49,7 @@ body {
 
     padding: 25px 15px !important;
 
-    box-shadow:
-        4px 0 20px rgba(0, 0, 0, 0.12);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.12);
 
     z-index: 9999 !important;
 }
@@ -66,13 +61,11 @@ body {
     color: white !important;
 
     font-size: 20px;
-
     font-weight: 700;
 
     padding: 10px 15px 30px;
 
     display: flex;
-
     align-items: center;
 
     gap: 10px;
@@ -87,23 +80,19 @@ body {
 
 .sidebar a {
     display: flex !important;
-
     align-items: center !important;
 
     gap: 13px;
 
     color: white !important;
-
     text-decoration: none !important;
 
     padding: 13px 15px;
-
     margin: 7px 0;
 
     border-radius: 10px;
 
     font-size: 14px;
-
     font-weight: 500;
 
     transition: all 0.25s ease;
@@ -132,8 +121,7 @@ body {
 .sidebar a.active {
     background: rgba(255, 255, 255, 0.25) !important;
 
-    box-shadow:
-        inset 4px 0 0 white;
+    box-shadow: inset 4px 0 0 white;
 }
 
 
@@ -172,9 +160,7 @@ body {
     border-radius: 17px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
 
     margin-bottom: 25px;
@@ -184,9 +170,7 @@ body {
     border-left: 10px solid #198754;
 
     border-top: 1px solid #cfe8da;
-
     border-right: 1px solid #cfe8da;
-
     border-bottom: 1px solid #cfe8da;
 
     box-shadow:
@@ -204,18 +188,16 @@ body {
     position: absolute;
 
     left: 0;
-
     top: 0;
 
     width: 100%;
-
     height: 5px;
 
     background: #198754;
 }
 
 
-/* Decorative green background */
+/* Decorative circle */
 
 .topbar::after {
     content: "";
@@ -223,11 +205,9 @@ body {
     position: absolute;
 
     right: -100px;
-
     top: -120px;
 
     width: 300px;
-
     height: 300px;
 
     border-radius: 50%;
@@ -296,7 +276,6 @@ body {
 
 .profile-img {
     width: 52px;
-
     height: 52px;
 
     border-radius: 50%;
@@ -392,11 +371,9 @@ body {
     position: absolute;
 
     top: 0;
-
     right: 0;
 
     width: 45%;
-
     height: 3px;
 
     background: #198754;
@@ -421,7 +398,6 @@ body {
 
 .summary-icon {
     width: 56px;
-
     height: 56px;
 
     min-width: 56px;
@@ -435,7 +411,6 @@ body {
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     font-size: 25px;
@@ -619,6 +594,8 @@ body {
     font-size: 12px;
 
     font-weight: 600;
+
+    white-space: nowrap;
 }
 
 
@@ -669,4 +646,526 @@ body {
 }
 
 
+/* Table body */
+
+.table tbody td {
+    padding: 14px 12px;
+
+    vertical-align: middle;
+
+    border-bottom: 1px solid #eeeeee;
+
+    color: #444;
+}
+
+
+/* Hover */
+
+.table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background: #f7fcf9;
+}
+
+
+/* Last row */
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =====================================================
+   CERTIFICATE TABLE
+   ===================================================== */
+
+#certificateTable {
+    min-width: 1150px;
+}
+
+
+/* Student name */
+
+#certificateTable td:nth-child(2) strong {
+    color: #111;
+
+    font-weight: 700;
+}
+
+
+/* Action column */
+
+#certificateTable th:last-child {
+    text-align: center;
+
+    min-width: 125px;
+
+    width: 125px;
+}
+
+#certificateTable td:last-child {
+    text-align: center;
+
+    min-width: 125px;
+
+    width: 125px;
+}
+
+
+/* =====================================================
+   COUNT BADGE
+   ===================================================== */
+
+.count-badge {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 34px;
+
+    padding: 5px 11px;
+
+    border-radius: 20px;
+
+    background: #e8f5ee;
+
+    color: #198754;
+
+    border: 1px solid #d5ecdf;
+
+    font-weight: 700;
+
+    font-size: 12px;
+}
+
+
+/* =====================================================
+   CATEGORY BADGE
+   ===================================================== */
+
+.category-badge {
+    display: inline-block;
+
+    background: #eef4ff;
+
+    color: #2864d7;
+
+    padding: 5px 10px;
+
+    border-radius: 15px;
+
+    border: 1px solid #dce7ff;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* =====================================================
+   SEARCH
+   ===================================================== */
+
+.search-box {
+    position: relative;
+
+    width: 100%;
+
+    margin-bottom: 18px;
+}
+
+.search-box i {
+    position: absolute;
+
+    left: 14px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #198754;
+
+    font-size: 15px;
+
+    z-index: 2;
+}
+
+.search-box input {
+    width: 100%;
+
+    height: 44px;
+
+    border: 1px solid #d7ddd9;
+
+    border-radius: 10px;
+
+    padding: 0 15px 0 40px;
+
+    font-family: "Poppins", Arial, sans-serif;
+
+    font-size: 13px;
+
+    outline: none;
+
+    background: #fafcfb;
+
+    transition: all 0.2s ease;
+}
+
+.search-box input:hover {
+    border-color: #b7d9c5;
+}
+
+.search-box input:focus {
+    border-color: #198754;
+
+    background: white;
+
+    box-shadow:
+        0 0 0 3px rgba(25, 135, 84, 0.09);
+}
+
+
+/* =====================================================
+   CERTIFICATE ACTION BUTTONS
+   ===================================================== */
+
 /*
+   IMPORTANT:
+   View + Download buttons have extra spacing.
+*/
+
+.action-buttons-small {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 14px;
+
+    min-width: 90px;
+
+    padding: 2px 4px;
+}
+
+
+/* Common button */
+
+.view-btn,
+.download-btn {
+    width: 36px;
+
+    height: 36px;
+
+    min-width: 36px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    transition: all 0.2s ease;
+
+    flex-shrink: 0;
+}
+
+
+/* =====================================================
+   VIEW BUTTON
+   ===================================================== */
+
+.view-btn {
+    background: #e8f5ee;
+
+    color: #198754;
+
+    border: 1px solid #d5ecdf;
+}
+
+.view-btn:hover {
+    background: #198754;
+
+    color: white;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 4px 10px rgba(25, 135, 84, 0.20);
+}
+
+
+/* =====================================================
+   DOWNLOAD BUTTON
+   ===================================================== */
+
+.download-btn {
+    background: #eef4ff;
+
+    color: #2864d7;
+
+    border: 1px solid #dce7ff;
+}
+
+.download-btn:hover {
+    background: #2864d7;
+
+    color: white;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 4px 10px rgba(40, 100, 215, 0.20);
+}
+
+
+/* =====================================================
+   EMPTY DATA
+   ===================================================== */
+
+.text-center {
+    text-align: center !important;
+}
+
+.text-muted {
+    color: #999 !important;
+}
+
+.table .bi-folder-x {
+    font-size: 27px;
+
+    color: #aaa;
+
+    margin-bottom: 8px;
+}
+
+
+/* =====================================================
+   SCROLLBAR
+   ===================================================== */
+
+.table-responsive::-webkit-scrollbar {
+    height: 7px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+
+    border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #b7d9c5;
+
+    border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #198754;
+}
+
+
+/* =====================================================
+   TABLET
+   ===================================================== */
+
+@media (max-width: 1100px) {
+
+    .summary-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 768px) {
+
+    /* Sidebar */
+
+    .sidebar {
+        position: relative !important;
+
+        width: 100% !important;
+
+        height: auto !important;
+
+        padding: 12px !important;
+    }
+
+    .sidebar-title {
+        padding: 10px;
+
+        justify-content: center;
+    }
+
+    .sidebar a {
+        display: inline-flex !important;
+
+        margin: 3px;
+
+        padding: 9px 12px;
+    }
+
+
+    /* Main */
+
+    .main-content {
+        margin-left: 0 !important;
+
+        width: 100% !important;
+
+        padding: 15px !important;
+    }
+
+
+    /* Topbar */
+
+    .topbar {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+
+        padding: 20px;
+    }
+
+    .profile-section {
+        width: 100%;
+    }
+
+
+    /* Summary */
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* Export */
+
+    .action-section {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+    .action-buttons {
+        width: 100%;
+    }
+
+    .action-buttons .btn {
+        flex: 1;
+    }
+
+
+    /* Report */
+
+    .report-card {
+        padding: 17px;
+    }
+
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+   ===================================================== */
+
+@media (max-width: 480px) {
+
+    .main-content {
+        padding: 10px !important;
+    }
+
+    .topbar {
+        padding: 17px;
+    }
+
+    .topbar h2 {
+        font-size: 21px;
+    }
+
+    .topbar p {
+        font-size: 12px;
+    }
+
+    .profile-img {
+        width: 45px;
+
+        height: 45px;
+    }
+
+    .summary-card {
+        min-height: 105px;
+
+        padding: 17px;
+    }
+
+    .summary-icon {
+        width: 45px;
+
+        height: 45px;
+
+        min-width: 45px;
+
+        font-size: 20px;
+    }
+
+    .summary-card h2 {
+        font-size: 22px;
+    }
+
+    .report-card {
+        padding: 14px;
+    }
+
+    .report-header {
+        align-items: flex-start;
+
+        gap: 10px;
+
+        flex-direction: column;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .action-buttons .btn {
+        width: 100%;
+    }
+
+
+    /* Action buttons on mobile */
+
+    .action-buttons-small {
+        gap: 12px;
+
+        justify-content: center;
+    }
+
+}
