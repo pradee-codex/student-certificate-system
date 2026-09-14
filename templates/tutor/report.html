@@ -2,9 +2,7 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Tutor Reports Dashboard</title>
@@ -15,11 +13,345 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
           rel="stylesheet">
 
+
+    <!-- =====================================================
+         COMPACT SIZE
+         SAME SIZE STYLE AS TUTOR DASHBOARD
+    ====================================================== -->
+
+    <style>
+
+        body {
+            font-size: 13px !important;
+        }
+
+        /* MAIN CONTAINER */
+
+        .container {
+            max-width: 1400px !important;
+            padding: 20px !important;
+        }
+
+
+        /* TOP BAR */
+
+        .topbar {
+            padding: 16px 20px !important;
+            margin-bottom: 18px !important;
+            border-radius: 14px !important;
+        }
+
+        .topbar h1 {
+            font-size: 22px !important;
+        }
+
+        .topbar p {
+            font-size: 11px !important;
+        }
+
+        .top-buttons {
+            gap: 7px !important;
+        }
+
+        .top-buttons .btn {
+            padding: 7px 11px !important;
+            font-size: 11px !important;
+        }
+
+
+        /* SUMMARY CARDS */
+
+        .cards {
+            gap: 14px !important;
+            margin-bottom: 18px !important;
+        }
+
+        .card {
+            padding: 18px !important;
+            border-radius: 14px !important;
+        }
+
+        .card > i {
+            font-size: 26px !important;
+        }
+
+        .card h2 {
+            font-size: 25px !important;
+        }
+
+        .card p {
+            font-size: 11px !important;
+        }
+
+
+        /* TUTOR PROFILE */
+
+        .profile-box {
+            padding: 18px !important;
+            margin-bottom: 18px !important;
+            border-radius: 14px !important;
+            gap: 20px !important;
+        }
+
+        .profile-img {
+            width: 75px !important;
+            height: 75px !important;
+        }
+
+        .profile-right h2 {
+            font-size: 18px !important;
+        }
+
+        .info-table {
+            font-size: 11px !important;
+        }
+
+        .info-table td {
+            font-size: 11px !important;
+            padding: 6px 9px !important;
+        }
+
+
+        /* REPORT BOXES */
+
+        .report-box {
+            padding: 18px !important;
+            margin-bottom: 18px !important;
+            border-radius: 14px !important;
+        }
+
+        .box-header h2 {
+            font-size: 18px !important;
+        }
+
+        .box-header small {
+            font-size: 10px !important;
+        }
+
+
+        /* REPORT TABLES */
+
+        .report-box table {
+            font-size: 11px !important;
+        }
+
+        .report-box table th,
+        .report-box table td {
+            font-size: 11px !important;
+            padding: 8px 9px !important;
+        }
+
+
+        /* QUICK STATISTICS */
+
+        .stats-grid {
+            gap: 12px !important;
+        }
+
+        .mini-card {
+            padding: 14px !important;
+            border-radius: 11px !important;
+        }
+
+        .mini-card i {
+            font-size: 22px !important;
+        }
+
+        .mini-card h3 {
+            font-size: 21px !important;
+        }
+
+        .mini-card p {
+            font-size: 10px !important;
+        }
+
+
+        /* SEARCH */
+
+        #searchInput {
+            width: 280px !important;
+            height: 36px !important;
+            padding: 7px 12px !important;
+            font-size: 11px !important;
+        }
+
+        .download-all-btn {
+            padding: 7px 12px !important;
+            font-size: 11px !important;
+        }
+
+
+        /* CERTIFICATE TABLE */
+
+        #certificateTable th {
+            font-size: 11px !important;
+            padding: 8px 9px !important;
+        }
+
+        #certificateTable td {
+            font-size: 11px !important;
+            padding: 8px 9px !important;
+        }
+
+        #certificateTable strong {
+            font-size: 11px !important;
+        }
+
+        #certificateTable .badge {
+            font-size: 9px !important;
+            padding: 4px 7px !important;
+        }
+
+
+        /* VIEW + DOWNLOAD BUTTONS */
+
+        .view-btn,
+        .download-btn {
+            padding: 6px 9px !important;
+            font-size: 10px !important;
+            border-radius: 6px !important;
+        }
+
+
+        /* REPORT SUMMARY */
+
+        .summary-area {
+            gap: 12px !important;
+        }
+
+        .summary-card {
+            padding: 14px !important;
+            border-radius: 11px !important;
+        }
+
+        .summary-card h3 {
+            font-size: 12px !important;
+        }
+
+        .summary-card span {
+            font-size: 21px !important;
+        }
+
+
+        /* FOOTER */
+
+        .footer {
+            padding: 16px !important;
+            margin-top: 18px !important;
+            border-radius: 11px !important;
+        }
+
+        .footer-left h3 {
+            font-size: 14px !important;
+        }
+
+        .footer-left p,
+        .footer-right p,
+        .footer-right {
+            font-size: 10px !important;
+        }
+
+
+        /* RESPONSIVE */
+
+        @media (max-width: 992px) {
+
+            .container {
+                padding: 15px !important;
+            }
+
+            .topbar {
+                padding: 15px !important;
+            }
+
+            .topbar h1 {
+                font-size: 20px !important;
+            }
+
+            .cards {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+
+            .profile-box {
+                gap: 15px !important;
+            }
+        }
+
+
+        @media (max-width: 768px) {
+
+            .container {
+                padding: 12px !important;
+            }
+
+            .topbar {
+                padding: 14px !important;
+            }
+
+            .topbar h1 {
+                font-size: 19px !important;
+            }
+
+            .top-buttons {
+                flex-wrap: wrap !important;
+            }
+
+            .cards {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 10px !important;
+            }
+
+            .card {
+                padding: 15px !important;
+            }
+
+            .profile-box {
+                flex-direction: column !important;
+                align-items: center !important;
+                text-align: center !important;
+            }
+
+            .report-search-actions {
+                flex-wrap: wrap !important;
+                gap: 8px !important;
+            }
+
+            #searchInput {
+                width: 100% !important;
+            }
+        }
+
+
+        @media (max-width: 500px) {
+
+            .cards {
+                grid-template-columns: 1fr !important;
+            }
+
+            .top-buttons .btn {
+                font-size: 10px !important;
+                padding: 6px 9px !important;
+            }
+
+            .card h2 {
+                font-size: 23px !important;
+            }
+
+            .report-box {
+                padding: 14px !important;
+            }
+
+            .box-header h2 {
+                font-size: 16px !important;
+            }
+        }
+
+    </style>
+
 </head>
 
 
 <body>
-
 
 <div class="container">
 
@@ -88,11 +420,13 @@
     </div>
 
 
+
     <!-- =====================================================
          SUMMARY CARDS
     ====================================================== -->
 
     <div class="cards">
+
 
         <div class="card green">
 
@@ -107,6 +441,7 @@
             </p>
 
         </div>
+
 
 
         <div class="card blue">
@@ -124,6 +459,7 @@
         </div>
 
 
+
         <div class="card orange">
 
             <i class="bi bi-building"></i>
@@ -137,6 +473,7 @@
             </p>
 
         </div>
+
 
 
         <div class="card purple">
@@ -156,11 +493,13 @@
     </div>
 
 
+
     <!-- =====================================================
          TUTOR PROFILE
     ====================================================== -->
 
     <div class="profile-box">
+
 
         <div class="profile-left">
 
@@ -187,6 +526,7 @@
             {% endif %}
 
         </div>
+
 
 
         <div class="profile-right">
@@ -260,6 +600,7 @@
     </div>
 
 
+
     <!-- =====================================================
          DEPARTMENT REPORT
     ====================================================== -->
@@ -318,7 +659,8 @@
 
                 <tr>
 
-                    <td colspan="2"
+                    <td
+                        colspan="2"
                         style="text-align:center;">
 
                         No department data found.
@@ -334,6 +676,7 @@
         </table>
 
     </div>
+
 
 
     <!-- =====================================================
@@ -394,7 +737,8 @@
 
                 <tr>
 
-                    <td colspan="2"
+                    <td
+                        colspan="2"
                         style="text-align:center;">
 
                         No year data found.
@@ -410,6 +754,7 @@
         </table>
 
     </div>
+
 
 
     <!-- =====================================================
@@ -449,6 +794,7 @@
             </div>
 
 
+
             <div class="mini-card">
 
                 <i class="bi bi-award-fill"></i>
@@ -464,6 +810,7 @@
             </div>
 
 
+
             <div class="mini-card">
 
                 <i class="bi bi-building-fill"></i>
@@ -477,6 +824,7 @@
                 </p>
 
             </div>
+
 
 
             <div class="mini-card">
@@ -496,6 +844,7 @@
         </div>
 
     </div>
+
 
 
     <!-- =====================================================
@@ -525,6 +874,7 @@
             </div>
 
 
+
             <!-- SEARCH + DOWNLOAD ALL -->
 
             <div class="report-search-actions">
@@ -552,6 +902,7 @@
             </div>
 
         </div>
+
 
 
         <!-- =================================================
@@ -608,6 +959,7 @@
                 </thead>
 
 
+
                 <tbody>
 
 
@@ -627,11 +979,13 @@
                         </td>
 
 
+
                         <!-- DEPARTMENT -->
 
                         <td>
                             {{ certificate[1] }}
                         </td>
+
 
 
                         <!-- YEAR -->
@@ -641,11 +995,13 @@
                         </td>
 
 
+
                         <!-- CERTIFICATE -->
 
                         <td>
                             {{ certificate[3] }}
                         </td>
+
 
 
                         <!-- CATEGORY -->
@@ -655,6 +1011,7 @@
                         </td>
 
 
+
                         <!-- ACHIEVEMENT -->
 
                         <td>
@@ -662,31 +1019,41 @@
                             {% if certificate[5] == "Participated" %}
 
                                 <span class="badge bg-primary">
+
                                     🏅 Participated
+
                                 </span>
 
                             {% elif certificate[5] == "Winner" %}
 
                                 <span class="badge bg-success">
+
                                     🥇 Winner
+
                                 </span>
 
                             {% elif certificate[5] == "Runner Up" %}
 
                                 <span class="badge bg-warning text-dark">
+
                                     🥈 Runner Up
+
                                 </span>
 
                             {% elif certificate[5] == "Runner" %}
 
                                 <span class="badge bg-warning text-dark">
+
                                     🥈 Runner
+
                                 </span>
 
                             {% else %}
 
                                 <span class="badge bg-secondary">
+
                                     📜 {{ certificate[5] }}
+
                                 </span>
 
                             {% endif %}
@@ -694,11 +1061,13 @@
                         </td>
 
 
+
                         <!-- UPLOAD DATE -->
 
                         <td>
                             {{ certificate[7] }}
                         </td>
+
 
 
                         <!-- =================================================
@@ -733,6 +1102,7 @@
                             {% endif %}
 
                         </td>
+
 
 
                         <!-- =================================================
@@ -812,6 +1182,7 @@
     </div>
 
 
+
     <!-- =====================================================
          REPORT SUMMARY
     ====================================================== -->
@@ -847,6 +1218,7 @@
             </div>
 
 
+
             <div class="summary-card">
 
                 <h3>
@@ -858,6 +1230,7 @@
                 </span>
 
             </div>
+
 
 
             <div class="summary-card">
@@ -873,6 +1246,7 @@
             </div>
 
 
+
             <div class="summary-card">
 
                 <h3>
@@ -885,9 +1259,11 @@
 
             </div>
 
+
         </div>
 
     </div>
+
 
 
     <!-- =====================================================
@@ -914,6 +1290,7 @@
         </div>
 
 
+
         <div class="footer-right">
 
             <p>
@@ -930,6 +1307,7 @@
 
 
 </div>
+
 
 
 <!-- =====================================================
@@ -994,13 +1372,16 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 
+
 <!-- =====================================================
      GOOGLE DRIVE VIEW ONLY
-     
+
      IMPORTANT:
+
      VIEW uses Google Drive.
-     
+
      DOWNLOAD DOES NOT USE GOOGLE DRIVE URL.
+
      DOWNLOAD uses Flask /download route.
 ====================================================== -->
 
@@ -1072,6 +1453,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+
     /*
     ========================================================
     VIEW BUTTON ONLY
@@ -1117,6 +1499,7 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 
+
 <!-- =====================================================
      DOWNLOAD REPORTS
 ====================================================== -->
@@ -1124,6 +1507,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <script>
 
 function downloadReports() {
+
 
     const searchBox =
         document.getElementById("searchInput");
@@ -1141,10 +1525,10 @@ function downloadReports() {
     /*
     ========================================================
     EMPTY SEARCH
-    ========================================================
 
     Download all certificates belonging
     to this tutor.
+    ========================================================
     */
 
     if (searchText === "") {
@@ -1160,9 +1544,9 @@ function downloadReports() {
     /*
     ========================================================
     SEARCH ENTERED
-    ========================================================
 
     Download only matching certificates.
+    ========================================================
     */
 
     window.location.href =
@@ -1174,6 +1558,7 @@ function downloadReports() {
 </script>
 
 
+
 <!-- =====================================================
      PRINT STYLE
 ====================================================== -->
@@ -1183,34 +1568,34 @@ function downloadReports() {
 @media print {
 
     body {
-        background:#ffffff !important;
+        background: #ffffff !important;
     }
 
 
     .top-buttons {
-        display:none !important;
+        display: none !important;
     }
 
 
     .report-search-actions {
-        display:none !important;
+        display: none !important;
     }
 
 
     .report-box {
-        page-break-inside:avoid;
+        page-break-inside: avoid;
     }
 
 
     .footer {
-        margin-top:30px;
-        text-align:center;
+        margin-top: 30px;
+        text-align: center;
     }
 
 
     .view-btn,
     .download-btn {
-        display:none !important;
+        display: none !important;
     }
 
 }
