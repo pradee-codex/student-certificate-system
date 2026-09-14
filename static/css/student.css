@@ -39,7 +39,9 @@ body {
 }
 
 
-/* Logo */
+/* ======================================
+   LOGO
+====================================== */
 
 .logo {
     text-align: center;
@@ -225,9 +227,6 @@ body {
     margin-bottom: 18px;
 }
 
-
-/* Profile card photo */
-
 .profile-card img {
     width: 75px !important;
     height: 75px !important;
@@ -384,7 +383,7 @@ table tr:hover {
 
 
 /* ======================================
-   VIEW + DOWNLOAD + DELETE BUTTONS
+   VIEW / DOWNLOAD / DELETE
 ====================================== */
 
 #certificateTable .view,
@@ -394,13 +393,11 @@ table tr:hover {
     display: inline-flex;
 
     align-items: center;
-
     justify-content: center;
 
     gap: 6px;
 
     min-width: 88px;
-
     height: 36px;
 
     padding: 8px 14px;
@@ -414,11 +411,9 @@ table tr:hover {
     color: #ffffff !important;
 
     border: none;
-
     border-radius: 8px;
 
     font-size: 11px;
-
     font-weight: 600;
 
     text-decoration: none;
@@ -436,9 +431,7 @@ table tr:hover {
 #certificateTable .view i,
 #certificateTable .download i,
 #certificateTable .delete i {
-
     color: #ffffff !important;
-
     font-size: 12px;
 }
 
@@ -477,7 +470,6 @@ table tr:hover {
 #certificateTable td:nth-last-child(1) {
 
     text-align: center;
-
     white-space: nowrap;
 }
 
@@ -487,11 +479,8 @@ table tr:hover {
 ====================================== */
 
 #certificateTable td form {
-
     display: inline;
-
     margin: 0;
-
     padding: 0;
 }
 
@@ -574,11 +563,14 @@ table tr:hover {
     padding: 18px;
     height: auto;
     min-height: 130px;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
     box-shadow: 0 6px 18px rgba(0,0,0,.06);
+
     transition: .3s;
 }
 
@@ -611,13 +603,11 @@ table tr:hover {
     display: inline-flex !important;
 
     align-items: center !important;
-
     justify-content: center !important;
 
     gap: 6px !important;
 
     min-width: 88px !important;
-
     height: 36px !important;
 
     padding: 8px 14px !important;
@@ -631,11 +621,9 @@ table tr:hover {
     color: #ffffff !important;
 
     border: none !important;
-
     border-radius: 8px !important;
 
     font-size: 11px !important;
-
     font-weight: 600 !important;
 
     text-decoration: none !important;
@@ -657,7 +645,6 @@ table tr:hover {
 #certificateTable td:nth-last-child(1) i {
 
     color: #ffffff !important;
-
     font-size: 12px !important;
 }
 
@@ -698,78 +685,86 @@ table tr:hover {
 #certificateTable td:nth-last-child(1) {
 
     text-align: center !important;
-
     vertical-align: middle !important;
-
     white-space: nowrap !important;
 }
 
 
 /* ======================================
-   FINAL PROFILE PHOTO OVERRIDE
-   DASHBOARD ONLY
-====================================== */
-
-.profile-card img {
-    width: 75px !important;
-    height: 75px !important;
-
-    min-width: 75px !important;
-    max-width: 75px !important;
-
-    min-height: 75px !important;
-    max-height: 75px !important;
-
-    border-radius: 50% !important;
-
-    object-fit: cover !important;
-
-    border: 3px solid #ffffff !important;
-
-    padding: 0 !important;
-
-    margin: 0 !important;
-
-    display: block !important;
-}
-
-
-/* ======================================
-   DASHBOARD WELCOME PHOTO
-   PHOTO ONLY — LEFT SIDE
+   DASHBOARD WELCOME BANNER
 ====================================== */
 
 .welcome-banner {
     position: relative;
+
+    /*
+       Extra space for the profile photo
+       so it will not overlap the upload area.
+    */
+    min-height: 185px;
 }
 
-/* IMPORTANT:
-   Do NOT move .right.
-   Upload Photo form stays in its original position.
+
+/* ======================================
+   WELCOME BANNER RIGHT SECTION
+====================================== */
+
+/*
+   IMPORTANT:
+   Do NOT make .right absolute.
+   This keeps the Upload Photo form
+   in its normal position.
 */
 
 .welcome-banner .right {
     position: static !important;
+
     display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
 }
 
 
-/* ONLY student photo is moved */
+/* ======================================
+   UPLOAD PHOTO FORM
+====================================== */
+
+.welcome-banner .right form {
+    position: relative !important;
+
+    width: 100% !important;
+
+    margin-top: 80px !important;
+
+    padding: 0 !important;
+}
+
+
+/* ======================================
+   STUDENT PHOTO
+   PHOTO ONLY MOVES
+====================================== */
 
 .welcome-banner .right .student-photo {
+
     position: absolute !important;
 
     left: 20px !important;
-    top: 95px !important;
 
-    width: 75px !important;
-    height: 75px !important;
+    top: 65px !important;
 
-    min-width: 75px !important;
-    max-width: 75px !important;
+    width: 70px !important;
+    height: 70px !important;
 
-    min-height: 75px !important;
-    max-height: 75px !important;
+    min-width: 70px !important;
+    max-width: 70px !important;
+
+    min-height: 70px !important;
+    max-height: 70px !important;
 
     border-radius: 50% !important;
 
@@ -777,8 +772,79 @@ table tr:hover {
 
     border: 3px solid #ffffff !important;
 
+    background: #ffffff !important;
+
     padding: 0 !important;
+
     margin: 0 !important;
 
     display: block !important;
+
+    z-index: 5 !important;
+}
+
+
+/* ======================================
+   RESPONSIVE
+====================================== */
+
+@media (max-width: 900px) {
+
+    .sidebar {
+        width: 190px;
+    }
+
+    .main {
+        margin-left: 190px;
+    }
+
+    .search input {
+        width: 250px;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+@media (max-width: 650px) {
+
+    .sidebar {
+        width: 70px;
+    }
+
+    .logo h2,
+    .sidebar ul li span {
+        display: none;
+    }
+
+    .logo img {
+        width: 55px;
+        height: 55px;
+    }
+
+    .main {
+        margin-left: 70px;
+    }
+
+    .topbar {
+        padding: 0 12px;
+    }
+
+    .search input {
+        width: 180px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        padding: 12px;
+    }
+
+    .welcome-banner .right .student-photo {
+        left: 15px !important;
+    }
 }
