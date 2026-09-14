@@ -225,13 +225,16 @@ body {
     margin-bottom: 18px;
 }
 
-/* Dashboard profile photo ONLY */
+
+/* Profile card photo */
 
 .profile-card img {
     width: 75px !important;
     height: 75px !important;
+
     min-width: 75px !important;
     max-width: 75px !important;
+
     min-height: 75px !important;
     max-height: 75px !important;
 
@@ -239,6 +242,7 @@ body {
     object-fit: cover !important;
 
     border: 3px solid #fff !important;
+
     padding: 0 !important;
     margin: 0 !important;
 
@@ -729,26 +733,35 @@ table tr:hover {
     display: block !important;
 }
 
+
 /* ======================================
    DASHBOARD WELCOME PHOTO
-   LEFT SIDE
+   PHOTO ONLY — LEFT SIDE
 ====================================== */
 
 .welcome-banner {
     position: relative;
 }
 
-.welcome-banner .right {
-    position: absolute;
-    left: 20px;
-    top: 95px;
+/* IMPORTANT:
+   Do NOT move .right.
+   Upload Photo form stays in its original position.
+*/
 
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
+.welcome-banner .right {
+    position: static !important;
+    display: block !important;
 }
 
+
+/* ONLY student photo is moved */
+
 .welcome-banner .right .student-photo {
+    position: absolute !important;
+
+    left: 20px !important;
+    top: 95px !important;
+
     width: 75px !important;
     height: 75px !important;
 
@@ -759,6 +772,7 @@ table tr:hover {
     max-height: 75px !important;
 
     border-radius: 50% !important;
+
     object-fit: cover !important;
 
     border: 3px solid #ffffff !important;
