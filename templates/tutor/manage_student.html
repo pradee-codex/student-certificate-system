@@ -8,245 +8,262 @@
 
 <title>Manage Students</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet">
 
 <link rel="stylesheet"
-href="{{ url_for('static', filename='css/tutor.css') }}">
+      href="{{ url_for('static', filename='css/tutor.css') }}">
 
 <style>
 
-/* =========================================
-   COMPACT MANAGE STUDENTS
-   Only size/spacing changed
-   Layout kept from tutor.css
-   ========================================= */
+/* =====================================================
+   MANAGE STUDENT - COMPACT DESIGN
+   IMPORTANT:
+   Sidebar and main-content are NOT modified
+   ===================================================== */
 
-body {
-    font-size: 11px !important;
+.manage-page {
+    font-size: 13px;
 }
 
-/* TOPBAR */
+/* ---------- TOP BAR ---------- */
 
-.topbar {
-    padding: 14px 18px !important;
-    margin-bottom: 14px !important;
+.manage-page .topbar {
+    padding: 14px 18px;
+    margin-bottom: 15px;
+    border-radius: 12px;
 }
 
-.topbar h2 {
-    font-size: 21px !important;
-    margin: 0 0 3px 0 !important;
+.manage-page .topbar h2 {
+    font-size: 21px;
+    margin-bottom: 3px;
 }
 
-.topbar h2 i {
-    font-size: 19px !important;
+.manage-page .topbar small {
+    font-size: 10px;
 }
 
-.topbar small {
-    font-size: 10px !important;
+.manage-page .profile {
+    font-size: 12px;
 }
 
-.profile {
-    font-size: 11px !important;
+/* ---------- STATISTICS ---------- */
+
+.manage-page .stats-row {
+    margin-top: 5px !important;
+    margin-bottom: 15px;
 }
 
-.profile i {
-    font-size: 24px !important;
-}
-
-
-/* =========================================
-   STATISTICS
-   ========================================= */
-
-.row.g-4 {
-    --bs-gutter-x: 12px !important;
-    --bs-gutter-y: 12px !important;
-}
-
-.stat-card {
+.manage-page .stat-card {
     padding: 15px !important;
-    min-height: 115px !important;
-    border-radius: 12px !important;
+    min-height: 105px;
+    border-radius: 12px;
 }
 
-.stat-card i {
+.manage-page .stat-card i {
     font-size: 24px !important;
-    margin-bottom: 5px !important;
 }
 
-.stat-card h3 {
-    font-size: 23px !important;
-    margin: 4px 0 !important;
+.manage-page .stat-card h3 {
+    font-size: 22px !important;
+    margin: 5px 0;
 }
 
-.stat-card p {
+.manage-page .stat-card p {
     font-size: 10px !important;
-    margin: 0 !important;
+    margin-bottom: 0;
 }
 
+/* ---------- COMMON CARDS ---------- */
 
-/* =========================================
-   CARDS
-   ========================================= */
-
-.card {
+.manage-page .card {
     margin-top: 15px !important;
-    border-radius: 12px !important;
+    border-radius: 12px;
 }
 
-.card-header {
-    padding: 11px 15px !important;
+.manage-page .card-header {
+    padding: 11px 15px;
 }
 
-.card-header h4 {
-    font-size: 15px !important;
-    margin: 0 !important;
+.manage-page .card-header h4 {
+    font-size: 15px;
+    margin: 0;
 }
 
-.card-header h4 i {
-    font-size: 14px !important;
+.manage-page .card-header i {
+    font-size: 14px;
 }
 
-.card-body {
-    padding: 15px !important;
+.manage-page .card-body {
+    padding: 15px;
 }
 
+/* ---------- FORM ---------- */
 
-/* =========================================
-   FORM
-   ========================================= */
-
-.form-label,
-label {
-    font-size: 10px !important;
-    margin-bottom: 4px !important;
+.manage-page .form-label,
+.manage-page label {
+    font-size: 11px;
     font-weight: 600;
+    margin-bottom: 4px;
 }
 
-.form-control,
-.form-select {
-    font-size: 10px !important;
-    padding: 7px 9px !important;
-    min-height: 33px !important;
-    border-radius: 6px !important;
+.manage-page .form-control,
+.manage-page .form-select {
+    height: 36px;
+    padding: 6px 10px;
+    font-size: 11px;
+    border-radius: 6px;
 }
 
-.form-control::placeholder {
-    font-size: 10px !important;
+.manage-page .form-control::placeholder {
+    font-size: 10px;
 }
 
-
-/* Form spacing */
-
-.col-lg-6,
-.col-md-6 {
-    margin-bottom: 10px !important;
+.manage-page .mb-4 {
+    margin-bottom: 12px !important;
 }
 
-
-/* =========================================
-   BUTTONS
-   ========================================= */
-
-.btn {
-    font-size: 10px !important;
-    border-radius: 6px !important;
+.manage-page .mb-3 {
+    margin-bottom: 12px !important;
 }
 
-.btn-lg {
-    padding: 7px 18px !important;
-    font-size: 10px !important;
+/* ---------- CREATE BUTTONS ---------- */
+
+.manage-page .btn-lg {
+    padding: 7px 20px !important;
+    font-size: 11px !important;
+    border-radius: 6px;
 }
 
-.btn-sm {
-    padding: 4px 7px !important;
-    font-size: 9px !important;
+.manage-page .btn-lg i {
+    font-size: 11px;
 }
 
-.btn i {
-    font-size: 10px !important;
+.manage-page .text-center.mt-3 {
+    margin-top: 5px !important;
 }
 
+/* ---------- EXCEL IMPORT ---------- */
 
-/* =========================================
-   EXCEL UPLOAD
-   ========================================= */
-
-.card-body small {
-    font-size: 9px !important;
+.manage-page .card-body small {
+    font-size: 9px;
 }
 
-hr {
-    margin: 12px 0 !important;
+.manage-page hr {
+    margin: 12px 0;
 }
 
+.manage-page .btn {
+    font-size: 10px;
+}
 
-/* =========================================
-   STUDENT LIST
-   ========================================= */
+.manage-page .btn-success {
+    padding: 8px 12px;
+    border-radius: 6px;
+}
 
-#searchStudent {
+/* ---------- STUDENT LIST HEADER ---------- */
+
+.manage-page #searchStudent {
     width: 250px !important;
-    height: 33px !important;
-    padding: 6px 10px !important;
-    font-size: 10px !important;
+    height: 34px;
+    padding: 6px 10px;
+    font-size: 10px;
+    border-radius: 6px;
 }
 
-
-/* =========================================
-   TABLE
-   ========================================= */
-
-#studentTable {
-    font-size: 10px !important;
+.manage-page #searchStudent::placeholder {
+    font-size: 10px;
 }
 
-#studentTable th {
-    font-size: 10px !important;
-    padding: 7px 8px !important;
+/* ---------- TABLE ---------- */
+
+.manage-page .table {
+    font-size: 10px;
+}
+
+.manage-page .table th {
+    font-size: 10px;
+    padding: 8px 7px;
     white-space: nowrap;
 }
 
-#studentTable td {
-    font-size: 10px !important;
-    padding: 7px 8px !important;
+.manage-page .table td {
+    font-size: 10px;
+    padding: 7px;
     white-space: nowrap;
 }
 
-#studentTable .btn-sm {
-    padding: 4px 7px !important;
-    font-size: 9px !important;
+.manage-page .table tbody tr {
+    height: 38px;
 }
 
+/* ---------- ACTION BUTTONS ---------- */
 
-/* =========================================
-   FOOTER
-   ========================================= */
-
-.text-center.mt-4.mb-3 {
-    margin-top: 14px !important;
-    margin-bottom: 10px !important;
+.manage-page .table .btn-sm {
+    padding: 4px 7px;
+    font-size: 9px;
+    border-radius: 5px;
 }
 
-.text-center.mt-4.mb-3 small {
-    font-size: 9px !important;
+.manage-page .table .btn-sm i {
+    font-size: 10px;
 }
 
+/* ---------- FOOTER ---------- */
 
-/* =========================================
-   MOBILE
-   ========================================= */
+.manage-page .footer-text {
+    font-size: 9px;
+    padding: 5px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 992px) {
+
+    .manage-page #searchStudent {
+        width: 200px !important;
+    }
+
+}
 
 @media (max-width: 768px) {
 
-    .topbar h2 {
-        font-size: 18px !important;
+    .manage-page .topbar {
+        padding: 12px;
     }
 
-    #searchStudent {
+    .manage-page .topbar h2 {
+        font-size: 18px;
+    }
+
+    .manage-page #searchStudent {
         width: 180px !important;
+    }
+
+    .manage-page .card-body {
+        padding: 12px;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    .manage-page #searchStudent {
+        width: 100% !important;
+        margin-top: 8px;
+    }
+
+    .manage-page .card-header {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+
+    .manage-page .topbar h2 {
+        font-size: 17px;
     }
 
 }
@@ -255,12 +272,13 @@ hr {
 
 </head>
 
-
 <body>
 
-<div class="wrapper">
+<div class="wrapper manage-page">
 
-    <!-- Sidebar -->
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
 
     <aside class="sidebar">
 
@@ -274,7 +292,6 @@ hr {
 
         </div>
 
-
         <ul>
 
             <li>
@@ -284,14 +301,12 @@ hr {
                 </a>
             </li>
 
-
             <li class="active">
                 <a href="/manage_student">
                     <i class="bi bi-person-plus-fill"></i>
                     Manage Students
                 </a>
             </li>
-
 
             <li>
                 <a href="/logout">
@@ -305,12 +320,13 @@ hr {
     </aside>
 
 
-    <!-- MAIN CONTENT -->
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
 
     <main class="main-content">
 
-
-        <!-- HEADER -->
+        <!-- TOP BAR -->
 
         <div class="topbar">
 
@@ -327,7 +343,6 @@ hr {
 
             </div>
 
-
             <div class="profile">
 
                 <i class="bi bi-person-circle"></i>
@@ -341,10 +356,11 @@ hr {
         </div>
 
 
-        <!-- STATISTICS -->
+        <!-- =================================================
+             STATISTICS
+             ================================================= -->
 
-        <div class="row g-4 mt-2">
-
+        <div class="row g-3 stats-row">
 
             <div class="col-md-4">
 
@@ -405,10 +421,11 @@ hr {
         </div>
 
 
-        <!-- CREATE STUDENT -->
+        <!-- =================================================
+             CREATE STUDENT ACCOUNT
+             ================================================= -->
 
-        <div class="card shadow-lg border-0 mt-4">
-
+        <div class="card shadow-lg border-0">
 
             <div class="card-header">
 
@@ -425,16 +442,11 @@ hr {
 
             <div class="card-body">
 
-
-                <form
-                    action="/add_student"
-                    method="POST">
-
+                <form action="/add_student" method="POST">
 
                     <div class="row">
 
-
-                        <!-- STUDENT NAME -->
+                        <!-- Student Name -->
 
                         <div class="col-lg-6 mb-4">
 
@@ -452,7 +464,7 @@ hr {
                         </div>
 
 
-                        <!-- REGISTER NUMBER -->
+                        <!-- Register Number -->
 
                         <div class="col-lg-6 mb-4">
 
@@ -470,7 +482,7 @@ hr {
                         </div>
 
 
-                        <!-- DEPARTMENT -->
+                        <!-- Department -->
 
                         <div class="col-lg-6 mb-4">
 
@@ -488,11 +500,11 @@ hr {
                         </div>
 
 
-                        <!-- SECTION -->
+                        <!-- Section -->
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-lg-6 mb-4">
 
-                            <label>
+                            <label class="form-label">
                                 Section
                             </label>
 
@@ -516,3 +528,432 @@ hr {
                                 <option value="C">
                                     C
                                 </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Year -->
+
+                        <div class="col-lg-6 mb-4">
+
+                            <label class="form-label">
+                                Year
+                            </label>
+
+                            <select
+                                name="year"
+                                class="form-select"
+                                required>
+
+                                <option value="">
+                                    Select Year
+                                </option>
+
+                                <option value="I">
+                                    I Year
+                                </option>
+
+                                <option value="II">
+                                    II Year
+                                </option>
+
+                                <option value="III">
+                                    III Year
+                                </option>
+
+                                <option value="IV">
+                                    IV Year
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Email -->
+
+                        <div class="col-lg-6 mb-4">
+
+                            <label class="form-label">
+                                Email Address
+                            </label>
+
+                            <input
+                                type="email"
+                                name="email"
+                                class="form-control"
+                                placeholder="Enter Email"
+                                required>
+
+                        </div>
+
+
+                        <!-- Phone -->
+
+                        <div class="col-lg-6 mb-4">
+
+                            <label class="form-label">
+                                Phone Number
+                            </label>
+
+                            <input
+                                type="text"
+                                name="phone"
+                                class="form-control"
+                                placeholder="Enter 10 Digit Mobile Number"
+                                maxlength="10"
+                                required>
+
+                        </div>
+
+
+                        <!-- Username -->
+
+                        <div class="col-lg-6 mb-4">
+
+                            <label class="form-label">
+                                Username
+                            </label>
+
+                            <input
+                                type="text"
+                                name="username"
+                                class="form-control"
+                                placeholder="Create Username"
+                                required>
+
+                        </div>
+
+
+                        <!-- Password -->
+
+                        <div class="col-lg-6 mb-4">
+
+                            <label class="form-label">
+                                Password
+                            </label>
+
+                            <input
+                                type="password"
+                                name="password"
+                                class="form-control"
+                                placeholder="Create Password"
+                                required>
+
+                        </div>
+
+
+                        <!-- Buttons -->
+
+                        <div class="col-12 text-center">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success btn-lg">
+
+                                <i class="bi bi-person-plus-fill"></i>
+
+                                Create Student
+
+                            </button>
+
+
+                            <a
+                                href="/tutor"
+                                class="btn btn-secondary btn-lg ms-2">
+
+                                <i class="bi bi-arrow-left-circle"></i>
+
+                                Back
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             IMPORT STUDENTS FROM EXCEL
+             ================================================= -->
+
+        <div class="card shadow-lg border-0">
+
+            <div class="card-header bg-success text-white">
+
+                <h4>
+
+                    <i class="bi bi-file-earmark-excel-fill"></i>
+
+                    Import Students From Excel
+
+                </h4>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <form
+                    action="/upload_students"
+                    method="POST"
+                    enctype="multipart/form-data">
+
+                    <div class="row align-items-end">
+
+                        <div class="col-lg-8">
+
+                            <label class="form-label">
+
+                                Select Excel File
+
+                            </label>
+
+                            <input
+                                type="file"
+                                name="excel_file"
+                                class="form-control"
+                                accept=".xlsx,.xls,.csv"
+                                required>
+
+                            <small class="text-muted">
+
+                                Supported Formats : .xlsx
+
+                            </small>
+
+                        </div>
+
+
+                        <div class="col-lg-4">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success w-100">
+
+                                <i class="bi bi-upload"></i>
+
+                                Upload & Import Students
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             STUDENT LIST
+             ================================================= -->
+
+        <div class="card shadow-lg border-0">
+
+            <div class="card-header d-flex justify-content-between align-items-center">
+
+                <h4>
+
+                    <i class="bi bi-people-fill"></i>
+
+                    Student List
+
+                </h4>
+
+
+                <input
+                    type="text"
+                    id="searchStudent"
+                    class="form-control"
+                    placeholder="🔍 Search Student">
+
+            </div>
+
+
+            <div class="card-body p-0">
+
+                <div class="table-responsive">
+
+                    <table
+                        class="table table-hover table-striped align-middle mb-0"
+                        id="studentTable">
+
+                        <thead class="table-success">
+
+                            <tr>
+
+                                <th>ID</th>
+
+                                <th>Student Name</th>
+
+                                <th>Register No</th>
+
+                                <th>Department</th>
+
+                                <th>Year</th>
+
+                                <th>Email</th>
+
+                                <th>Phone</th>
+
+                                <th>Username</th>
+
+                                <th class="text-center">
+                                    Actions
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                        {% for student in students %}
+
+                            <tr>
+
+                                <td>
+                                    {{ student[0] }}
+                                </td>
+
+                                <td>
+                                    {{ student[1] }}
+                                </td>
+
+                                <td>
+                                    {{ student[2] }}
+                                </td>
+
+                                <td>
+                                    {{ student[3] }}
+                                </td>
+
+                                <td>
+                                    {{ student[4] }}
+                                </td>
+
+                                <td>
+                                    {{ student[5] }}
+                                </td>
+
+                                <td>
+                                    {{ student[6] }}
+                                </td>
+
+                                <td>
+                                    {{ student[7] }}
+                                </td>
+
+                                <td class="text-center">
+
+                                    <a
+                                        href="/edit_student/{{ student[0] }}"
+                                        class="btn btn-warning btn-sm">
+
+                                        <i class="bi bi-pencil-square"></i>
+
+                                    </a>
+
+
+                                    <a
+                                        href="/delete_student/{{ student[0] }}"
+                                        class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Are you sure you want to delete this student?');">
+
+                                        <i class="bi bi-trash-fill"></i>
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             FOOTER
+             ================================================= -->
+
+        <div class="text-center mt-3 mb-3 footer-text">
+
+            <small class="text-muted">
+
+                © 2026 Student Certificate Management System
+                | Designed By PRADEEP From AIDS
+
+            </small>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- =====================================================
+     SEARCH STUDENT
+     ===================================================== -->
+
+<script>
+
+document
+.getElementById("searchStudent")
+.addEventListener("keyup", function () {
+
+    let value = this.value.toLowerCase();
+
+    let rows = document.querySelectorAll(
+        "#studentTable tbody tr"
+    );
+
+    rows.forEach(function(row) {
+
+        let text = row.innerText.toLowerCase();
+
+        if (text.indexOf(value) > -1) {
+
+            row.style.display = "";
+
+        } else {
+
+            row.style.display = "none";
+
+        }
+
+    });
+
+});
+
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+</body>
+
+</html>
