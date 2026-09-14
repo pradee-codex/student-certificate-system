@@ -3722,6 +3722,10 @@ def update_hod_profile():
 # HOD Reports
 # ==========================
 
+# ==========================
+# HOD Reports
+# ==========================
+
 @app.route("/hod_reports")
 def hod_reports():
 
@@ -3738,7 +3742,6 @@ def hod_reports():
         SELECT
             hods.hod_name,
             hods.department,
-            hods.email,
             users.profile_photo
 
         FROM hods
@@ -3746,7 +3749,7 @@ def hod_reports():
         INNER JOIN users
             ON hods.user_id = users.id
 
-        WHERE users.id = %s
+        WHERE hods.user_id = %s
     """, (session["user_id"],))
 
     hod = cursor.fetchone()
@@ -3765,8 +3768,9 @@ def hod_reports():
     cursor.execute("""
         SELECT COUNT(*)
         FROM students
-        WHERE department=%s
+        WHERE department = %s
     """, (department,))
+
     total_students = cursor.fetchone()[0]
 
     # ==============================
@@ -3776,10 +3780,13 @@ def hod_reports():
     cursor.execute("""
         SELECT COUNT(*)
         FROM certificates
+
         INNER JOIN students
             ON certificates.student_id = students.student_id
-        WHERE students.department=%s
+
+        WHERE students.department = %s
     """, (department,))
+
     total_certificates = cursor.fetchone()[0]
 
     # ==============================
@@ -3787,11 +3794,17 @@ def hod_reports():
     # ==============================
 
     cursor.execute("""
-        SELECT department, COUNT(*)
+        SELECT
+            department,
+            COUNT(*)
+
         FROM students
-        WHERE department=%s
+
+        WHERE department = %s
+
         GROUP BY department
     """, (department,))
+
     department_report = cursor.fetchall()
 
     # ==============================
@@ -3799,12 +3812,19 @@ def hod_reports():
     # ==============================
 
     cursor.execute("""
-        SELECT year, COUNT(*)
+        SELECT
+            year,
+            COUNT(*)
+
         FROM students
-        WHERE department=%s
+
+        WHERE department = %s
+
         GROUP BY year
+
         ORDER BY year
     """, (department,))
+
     year_report = cursor.fetchall()
 
     # ==============================
@@ -3818,14 +3838,15 @@ def hod_reports():
 
         FROM certificate_categories
 
-        LEFT JOIN certificates
+        INNER JOIN certificates
             ON certificate_categories.category_id =
                certificates.category_id
 
-        LEFT JOIN students
-            ON certificates.student_id = students.student_id
+        INNER JOIN students
+            ON certificates.student_id =
+               students.student_id
 
-        WHERE students.department=%s
+        WHERE students.department = %s
 
         GROUP BY certificate_categories.category_name
 
@@ -3853,13 +3874,14 @@ def hod_reports():
         FROM certificates
 
         INNER JOIN students
-            ON certificates.student_id = students.student_id
+            ON certificates.student_id =
+               students.student_id
 
         INNER JOIN certificate_categories
             ON certificates.category_id =
                certificate_categories.category_id
 
-        WHERE students.department=%s
+        WHERE students.department = %s
 
         ORDER BY certificates.upload_date DESC
     """, (department,))
@@ -3867,6 +3889,10 @@ def hod_reports():
     certificates = cursor.fetchall()
 
     cursor.close()
+
+    # ==============================
+    # RENDER HOD REPORT
+    # ==============================
 
     return render_template(
         "hod/report.html",
@@ -3880,6 +3906,7 @@ def hod_reports():
         certificates=certificates
     )
 
+
 # ==========================
 # HOD Export PDF
 # ==========================
@@ -3892,11 +3919,14 @@ def hod_export_pdf():
 
     cursor = mysql.connection.cursor()
 
-    # Get HOD Department
+    # ==============================
+    # GET HOD DEPARTMENT
+    # ==============================
+
     cursor.execute("""
         SELECT department
         FROM hods
-        WHERE user_id=%s
+        WHERE user_id = %s
     """, (session["user_id"],))
 
     hod = cursor.fetchone()
@@ -3908,7 +3938,10 @@ def hod_export_pdf():
 
     department = hod[0]
 
-    # Fetch Certificate Records
+    # ==============================
+    # FETCH CERTIFICATE RECORDS
+    # ==============================
+
     cursor.execute("""
         SELECT
             students.register_no,
@@ -3922,12 +3955,14 @@ def hod_export_pdf():
         FROM certificates
 
         INNER JOIN students
-            ON certificates.student_id = students.student_id
+            ON certificates.student_id =
+               students.student_id
 
         INNER JOIN certificate_categories
-            ON certificates.category_id = certificate_categories.category_id
+            ON certificates.category_id =
+               certificate_categories.category_id
 
-        WHERE students.department=%s
+        WHERE students.department = %s
 
         ORDER BY students.student_name
     """, (department,))
@@ -3936,10 +3971,16 @@ def hod_export_pdf():
 
     cursor.close()
 
-    # Create PDF
+    # ==============================
+    # CREATE PDF
+    # ==============================
+
     buffer = BytesIO()
 
-    pdf = canvas.Canvas(buffer, pagesize=letter)
+    pdf = canvas.Canvas(
+        buffer,
+        pagesize=letter
+    )
 
     width, height = letter
 
@@ -3947,12 +3988,31 @@ def hod_export_pdf():
 
     pdf.setTitle("HOD Certificate Report")
 
-    pdf.setFont("Helvetica-Bold", 16)
-    pdf.drawString(180, y, "HOD Certificate Report")
+    # ==============================
+    # TITLE
+    # ==============================
+
+    pdf.setFont(
+        "Helvetica-Bold",
+        16
+    )
+
+    pdf.drawString(
+        180,
+        y,
+        "HOD Certificate Report"
+    )
 
     y -= 30
 
-    pdf.setFont("Helvetica-Bold", 10)
+    # ==============================
+    # TABLE HEADER
+    # ==============================
+
+    pdf.setFont(
+        "Helvetica-Bold",
+        10
+    )
 
     pdf.drawString(20, y, "Reg No")
     pdf.drawString(85, y, "Student")
@@ -3964,7 +4024,14 @@ def hod_export_pdf():
 
     y -= 20
 
-    pdf.setFont("Helvetica", 9)
+    pdf.setFont(
+        "Helvetica",
+        9
+    )
+
+    # ==============================
+    # RECORDS
+    # ==============================
 
     for row in records:
 
@@ -3974,7 +4041,10 @@ def hod_export_pdf():
 
             y = height - 40
 
-            pdf.setFont("Helvetica-Bold", 10)
+            pdf.setFont(
+                "Helvetica-Bold",
+                10
+            )
 
             pdf.drawString(20, y, "Reg No")
             pdf.drawString(85, y, "Student")
@@ -3986,15 +4056,52 @@ def hod_export_pdf():
 
             y -= 20
 
-            pdf.setFont("Helvetica", 9)
+            pdf.setFont(
+                "Helvetica",
+                9
+            )
 
-        pdf.drawString(20, y, str(row[0]))
-        pdf.drawString(85, y, str(row[1])[:14])
-        pdf.drawString(180, y, str(row[2]))
-        pdf.drawString(240, y, str(row[3]))
-        pdf.drawString(290, y, str(row[4])[:20])
-        pdf.drawString(430, y, str(row[5])[:12])
-        pdf.drawString(510, y, str(row[6]))
+        pdf.drawString(
+            20,
+            y,
+            str(row[0])
+        )
+
+        pdf.drawString(
+            85,
+            y,
+            str(row[1])[:14]
+        )
+
+        pdf.drawString(
+            180,
+            y,
+            str(row[2])
+        )
+
+        pdf.drawString(
+            240,
+            y,
+            str(row[3])
+        )
+
+        pdf.drawString(
+            290,
+            y,
+            str(row[4])[:20]
+        )
+
+        pdf.drawString(
+            430,
+            y,
+            str(row[5])[:12]
+        )
+
+        pdf.drawString(
+            510,
+            y,
+            str(row[6])
+        )
 
         y -= 18
 
@@ -4009,6 +4116,7 @@ def hod_export_pdf():
         mimetype="application/pdf"
     )
 
+
 # ==========================
 # HOD Export Excel
 # ==========================
@@ -4021,11 +4129,14 @@ def hod_export_excel():
 
     cursor = mysql.connection.cursor()
 
-    # HOD Department
+    # ==============================
+    # HOD DEPARTMENT
+    # ==============================
+
     cursor.execute("""
         SELECT department
         FROM hods
-        WHERE user_id=%s
+        WHERE user_id = %s
     """, (session["user_id"],))
 
     hod = cursor.fetchone()
@@ -4037,7 +4148,10 @@ def hod_export_excel():
 
     department = hod[0]
 
-    # Certificate Records
+    # ==============================
+    # CERTIFICATE RECORDS
+    # ==============================
+
     cursor.execute("""
         SELECT
             students.register_no,
@@ -4051,12 +4165,14 @@ def hod_export_excel():
         FROM certificates
 
         INNER JOIN students
-            ON certificates.student_id = students.student_id
+            ON certificates.student_id =
+               students.student_id
 
         INNER JOIN certificate_categories
-            ON certificates.category_id = certificate_categories.category_id
+            ON certificates.category_id =
+               certificate_categories.category_id
 
-        WHERE students.department=%s
+        WHERE students.department = %s
 
         ORDER BY students.student_name
     """, (department,))
@@ -4064,6 +4180,10 @@ def hod_export_excel():
     records = cursor.fetchall()
 
     cursor.close()
+
+    # ==============================
+    # CREATE EXCEL
+    # ==============================
 
     workbook = Workbook()
 
