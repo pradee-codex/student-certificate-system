@@ -533,15 +533,13 @@
                     type="text"
                     id="searchInput"
                     placeholder="Search Student / Register No / Department / Certificate..."
-                    autocomplete="off"
-                >
+                    autocomplete="off">
 
 
                 <button
                     type="button"
                     onclick="downloadReports()"
-                    class="download-all-btn"
-                >
+                    class="download-all-btn">
 
                     <i class="bi bi-download"></i>
 
@@ -563,87 +561,223 @@
             <table id="certificateTable">
 
                 <thead>
+
                     <tr>
+
                         <th>Register No</th>
+
                         <th>Student</th>
+
                         <th>Department</th>
+
                         <th>Year</th>
+
                         <th>Certificate</th>
+
                         <th>Category</th>
+
                         <th>Achievement</th>
+
                         <th>Upload Date</th>
+
                         <th>View</th>
+
                         <th>Download</th>
+
                     </tr>
+
                 </thead>
+
 
                 <tbody>
 
                     {% for certificate in certificates %}
 
                     <tr>
-                        <td><strong>{{ certificate[0] }}</strong></td>
-                        <td>{{ certificate[1] }}</td>
-                        <td>{{ certificate[2] }}</td>
-                        <td>{{ certificate[3] }}</td>
-                        <td>{{ certificate[4] }}</td>
-                        <td>{{ certificate[5] }}</td>
+
+                        <!-- Register No -->
 
                         <td>
+                            <strong>
+                                {{ certificate[0] }}
+                            </strong>
+                        </td>
+
+
+                        <!-- Student -->
+
+                        <td>
+                            {{ certificate[1] }}
+                        </td>
+
+
+                        <!-- Department -->
+
+                        <td>
+                            {{ certificate[2] }}
+                        </td>
+
+
+                        <!-- Year -->
+
+                        <td>
+                            {{ certificate[3] }}
+                        </td>
+
+
+                        <!-- Certificate -->
+
+                        <td>
+                            {{ certificate[4] }}
+                        </td>
+
+
+                        <!-- Category -->
+
+                        <td>
+                            {{ certificate[5] }}
+                        </td>
+
+
+                        <!-- Achievement -->
+
+                        <td>
+
                             {% if certificate[6] == "Participated" %}
-                                <span class="badge bg-primary">🏅 Participated</span>
+
+                                <span class="badge bg-primary">
+                                    🏅 Participated
+                                </span>
+
                             {% elif certificate[6] == "Winner" %}
-                                <span class="badge bg-success">🥇 Winner</span>
+
+                                <span class="badge bg-success">
+                                    🥇 Winner
+                                </span>
+
                             {% elif certificate[6] == "Runner Up" %}
-                                <span class="badge bg-warning text-dark">🥈 Runner Up</span>
+
+                                <span class="badge bg-warning text-dark">
+                                    🥈 Runner Up
+                                </span>
+
                             {% elif certificate[6] == "Runner" %}
-                                <span class="badge bg-warning text-dark">🥈 Runner</span>
+
+                                <span class="badge bg-warning text-dark">
+                                    🥈 Runner
+                                </span>
+
                             {% else %}
-                                <span class="badge bg-secondary">📜 {{ certificate[6] }}</span>
+
+                                <span class="badge bg-secondary">
+                                    📜 {{ certificate[6] }}
+                                </span>
+
                             {% endif %}
+
                         </td>
 
-                        <td>{{ certificate[8] }}</td>
 
-                        <!-- VIEW: Flask route handles Google Drive internally -->
+                        <!-- Upload Date -->
+
                         <td>
-                            {% if certificate[7] %}
-                                <a href="{{ url_for('view', filename=certificate[7]) }}"
-                                   class="view-btn"
-                                   target="_blank"
-                                   rel="noopener noreferrer">
-                                    <i class="bi bi-eye-fill"></i> View
-                                </a>
-                            {% else %}
-                                <span>No File</span>
-                            {% endif %}
+                            {{ certificate[8] }}
                         </td>
 
-                        <!-- DOWNLOAD: keep existing Flask download route -->
+
+                        <!-- VIEW -->
+
                         <td>
+
                             {% if certificate[7] %}
-                                <a href="{{ url_for('download', filename=certificate[7]) }}"
-                                   class="download-btn">
-                                    <i class="bi bi-download"></i> Download
+
+                                <a
+                                    href="{{ url_for(
+                                        'view',
+                                        filename=certificate[7]
+                                    ) }}"
+                                    class="view-btn"
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+
+                                    <i class="bi bi-eye-fill"></i>
+                                    View
+
                                 </a>
+
                             {% else %}
-                                <span>No File</span>
+
+                                <span>
+                                    No File
+                                </span>
+
                             {% endif %}
+
                         </td>
+
+
+                        <!-- DOWNLOAD -->
+
+                        <td>
+
+                            {% if certificate[7] %}
+
+                                <a
+                                    href="{{ url_for(
+                                        'download',
+                                        filename=certificate[7]
+                                    ) }}"
+                                    class="download-btn">
+
+                                    <i class="bi bi-download"></i>
+                                    Download
+
+                                </a>
+
+                            {% else %}
+
+                                <span>
+                                    No File
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
                     </tr>
+
 
                     {% else %}
+
                     <tr>
-                        <td colspan="10" style="text-align:center;padding:40px;">
-                            <i class="bi bi-award" style="font-size:45px;"></i>
-                            <h3>No Certificates Found</h3>
-                            <p>No student certificates have been uploaded.</p>
+
+                        <td
+                            colspan="10"
+                            style="text-align:center;padding:40px;">
+
+                            <i
+                                class="bi bi-award"
+                                style="font-size:45px;">
+                            </i>
+
+                            <h3>
+                                No Certificates Found
+                            </h3>
+
+                            <p>
+                                No student certificates have been uploaded.
+                            </p>
+
                         </td>
+
                     </tr>
+
                     {% endfor %}
 
                 </tbody>
+
             </table>
+
         </div>
 
     </div>
@@ -828,10 +962,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+
+/* =====================================================
+   DOWNLOAD REPORTS
+====================================================== */
+
+function downloadReports() {
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+    const searchValue =
+        searchInput
+            ? searchInput.value.trim()
+            : "";
+
+
+    /*
+       If search is empty,
+       download all tutor certificates.
+
+       If search has a value,
+       send the search value to the
+       tutor export route.
+    */
+
+    if (searchValue === "") {
+
+        window.location.href =
+            "/tutor_export_zip";
+
+    } else {
+
+        window.location.href =
+            "/tutor_export_zip?search=" +
+            encodeURIComponent(searchValue);
+
+    }
+
+}
+
 </script>
-
-
-
 
 
 <!-- =====================================================
