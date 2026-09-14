@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -7,10 +8,18 @@
 
 <title>Student Profile</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet">
+
 
 <style>
+
+/* =====================================================
+   GLOBAL
+===================================================== */
 
 *{
     box-sizing:border-box;
@@ -23,7 +32,10 @@ body{
     margin:0;
 }
 
-/* MAIN PROFILE CARD */
+
+/* =====================================================
+   MAIN PROFILE CARD
+===================================================== */
 
 .profile-card{
     max-width:1000px;
@@ -34,7 +46,10 @@ body{
     box-shadow:0 8px 22px rgba(0,0,0,.12);
 }
 
-/* HEADER */
+
+/* =====================================================
+   PROFILE HEADER
+===================================================== */
 
 .profile-header{
     background:#198754;
@@ -46,14 +61,49 @@ body{
     margin:0;
 }
 
+
+/* =====================================================
+   STUDENT PROFILE IMAGE
+   PERFECT CIRCLE
+===================================================== */
+
 .profile-img{
-    width:115px;
-    height:115px;
-    border-radius:50%;
-    object-fit:cover;
-    border:4px solid #fff;
+
+    width:115px !important;
+    height:115px !important;
+
+    min-width:115px !important;
+    min-height:115px !important;
+
+    max-width:115px !important;
+    max-height:115px !important;
+
+    aspect-ratio:1 / 1 !important;
+
+    border-radius:50% !important;
+
+    object-fit:cover !important;
+
+    display:block !important;
+
+    overflow:hidden !important;
+
+    border:4px solid #fff !important;
+
     background:#fff;
+
+    box-sizing:border-box !important;
+
+    flex-shrink:0 !important;
+
+    margin:0 auto !important;
+
 }
+
+
+/* =====================================================
+   PROFILE HEADER TEXT
+===================================================== */
 
 .profile-header h2{
     font-size:21px;
@@ -73,7 +123,10 @@ body{
     margin:0;
 }
 
-/* PHOTO UPLOAD */
+
+/* =====================================================
+   PHOTO UPLOAD
+===================================================== */
 
 .profile-header .mt-3{
     margin-top:10px !important;
@@ -93,11 +146,19 @@ body{
     border-radius:6px;
 }
 
-/* BODY */
+
+/* =====================================================
+   PROFILE BODY
+===================================================== */
 
 .profile-card .card-body{
     padding:22px 25px !important;
 }
+
+
+/* =====================================================
+   FORM LABEL
+===================================================== */
 
 .form-label{
     font-size:11px;
@@ -105,6 +166,11 @@ body{
     margin-bottom:5px;
     color:#333;
 }
+
+
+/* =====================================================
+   FORM INPUT
+===================================================== */
 
 .form-control{
     height:36px;
@@ -118,13 +184,19 @@ body{
     border-color:#198754;
 }
 
-/* FORM SPACING */
+
+/* =====================================================
+   FORM SPACING
+===================================================== */
 
 .profile-card .mb-4{
     margin-bottom:13px !important;
 }
 
-/* BUTTONS */
+
+/* =====================================================
+   SAVE BUTTON
+===================================================== */
 
 .btn-save{
     background:#198754;
@@ -141,19 +213,30 @@ body{
     color:white;
 }
 
+
+/* =====================================================
+   BACK BUTTON
+===================================================== */
+
 .btn-back{
     padding:7px 20px;
     border-radius:7px;
     font-size:11px;
 }
 
-/* BUTTON AREA */
+
+/* =====================================================
+   BUTTON AREA
+===================================================== */
 
 .profile-card .text-center{
     margin-top:10px !important;
 }
 
-/* MOBILE */
+
+/* =====================================================
+   MOBILE
+===================================================== */
 
 @media(max-width:768px){
 
@@ -162,14 +245,41 @@ body{
         border-radius:12px;
     }
 
+
     .profile-header{
         padding:18px;
     }
 
+
+    /* MOBILE PERFECT CIRCLE */
+
     .profile-img{
-        width:95px;
-        height:95px;
+
+        width:95px !important;
+        height:95px !important;
+
+        min-width:95px !important;
+        min-height:95px !important;
+
+        max-width:95px !important;
+        max-height:95px !important;
+
+        aspect-ratio:1 / 1 !important;
+
+        border-radius:50% !important;
+
+        object-fit:cover !important;
+
+        display:block !important;
+
+        overflow:hidden !important;
+
+        border:4px solid #fff !important;
+
+        margin:0 auto !important;
+
     }
+
 
     .profile-header h2{
         font-size:19px;
@@ -183,9 +293,11 @@ body{
         font-size:10px;
     }
 
+
     .profile-card .card-body{
         padding:18px !important;
     }
+
 
     .btn-save,
     .btn-back{
@@ -199,38 +311,60 @@ body{
 
 </head>
 
+
 <body>
+
 
 <div class="card profile-card">
 
-    <!-- PROFILE HEADER -->
+
+    <!-- =====================================================
+         PROFILE HEADER
+    ====================================================== -->
 
     <div class="profile-header">
 
+
         <div class="row align-items-center">
 
+
+            <!-- =================================================
+                 PROFILE PHOTO
+            ================================================== -->
+
             <div class="col-md-3 text-center">
+
 
                 {% if student[7] %}
 
                 <img
-                    src="{{ url_for('static', filename='uploads/profile/' + student[7]) }}"
+                    src="{{ url_for(
+                        'static',
+                        filename='uploads/profile/' + student[7]
+                    ) }}"
                     class="profile-img"
                     alt="Student Profile">
 
                 {% else %}
 
                 <img
-                    src="{{ url_for('static', filename='uploads/default.png') }}"
+                    src="{{ url_for(
+                        'static',
+                        filename='uploads/default.png'
+                    ) }}"
                     class="profile-img"
                     alt="Default Profile">
 
                 {% endif %}
 
+
+                <!-- PHOTO UPLOAD -->
+
                 <form
                     action="/upload_student_photo"
                     method="POST"
                     enctype="multipart/form-data">
+
 
                     <div class="mt-3">
 
@@ -238,15 +372,18 @@ body{
                             type="file"
                             name="profile_photo"
                             class="form-control"
+                            accept=".jpg,.jpeg,.png"
                             required>
 
                     </div>
+
 
                     <button
                         type="submit"
                         class="btn btn-light upload-btn">
 
                         <i class="bi bi-upload"></i>
+
                         Upload Photo
 
                     </button>
@@ -255,43 +392,79 @@ body{
 
             </div>
 
+
+
+            <!-- =================================================
+                 PROFILE DETAILS
+            ================================================== -->
+
             <div class="col-md-9">
 
+
                 <h2>
+
                     <i class="bi bi-person-circle"></i>
+
                     Student Profile
+
                 </h2>
 
+
                 <h3>
-                    Welcome, {{ student[2] }}
+
+                    Welcome,
+
+                    {{ student[2] }}
+
                 </h3>
 
+
                 <h5>
-                    Register No : {{ student[1] }}
+
+                    Register No :
+
+                    {{ student[1] }}
+
                 </h5>
 
+
             </div>
+
 
         </div>
 
     </div>
 
 
-    <!-- PROFILE FORM -->
+
+    <!-- =====================================================
+         PROFILE FORM
+    ====================================================== -->
 
     <div class="card-body">
 
-        <form action="/update_student_profile" method="POST">
+
+        <form
+            action="/update_student_profile"
+            method="POST">
+
 
             <div class="row">
 
-                <!-- Student Name -->
+
+                <!-- =================================================
+                     STUDENT NAME
+                ================================================== -->
 
                 <div class="col-md-6 mb-4">
 
+
                     <label class="form-label">
+
                         Student Name
+
                     </label>
+
 
                     <input
                         type="text"
@@ -300,16 +473,24 @@ body{
                         value="{{ student[2] }}"
                         required>
 
+
                 </div>
 
 
-                <!-- Register Number -->
+
+                <!-- =================================================
+                     REGISTER NUMBER
+                ================================================== -->
 
                 <div class="col-md-6 mb-4">
 
+
                     <label class="form-label">
+
                         Register Number
+
                     </label>
+
 
                     <input
                         type="text"
@@ -317,16 +498,24 @@ body{
                         value="{{ student[1] }}"
                         readonly>
 
+
                 </div>
 
 
-                <!-- Department -->
+
+                <!-- =================================================
+                     DEPARTMENT
+                ================================================== -->
 
                 <div class="col-md-6 mb-4">
 
+
                     <label class="form-label">
+
                         Department
+
                     </label>
+
 
                     <input
                         type="text"
@@ -334,16 +523,24 @@ body{
                         value="{{ student[3] }}"
                         readonly>
 
+
                 </div>
 
 
-                <!-- Year -->
+
+                <!-- =================================================
+                     YEAR
+                ================================================== -->
 
                 <div class="col-md-6 mb-4">
 
+
                     <label class="form-label">
+
                         Year
+
                     </label>
+
 
                     <input
                         type="text"
@@ -351,16 +548,24 @@ body{
                         value="{{ student[4] }}"
                         readonly>
 
+
                 </div>
 
 
-                <!-- Email -->
+
+                <!-- =================================================
+                     EMAIL
+                ================================================== -->
 
                 <div class="col-md-6 mb-4">
 
+
                     <label class="form-label">
+
                         Email
+
                     </label>
+
 
                     <input
                         type="email"
@@ -368,16 +573,24 @@ body{
                         class="form-control"
                         value="{{ student[5] }}">
 
+
                 </div>
 
 
-                <!-- Phone -->
+
+                <!-- =================================================
+                     PHONE
+                ================================================== -->
 
                 <div class="col-md-6 mb-4">
 
+
                     <label class="form-label">
+
                         Phone Number
+
                     </label>
+
 
                     <input
                         type="text"
@@ -385,43 +598,68 @@ body{
                         class="form-control"
                         value="{{ student[6] }}">
 
+
                 </div>
+
 
             </div>
 
 
-            <!-- ACTION BUTTONS -->
+
+            <!-- =================================================
+                 ACTION BUTTONS
+            ================================================== -->
 
             <div class="text-center mt-4">
+
 
                 <button
                     type="submit"
                     class="btn btn-save">
 
+
                     <i class="bi bi-check-circle-fill"></i>
+
                     Update Profile
 
+
                 </button>
+
+
 
                 <a
                     href="/student"
                     class="btn btn-secondary btn-back ms-2">
 
+
                     <i class="bi bi-arrow-left-circle-fill"></i>
+
                     Back
+
 
                 </a>
 
+
             </div>
+
 
         </form>
 
+
     </div>
+
 
 </div>
 
 
+
+<!-- =====================================================
+     BOOTSTRAP JS
+====================================================== -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+
 </body>
+
 </html>
