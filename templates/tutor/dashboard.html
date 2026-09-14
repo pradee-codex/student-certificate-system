@@ -15,6 +15,7 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
     <style>
 
         * {
@@ -55,33 +56,25 @@
 
 
         .logo-area {
-
             text-align: center;
-
             margin-bottom: 30px;
         }
 
 
         .logo-area h2 {
-
             font-size: 23px;
-
             margin-bottom: 5px;
         }
 
 
         .logo-area p {
-
             font-size: 12px;
-
             opacity: 0.85;
         }
 
 
         .profile-box {
-
             text-align: center;
-
             margin-bottom: 30px;
         }
 
@@ -102,29 +95,23 @@
 
 
         .profile-box h4 {
-
             font-size: 16px;
-
             margin-bottom: 3px;
         }
 
 
         .profile-box p {
-
             font-size: 12px;
-
             opacity: 0.85;
         }
 
 
         .menu {
-
             list-style: none;
         }
 
 
         .menu li {
-
             margin-bottom: 8px;
         }
 
@@ -153,13 +140,11 @@
 
         .menu a:hover,
         .menu a.active {
-
             background: rgba(255,255,255,0.18);
         }
 
 
         .menu i {
-
             font-size: 17px;
         }
 
@@ -176,8 +161,15 @@
             padding: 25px 30px;
 
             min-height: 100vh;
+
+            padding-bottom: 30px;
         }
 
+
+
+        /* =====================================================
+           PAGE HEADER
+        ===================================================== */
 
         .page-header {
 
@@ -294,22 +286,33 @@
 
             border-radius: 14px;
 
-            padding: 25px;
+            padding: 20px;
+
+            /*
+              CENTER BOX SMALLER
+            */
+
+            max-width: 1000px;
+
+            margin: 0 auto 25px auto;
 
             box-shadow:
                 0 4px 15px rgba(0,0,0,0.06);
-
-            margin-bottom: 25px;
         }
 
 
-        /* Search bar */
+
+        /* =====================================================
+           SEARCH BAR
+        ===================================================== */
 
         .student-search-bar {
 
-            max-width: 650px;
+            max-width: 560px;
 
-            margin: 0 auto 25px auto;
+            height: 46px;
+
+            margin: 0 auto 18px auto;
 
             display: flex;
 
@@ -317,7 +320,7 @@
 
             border: 1px solid #d9dee7;
 
-            border-radius: 10px;
+            border-radius: 9px;
 
             overflow: hidden;
 
@@ -327,9 +330,9 @@
 
         .search-icon {
 
-            width: 48px;
+            width: 45px;
 
-            height: 48px;
+            height: 46px;
 
             display: flex;
 
@@ -339,7 +342,7 @@
 
             color: #198754;
 
-            font-size: 19px;
+            font-size: 18px;
         }
 
 
@@ -347,13 +350,13 @@
 
             flex: 1;
 
-            height: 48px;
+            height: 46px;
 
             border: none;
 
             outline: none;
 
-            font-size: 14px;
+            font-size: 13px;
 
             padding: 0 10px;
         }
@@ -361,7 +364,7 @@
 
         .student-search-bar button {
 
-            height: 48px;
+            height: 46px;
 
             border: none;
 
@@ -369,11 +372,11 @@
 
             color: white;
 
-            padding: 0 25px;
+            padding: 0 23px;
 
             cursor: pointer;
 
-            font-size: 14px;
+            font-size: 13px;
 
             font-weight: 600;
         }
@@ -398,15 +401,15 @@
 
             align-items: center;
 
-            gap: 20px;
+            gap: 15px;
 
-            padding: 18px;
+            padding: 14px;
 
-            border-radius: 12px;
+            border-radius: 10px;
 
             background: #f8fafc;
 
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
 
@@ -416,14 +419,14 @@
 
             align-items: center;
 
-            gap: 13px;
+            gap: 11px;
         }
 
 
         .student-result-icon {
 
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
 
             border-radius: 50%;
 
@@ -437,15 +440,15 @@
 
             justify-content: center;
 
-            font-size: 21px;
+            font-size: 19px;
         }
 
 
         .student-result-info h4 {
 
-            font-size: 17px;
+            font-size: 16px;
 
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
 
@@ -453,7 +456,7 @@
 
             color: #6b7280;
 
-            font-size: 12px;
+            font-size: 11px;
         }
 
 
@@ -466,23 +469,23 @@
 
             display: flex;
 
-            gap: 12px;
+            gap: 9px;
         }
 
 
         .mini-stat {
 
-            min-width: 135px;
+            min-width: 120px;
 
-            padding: 12px 15px;
+            padding: 9px 12px;
 
-            border-radius: 9px;
+            border-radius: 8px;
 
             display: flex;
 
             align-items: center;
 
-            gap: 10px;
+            gap: 8px;
 
             background: white;
 
@@ -492,7 +495,7 @@
 
         .mini-stat i {
 
-            font-size: 20px;
+            font-size: 18px;
 
             color: #198754;
         }
@@ -504,9 +507,9 @@
 
             color: #6b7280;
 
-            font-size: 10px;
+            font-size: 9px;
 
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
 
@@ -514,7 +517,7 @@
 
             display: block;
 
-            font-size: 18px;
+            font-size: 17px;
         }
 
 
@@ -542,7 +545,7 @@
             grid-template-columns:
                 1fr 1fr;
 
-            gap: 20px;
+            gap: 15px;
         }
 
 
@@ -552,9 +555,9 @@
 
             border: 1px solid #edf0f4;
 
-            border-radius: 12px;
+            border-radius: 10px;
 
-            padding: 18px;
+            padding: 15px;
         }
 
 
@@ -564,13 +567,13 @@
 
             align-items: center;
 
-            gap: 9px;
+            gap: 8px;
 
-            font-size: 14px;
+            font-size: 13px;
 
             font-weight: 600;
 
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
 
@@ -578,13 +581,13 @@
 
             color: #198754;
 
-            font-size: 17px;
+            font-size: 16px;
         }
 
 
         .student-chart-container {
 
-            height: 250px;
+            height: 210px;
 
             position: relative;
         }
@@ -597,7 +600,7 @@
 
         .student-empty {
 
-            min-height: 130px;
+            min-height: 90px;
 
             display: flex;
 
@@ -615,9 +618,9 @@
 
         .student-empty i {
 
-            font-size: 35px;
+            font-size: 30px;
 
-            margin-bottom: 8px;
+            margin-bottom: 6px;
 
             color: #198754;
         }
@@ -625,7 +628,7 @@
 
         .student-empty p {
 
-            font-size: 13px;
+            font-size: 12px;
         }
 
 
@@ -767,6 +770,35 @@
 
 
         /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer {
+
+            margin-left: 240px;
+
+            background: white;
+
+            border-top: 1px solid #e5e7eb;
+
+            padding: 16px 30px;
+
+            text-align: center;
+
+            color: #6b7280;
+
+            font-size: 12px;
+        }
+
+
+        .footer strong {
+
+            color: #198754;
+        }
+
+
+
+        /* =====================================================
            RESPONSIVE
         ===================================================== */
 
@@ -787,6 +819,7 @@
             }
 
         }
+
 
 
         @media (max-width: 800px) {
@@ -833,6 +866,12 @@
             }
 
 
+            .student-search-card {
+
+                max-width: 100%;
+            }
+
+
             .student-graph-row {
 
                 grid-template-columns: 1fr;
@@ -846,7 +885,14 @@
                 flex-wrap: wrap;
             }
 
+
+            .footer {
+
+                margin-left: 70px;
+            }
+
         }
+
 
 
         @media (max-width: 550px) {
@@ -859,9 +905,25 @@
 
             .student-search-bar {
 
+                max-width: 100%;
+
                 flex-wrap: wrap;
 
+                height: auto;
+
                 border: none;
+
+                overflow: visible;
+            }
+
+
+            .search-icon {
+
+                border: 1px solid #d9dee7;
+
+                border-right: none;
+
+                border-radius: 8px 0 0 8px;
             }
 
 
@@ -884,11 +946,24 @@
                 border-radius: 8px;
             }
 
+
+            .student-mini-stats {
+
+                flex-direction: column;
+            }
+
+
+            .mini-stat {
+
+                width: 100%;
+            }
+
         }
 
     </style>
 
 </head>
+
 
 
 <body>
@@ -904,7 +979,9 @@
 
         <h2>SCMS</h2>
 
-        <p>Student Certificate Management</p>
+        <p>
+            Student Certificate Management
+        </p>
 
     </div>
 
@@ -913,31 +990,47 @@
 
         {% if tutor[4] %}
 
-            <img src="{{ url_for('static', filename='uploads/' + tutor[4]) }}"
-                 onerror="this.src='{{ url_for('static', filename='images/default.png') }}'">
+            <img
+                src="{{ url_for('static', filename='uploads/' + tutor[4]) }}"
+                onerror="this.src='{{ url_for('static', filename='images/default.png') }}'"
+            >
 
         {% else %}
 
-            <img src="{{ url_for('static', filename='images/default.png') }}">
+            <img
+                src="{{ url_for('static', filename='images/default.png') }}"
+            >
 
         {% endif %}
 
-        <h4>{{ tutor_name }}</h4>
 
-        <p>Tutor</p>
+        <h4>
+            {{ tutor_name }}
+        </h4>
+
+
+        <p>
+            Tutor
+        </p>
 
     </div>
+
 
 
     <ul class="menu">
 
         <li>
 
-            <a href="/tutor" class="active">
+            <a
+                href="/tutor"
+                class="active"
+            >
 
                 <i class="bi bi-speedometer2"></i>
 
-                <span>Dashboard</span>
+                <span>
+                    Dashboard
+                </span>
 
             </a>
 
@@ -950,7 +1043,9 @@
 
                 <i class="bi bi-people-fill"></i>
 
-                <span>Students</span>
+                <span>
+                    Students
+                </span>
 
             </a>
 
@@ -963,7 +1058,9 @@
 
                 <i class="bi bi-bar-chart-fill"></i>
 
-                <span>Reports</span>
+                <span>
+                    Reports
+                </span>
 
             </a>
 
@@ -976,7 +1073,9 @@
 
                 <i class="bi bi-grid-fill"></i>
 
-                <span>Categories</span>
+                <span>
+                    Categories
+                </span>
 
             </a>
 
@@ -989,7 +1088,9 @@
 
                 <i class="bi bi-person-fill"></i>
 
-                <span>Profile</span>
+                <span>
+                    Profile
+                </span>
 
             </a>
 
@@ -1002,7 +1103,9 @@
 
                 <i class="bi bi-box-arrow-right"></i>
 
-                <span>Logout</span>
+                <span>
+                    Logout
+                </span>
 
             </a>
 
@@ -1015,28 +1118,37 @@
 
 
 <!-- =========================================================
-     MAIN
+     MAIN CONTENT
 ========================================================= -->
 
 <div class="main">
 
 
-    <!-- PAGE HEADER -->
+    <!-- =====================================================
+         PAGE HEADER
+    ===================================================== -->
 
     <div class="page-header">
 
         <div>
 
-            <h1>Tutor Dashboard</h1>
+            <h1>
+                Tutor Dashboard
+            </h1>
+
 
             <p>
+
                 {{ department }}
+
                 {% if class_year %}
                     • {{ class_year }}
                 {% endif %}
+
                 {% if section %}
                     • {{ section }}
                 {% endif %}
+
             </p>
 
         </div>
@@ -1052,7 +1164,7 @@
     <div class="top-cards">
 
 
-        <!-- Total Students -->
+        <!-- TOTAL STUDENTS -->
 
         <div class="top-card">
 
@@ -1062,18 +1174,24 @@
 
             </div>
 
+
             <div>
 
-                <h3>{{ total_students }}</h3>
+                <h3>
+                    {{ total_students }}
+                </h3>
 
-                <span>Total Students</span>
+                <span>
+                    Total Students
+                </span>
 
             </div>
 
         </div>
 
 
-        <!-- Total Certificates -->
+
+        <!-- TOTAL CERTIFICATES -->
 
         <div class="top-card">
 
@@ -1083,18 +1201,24 @@
 
             </div>
 
+
             <div>
 
-                <h3>{{ total_certificates }}</h3>
+                <h3>
+                    {{ total_certificates }}
+                </h3>
 
-                <span>Total Certificates</span>
+                <span>
+                    Total Certificates
+                </span>
 
             </div>
 
         </div>
 
 
-        <!-- Department -->
+
+        <!-- DEPARTMENT -->
 
         <div class="top-card">
 
@@ -1104,18 +1228,24 @@
 
             </div>
 
+
             <div>
 
-                <h3>{{ department }}</h3>
+                <h3>
+                    {{ department }}
+                </h3>
 
-                <span>Department</span>
+                <span>
+                    Department
+                </span>
 
             </div>
 
         </div>
 
 
-        <!-- Completion -->
+
+        <!-- COMPLETION -->
 
         <div class="top-card">
 
@@ -1125,40 +1255,54 @@
 
             </div>
 
+
             <div>
 
                 {% if total_students > 0 %}
 
                     <h3>
-                        {{ ((total_certificates / total_students) * 100) | round(0) | int }}%
+
+                        {{
+                            ((total_certificates / total_students) * 100)
+                            | round(0)
+                            | int
+                        }}%
+
                     </h3>
 
                 {% else %}
 
-                    <h3>0%</h3>
+                    <h3>
+                        0%
+                    </h3>
 
                 {% endif %}
 
-                <span>Completion</span>
+
+                <span>
+                    Completion
+                </span>
 
             </div>
 
         </div>
+
 
     </div>
 
 
 
     <!-- =====================================================
-         STUDENT SEARCH + GRAPHS
+         STUDENT SEARCH CARD
     ===================================================== -->
 
     <div class="student-search-card">
 
 
-        <!-- SEARCH -->
+        <!-- SEARCH BAR -->
 
         <div class="student-search-bar">
+
 
             <div class="search-icon">
 
@@ -1189,7 +1333,7 @@
 
 
         <!-- =================================================
-             SEARCH RESULT
+             RESULT
         ================================================= -->
 
         <div
@@ -1198,12 +1342,13 @@
         >
 
 
-            <!-- Student Header -->
+            <!-- STUDENT HEADER -->
 
             <div class="student-result-header">
 
 
                 <div class="student-result-info">
+
 
                     <div class="student-result-icon">
 
@@ -1217,6 +1362,7 @@
                         <h4 id="selectedStudentName">
                             Student Name
                         </h4>
+
 
                         <small>
 
@@ -1239,11 +1385,12 @@
                 <div class="student-mini-stats">
 
 
-                    <!-- Total Certificates -->
+                    <!-- TOTAL -->
 
                     <div class="mini-stat">
 
                         <i class="bi bi-file-earmark-text-fill"></i>
+
 
                         <div>
 
@@ -1251,7 +1398,10 @@
                                 Total Certificates
                             </small>
 
-                            <strong id="studentTotalCertificates">
+
+                            <strong
+                                id="studentTotalCertificates"
+                            >
                                 0
                             </strong>
 
@@ -1260,11 +1410,13 @@
                     </div>
 
 
-                    <!-- Winner -->
+
+                    <!-- WINNER -->
 
                     <div class="mini-stat winner-stat">
 
                         <i class="bi bi-trophy-fill"></i>
+
 
                         <div>
 
@@ -1272,7 +1424,10 @@
                                 Winner
                             </small>
 
-                            <strong id="studentWinnerCount">
+
+                            <strong
+                                id="studentWinnerCount"
+                            >
                                 0
                             </strong>
 
@@ -1281,11 +1436,13 @@
                     </div>
 
 
-                    <!-- Participated -->
+
+                    <!-- PARTICIPATED -->
 
                     <div class="mini-stat participated-stat">
 
                         <i class="bi bi-people-fill"></i>
+
 
                         <div>
 
@@ -1293,7 +1450,10 @@
                                 Participated
                             </small>
 
-                            <strong id="studentParticipatedCount">
+
+                            <strong
+                                id="studentParticipatedCount"
+                            >
                                 0
                             </strong>
 
@@ -1304,20 +1464,22 @@
 
                 </div>
 
+
             </div>
 
 
 
             <!-- =================================================
-                 GRAPH ROW
+                 GRAPHS
             ================================================= -->
 
             <div class="student-graph-row">
 
 
-                <!-- CATEGORY GRAPH -->
+                <!-- CATEGORY -->
 
                 <div class="student-graph-card">
+
 
                     <div class="student-graph-title">
 
@@ -1333,18 +1495,20 @@
                     <div class="student-chart-container">
 
                         <canvas
-                            id="studentCategoryChart">
-                        </canvas>
+                            id="studentCategoryChart"
+                        ></canvas>
 
                     </div>
+
 
                 </div>
 
 
 
-                <!-- ACHIEVEMENT GRAPH -->
+                <!-- ACHIEVEMENT -->
 
                 <div class="student-graph-card">
+
 
                     <div class="student-graph-title">
 
@@ -1360,22 +1524,24 @@
                     <div class="student-chart-container">
 
                         <canvas
-                            id="studentAchievementChart">
-                        </canvas>
+                            id="studentAchievementChart"
+                        ></canvas>
 
                     </div>
+
 
                 </div>
 
 
             </div>
 
+
         </div>
 
 
 
         <!-- =================================================
-             EMPTY SEARCH MESSAGE
+             EMPTY MESSAGE
         ================================================= -->
 
         <div
@@ -1384,6 +1550,7 @@
         >
 
             <i class="bi bi-person-search"></i>
+
 
             <p>
                 Search a student to view certificate details
@@ -1397,7 +1564,7 @@
 
 
     <!-- =====================================================
-         STUDENT CERTIFICATES TABLE
+         CERTIFICATE TABLE
     ===================================================== -->
 
     <div class="table-card">
@@ -1407,47 +1574,70 @@
 
             <i class="bi bi-award-fill"></i>
 
-            <h3>Student Certificates</h3>
+
+            <h3>
+                Student Certificates
+            </h3>
 
         </div>
 
 
+
         <div class="table-wrapper">
 
+
             <table>
+
 
                 <thead>
 
                     <tr>
 
-                        <th>Student Name</th>
+                        <th>
+                            Student Name
+                        </th>
 
-                        <th>Department</th>
+                        <th>
+                            Department
+                        </th>
 
-                        <th>Year</th>
+                        <th>
+                            Year
+                        </th>
 
-                        <th>Certificate</th>
+                        <th>
+                            Certificate
+                        </th>
 
-                        <th>Category</th>
+                        <th>
+                            Category
+                        </th>
 
-                        <th>Achievement</th>
+                        <th>
+                            Achievement
+                        </th>
 
-                        <th>View</th>
+                        <th>
+                            View
+                        </th>
 
                     </tr>
 
                 </thead>
 
 
+
                 <tbody>
+
 
                     {% if certificates %}
 
+
                         {% for row in certificates %}
+
 
                             <tr>
 
-                                <!-- Student -->
 
                                 <td>
 
@@ -1458,39 +1648,31 @@
                                 </td>
 
 
-                                <!-- Department -->
-
                                 <td>
                                     {{ row[1] }}
                                 </td>
 
-
-                                <!-- Year -->
 
                                 <td>
                                     {{ row[2] }}
                                 </td>
 
 
-                                <!-- Certificate -->
-
                                 <td>
                                     {{ row[3] }}
                                 </td>
 
-
-                                <!-- Category -->
 
                                 <td>
                                     {{ row[4] }}
                                 </td>
 
 
-                                <!-- Achievement -->
-
                                 <td>
 
-                                    <span class="achievement-badge">
+                                    <span
+                                        class="achievement-badge"
+                                    >
 
                                         {{ row[5] }}
 
@@ -1499,11 +1681,11 @@
                                 </td>
 
 
-                                <!-- View -->
-
                                 <td>
 
+
                                     {% if row[8] %}
+
 
                                         <a
                                             href="{{ row[8] }}"
@@ -1517,27 +1699,38 @@
 
                                         </a>
 
+
                                     {% else %}
+
 
                                         <span>
                                             No File
                                         </span>
 
+
                                     {% endif %}
+
 
                                 </td>
 
+
                             </tr>
+
 
                         {% endfor %}
 
+
                     {% else %}
+
 
                         <tr>
 
                             <td
                                 colspan="7"
-                                style="text-align:center; padding:30px;"
+                                style="
+                                    text-align:center;
+                                    padding:30px;
+                                "
                             >
 
                                 No certificates found.
@@ -1546,13 +1739,18 @@
 
                         </tr>
 
+
                     {% endif %}
+
 
                 </tbody>
 
+
             </table>
 
+
         </div>
+
 
     </div>
 
@@ -1562,10 +1760,25 @@
 
 
 <!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="footer">
+
+    © 2026
+    <strong>Student Certificate Management System</strong>
+    . Designed By PRADEEP From AIDS.
+
+</footer>
+
+
+
+<!-- =========================================================
      JAVASCRIPT
 ========================================================= -->
 
 <script>
+
 
     /* ========================================================
        DATA FROM FLASK
@@ -1601,9 +1814,10 @@
 
 
 
-        /* Empty search */
+        /* EMPTY SEARCH */
 
         if (searchValue === "") {
+
 
             document.getElementById(
                 "studentGraphResult"
@@ -1627,7 +1841,9 @@
 
             `;
 
+
             return;
+
         }
 
 
@@ -1647,9 +1863,10 @@
 
 
 
-        /* Student not found */
+        /* STUDENT NOT FOUND */
 
         if (studentCertificates.length === 0) {
+
 
             document.getElementById(
                 "studentGraphResult"
@@ -1673,7 +1890,9 @@
 
             `;
 
+
             return;
+
         }
 
 
@@ -1694,7 +1913,7 @@
 
 
         /* ====================================================
-           STUDENT DETAILS
+           STUDENT NAME
         ==================================================== */
 
         document.getElementById(
@@ -1702,6 +1921,11 @@
         ).innerText =
             studentCertificates[0].name;
 
+
+
+        /* ====================================================
+           REGISTER NUMBER
+        ==================================================== */
 
         document.getElementById(
             "selectedRegisterNo"
@@ -1732,6 +1956,7 @@
 
         studentCertificates.forEach(item => {
 
+
             const achievement =
                 (item.achievement || "")
                     .toLowerCase()
@@ -1756,6 +1981,7 @@
                 participatedCount++;
 
             }
+
 
         });
 
@@ -1783,12 +2009,14 @@
 
         studentCertificates.forEach(item => {
 
+
             const category =
                 item.category || "Others";
 
 
             categoryCounts[category] =
                 (categoryCounts[category] || 0) + 1;
+
 
         });
 
@@ -1803,12 +2031,14 @@
 
         studentCertificates.forEach(item => {
 
+
             const achievement =
                 item.achievement || "Others";
 
 
             achievementCounts[achievement] =
                 (achievementCounts[achievement] || 0) + 1;
+
 
         });
 
@@ -1847,10 +2077,12 @@
 
                 type: "bar",
 
+
                 data: {
 
                     labels:
                         Object.keys(categoryCounts),
+
 
                     datasets: [
 
@@ -1859,8 +2091,10 @@
                             label:
                                 "Number of Certificates",
 
+
                             data:
                                 Object.values(categoryCounts),
+
 
                             backgroundColor: [
 
@@ -1872,6 +2106,7 @@
                                 "#ec4899"
 
                             ],
+
 
                             borderRadius: 5
 
@@ -1887,6 +2122,7 @@
                     responsive: true,
 
                     maintainAspectRatio: false,
+
 
                     plugins: {
 
@@ -1905,13 +2141,14 @@
 
                             beginAtZero: true,
 
+
                             ticks: {
 
                                 stepSize: 1,
 
                                 font: {
 
-                                    size: 10
+                                    size: 9
 
                                 }
 
@@ -1926,7 +2163,7 @@
 
                                 font: {
 
-                                    size: 10
+                                    size: 9
 
                                 }
 
@@ -1958,10 +2195,12 @@
 
                 type: "bar",
 
+
                 data: {
 
                     labels:
                         Object.keys(achievementCounts),
+
 
                     datasets: [
 
@@ -1970,8 +2209,10 @@
                             label:
                                 "Certificates",
 
+
                             data:
                                 Object.values(achievementCounts),
+
 
                             backgroundColor: [
 
@@ -1982,6 +2223,7 @@
                                 "#0d6efd"
 
                             ],
+
 
                             borderRadius: 5
 
@@ -2000,6 +2242,7 @@
 
                     maintainAspectRatio: false,
 
+
                     plugins: {
 
                         legend: {
@@ -2017,13 +2260,14 @@
 
                             beginAtZero: true,
 
+
                             ticks: {
 
                                 stepSize: 1,
 
                                 font: {
 
-                                    size: 10
+                                    size: 9
 
                                 }
 
@@ -2038,7 +2282,7 @@
 
                                 font: {
 
-                                    size: 10
+                                    size: 9
 
                                 }
 
@@ -2053,6 +2297,7 @@
             }
 
         );
+
 
     }
 
@@ -2076,6 +2321,7 @@
 
             }
         );
+
 
 </script>
 
