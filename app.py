@@ -3462,11 +3462,18 @@ def export_zip():
 # DELETE CERTIFICATE - TUTOR
 # ============================================================
 
-@app.route("/delete_certificate/<path:filename>")
+
+# ----------------------------------------------------
+        # DELETE FROM DATABASE
+        # ----------------------------------------------------
+
+    @app.route("/delete_certificate/<path:filename>", methods=["POST"])
 def delete_certificate(filename):
 
-    # Only Tutor can delete
-    if session.get("role") != "tutor":
+    role = session.get("role")
+
+    # Student or Tutor only
+    if role not in ["student", "tutor"]:
         flash("Unauthorized access.")
         return redirect("/")
 
@@ -3474,194 +3481,231 @@ def delete_certificate(filename):
 
     try:
 
-        # ----------------------------------------------------
-        # GET TUTOR DETAILS
-        # ----------------------------------------------------
-        cursor.execute("""
-            SELECT
-                department,
-                class_year,
-                section
-            FROM tutors
-            WHERE user_id = %s
-        """, (session["user_id"],))
+        # ====================================================
+        # STUDENT DELETE
+        # ====================================================
 
-        tutor = cursor.fetchone()
+        if role == "student":
 
-        if not tutor:
-            cursor.close()
-            flash("Tutor not found.")
-            return redirect("/tutor")
+            cursor.execute("""
+                DELETE FROM certificates
+                WHERE certificate_file = %s
+                AND student_id = (
+                    SELECT student_id
+                    FROM students
+                    WHERE user_id = %s
+                )
+            """, (
+                filename,
+                session["user_id"]
+            ))
 
-        tutor_department = tutor[0]
-        tutor_year = tutor[1]
-        tutor_section = tutor[2]
+            mysql.connection.commit()
 
-        # ----------------------------------------------------
-        # FIND CERTIFICATE + STUDENT DETAILS
-        # ----------------------------------------------------
-        cursor.execute("""
-            SELECT
-                certificates.certificate_id,
-                certificates.certificate_file,
-                students.department,
-                students.year,
-                students.section
-            FROM certificates
+            if cursor.rowcount > 0:
+                flash("Certificate deleted successfully.")
+            else:
+                flash("Certificate not found.")
 
-            INNER JOIN students
-                ON certificates.student_id =
-                   students.student_id
+            return redirect("/student")
 
-            WHERE certificates.certificate_file = %s
-        """, (filename,))
 
-        certificate = cursor.fetchone()
+        # ====================================================
+        # TUTOR DELETE
+        # ====================================================
 
-        if not certificate:
-            cursor.close()
-            flash("Certificate not found.")
-            return redirect("/tutor")
+        if role == "tutor":
 
-        certificate_id = certificate[0]
-        certificate_file = certificate[1]
-        student_department = certificate[2]
-        student_year = certificate[3]
-        student_section = certificate[4]
+            # ------------------------------------------------
+            # GET TUTOR DETAILS
+            # ------------------------------------------------
 
-        # ----------------------------------------------------
-        # CHECK TUTOR ACCESS
-        # ----------------------------------------------------
+            cursor.execute("""
+                SELECT
+                    department,
+                    class_year,
+                    section
+                FROM tutors
+                WHERE user_id = %s
+            """, (session["user_id"],))
 
-        # Department check
-        if (
-            tutor_department
-            and student_department
-            and str(tutor_department).strip().lower()
-            != str(student_department).strip().lower()
-        ):
-            cursor.close()
-            flash("You are not authorized to delete this certificate.")
-            return redirect("/tutor")
+            tutor = cursor.fetchone()
 
-        # Year check
-        if (
-            tutor_year
-            and student_year
-            and str(tutor_year).strip().lower()
-            != str(student_year).strip().lower()
-        ):
-            cursor.close()
-            flash("You are not authorized to delete this certificate.")
-            return redirect("/tutor")
+            if not tutor:
+                flash("Tutor not found.")
+                return redirect("/tutor")
 
-        # Section check
-        if (
-            tutor_section
-            and student_section
-            and str(tutor_section).strip().lower()
-            != str(student_section).strip().lower()
-        ):
-            cursor.close()
-            flash("You are not authorized to delete this certificate.")
-            return redirect("/tutor")
+            tutor_department = tutor[0]
+            tutor_year = tutor[1]
+            tutor_section = tutor[2]
 
-        # ----------------------------------------------------
-        # DELETE FROM GOOGLE DRIVE
-        # ----------------------------------------------------
 
-        if (
-            certificate_file.startswith("http://")
-            or certificate_file.startswith("https://")
-        ):
+            # ------------------------------------------------
+            # FIND CERTIFICATE + STUDENT DETAILS
+            # ------------------------------------------------
+
+            cursor.execute("""
+                SELECT
+                    certificates.certificate_id,
+                    certificates.certificate_file,
+                    students.department,
+                    students.year,
+                    students.section
+                FROM certificates
+
+                INNER JOIN students
+                    ON certificates.student_id =
+                       students.student_id
+
+                WHERE certificates.certificate_file = %s
+            """, (filename,))
+
+            certificate = cursor.fetchone()
+
+            if not certificate:
+                flash("Certificate not found.")
+                return redirect("/tutor")
+
+            certificate_id = certificate[0]
+            certificate_file = certificate[1]
+            student_department = certificate[2]
+            student_year = certificate[3]
+            student_section = certificate[4]
+
+
+            # ------------------------------------------------
+            # CHECK TUTOR ACCESS
+            # ------------------------------------------------
+
+            # Department check
+            if (
+                tutor_department
+                and student_department
+                and str(tutor_department).strip().lower()
+                != str(student_department).strip().lower()
+            ):
+                flash("You are not authorized to delete this certificate.")
+                return redirect("/tutor")
+
+
+            # Year check
+            if (
+                tutor_year
+                and student_year
+                and str(tutor_year).strip().lower()
+                != str(student_year).strip().lower()
+            ):
+                flash("You are not authorized to delete this certificate.")
+                return redirect("/tutor")
+
+
+            # Section check
+            if (
+                tutor_section
+                and student_section
+                and str(tutor_section).strip().lower()
+                != str(student_section).strip().lower()
+            ):
+                flash("You are not authorized to delete this certificate.")
+                return redirect("/tutor")
+
+
+            # ------------------------------------------------
+            # DELETE FROM GOOGLE DRIVE
+            # ------------------------------------------------
 
             if (
-                "drive.google.com" in certificate_file
-                or "drive.usercontent.google.com" in certificate_file
+                certificate_file.startswith("http://")
+                or certificate_file.startswith("https://")
             ):
 
-                import re
+                if (
+                    "drive.google.com" in certificate_file
+                    or "drive.usercontent.google.com"
+                    in certificate_file
+                ):
 
-                file_id = None
+                    import re
 
-                # /file/d/FILE_ID/view
-                match = re.search(
-                    r"/file/d/([^/]+)",
-                    certificate_file
-                )
+                    file_id = None
 
-                if match:
-                    file_id = match.group(1)
-
-                # ?id=FILE_ID
-                if not file_id:
-
+                    # /file/d/FILE_ID/view
                     match = re.search(
-                        r"[?&]id=([^&]+)",
+                        r"/file/d/([^/]+)",
                         certificate_file
                     )
 
                     if match:
                         file_id = match.group(1)
 
-                if file_id:
 
-                    try:
+                    # ?id=FILE_ID
+                    if not file_id:
 
-                        from drive_service import get_drive_service
-
-                        service = get_drive_service()
-
-                        service.files().delete(
-                            fileId=file_id
-                        ).execute()
-
-                        print(
-                            "GOOGLE DRIVE FILE DELETED:",
-                            file_id
+                        match = re.search(
+                            r"[?&]id=([^&]+)",
+                            certificate_file
                         )
 
-                    except Exception as e:
+                        if match:
+                            file_id = match.group(1)
 
-                        print(
-                            "GOOGLE DRIVE DELETE ERROR:",
-                            str(e)
-                        )
 
-                        cursor.close()
+                    if file_id:
 
-                        flash(
-                            "Unable to delete certificate from Google Drive."
-                        )
+                        try:
 
-                        return redirect("/tutor")
+                            from drive_service import get_drive_service
 
-        # ----------------------------------------------------
-        # DELETE FROM DATABASE
-        # ----------------------------------------------------
+                            service = get_drive_service()
 
-        cursor.execute("""
-            DELETE FROM certificates
-            WHERE certificate_id = %s
-        """, (certificate_id,))
+                            service.files().delete(
+                                fileId=file_id
+                            ).execute()
 
-        mysql.connection.commit()
+                            print(
+                                "GOOGLE DRIVE FILE DELETED:",
+                                file_id
+                            )
 
-        cursor.close()
+                        except Exception as e:
 
-        print(
-            "CERTIFICATE DELETED:",
-            certificate_id
-        )
+                            print(
+                                "GOOGLE DRIVE DELETE ERROR:",
+                                str(e)
+                            )
 
-        flash("Certificate deleted successfully.")
+                            flash(
+                                "Unable to delete certificate from Google Drive."
+                            )
 
-        return redirect("/tutor")
+                            return redirect("/tutor")
+
+
+            # ------------------------------------------------
+            # DELETE FROM DATABASE
+            # ------------------------------------------------
+
+            cursor.execute("""
+                DELETE FROM certificates
+                WHERE certificate_id = %s
+            """, (certificate_id,))
+
+            mysql.connection.commit()
+
+            print(
+                "CERTIFICATE DELETED:",
+                certificate_id
+            )
+
+            flash("Certificate deleted successfully.")
+
+            return redirect("/tutor")
+
 
     except Exception as e:
 
         mysql.connection.rollback()
-        cursor.close()
 
         print("================================")
         print("DELETE CERTIFICATE ERROR")
@@ -3671,7 +3715,14 @@ def delete_certificate(filename):
 
         flash("Unable to delete certificate.")
 
-        return redirect("/tutor")
+        if role == "student":
+            return redirect("/student")
+        else:
+            return redirect("/tutor")
+
+
+    finally:
+        cursor.close()
 # ==========================
 # HOD Dashboard
 # ==========================
@@ -5901,65 +5952,7 @@ def download_all():
         
     )
 #============================
-@app.route("/delete_certificate/<path:filename>", methods=["POST"])
-def delete_certificate(filename):
 
-    if session.get("role") not in ["student", "tutor"]:
-        return redirect("/")
-
-    cursor = mysql.connection.cursor()
-
-    try:
-
-        if session.get("role") == "student":
-
-            # Student can delete only their own certificate
-            cursor.execute("""
-                DELETE FROM certificates
-                WHERE certificate_file = %s
-                AND student_id = (
-                    SELECT student_id
-                    FROM students
-                    WHERE user_id = %s
-                )
-            """, (
-                filename,
-                session["user_id"]
-            ))
-
-            redirect_page = "/student"
-
-        else:
-
-            # Tutor can delete the certificate
-            cursor.execute("""
-                DELETE FROM certificates
-                WHERE certificate_file = %s
-            """, (
-                filename,
-            ))
-
-            redirect_page = "/tutor"
-
-        mysql.connection.commit()
-
-        if cursor.rowcount > 0:
-            flash("Certificate deleted successfully.")
-        else:
-            flash("Certificate not found.")
-
-    except Exception as e:
-
-        mysql.connection.rollback()
-
-        print("DELETE CERTIFICATE ERROR:", e)
-
-        flash("Unable to delete certificate.")
-
-    finally:
-        cursor.close()
-
-    return redirect(redirect_page)
 # ==========================
 # Export Excel
 # ==========================
