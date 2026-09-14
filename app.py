@@ -766,9 +766,6 @@ def tutor():
 
     if class_year is None or section is None:
 
-        # No year/section assigned
-        # Show all students from tutor department
-
         cursor.execute("""
             SELECT COUNT(*)
             FROM students
@@ -776,9 +773,6 @@ def tutor():
         """, (department,))
 
     else:
-
-        # Year and section assigned
-        # Show only students from that class
 
         cursor.execute("""
             SELECT COUNT(*)
@@ -797,31 +791,21 @@ def tutor():
 
     if class_year is None or section is None:
 
-        # No year/section
-        # Count all certificates from tutor department
-
         cursor.execute("""
             SELECT COUNT(*)
             FROM certificates
-
             INNER JOIN students
                 ON certificates.student_id = students.student_id
-
             WHERE students.department=%s
         """, (department,))
 
     else:
 
-        # Year and section assigned
-        # Count only certificates from that class
-
         cursor.execute("""
             SELECT COUNT(*)
             FROM certificates
-
             INNER JOIN students
                 ON certificates.student_id = students.student_id
-
             WHERE students.department=%s
             AND students.year=%s
             AND students.section=%s
@@ -836,8 +820,6 @@ def tutor():
 
     if class_year is None or section is None:
 
-        # Show ALL students from tutor department
-
         cursor.execute("""
             SELECT
                 student_name,
@@ -846,16 +828,12 @@ def tutor():
                 year,
                 email
             FROM students
-
             WHERE department=%s
-
             ORDER BY student_name
         """, (department,))
 
     else:
 
-        # Show students only from tutor's year and section
-
         cursor.execute("""
             SELECT
                 student_name,
@@ -864,11 +842,9 @@ def tutor():
                 year,
                 email
             FROM students
-
             WHERE department=%s
             AND year=%s
             AND section=%s
-
             ORDER BY student_name
         """, (department, class_year, section))
 
@@ -880,9 +856,6 @@ def tutor():
     # =========================================================
 
     if class_year is None or section is None:
-
-        # No year/section
-        # Show ALL certificates from tutor department
 
         cursor.execute("""
             SELECT
@@ -911,9 +884,6 @@ def tutor():
         """, (department,))
 
     else:
-
-        # Year and section assigned
-        # Show only certificates from that class
 
         cursor.execute("""
             SELECT
@@ -959,7 +929,23 @@ def tutor():
     cursor.close()
 
 
-# =========================================================
+    # =========================================================
+    # Render Dashboard
+    # =========================================================
+
+    return render_template(
+        "tutor/dashboard.html",
+        tutor=tutor,
+        tutor_name=tutor_name,
+        department=department,
+        class_year=class_year,
+        section=section,
+        total_students=total_students,
+        total_certificates=total_certificates,
+        students=students,
+        certificates=certificates
+    )
+#=====================================================
     
 
 @app.route("/tutor_profile")
