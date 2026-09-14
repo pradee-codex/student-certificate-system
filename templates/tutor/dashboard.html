@@ -1402,7 +1402,7 @@ footer small {
                                 {% if row[8] %}
 
                                     <a
-                                        href="{{ row[8] }}"
+                                        href="{{ url_for('view', filename=row[8]) }}"
                                         class="btn btn-primary btn-sm"
                                         target="_blank"
                                         rel="noopener noreferrer">
