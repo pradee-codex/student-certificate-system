@@ -8,796 +8,936 @@
 
     <title>Tutor Dashboard</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet">
-
     <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-          rel="stylesheet">
-
-    <!-- Poppins Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <style>
 
-<style>
-
-/* =====================================================
-   GLOBAL
-===================================================== */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
-
-body {
-    background: #eef2f7;
-    font-size: 13px;
-}
-
-.wrapper {
-    display: flex;
-    min-height: 100vh;
-}
-
-
-/* =====================================================
-   SIDEBAR
-===================================================== */
-
-.sidebar {
-    width: 220px;
-    background: #198754;
-    color: white;
-    position: fixed;
-    height: 100%;
-    overflow: auto;
-    box-shadow: 4px 0 15px rgba(0,0,0,.10);
-}
-
-.logo {
-    padding: 18px;
-}
-
-.logo-img {
-    width: 60px;
-    height: 60px;
-    object-fit: contain;
-}
-
-.logo h2 {
-    font-size: 20px;
-    font-weight: 700;
-    margin-top: 7px;
-}
-
-.logo p {
-    font-size: 10px;
-    opacity: .8;
-    margin-bottom: 0;
-}
-
-
-/* PROFILE */
-
-.profile {
-    text-align: center;
-    padding: 8px 15px;
-}
-
-.profile-img {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    border: 3px solid white;
-    object-fit: cover;
-    background: white;
-}
-
-.profile h4 {
-    margin-top: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 5px;
-}
-
-.profile .badge {
-    font-size: 9px;
-    padding: 5px 8px;
-}
-
-.profile p {
-    margin-top: 6px;
-    margin-bottom: 0;
-    font-size: 10px;
-}
-
-
-/* SIDEBAR MENU */
-
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin-top: 15px;
-}
-
-.sidebar ul li {
-    margin: 4px 12px;
-}
-
-.sidebar ul li a {
-    display: block;
-    padding: 10px 13px;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-size: 12px;
-    transition: .3s;
-}
-
-.sidebar ul li a:hover,
-.sidebar ul li.active a {
-    background: white;
-    color: #198754;
-    font-weight: 600;
-}
-
-.sidebar ul li a i {
-    margin-right: 8px;
-    font-size: 13px;
-}
-
-
-/* =====================================================
-   MAIN CONTENT
-===================================================== */
-
-.main-content {
-    margin-left: 220px;
-    width: calc(100% - 220px);
-    padding: 20px;
-}
-
-
-/* =====================================================
-   TOP BAR
-===================================================== */
-
-.topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: white;
-    padding: 14px 20px;
-    border-radius: 12px;
-    box-shadow: 0 5px 18px rgba(0,0,0,.07);
-}
-
-.topbar h1 {
-    font-size: 22px;
-    font-weight: 600;
-    color: #198754;
-    margin-bottom: 3px;
-}
-
-.topbar p {
-    font-size: 11px;
-}
-
-.top-icons {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.icon-box {
-    width: 36px;
-    height: 36px;
-    background: #f5f5f5;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 15px;
-}
-
-
-/* =====================================================
-   DASHBOARD CARDS
-===================================================== */
-
-.dashboard-card {
-    background: white;
-    padding: 18px;
-    border-radius: 13px;
-    box-shadow: 0 6px 20px rgba(0,0,0,.07);
-    text-align: center;
-    transition: .3s;
-}
-
-.dashboard-card:hover {
-    transform: translateY(-3px);
-}
-
-.icon {
-    width: 55px;
-    height: 55px;
-    margin: auto;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    color: white;
-    margin-bottom: 10px;
-}
-
-.students {
-    background: #2563eb;
-}
-
-.certificates {
-    background: #16a34a;
-}
-
-.department {
-    background: #f59e0b;
-}
-
-.progress {
-    background: #7c3aed;
-}
-
-.dashboard-card h3 {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 4px;
-}
-
-.dashboard-card h1 {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 4px;
-}
-
-.dashboard-card p {
-    font-size: 10px;
-    margin-bottom: 0;
-}
-
-
-/* =====================================================
-   STUDENT ANALYSIS SECTION
-===================================================== */
-
-.student-analysis {
-    background: white;
-    border-radius: 14px;
-    padding: 14px;
-    margin-top: 15px;
-    box-shadow: 0 5px 18px rgba(0,0,0,.07);
-}
-
-
-/* SEARCH BAR */
-
-.student-search {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.student-search .search-icon {
-    color: #198754;
-    font-size: 15px;
-}
-
-.student-search input {
-    width: 220px;
-    height: 34px;
-    border: 1px solid #b7c9dc;
-    border-radius: 6px;
-    padding: 7px 12px;
-    font-size: 10px;
-    outline: none;
-}
-
-.student-search input:focus {
-    border-color: #198754;
-    box-shadow: 0 0 0 2px rgba(25,135,84,.10);
-}
-
-.student-search button {
-    height: 34px;
-    padding: 0 18px;
-    border: none;
-    border-radius: 6px;
-    background: #087f5b;
-    color: white;
-    font-size: 10px;
-    cursor: pointer;
-}
-
-.student-search button:hover {
-    background: #066b4c;
-}
-
-
-/* STUDENT INFORMATION */
-
-.selected-student {
-    margin-top: 7px;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 7px;
-}
-
-
-/* STUDENT PROFILE */
-
-.student-info-card {
-    background: #f5faf8;
-    border-radius: 8px;
-    padding: 8px 10px;
-    display: flex;
-    align-items: center;
-    min-height: 48px;
-}
-
-.student-avatar {
-    width: 38px;
-    height: 38px;
-    background: #e7f3ff;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 9px;
-    flex-shrink: 0;
-}
-
-.student-avatar i {
-    font-size: 22px;
-    color: #2383c6;
-}
-
-.student-details h4 {
-    font-size: 10px;
-    color: #087f5b;
-    font-weight: 700;
-    margin-bottom: 2px;
-}
-
-.student-details p {
-    font-size: 8px;
-    color: #6b7280;
-    margin: 0;
-}
-
-
-/* SMALL STAT CARDS */
-
-.analysis-stat {
-    border-radius: 8px;
-    padding: 8px;
-    min-height: 48px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.analysis-stat i {
-    width: 30px;
-    height: 30px;
-    border-radius: 7px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 14px;
-}
-
-.analysis-stat h5 {
-    font-size: 8px;
-    margin: 0 0 2px;
-    font-weight: 500;
-}
-
-.analysis-stat h3 {
-    font-size: 14px;
-    margin: 0;
-    font-weight: 700;
-}
-
-
-/* TOTAL CERTIFICATES */
-
-.stat-certificate {
-    background: #effaf5;
-}
-
-.stat-certificate i {
-    background: #d8f3e7;
-    color: #16a34a;
-}
-
-.stat-certificate h5 {
-    color: #198754;
-}
-
-
-/* WINNER */
-
-.stat-winner {
-    background: #eef6ff;
-}
-
-.stat-winner i {
-    background: #dcecff;
-    color: #287be5;
-}
-
-.stat-winner h5 {
-    color: #287be5;
-}
-
-
-/* PARTICIPATED */
-
-.stat-participated {
-    background: #f5f1ff;
-}
-
-.stat-participated i {
-    background: #e8ddff;
-    color: #7c4de8;
-}
-
-.stat-participated h5 {
-    color: #7c4de8;
-}
-
-
-/* =====================================================
-   GRAPHS
-===================================================== */
-
-.analysis-graphs {
-    display: grid;
-    grid-template-columns: 1.6fr 1fr;
-    gap: 7px;
-    margin-top: 7px;
-}
-
-.graph-card {
-    background: white;
-    border: 1px solid #edf0f2;
-    border-radius: 8px;
-    padding: 8px;
-    min-height: 155px;
-}
-
-.graph-title {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 9px;
-    font-weight: 600;
-    color: #087f5b;
-    margin-bottom: 4px;
-}
-
-.graph-title i {
-    font-size: 10px;
-}
-
-.graph-container {
-    position: relative;
-    width: 100%;
-    height: 115px;
-}
-
-
-/* EMPTY MESSAGE */
-
-.no-student {
-    text-align: center;
-    padding: 15px;
-    color: #888;
-    font-size: 10px;
-}
-
-
-/* =====================================================
-   CERTIFICATE TABLE
-===================================================== */
-
-.card {
-    background: white;
-}
-
-.card-body {
-    padding: 18px;
-}
-
-.certificate-header {
-    margin-bottom: 12px !important;
-}
-
-.certificate-header h2 {
-    font-size: 18px !important;
-    margin-bottom: 2px !important;
-}
-
-.certificate-header small {
-    font-size: 10px;
-}
-
-
-/* SEARCH */
-
-#searchInput {
-    width: 230px !important;
-    font-size: 11px;
-    padding: 7px 12px;
-}
-
-.certificate-header .btn {
-    font-size: 11px;
-    padding: 7px 14px !important;
-}
-
-
-/* TABLE */
-
-.table {
-    font-size: 11px;
-    margin-bottom: 0;
-}
-
-.table th {
-    white-space: nowrap;
-    font-size: 10px;
-    padding: 8px;
-    font-weight: 600;
-}
-
-.table td {
-    vertical-align: middle;
-    font-size: 10px;
-    padding: 8px;
-}
-
-.table td img {
-    width: 40px !important;
-    height: 40px !important;
-}
-
-.table h6 {
-    font-size: 10px;
-}
-
-.table small {
-    font-size: 8px;
-}
-
-.table .badge {
-    font-size: 8px;
-    padding: 5px 7px;
-}
-
-.table .btn {
-    font-size: 9px;
-    padding: 5px 8px;
-}
-
-
-/* =====================================================
-   FOOTER
-===================================================== */
-
-footer {
-    margin-bottom: 20px;
-}
-
-footer .card-body {
-    padding: 14px 18px;
-}
-
-footer h5 {
-    font-size: 13px;
-}
-
-footer small {
-    font-size: 9px;
-}
-
-
-/* =====================================================
-   RESPONSIVE
-===================================================== */
-
-@media(max-width: 992px) {
-
-    .sidebar {
-        width: 200px;
-    }
-
-    .main-content {
-        margin-left: 200px;
-        width: calc(100% - 200px);
-        padding: 15px;
-    }
-
-    .selected-student {
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-    }
-
-    .analysis-graphs {
-        grid-template-columns: 1fr;
-    }
-}
-
-
-@media(max-width: 768px) {
-
-    .sidebar {
-        position: relative;
-        width: 100%;
-        height: auto;
-    }
-
-    .wrapper {
-        display: block;
-    }
-
-    .main-content {
-        margin-left: 0;
-        width: 100%;
-        padding: 12px;
-    }
-
-    .topbar {
-        flex-direction: column;
-        gap: 10px;
-        align-items: flex-start;
-    }
-
-    .topbar h1 {
-        font-size: 20px;
-    }
-
-    .certificate-header {
-        flex-direction: column;
-        gap: 10px;
-        align-items: stretch !important;
-    }
-
-    #searchInput {
-        width: 100% !important;
-    }
-
-    .student-search {
-        justify-content: stretch;
-    }
-
-    .student-search input {
-        width: 100%;
-    }
-
-    .selected-student {
-        grid-template-columns: 1fr;
-    }
-}
-
-
-/* =====================================================
-   EXTRA COMPACT
-===================================================== */
-
-.row.mt-4 {
-    margin-top: 15px !important;
-}
-
-.g-4 {
-    --bs-gutter-x: 1rem;
-    --bs-gutter-y: 1rem;
-}
-
-.rounded-4 {
-    border-radius: 12px !important;
-}
-
-.shadow-lg {
-    box-shadow: 0 5px 18px rgba(0,0,0,.07) !important;
-}
-
-</style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
+
+        .sidebar {
+
+            position: fixed;
+
+            left: 0;
+            top: 0;
+
+            width: 240px;
+            height: 100vh;
+
+            background: #198754;
+
+            padding: 25px 15px;
+
+            color: white;
+
+            z-index: 1000;
+        }
+
+
+        .logo-area {
+
+            text-align: center;
+
+            margin-bottom: 30px;
+        }
+
+
+        .logo-area h2 {
+
+            font-size: 23px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .logo-area p {
+
+            font-size: 12px;
+
+            opacity: 0.85;
+        }
+
+
+        .profile-box {
+
+            text-align: center;
+
+            margin-bottom: 30px;
+        }
+
+
+        .profile-box img {
+
+            width: 75px;
+            height: 75px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            border: 3px solid white;
+
+            margin-bottom: 10px;
+        }
+
+
+        .profile-box h4 {
+
+            font-size: 16px;
+
+            margin-bottom: 3px;
+        }
+
+
+        .profile-box p {
+
+            font-size: 12px;
+
+            opacity: 0.85;
+        }
+
+
+        .menu {
+
+            list-style: none;
+        }
+
+
+        .menu li {
+
+            margin-bottom: 8px;
+        }
+
+
+        .menu a {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            padding: 12px 15px;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            transition: 0.3s;
+        }
+
+
+        .menu a:hover,
+        .menu a.active {
+
+            background: rgba(255,255,255,0.18);
+        }
+
+
+        .menu i {
+
+            font-size: 17px;
+        }
+
+
+
+        /* =====================================================
+           MAIN CONTENT
+        ===================================================== */
+
+        .main {
+
+            margin-left: 240px;
+
+            padding: 25px 30px;
+
+            min-height: 100vh;
+        }
+
+
+        .page-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        .page-header h1 {
+
+            font-size: 25px;
+
+            font-weight: 700;
+        }
+
+
+        .page-header p {
+
+            margin-top: 5px;
+
+            color: #6b7280;
+
+            font-size: 13px;
+        }
+
+
+
+        /* =====================================================
+           TOP CARDS
+        ===================================================== */
+
+        .top-cards {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .top-card {
+
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 20px;
+
+            box-shadow:
+                0 3px 12px rgba(0,0,0,0.06);
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+
+        .top-card-icon {
+
+            width: 50px;
+            height: 50px;
+
+            border-radius: 10px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #e8f5ee;
+
+            color: #198754;
+
+            font-size: 23px;
+        }
+
+
+        .top-card h3 {
+
+            font-size: 22px;
+
+            margin-bottom: 3px;
+        }
+
+
+        .top-card span {
+
+            color: #6b7280;
+
+            font-size: 12px;
+        }
+
+
+
+        /* =====================================================
+           STUDENT SEARCH CARD
+        ===================================================== */
+
+        .student-search-card {
+
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 4px 15px rgba(0,0,0,0.06);
+
+            margin-bottom: 25px;
+        }
+
+
+        /* Search bar */
+
+        .student-search-bar {
+
+            max-width: 650px;
+
+            margin: 0 auto 25px auto;
+
+            display: flex;
+
+            align-items: center;
+
+            border: 1px solid #d9dee7;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+
+            background: white;
+        }
+
+
+        .search-icon {
+
+            width: 48px;
+
+            height: 48px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #198754;
+
+            font-size: 19px;
+        }
+
+
+        .student-search-bar input {
+
+            flex: 1;
+
+            height: 48px;
+
+            border: none;
+
+            outline: none;
+
+            font-size: 14px;
+
+            padding: 0 10px;
+        }
+
+
+        .student-search-bar button {
+
+            height: 48px;
+
+            border: none;
+
+            background: #198754;
+
+            color: white;
+
+            padding: 0 25px;
+
+            cursor: pointer;
+
+            font-size: 14px;
+
+            font-weight: 600;
+        }
+
+
+        .student-search-bar button:hover {
+
+            background: #157347;
+        }
+
+
+
+        /* =====================================================
+           SEARCH RESULT HEADER
+        ===================================================== */
+
+        .student-result-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 20px;
+
+            padding: 18px;
+
+            border-radius: 12px;
+
+            background: #f8fafc;
+
+            margin-bottom: 20px;
+        }
+
+
+        .student-result-info {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+        }
+
+
+        .student-result-icon {
+
+            width: 50px;
+            height: 50px;
+
+            border-radius: 50%;
+
+            background: #e8f5ee;
+
+            color: #198754;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 21px;
+        }
+
+
+        .student-result-info h4 {
+
+            font-size: 17px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .student-result-info small {
+
+            color: #6b7280;
+
+            font-size: 12px;
+        }
+
+
+
+        /* =====================================================
+           MINI STATS
+        ===================================================== */
+
+        .student-mini-stats {
+
+            display: flex;
+
+            gap: 12px;
+        }
+
+
+        .mini-stat {
+
+            min-width: 135px;
+
+            padding: 12px 15px;
+
+            border-radius: 9px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            background: white;
+
+            border: 1px solid #e5e7eb;
+        }
+
+
+        .mini-stat i {
+
+            font-size: 20px;
+
+            color: #198754;
+        }
+
+
+        .mini-stat small {
+
+            display: block;
+
+            color: #6b7280;
+
+            font-size: 10px;
+
+            margin-bottom: 3px;
+        }
+
+
+        .mini-stat strong {
+
+            display: block;
+
+            font-size: 18px;
+        }
+
+
+        .winner-stat i {
+
+            color: #f59e0b;
+        }
+
+
+        .participated-stat i {
+
+            color: #8b5cf6;
+        }
+
+
+
+        /* =====================================================
+           GRAPH ROW
+        ===================================================== */
+
+        .student-graph-row {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 20px;
+        }
+
+
+        .student-graph-card {
+
+            background: white;
+
+            border: 1px solid #edf0f4;
+
+            border-radius: 12px;
+
+            padding: 18px;
+        }
+
+
+        .student-graph-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            margin-bottom: 15px;
+        }
+
+
+        .student-graph-title i {
+
+            color: #198754;
+
+            font-size: 17px;
+        }
+
+
+        .student-chart-container {
+
+            height: 250px;
+
+            position: relative;
+        }
+
+
+
+        /* =====================================================
+           EMPTY SEARCH
+        ===================================================== */
+
+        .student-empty {
+
+            min-height: 130px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #9ca3af;
+
+            text-align: center;
+        }
+
+
+        .student-empty i {
+
+            font-size: 35px;
+
+            margin-bottom: 8px;
+
+            color: #198754;
+        }
+
+
+        .student-empty p {
+
+            font-size: 13px;
+        }
+
+
+
+        /* =====================================================
+           CERTIFICATE TABLE
+        ===================================================== */
+
+        .table-card {
+
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 22px;
+
+            box-shadow:
+                0 4px 15px rgba(0,0,0,0.06);
+        }
+
+
+        .table-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .table-title i {
+
+            color: #198754;
+
+            font-size: 20px;
+        }
+
+
+        .table-title h3 {
+
+            font-size: 17px;
+        }
+
+
+        .table-wrapper {
+
+            overflow-x: auto;
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+
+        th {
+
+            text-align: left;
+
+            padding: 13px;
+
+            background: #f8fafc;
+
+            color: #374151;
+
+            font-size: 12px;
+
+            font-weight: 600;
+        }
+
+
+        td {
+
+            padding: 13px;
+
+            border-bottom: 1px solid #edf0f4;
+
+            font-size: 12px;
+
+            color: #4b5563;
+        }
+
+
+        tr:hover td {
+
+            background: #fafdfb;
+        }
+
+
+        .achievement-badge {
+
+            display: inline-block;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-size: 10px;
+
+            background: #e8f5ee;
+
+            color: #198754;
+        }
+
+
+        .view-btn {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            padding: 6px 10px;
+
+            background: #198754;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 5px;
+
+            font-size: 10px;
+        }
+
+
+        .view-btn:hover {
+
+            background: #157347;
+        }
+
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1100px) {
+
+            .top-cards {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .student-result-header {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+        }
+
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+
+                width: 70px;
+
+                padding: 20px 8px;
+            }
+
+
+            .logo-area h2,
+            .logo-area p,
+            .profile-box h4,
+            .profile-box p,
+            .menu span {
+
+                display: none;
+            }
+
+
+            .profile-box img {
+
+                width: 45px;
+
+                height: 45px;
+            }
+
+
+            .menu a {
+
+                justify-content: center;
+
+                padding: 12px;
+            }
+
+
+            .main {
+
+                margin-left: 70px;
+
+                padding: 20px;
+            }
+
+
+            .student-graph-row {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .student-mini-stats {
+
+                width: 100%;
+
+                flex-wrap: wrap;
+            }
+
+        }
+
+
+        @media (max-width: 550px) {
+
+            .top-cards {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .student-search-bar {
+
+                flex-wrap: wrap;
+
+                border: none;
+            }
+
+
+            .student-search-bar input {
+
+                border: 1px solid #d9dee7;
+
+                border-left: none;
+
+                border-radius: 0 8px 8px 0;
+            }
+
+
+            .student-search-bar button {
+
+                width: 100%;
+
+                margin-top: 8px;
+
+                border-radius: 8px;
+            }
+
+        }
+
+    </style>
 
 </head>
 
 
 <body>
 
-<div class="wrapper">
 
-
-<!-- =====================================================
+<!-- =========================================================
      SIDEBAR
-===================================================== -->
+========================================================= -->
 
 <div class="sidebar">
 
-    <div class="logo text-center">
-
-        <img src="{{ url_for('static', filename='uploads/hod/logo.png') }}"
-             class="logo-img"
-             alt="Logo">
+    <div class="logo-area">
 
         <h2>SCMS</h2>
 
-        <p>Certificate Management</p>
+        <p>Student Certificate Management</p>
 
     </div>
 
 
-    <div class="profile">
+    <div class="profile-box">
 
         {% if tutor[4] %}
 
-            <img src="{{ url_for(
-                'static',
-                filename='uploads/profile/' ~ tutor[4]
-            ) }}"
-            class="profile-img"
-            onerror="this.src='{{ url_for(
-                'static',
-                filename='uploads/profile/default.png'
-            ) }}'">
+            <img src="{{ url_for('static', filename='uploads/' + tutor[4]) }}"
+                 onerror="this.src='{{ url_for('static', filename='images/default.png') }}'">
 
         {% else %}
 
-            <img src="{{ url_for(
-                'static',
-                filename='uploads/profile/default.png'
-            ) }}"
-            class="profile-img">
+            <img src="{{ url_for('static', filename='images/default.png') }}">
 
         {% endif %}
 
+        <h4>{{ tutor_name }}</h4>
 
-        <h4>{{ tutor[0] }}</h4>
-
-        <span class="badge bg-light text-success">
-            Tutor
-        </span>
-
-        <p>{{ tutor[1] }}</p>
+        <p>Tutor</p>
 
     </div>
 
 
-    <ul>
+    <ul class="menu">
 
-        <li class="active">
+        <li>
 
-            <a href="/tutor">
+            <a href="/tutor" class="active">
 
                 <i class="bi bi-speedometer2"></i>
 
-                Dashboard
+                <span>Dashboard</span>
 
             </a>
 
@@ -806,11 +946,11 @@ footer small {
 
         <li>
 
-            <a href="/manage_student">
+            <a href="/tutor/students">
 
                 <i class="bi bi-people-fill"></i>
 
-                Students
+                <span>Students</span>
 
             </a>
 
@@ -819,11 +959,11 @@ footer small {
 
         <li>
 
-            <a href="/tutor_reports">
+            <a href="/tutor/reports">
 
                 <i class="bi bi-bar-chart-fill"></i>
 
-                Reports
+                <span>Reports</span>
 
             </a>
 
@@ -832,11 +972,11 @@ footer small {
 
         <li>
 
-            <a href="/certificate_categories">
+            <a href="/tutor/categories">
 
                 <i class="bi bi-grid-fill"></i>
 
-                Categories
+                <span>Categories</span>
 
             </a>
 
@@ -845,11 +985,11 @@ footer small {
 
         <li>
 
-            <a href="/tutor_profile">
+            <a href="/tutor/profile">
 
-                <i class="bi bi-person-circle"></i>
+                <i class="bi bi-person-fill"></i>
 
-                Profile
+                <span>Profile</span>
 
             </a>
 
@@ -862,7 +1002,7 @@ footer small {
 
                 <i class="bi bi-box-arrow-right"></i>
 
-                Logout
+                <span>Logout</span>
 
             </a>
 
@@ -873,318 +1013,360 @@ footer small {
 </div>
 
 
-<!-- =====================================================
-     MAIN CONTENT
-===================================================== -->
 
-<div class="main-content">
+<!-- =========================================================
+     MAIN
+========================================================= -->
 
-
-<!-- =====================================================
-     TOP BAR
-===================================================== -->
-
-<div class="topbar">
-
-    <div>
-
-        <h1>
-            Tutor Dashboard
-        </h1>
-
-        <p class="text-muted mb-0">
-
-            Welcome,
-
-            <b>{{ tutor[0] }}</b>
-
-        </p>
-
-    </div>
+<div class="main">
 
 
-    <div class="top-icons">
+    <!-- PAGE HEADER -->
 
-        <div class="icon-box">
+    <div class="page-header">
 
-            <i class="bi bi-bell-fill"></i>
+        <div>
 
-        </div>
+            <h1>Tutor Dashboard</h1>
 
-
-        <div class="icon-box">
-
-            <i class="bi bi-person-circle"></i>
+            <p>
+                {{ department }}
+                {% if class_year %}
+                    • {{ class_year }}
+                {% endif %}
+                {% if section %}
+                    • {{ section }}
+                {% endif %}
+            </p>
 
         </div>
 
     </div>
 
-</div>
 
 
-<!-- =====================================================
-     DASHBOARD CARDS
-===================================================== -->
+    <!-- =====================================================
+         TOP CARDS
+    ===================================================== -->
 
-<div class="row mt-3 g-3">
+    <div class="top-cards">
 
 
-    <!-- STUDENTS -->
+        <!-- Total Students -->
 
-    <div class="col-lg-3 col-md-6">
+        <div class="top-card">
 
-        <div class="dashboard-card">
-
-            <div class="icon students">
+            <div class="top-card-icon">
 
                 <i class="bi bi-people-fill"></i>
 
             </div>
 
-            <h3>Total Students</h3>
+            <div>
 
-            <h1>{{ total_students }}</h1>
+                <h3>{{ total_students }}</h3>
 
-            <p class="text-muted">
-                Assigned Students
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <!-- CERTIFICATES -->
-
-    <div class="col-lg-3 col-md-6">
-
-        <div class="dashboard-card">
-
-            <div class="icon certificates">
-
-                <i class="bi bi-patch-check-fill"></i>
+                <span>Total Students</span>
 
             </div>
 
-            <h3>Certificates</h3>
+        </div>
 
-            <h1>{{ total_certificates }}</h1>
 
-            <p class="text-muted">
-                Uploaded Certificates
-            </p>
+        <!-- Total Certificates -->
+
+        <div class="top-card">
+
+            <div class="top-card-icon">
+
+                <i class="bi bi-award-fill"></i>
+
+            </div>
+
+            <div>
+
+                <h3>{{ total_certificates }}</h3>
+
+                <span>Total Certificates</span>
+
+            </div>
 
         </div>
 
-    </div>
 
+        <!-- Department -->
 
-    <!-- DEPARTMENT -->
+        <div class="top-card">
 
-    <div class="col-lg-3 col-md-6">
-
-        <div class="dashboard-card">
-
-            <div class="icon department">
+            <div class="top-card-icon">
 
                 <i class="bi bi-building"></i>
 
             </div>
 
-            <h3>Department</h3>
+            <div>
 
-            <h1>{{ tutor[1] }}</h1>
+                <h3>{{ department }}</h3>
 
-            <p class="text-muted">
-                Academic Department
-            </p>
+                <span>Department</span>
+
+            </div>
 
         </div>
 
-    </div>
 
+        <!-- Completion -->
 
-    <!-- COMPLETION -->
+        <div class="top-card">
 
-    <div class="col-lg-3 col-md-6">
-
-        <div class="dashboard-card">
-
-            <div class="icon progress">
+            <div class="top-card-icon">
 
                 <i class="bi bi-graph-up-arrow"></i>
 
             </div>
 
-            <h3>Completion</h3>
-
-
-            {% if total_students == 0 %}
-
-                <h1>0%</h1>
-
-            {% else %}
-
-                <h1>
-                    {{ ((total_certificates / total_students) * 100)|round|int }}%
-                </h1>
-
-            {% endif %}
-
-
-            <p class="text-muted">
-                Certificate Status
-            </p>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-
-<!-- =====================================================
-     NEW STUDENT SEARCH + GRAPH SECTION
-===================================================== -->
-
-<div class="student-analysis">
-
-
-    <!-- SEARCH -->
-
-    <div class="student-search">
-
-        <i class="bi bi-search search-icon"></i>
-
-        <input
-            type="text"
-            id="studentAnalysisSearch"
-            placeholder="Search student name..."
-            autocomplete="off">
-
-        <button type="button" onclick="searchStudent()">
-            Search
-        </button>
-
-    </div>
-
-
-    <!-- SELECTED STUDENT -->
-
-    <div id="studentResult">
-
-        <div class="no-student">
-            Search a student to view certificate details
-        </div>
-
-    </div>
-
-
-    <!-- GRAPHS -->
-
-    <div class="analysis-graphs">
-
-
-        <!-- CATEGORY GRAPH -->
-
-        <div class="graph-card">
-
-            <div class="graph-title">
-
-                <i class="bi bi-bar-chart-fill"></i>
-
-                Certificate Category Distribution
-
-            </div>
-
-            <div class="graph-container">
-
-                <canvas id="studentCategoryChart"></canvas>
-
-            </div>
-
-        </div>
-
-
-        <!-- ACHIEVEMENT GRAPH -->
-
-        <div class="graph-card">
-
-            <div class="graph-title">
-
-                <i class="bi bi-trophy-fill"></i>
-
-                Achievement Type
-
-            </div>
-
-            <div class="graph-container">
-
-                <canvas id="studentAchievementChart"></canvas>
-
-            </div>
-
-        </div>
-
-
-    </div>
-
-</div>
-
-
-
-<!-- =====================================================
-     CERTIFICATE TABLE CARD
-===================================================== -->
-
-<div class="card mt-3 shadow-lg border-0 rounded-4">
-
-    <div class="card-body">
-
-
-        <div class="d-flex justify-content-between align-items-center mb-3 certificate-header">
-
-
             <div>
 
-                <h2 class="text-success fw-bold">
+                {% if total_students > 0 %}
 
-                    <i class="bi bi-award-fill"></i>
+                    <h3>
+                        {{ ((total_certificates / total_students) * 100) | round(0) | int }}%
+                    </h3>
 
-                    Student Certificates
+                {% else %}
 
-                </h2>
+                    <h3>0%</h3>
 
-                <small class="text-muted">
+                {% endif %}
 
-                    View and Download Student Certificates
+                <span>Completion</span>
 
-                </small>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         STUDENT SEARCH + GRAPHS
+    ===================================================== -->
+
+    <div class="student-search-card">
+
+
+        <!-- SEARCH -->
+
+        <div class="student-search-bar">
+
+            <div class="search-icon">
+
+                <i class="bi bi-search"></i>
 
             </div>
 
 
-            <div class="d-flex align-items-center">
+            <input
+                type="text"
+                id="studentGraphSearch"
+                placeholder="Search Student Name..."
+                autocomplete="off"
+            >
 
 
-                <input
-                    type="text"
-                    id="searchInput"
-                    class="form-control rounded-pill me-2"
-                    placeholder="🔍 Search Student Name..."
-                    autocomplete="off">
+            <button
+                type="button"
+                onclick="searchStudentGraph()"
+            >
+
+                Search
+
+            </button>
+
+        </div>
 
 
-                <a href="/export_zip"
-                   class="btn btn-success rounded-pill px-3">
 
-                    <i class="bi bi-download"></i>
+        <!-- =================================================
+             SEARCH RESULT
+        ================================================= -->
 
-                    Export ZIP
+        <div
+            id="studentGraphResult"
+            style="display:none;"
+        >
 
-                </a>
+
+            <!-- Student Header -->
+
+            <div class="student-result-header">
+
+
+                <div class="student-result-info">
+
+                    <div class="student-result-icon">
+
+                        <i class="bi bi-person-fill"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <h4 id="selectedStudentName">
+                            Student Name
+                        </h4>
+
+                        <small>
+
+                            Register No:
+
+                            <span id="selectedRegisterNo">
+                                -
+                            </span>
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- MINI STATS -->
+
+                <div class="student-mini-stats">
+
+
+                    <!-- Total Certificates -->
+
+                    <div class="mini-stat">
+
+                        <i class="bi bi-file-earmark-text-fill"></i>
+
+                        <div>
+
+                            <small>
+                                Total Certificates
+                            </small>
+
+                            <strong id="studentTotalCertificates">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Winner -->
+
+                    <div class="mini-stat winner-stat">
+
+                        <i class="bi bi-trophy-fill"></i>
+
+                        <div>
+
+                            <small>
+                                Winner
+                            </small>
+
+                            <strong id="studentWinnerCount">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Participated -->
+
+                    <div class="mini-stat participated-stat">
+
+                        <i class="bi bi-people-fill"></i>
+
+                        <div>
+
+                            <small>
+                                Participated
+                            </small>
+
+                            <strong id="studentParticipatedCount">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 GRAPH ROW
+            ================================================= -->
+
+            <div class="student-graph-row">
+
+
+                <!-- CATEGORY GRAPH -->
+
+                <div class="student-graph-card">
+
+                    <div class="student-graph-title">
+
+                        <i class="bi bi-bar-chart-fill"></i>
+
+                        <span>
+                            Certificate Category Distribution
+                        </span>
+
+                    </div>
+
+
+                    <div class="student-chart-container">
+
+                        <canvas
+                            id="studentCategoryChart">
+                        </canvas>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ACHIEVEMENT GRAPH -->
+
+                <div class="student-graph-card">
+
+                    <div class="student-graph-title">
+
+                        <i class="bi bi-trophy-fill"></i>
+
+                        <span>
+                            Achievement Type
+                        </span>
+
+                    </div>
+
+
+                    <div class="student-chart-container">
+
+                        <canvas
+                            id="studentAchievementChart">
+                        </canvas>
+
+                    </div>
+
+                </div>
+
 
             </div>
 
@@ -1193,22 +1375,52 @@ footer small {
 
 
         <!-- =================================================
-             TABLE
+             EMPTY SEARCH MESSAGE
         ================================================= -->
 
-        <div class="table-responsive">
+        <div
+            id="studentGraphEmpty"
+            class="student-empty"
+        >
+
+            <i class="bi bi-person-search"></i>
+
+            <p>
+                Search a student to view certificate details
+            </p>
+
+        </div>
 
 
-            <table
-                class="table table-hover align-middle"
-                id="certificateTable">
+    </div>
 
 
-                <thead class="table-success">
+
+    <!-- =====================================================
+         STUDENT CERTIFICATES TABLE
+    ===================================================== -->
+
+    <div class="table-card">
+
+
+        <div class="table-title">
+
+            <i class="bi bi-award-fill"></i>
+
+            <h3>Student Certificates</h3>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
 
                     <tr>
 
-                        <th>Student</th>
+                        <th>Student Name</th>
 
                         <th>Department</th>
 
@@ -1222,8 +1434,6 @@ footer small {
 
                         <th>View</th>
 
-                        <th>Download</th>
-
                     </tr>
 
                 </thead>
@@ -1231,288 +1441,114 @@ footer small {
 
                 <tbody>
 
+                    {% if certificates %}
 
-                {% if certificates %}
+                        {% for row in certificates %}
 
+                            <tr>
 
-                    {% for row in certificates %}
+                                <!-- Student -->
 
+                                <td>
 
-                    <tr>
-
-
-                        <!-- STUDENT -->
-
-                        <td>
-
-                            <div class="d-flex align-items-center">
-
-
-                                {% if row[6] %}
-
-                                    <img
-                                        src="{{ url_for(
-                                            'static',
-                                            filename='uploads/profile/' ~ row[6]
-                                        ) }}"
-                                        width="40"
-                                        height="40"
-                                        class="rounded-circle"
-                                        style="object-fit:cover;"
-                                        onerror="this.src='{{ url_for(
-                                            'static',
-                                            filename='uploads/profile/default.png'
-                                        ) }}'">
-
-                                {% else %}
-
-                                    <img
-                                        src="{{ url_for(
-                                            'static',
-                                            filename='uploads/profile/default.png'
-                                        ) }}"
-                                        width="40"
-                                        height="40"
-                                        class="rounded-circle"
-                                        style="object-fit:cover;">
-
-                                {% endif %}
-
-
-                                <div class="ms-2">
-
-                                    <h6 class="mb-0 fw-bold">
-
+                                    <strong>
                                         {{ row[0] }}
+                                    </strong>
 
-                                    </h6>
+                                </td>
 
 
-                                    <small class="text-muted">
+                                <!-- Department -->
 
-                                        {% if row[7] %}
+                                <td>
+                                    {{ row[1] }}
+                                </td>
 
-                                            {{ row[7].strftime('%d-%m-%Y') }}
 
-                                        {% endif %}
+                                <!-- Year -->
 
-                                    </small>
+                                <td>
+                                    {{ row[2] }}
+                                </td>
 
-                                </div>
 
-                            </div>
+                                <!-- Certificate -->
 
-                        </td>
+                                <td>
+                                    {{ row[3] }}
+                                </td>
 
 
-                        <!-- DEPARTMENT -->
+                                <!-- Category -->
 
-                        <td>
+                                <td>
+                                    {{ row[4] }}
+                                </td>
 
-                            <span class="badge bg-primary">
 
-                                {{ row[1] }}
+                                <!-- Achievement -->
 
-                            </span>
+                                <td>
 
-                        </td>
+                                    <span class="achievement-badge">
 
+                                        {{ row[5] }}
 
-                        <!-- YEAR -->
+                                    </span>
 
-                        <td>
+                                </td>
 
-                            {{ row[2] }}
 
-                        </td>
+                                <!-- View -->
 
+                                <td>
 
-                        <!-- CERTIFICATE -->
+                                    {% if row[8] %}
 
-                        <td>
+                                        <a
+                                            href="{{ row[8] }}"
+                                            target="_blank"
+                                            class="view-btn"
+                                        >
 
-                            <b>
+                                            <i class="bi bi-eye-fill"></i>
 
-                                {{ row[3] }}
+                                            View
 
-                            </b>
+                                        </a>
 
-                        </td>
+                                    {% else %}
 
+                                        <span>
+                                            No File
+                                        </span>
 
-                        <!-- CATEGORY -->
+                                    {% endif %}
 
-                        <td>
+                                </td>
 
-                            <span class="badge bg-success">
+                            </tr>
 
-                                {{ row[4] }}
+                        {% endfor %}
 
-                            </span>
+                    {% else %}
 
-                        </td>
+                        <tr>
 
+                            <td
+                                colspan="7"
+                                style="text-align:center; padding:30px;"
+                            >
 
-                        <!-- ACHIEVEMENT -->
+                                No certificates found.
 
-                        <td>
+                            </td>
 
+                        </tr>
 
-                            {% if row[5] == "Winner" %}
-
-                                <span class="badge bg-success">
-
-                                    🏆 Winner
-
-                                </span>
-
-
-                            {% elif row[5] == "Runner" %}
-
-                                <span class="badge bg-warning text-dark">
-
-                                    🥈 Runner
-
-                                </span>
-
-
-                            {% elif row[5] == "Participated" %}
-
-                                <span class="badge bg-primary">
-
-                                    🎖 Participated
-
-                                </span>
-
-
-                            {% else %}
-
-                                <span class="badge bg-secondary">
-
-                                    📜 Others
-
-                                </span>
-
-                            {% endif %}
-
-
-                        </td>
-
-
-                        <!-- VIEW -->
-
-                        <td>
-
-
-                            {% if row[8] %}
-
-                                <a
-                                    href="{{ row[8] }}"
-                                    class="btn btn-primary btn-sm"
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-
-                                    <i class="bi bi-eye-fill"></i>
-
-                                    View
-
-                                </a>
-
-                            {% else %}
-
-                                <span class="text-muted">
-
-                                    No File
-
-                                </span>
-
-                            {% endif %}
-
-
-                        </td>
-
-
-                        <!-- DOWNLOAD -->
-
-                        <td>
-
-
-                            {% if row[8] %}
-
-                                <a
-                                    href="{{ url_for('download', filename=row[8]) }}"
-                                    class="btn btn-success btn-sm">
-
-                                    <i class="bi bi-download"></i>
-
-                                    Download
-
-                                </a>
-
-                            {% else %}
-
-                                <span class="text-muted">
-
-                                    No File
-
-                                </span>
-
-                            {% endif %}
-
-
-                        </td>
-
-
-                    </tr>
-
-
-                    {% endfor %}
-
-
-                {% else %}
-
-
-                    <tr>
-
-                        <td colspan="8" class="text-center p-4">
-
-
-                            <img
-                                src="{{ url_for(
-                                    'static',
-                                    filename='images/no_data.png'
-                                ) }}"
-                                width="120">
-
-
-                            <br>
-                            <br>
-
-
-                            <h4 style="font-size:16px;">
-
-                                No Certificates Found
-
-                            </h4>
-
-
-                            <p class="text-muted" style="font-size:10px;">
-
-                                No student certificates have been uploaded.
-
-                            </p>
-
-
-                        </td>
-
-                    </tr>
-
-
-                {% endif %}
-
+                    {% endif %}
 
                 </tbody>
-
 
             </table>
 
@@ -1520,779 +1556,527 @@ footer small {
 
     </div>
 
-</div>
-
-
-
-<!-- =====================================================
-     FOOTER
-===================================================== -->
-
-<footer class="mt-4">
-
-
-    <div class="card border-0 shadow-sm">
-
-
-        <div class="card-body">
-
-
-            <div class="row align-items-center">
-
-
-                <div class="col-md-6">
-
-                    <h5 class="text-success mb-1">
-
-                        <i class="bi bi-award-fill"></i>
-
-                        Student Certificate Management System
-
-                    </h5>
-
-
-                    <small class="text-muted">
-
-                        Tutor Dashboard
-
-                    </small>
-
-                </div>
-
-
-                <div class="col-md-6 text-end">
-
-                    <small class="text-muted">
-
-                        © 2026 Student Certificate Management System |
-
-                        Designed By PRADEEP From AIDS
-
-                    </small>
-
-                </div>
-
-
-            </div>
-
-        </div>
-
-    </div>
-
-</footer>
-
-
-</div>
 
 </div>
 
 
 
-<!-- =====================================================
+<!-- =========================================================
      JAVASCRIPT
-===================================================== -->
+========================================================= -->
 
 <script>
 
-/* =====================================================
-   STUDENT DATA FROM FLASK
-===================================================== */
+    /* ========================================================
+       DATA FROM FLASK
+    ======================================================== */
 
-const studentsData = [
+    const studentChartData =
+        {{ student_chart_data | tojson | safe }};
 
-{% for student in students %}
 
-    {
-        name: {{ student[0]|tojson }},
-        registerNo: {{ student[1]|tojson }}
-    }
+    let studentCategoryChart = null;
 
-    {% if not loop.last %},{% endif %}
+    let studentAchievementChart = null;
 
-{% endfor %}
 
-];
 
+    /* ========================================================
+       SEARCH STUDENT
+    ======================================================== */
 
-/* =====================================================
-   CERTIFICATE DATA FROM FLASK
-===================================================== */
+    function searchStudentGraph() {
 
-const certificatesData = [
 
-{% for row in certificates %}
-
-    {
-        studentName: {{ row[0]|tojson }},
-        category: {{ row[4]|tojson }},
-        achievement: {{ row[5]|tojson }}
-    }
-
-    {% if not loop.last %},{% endif %}
-
-{% endfor %}
-
-];
-
-
-
-/* =====================================================
-   CHART VARIABLES
-===================================================== */
-
-let categoryChart = null;
-let achievementChart = null;
-
-
-
-/* =====================================================
-   SEARCH STUDENT
-===================================================== */
-
-function searchStudent() {
-
-    const input =
-        document.getElementById("studentAnalysisSearch");
-
-    const value =
-        input.value.trim().toLowerCase();
-
-
-    if (value === "") {
-
-        document.getElementById("studentResult").innerHTML = `
-
-            <div class="no-student">
-
-                Please enter a student name.
-
-            </div>
-
-        `;
-
-        destroyCharts();
-
-        return;
-
-    }
-
-
-    /* FIND STUDENT */
-
-    const student = studentsData.find(function(s) {
-
-        return s.name.toLowerCase().includes(value);
-
-    });
-
-
-    if (!student) {
-
-        document.getElementById("studentResult").innerHTML = `
-
-            <div class="no-student">
-
-                ❌ Student not found
-
-            </div>
-
-        `;
-
-        destroyCharts();
-
-        return;
-
-    }
-
-
-    /* GET CERTIFICATES */
-
-    const studentCertificates =
-        certificatesData.filter(function(c) {
-
-            return c.studentName.toLowerCase() ===
-                   student.name.toLowerCase();
-
-        });
-
-
-    /* TOTAL */
-
-    const total =
-        studentCertificates.length;
-
-
-    /* WINNER */
-
-    const winner =
-        studentCertificates.filter(function(c) {
-
-            return c.achievement === "Winner";
-
-        }).length;
-
-
-    /* PARTICIPATED */
-
-    const participated =
-        studentCertificates.filter(function(c) {
-
-            return c.achievement === "Participated";
-
-        }).length;
-
-
-
-    /* =================================================
-       DISPLAY STUDENT CARD
-    ================================================= */
-
-    document.getElementById("studentResult").innerHTML = `
-
-        <div class="selected-student">
-
-
-            <!-- STUDENT -->
-
-            <div class="student-info-card">
-
-                <div class="student-avatar">
-
-                    <i class="bi bi-person-fill"></i>
-
-                </div>
-
-
-                <div class="student-details">
-
-                    <h4>
-                        ${student.name}
-                    </h4>
-
-                    <p>
-                        Register No: ${student.registerNo}
-                    </p>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- TOTAL -->
-
-            <div class="analysis-stat stat-certificate">
-
-                <i class="bi bi-file-earmark-check-fill"></i>
-
-                <div>
-
-                    <h5>
-                        Total Certificates
-                    </h5>
-
-                    <h3>
-                        ${total}
-                    </h3>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- WINNER -->
-
-            <div class="analysis-stat stat-winner">
-
-                <i class="bi bi-trophy-fill"></i>
-
-                <div>
-
-                    <h5>
-                        Winner
-                    </h5>
-
-                    <h3>
-                        ${winner}
-                    </h3>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- PARTICIPATED -->
-
-            <div class="analysis-stat stat-participated">
-
-                <i class="bi bi-people-fill"></i>
-
-                <div>
-
-                    <h5>
-                        Participated
-                    </h5>
-
-                    <h3>
-                        ${participated}
-                    </h3>
-
-                </div>
-
-            </div>
-
-
-        </div>
-
-    `;
-
-
-
-    /* DRAW GRAPHS */
-
-    drawCategoryChart(studentCertificates);
-
-    drawAchievementChart(studentCertificates);
-
-}
-
-
-
-/* =====================================================
-   CATEGORY GRAPH
-===================================================== */
-
-function drawCategoryChart(data) {
-
-
-    const categoryCounts = {};
-
-
-    data.forEach(function(c) {
-
-        const category =
-            c.category || "Others";
-
-
-        if (!categoryCounts[category]) {
-
-            categoryCounts[category] = 0;
-
-        }
-
-
-        categoryCounts[category]++;
-
-    });
-
-
-    const labels =
-        Object.keys(categoryCounts);
-
-
-    const values =
-        Object.values(categoryCounts);
-
-
-    const ctx =
-        document.getElementById("studentCategoryChart")
-        .getContext("2d");
-
-
-    if (categoryChart) {
-
-        categoryChart.destroy();
-
-    }
-
-
-    categoryChart = new Chart(ctx, {
-
-        type: "bar",
-
-        data: {
-
-            labels: labels,
-
-            datasets: [{
-
-                label: "Number of Certificates",
-
-                data: values,
-
-                borderWidth: 0,
-
-                borderRadius: 3,
-
-                backgroundColor: [
-                    "#20a36a",
-                    "#3188e8",
-                    "#8b5de8",
-                    "#f0a51a",
-                    "#ef6c6c",
-                    "#6c8aa8"
-                ]
-
-            }]
-
-        },
-
-
-        options: {
-
-            responsive: true,
-
-            maintainAspectRatio: false,
-
-            plugins: {
-
-                legend: {
-                    display: false
-                }
-
-            },
-
-
-            scales: {
-
-                y: {
-
-                    beginAtZero: true,
-
-                    ticks: {
-
-                        font: {
-                            size: 7
-                        },
-
-                        stepSize: 1
-
-                    },
-
-                    title: {
-
-                        display: true,
-
-                        text: "Number of Certificates",
-
-                        font: {
-                            size: 7
-                        }
-
-                    }
-
-                },
-
-
-                x: {
-
-                    ticks: {
-
-                        font: {
-                            size: 7
-                        }
-
-                    },
-
-                    title: {
-
-                        display: true,
-
-                        text: "Categories",
-
-                        font: {
-                            size: 7
-                        }
-
-                    }
-
-                }
-
-            }
-
-        }
-
-    });
-
-}
-
-
-
-/* =====================================================
-   ACHIEVEMENT GRAPH
-===================================================== */
-
-function drawAchievementChart(data) {
-
-
-    const achievementCounts = {
-
-        "Winner": 0,
-
-        "Runner": 0,
-
-        "Participated": 0,
-
-        "Others": 0
-
-    };
-
-
-    data.forEach(function(c) {
-
-        const achievement =
-            c.achievement;
-
-
-        if (achievement === "Winner") {
-
-            achievementCounts["Winner"]++;
-
-        }
-
-        else if (achievement === "Runner") {
-
-            achievementCounts["Runner"]++;
-
-        }
-
-        else if (achievement === "Participated") {
-
-            achievementCounts["Participated"]++;
-
-        }
-
-        else {
-
-            achievementCounts["Others"]++;
-
-        }
-
-    });
-
-
-    const labels = [];
-
-    const values = [];
-
-
-    Object.keys(achievementCounts).forEach(function(key) {
-
-        if (achievementCounts[key] > 0) {
-
-            labels.push(key);
-
-            values.push(achievementCounts[key]);
-
-        }
-
-    });
-
-
-    const ctx =
-        document.getElementById("studentAchievementChart")
-        .getContext("2d");
-
-
-    if (achievementChart) {
-
-        achievementChart.destroy();
-
-    }
-
-
-    achievementChart = new Chart(ctx, {
-
-        type: "bar",
-
-        data: {
-
-            labels: labels,
-
-            datasets: [{
-
-                data: values,
-
-                borderWidth: 0,
-
-                borderRadius: 3,
-
-                backgroundColor: [
-
-                    "#f4ad20",
-
-                    "#e69b28",
-
-                    "#8055e8",
-
-                    "#7890a0"
-
-                ]
-
-            }]
-
-        },
-
-
-        options: {
-
-            indexAxis: "y",
-
-            responsive: true,
-
-            maintainAspectRatio: false,
-
-            plugins: {
-
-                legend: {
-                    display: false
-                }
-
-            },
-
-
-            scales: {
-
-                x: {
-
-                    beginAtZero: true,
-
-                    ticks: {
-
-                        font: {
-                            size: 7
-                        },
-
-                        stepSize: 1
-
-                    }
-
-                },
-
-
-                y: {
-
-                    ticks: {
-
-                        font: {
-                            size: 8
-                        }
-
-                    }
-
-                }
-
-            }
-
-        }
-
-    });
-
-}
-
-
-
-/* =====================================================
-   DESTROY CHARTS
-===================================================== */
-
-function destroyCharts() {
-
-
-    if (categoryChart) {
-
-        categoryChart.destroy();
-
-        categoryChart = null;
-
-    }
-
-
-    if (achievementChart) {
-
-        achievementChart.destroy();
-
-        achievementChart = null;
-
-    }
-
-}
-
-
-
-/* =====================================================
-   ENTER KEY SEARCH
-===================================================== */
-
-document
-    .getElementById("studentAnalysisSearch")
-    .addEventListener("keypress", function(event) {
-
-        if (event.key === "Enter") {
-
-            searchStudent();
-
-        }
-
-    });
-
-
-
-/* =====================================================
-   EXISTING CERTIFICATE TABLE SEARCH
-===================================================== */
-
-const searchInput =
-    document.getElementById("searchInput");
-
-
-if (searchInput) {
-
-    searchInput.addEventListener("keyup", function () {
-
-        let value =
-            this.value.toLowerCase().trim();
-
-
-        let rows =
-            document.querySelectorAll(
-                "#certificateTable tbody tr"
+        const input =
+            document.getElementById(
+                "studentGraphSearch"
             );
 
 
-        rows.forEach(function(row) {
+        const searchValue =
+            input.value
+                .toLowerCase()
+                .trim();
 
-            let text =
-                row.innerText.toLowerCase();
 
 
-            if (text.indexOf(value) > -1) {
+        /* Empty search */
 
-                row.style.display = "";
+        if (searchValue === "") {
+
+            document.getElementById(
+                "studentGraphResult"
+            ).style.display = "none";
+
+
+            document.getElementById(
+                "studentGraphEmpty"
+            ).style.display = "flex";
+
+
+            document.getElementById(
+                "studentGraphEmpty"
+            ).innerHTML = `
+
+                <i class="bi bi-person-search"></i>
+
+                <p>
+                    Search a student to view certificate details
+                </p>
+
+            `;
+
+            return;
+        }
+
+
+
+        /* ====================================================
+           FIND STUDENT
+        ==================================================== */
+
+        const studentCertificates =
+            studentChartData.filter(item =>
+
+                (item.name || "")
+                    .toLowerCase()
+                    .includes(searchValue)
+
+            );
+
+
+
+        /* Student not found */
+
+        if (studentCertificates.length === 0) {
+
+            document.getElementById(
+                "studentGraphResult"
+            ).style.display = "none";
+
+
+            document.getElementById(
+                "studentGraphEmpty"
+            ).style.display = "flex";
+
+
+            document.getElementById(
+                "studentGraphEmpty"
+            ).innerHTML = `
+
+                <i class="bi bi-person-x"></i>
+
+                <p>
+                    Student not found
+                </p>
+
+            `;
+
+            return;
+        }
+
+
+
+        /* ====================================================
+           SHOW RESULT
+        ==================================================== */
+
+        document.getElementById(
+            "studentGraphResult"
+        ).style.display = "block";
+
+
+        document.getElementById(
+            "studentGraphEmpty"
+        ).style.display = "none";
+
+
+
+        /* ====================================================
+           STUDENT DETAILS
+        ==================================================== */
+
+        document.getElementById(
+            "selectedStudentName"
+        ).innerText =
+            studentCertificates[0].name;
+
+
+        document.getElementById(
+            "selectedRegisterNo"
+        ).innerText =
+            studentCertificates[0].register_no || "-";
+
+
+
+        /* ====================================================
+           TOTAL CERTIFICATES
+        ==================================================== */
+
+        document.getElementById(
+            "studentTotalCertificates"
+        ).innerText =
+            studentCertificates.length;
+
+
+
+        /* ====================================================
+           WINNER + PARTICIPATED
+        ==================================================== */
+
+        let winnerCount = 0;
+
+        let participatedCount = 0;
+
+
+        studentCertificates.forEach(item => {
+
+            const achievement =
+                (item.achievement || "")
+                    .toLowerCase()
+                    .trim();
+
+
+            if (
+                achievement === "winner" ||
+                achievement === "won"
+            ) {
+
+                winnerCount++;
 
             }
 
-            else {
 
-                row.style.display = "none";
+            if (
+                achievement === "participated" ||
+                achievement === "participation"
+            ) {
+
+                participatedCount++;
 
             }
 
         });
 
-    });
-
-}
-
-</script>
 
 
+        document.getElementById(
+            "studentWinnerCount"
+        ).innerText =
+            winnerCount;
 
-<!-- Bootstrap JS -->
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+        document.getElementById(
+            "studentParticipatedCount"
+        ).innerText =
+            participatedCount;
+
+
+
+        /* ====================================================
+           CATEGORY COUNTS
+        ==================================================== */
+
+        const categoryCounts = {};
+
+
+        studentCertificates.forEach(item => {
+
+            const category =
+                item.category || "Others";
+
+
+            categoryCounts[category] =
+                (categoryCounts[category] || 0) + 1;
+
+        });
+
+
+
+        /* ====================================================
+           ACHIEVEMENT COUNTS
+        ==================================================== */
+
+        const achievementCounts = {};
+
+
+        studentCertificates.forEach(item => {
+
+            const achievement =
+                item.achievement || "Others";
+
+
+            achievementCounts[achievement] =
+                (achievementCounts[achievement] || 0) + 1;
+
+        });
+
+
+
+        /* ====================================================
+           DESTROY OLD CHARTS
+        ==================================================== */
+
+        if (studentCategoryChart) {
+
+            studentCategoryChart.destroy();
+
+        }
+
+
+        if (studentAchievementChart) {
+
+            studentAchievementChart.destroy();
+
+        }
+
+
+
+        /* ====================================================
+           CATEGORY BAR CHART
+        ==================================================== */
+
+        studentCategoryChart = new Chart(
+
+            document.getElementById(
+                "studentCategoryChart"
+            ),
+
+            {
+
+                type: "bar",
+
+                data: {
+
+                    labels:
+                        Object.keys(categoryCounts),
+
+                    datasets: [
+
+                        {
+
+                            label:
+                                "Number of Certificates",
+
+                            data:
+                                Object.values(categoryCounts),
+
+                            backgroundColor: [
+
+                                "#198754",
+                                "#0d6efd",
+                                "#8b5cf6",
+                                "#f59e0b",
+                                "#64748b",
+                                "#ec4899"
+
+                            ],
+
+                            borderRadius: 5
+
+                        }
+
+                    ]
+
+                },
+
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+
+                            display: false
+
+                        }
+
+                    },
+
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            ticks: {
+
+                                stepSize: 1,
+
+                                font: {
+
+                                    size: 10
+
+                                }
+
+                            }
+
+                        },
+
+
+                        x: {
+
+                            ticks: {
+
+                                font: {
+
+                                    size: 10
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+
+
+        /* ====================================================
+           ACHIEVEMENT HORIZONTAL BAR CHART
+        ==================================================== */
+
+        studentAchievementChart = new Chart(
+
+            document.getElementById(
+                "studentAchievementChart"
+            ),
+
+            {
+
+                type: "bar",
+
+                data: {
+
+                    labels:
+                        Object.keys(achievementCounts),
+
+                    datasets: [
+
+                        {
+
+                            label:
+                                "Certificates",
+
+                            data:
+                                Object.values(achievementCounts),
+
+                            backgroundColor: [
+
+                                "#f59e0b",
+                                "#8b5cf6",
+                                "#198754",
+                                "#64748b",
+                                "#0d6efd"
+
+                            ],
+
+                            borderRadius: 5
+
+                        }
+
+                    ]
+
+                },
+
+
+                options: {
+
+                    indexAxis: "y",
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+
+                            display: false
+
+                        }
+
+                    },
+
+
+                    scales: {
+
+                        x: {
+
+                            beginAtZero: true,
+
+                            ticks: {
+
+                                stepSize: 1,
+
+                                font: {
+
+                                    size: 10
+
+                                }
+
+                            }
+
+                        },
+
+
+                        y: {
+
+                            ticks: {
+
+                                font: {
+
+                                    size: 10
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+    }
+
+
+
+    /* ========================================================
+       ENTER KEY SEARCH
+    ======================================================== */
+
+    document
+        .getElementById("studentGraphSearch")
+        .addEventListener(
+            "keypress",
+            function(event) {
+
+                if (event.key === "Enter") {
+
+                    searchStudentGraph();
+
+                }
+
+            }
+        );
+
 </script>
 
 

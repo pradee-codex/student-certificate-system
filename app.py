@@ -770,7 +770,9 @@ def tutor():
             students.department=%s
         """
 
-        student_params = (department,)
+        student_params = (
+            department,
+        )
 
     else:
 
@@ -788,7 +790,7 @@ def tutor():
 
 
     # =========================================================
-    # Dashboard - Total Students
+    # DASHBOARD - TOTAL STUDENTS
     # =========================================================
 
     cursor.execute(f"""
@@ -801,7 +803,7 @@ def tutor():
 
 
     # =========================================================
-    # Dashboard - Total Certificates
+    # DASHBOARD - TOTAL CERTIFICATES
     # =========================================================
 
     cursor.execute(f"""
@@ -818,7 +820,7 @@ def tutor():
 
 
     # =========================================================
-    # Student List
+    # STUDENT LIST
     # =========================================================
 
     cursor.execute(f"""
@@ -840,7 +842,7 @@ def tutor():
 
 
     # =========================================================
-    # Certificate List
+    # CERTIFICATE LIST
     # =========================================================
 
     cursor.execute(f"""
@@ -873,10 +875,54 @@ def tutor():
 
 
     # =========================================================
-    # STUDENT-WISE CERTIFICATE COUNT
+    # STUDENT SEARCH + CHART DATA
     # =========================================================
-    # This is used for:
-    # Search student -> show their total certificate count
+    #
+    # Used for:
+    # Search Student
+    # Total Certificates
+    # Winner
+    # Participated
+    # Certificate Category Chart
+    # Achievement Type Chart
+    #
+    # =========================================================
+
+    # Student name -> Register number
+    student_lookup = {
+        str(student[0]).strip().lower(): student[1]
+        for student in students
+    }
+
+    student_chart_data = []
+
+    for row in certificates:
+
+        student_name = row[0] if row[0] else ""
+
+        student_chart_data.append({
+
+            "name": student_name,
+
+            "register_no": student_lookup.get(
+                str(student_name).strip().lower(),
+                ""
+            ),
+
+            "department": row[1] if row[1] else "",
+
+            "year": row[2] if row[2] else "",
+
+            "certificate": row[3] if row[3] else "",
+
+            "category": row[4] if row[4] else "Others",
+
+            "achievement": row[5] if row[5] else "Others"
+        })
+
+
+    # =========================================================
+    # STUDENT-WISE CERTIFICATE COUNT
     # =========================================================
 
     cursor.execute(f"""
@@ -1036,10 +1082,13 @@ def tutor():
     print("====================================")
     print("TOTAL STUDENTS:", total_students)
     print("TOTAL CERTIFICATES:", total_certificates)
-    print("STUDENT CERTIFICATE COUNTS:",
-          student_certificate_counts)
+    print(
+        "STUDENT CERTIFICATE COUNTS:",
+        student_certificate_counts
+    )
     print("CATEGORY REPORT:", category_report)
     print("ACHIEVEMENT REPORT:", achievement_report)
+    print("STUDENT CHART DATA:", student_chart_data)
     print("====================================")
 
 
@@ -1057,28 +1106,62 @@ def tutor():
     return render_template(
         "tutor/dashboard.html",
 
-        # Tutor
+        # -----------------------------------------------------
+        # Tutor Details
+        # -----------------------------------------------------
+
         tutor=tutor,
         tutor_name=tutor_name,
         department=department,
         class_year=class_year,
         section=section,
 
+
+        # -----------------------------------------------------
         # Dashboard
+        # -----------------------------------------------------
+
         total_students=total_students,
         total_certificates=total_certificates,
 
-        # Lists
+
+        # -----------------------------------------------------
+        # Student / Certificate Lists
+        # -----------------------------------------------------
+
         students=students,
         certificates=certificates,
 
-        # Graph / Search Data
+
+        # -----------------------------------------------------
+        # Existing Graph / Report Data
+        # -----------------------------------------------------
+
         top_students=top_students,
-        student_certificate_counts=student_certificate_counts,
-        category_report=category_report,
-        achievement_report=achievement_report,
-        student_category_report=student_category_report,
-        student_achievement_report=student_achievement_report
+
+        student_certificate_counts=
+            student_certificate_counts,
+
+        category_report=
+            category_report,
+
+        achievement_report=
+            achievement_report,
+
+        student_category_report=
+            student_category_report,
+
+        student_achievement_report=
+            student_achievement_report,
+
+
+        # -----------------------------------------------------
+        # NEW
+        # Student Search + Category + Achievement Charts
+        # -----------------------------------------------------
+
+        student_chart_data=
+            student_chart_data
     )
 #=====================================================
     
