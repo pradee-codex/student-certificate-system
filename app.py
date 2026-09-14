@@ -3457,6 +3457,221 @@ def export_zip():
         mimetype="application/zip"
     )
 
+#===========================
+# ============================================================
+# DELETE CERTIFICATE - TUTOR
+# ============================================================
+
+@app.route("/delete_certificate/<path:filename>")
+def delete_certificate(filename):
+
+    # Only Tutor can delete
+    if session.get("role") != "tutor":
+        flash("Unauthorized access.")
+        return redirect("/")
+
+    cursor = mysql.connection.cursor()
+
+    try:
+
+        # ----------------------------------------------------
+        # GET TUTOR DETAILS
+        # ----------------------------------------------------
+        cursor.execute("""
+            SELECT
+                department,
+                class_year,
+                section
+            FROM tutors
+            WHERE user_id = %s
+        """, (session["user_id"],))
+
+        tutor = cursor.fetchone()
+
+        if not tutor:
+            cursor.close()
+            flash("Tutor not found.")
+            return redirect("/tutor")
+
+        tutor_department = tutor[0]
+        tutor_year = tutor[1]
+        tutor_section = tutor[2]
+
+        # ----------------------------------------------------
+        # FIND CERTIFICATE + STUDENT DETAILS
+        # ----------------------------------------------------
+        cursor.execute("""
+            SELECT
+                certificates.certificate_id,
+                certificates.certificate_file,
+                students.department,
+                students.year,
+                students.section
+            FROM certificates
+
+            INNER JOIN students
+                ON certificates.student_id =
+                   students.student_id
+
+            WHERE certificates.certificate_file = %s
+        """, (filename,))
+
+        certificate = cursor.fetchone()
+
+        if not certificate:
+            cursor.close()
+            flash("Certificate not found.")
+            return redirect("/tutor")
+
+        certificate_id = certificate[0]
+        certificate_file = certificate[1]
+        student_department = certificate[2]
+        student_year = certificate[3]
+        student_section = certificate[4]
+
+        # ----------------------------------------------------
+        # CHECK TUTOR ACCESS
+        # ----------------------------------------------------
+
+        # Department check
+        if (
+            tutor_department
+            and student_department
+            and str(tutor_department).strip().lower()
+            != str(student_department).strip().lower()
+        ):
+            cursor.close()
+            flash("You are not authorized to delete this certificate.")
+            return redirect("/tutor")
+
+        # Year check
+        if (
+            tutor_year
+            and student_year
+            and str(tutor_year).strip().lower()
+            != str(student_year).strip().lower()
+        ):
+            cursor.close()
+            flash("You are not authorized to delete this certificate.")
+            return redirect("/tutor")
+
+        # Section check
+        if (
+            tutor_section
+            and student_section
+            and str(tutor_section).strip().lower()
+            != str(student_section).strip().lower()
+        ):
+            cursor.close()
+            flash("You are not authorized to delete this certificate.")
+            return redirect("/tutor")
+
+        # ----------------------------------------------------
+        # DELETE FROM GOOGLE DRIVE
+        # ----------------------------------------------------
+
+        if (
+            certificate_file.startswith("http://")
+            or certificate_file.startswith("https://")
+        ):
+
+            if (
+                "drive.google.com" in certificate_file
+                or "drive.usercontent.google.com" in certificate_file
+            ):
+
+                import re
+
+                file_id = None
+
+                # /file/d/FILE_ID/view
+                match = re.search(
+                    r"/file/d/([^/]+)",
+                    certificate_file
+                )
+
+                if match:
+                    file_id = match.group(1)
+
+                # ?id=FILE_ID
+                if not file_id:
+
+                    match = re.search(
+                        r"[?&]id=([^&]+)",
+                        certificate_file
+                    )
+
+                    if match:
+                        file_id = match.group(1)
+
+                if file_id:
+
+                    try:
+
+                        from drive_service import get_drive_service
+
+                        service = get_drive_service()
+
+                        service.files().delete(
+                            fileId=file_id
+                        ).execute()
+
+                        print(
+                            "GOOGLE DRIVE FILE DELETED:",
+                            file_id
+                        )
+
+                    except Exception as e:
+
+                        print(
+                            "GOOGLE DRIVE DELETE ERROR:",
+                            str(e)
+                        )
+
+                        cursor.close()
+
+                        flash(
+                            "Unable to delete certificate from Google Drive."
+                        )
+
+                        return redirect("/tutor")
+
+        # ----------------------------------------------------
+        # DELETE FROM DATABASE
+        # ----------------------------------------------------
+
+        cursor.execute("""
+            DELETE FROM certificates
+            WHERE certificate_id = %s
+        """, (certificate_id,))
+
+        mysql.connection.commit()
+
+        cursor.close()
+
+        print(
+            "CERTIFICATE DELETED:",
+            certificate_id
+        )
+
+        flash("Certificate deleted successfully.")
+
+        return redirect("/tutor")
+
+    except Exception as e:
+
+        mysql.connection.rollback()
+        cursor.close()
+
+        print("================================")
+        print("DELETE CERTIFICATE ERROR")
+        print("Filename :", filename)
+        print("Error    :", str(e))
+        print("================================")
+
+        flash("Unable to delete certificate.")
+
+        return redirect("/tutor")
 # ==========================
 # HOD Dashboard
 # ==========================
