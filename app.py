@@ -1307,7 +1307,7 @@ def tutor():
     cursor = mysql.connection.cursor()
 
     # =========================================================
-    # Tutor Details
+    # TUTOR DETAILS
     # =========================================================
 
     cursor.execute("""
@@ -1333,23 +1333,49 @@ def tutor():
     class_year = tutor[2]
     section = tutor[3]
 
+    # Convert empty values to None
+    if department:
+        department = str(department).strip()
+
+    if class_year:
+        class_year = str(class_year).strip()
+
+    if section:
+        section = str(section).strip()
+
     print("====================================")
-    print("LOGIN USER ID:", session["user_id"])
-    print("TUTOR DATA:", tutor)
-    print("DEPARTMENT:", department)
-    print("CLASS YEAR:", class_year)
-    print("SECTION:", section)
+    print("LOGIN USER ID :", session["user_id"])
+    print("TUTOR DATA    :", tutor)
+    print("DEPARTMENT    :", department)
+    print("CLASS YEAR    :", class_year)
+    print("SECTION       :", section)
     print("====================================")
 
 
     # =========================================================
     # COMMON STUDENT FILTER
+    #
+    # IMPORTANT:
+    # Section is NOT used.
+    #
+    # Year = None
+    #     -> All students from tutor department
+    #
+    # Year = I / II / III / IV
+    #     -> Students from department + selected year
     # =========================================================
 
-    if class_year is None or section is None:
+    if not class_year:
+
+        # -----------------------------------------
+        # YEAR = NONE
+        # Show ALL students in department
+        # -----------------------------------------
 
         student_where = """
-            students.department=%s
+            TRIM(UPPER(students.department))
+            =
+            TRIM(UPPER(%s))
         """
 
         student_params = (
@@ -1358,17 +1384,33 @@ def tutor():
 
     else:
 
+        # -----------------------------------------
+        # SPECIFIC YEAR
+        # Section completely ignored
+        # -----------------------------------------
+
         student_where = """
-            students.department=%s
-            AND students.year=%s
-            AND students.section=%s
+            TRIM(UPPER(students.department))
+            =
+            TRIM(UPPER(%s))
+
+            AND
+
+            TRIM(UPPER(students.year))
+            =
+            TRIM(UPPER(%s))
         """
 
         student_params = (
             department,
-            class_year,
-            section
+            class_year
         )
+
+
+    print("------------------------------------")
+    print("STUDENT WHERE :", student_where)
+    print("STUDENT PARAMS:", student_params)
+    print("------------------------------------")
 
 
     # =========================================================
@@ -1417,7 +1459,7 @@ def tutor():
 
         WHERE {student_where}
 
-        ORDER BY students.student_name
+        ORDER BY students.student_name ASC
     """, student_params)
 
     students = cursor.fetchall()
@@ -1459,16 +1501,6 @@ def tutor():
     # =========================================================
     # STUDENT SEARCH + CHART DATA
     # =========================================================
-    #
-    # Used for:
-    # Search Student
-    # Total Certificates
-    # Winner
-    # Participated
-    # Certificate Category Chart
-    # Achievement Type Chart
-    #
-    # =========================================================
 
     # Student name -> Register number
     student_lookup = {
@@ -1500,6 +1532,7 @@ def tutor():
             "category": row[4] if row[4] else "Others",
 
             "achievement": row[5] if row[5] else "Others"
+
         })
 
 
@@ -1517,7 +1550,8 @@ def tutor():
         FROM students
 
         LEFT JOIN certificates
-            ON students.student_id = certificates.student_id
+            ON students.student_id =
+               certificates.student_id
 
         WHERE {student_where}
 
@@ -1527,7 +1561,8 @@ def tutor():
             students.register_no,
             students.department
 
-        ORDER BY total_certificates DESC
+        ORDER BY
+            total_certificates DESC
     """, student_params)
 
     student_certificate_counts = cursor.fetchall()
@@ -1552,7 +1587,8 @@ def tutor():
         FROM certificates
 
         INNER JOIN students
-            ON certificates.student_id = students.student_id
+            ON certificates.student_id =
+               students.student_id
 
         INNER JOIN certificate_categories
             ON certificates.category_id =
@@ -1564,7 +1600,8 @@ def tutor():
             certificate_categories.category_id,
             certificate_categories.category_name
 
-        ORDER BY COUNT(certificates.certificate_id) DESC
+        ORDER BY
+            COUNT(certificates.certificate_id) DESC
     """, student_params)
 
     category_report = cursor.fetchall()
@@ -1582,13 +1619,16 @@ def tutor():
         FROM certificates
 
         INNER JOIN students
-            ON certificates.student_id = students.student_id
+            ON certificates.student_id =
+               students.student_id
 
         WHERE {student_where}
 
-        GROUP BY certificates.achievement
+        GROUP BY
+            certificates.achievement
 
-        ORDER BY COUNT(certificates.certificate_id) DESC
+        ORDER BY
+            COUNT(certificates.certificate_id) DESC
     """, student_params)
 
     achievement_report = cursor.fetchall()
@@ -1607,7 +1647,8 @@ def tutor():
         FROM certificates
 
         INNER JOIN students
-            ON certificates.student_id = students.student_id
+            ON certificates.student_id =
+               students.student_id
 
         INNER JOIN certificate_categories
             ON certificates.category_id =
@@ -1622,7 +1663,7 @@ def tutor():
             certificate_categories.category_name
 
         ORDER BY
-            students.student_name
+            students.student_name ASC
     """, student_params)
 
     student_category_report = cursor.fetchall()
@@ -1641,7 +1682,8 @@ def tutor():
         FROM certificates
 
         INNER JOIN students
-            ON certificates.student_id = students.student_id
+            ON certificates.student_id =
+               students.student_id
 
         WHERE {student_where}
 
@@ -1651,19 +1693,25 @@ def tutor():
             certificates.achievement
 
         ORDER BY
-            students.student_name
+            students.student_name ASC
     """, student_params)
 
     student_achievement_report = cursor.fetchall()
 
 
     # =========================================================
-    # DEBUG
+    # DEBUG INFORMATION
     # =========================================================
 
     print("====================================")
-    print("TOTAL STUDENTS:", total_students)
-    print("TOTAL CERTIFICATES:", total_certificates)
+    print("TUTOR NAME          :", tutor_name)
+    print("DEPARTMENT          :", department)
+    print("CLASS YEAR          :", class_year)
+    print("SECTION             :", section)
+    print("TOTAL STUDENTS      :", total_students)
+    print("TOTAL CERTIFICATES  :", total_certificates)
+    print("STUDENTS FOUND      :", len(students))
+    print("CERTIFICATES FOUND  :", len(certificates))
     print(
         "STUDENT CERTIFICATE COUNTS:",
         student_certificate_counts
@@ -1682,7 +1730,7 @@ def tutor():
 
 
     # =========================================================
-    # RENDER DASHBOARD
+    # RENDER TUTOR DASHBOARD
     # =========================================================
 
     return render_template(
@@ -1716,7 +1764,7 @@ def tutor():
 
 
         # -----------------------------------------------------
-        # Existing Graph / Report Data
+        # Graph / Report Data
         # -----------------------------------------------------
 
         top_students=top_students,
@@ -1738,8 +1786,7 @@ def tutor():
 
 
         # -----------------------------------------------------
-        # NEW
-        # Student Search + Category + Achievement Charts
+        # Student Search + Charts
         # -----------------------------------------------------
 
         student_chart_data=
