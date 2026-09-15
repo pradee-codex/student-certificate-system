@@ -30,14 +30,10 @@
             margin:0;
         }
 
-        /* MAIN CONTAINER */
-
         .manage-hod-container{
             max-width:1000px;
             margin:20px auto !important;
         }
-
-        /* MAIN CARD */
 
         .manage-hod-card{
             border:none !important;
@@ -45,8 +41,6 @@
             overflow:hidden;
             box-shadow:0 8px 22px rgba(0,0,0,.10) !important;
         }
-
-        /* HEADER */
 
         .manage-hod-card .card-header{
             padding:16px 20px;
@@ -64,21 +58,15 @@
             margin-right:5px;
         }
 
-        /* BODY */
-
         .manage-hod-card .card-body{
             padding:20px !important;
         }
-
-        /* LABEL */
 
         .manage-hod-card .form-label{
             font-size:11px;
             font-weight:600;
             margin-bottom:5px;
         }
-
-        /* INPUT */
 
         .manage-hod-card .form-control{
             height:36px;
@@ -92,13 +80,9 @@
             box-shadow:none;
         }
 
-        /* FORM SPACING */
-
         .manage-hod-card .mb-3{
             margin-bottom:12px !important;
         }
-
-        /* BUTTONS */
 
         .manage-hod-card .btn{
             padding:7px 16px;
@@ -117,19 +101,13 @@
             margin-right:3px;
         }
 
-        /* BUTTON AREA */
-
         .manage-hod-card .text-center{
             margin-top:8px !important;
         }
 
-        /* DIVIDER */
-
         .manage-hod-card hr{
             margin:18px 0 !important;
         }
-
-        /* HOD LIST TITLE */
 
         .hod-list-title{
             font-size:16px;
@@ -142,8 +120,6 @@
             font-size:15px;
             margin-right:4px;
         }
-
-        /* TABLE */
 
         .manage-hod-card .table{
             margin-bottom:0;
@@ -169,7 +145,22 @@
             vertical-align:middle;
         }
 
-        /* RESPONSIVE */
+        /* ACTION BUTTONS */
+
+        .action-btn{
+            padding:5px 9px !important;
+            font-size:10px !important;
+            border-radius:6px !important;
+            text-decoration:none;
+            display:inline-flex;
+            align-items:center;
+            gap:3px;
+        }
+
+        .action-btn i{
+            font-size:10px !important;
+            margin:0 !important;
+        }
 
         @media(max-width:768px){
 
@@ -364,78 +355,4 @@
                         <i class="bi bi-arrow-left-circle-fill"></i>
                         Back
 
-                    </a>
-
-                </div>
-
-            </form>
-
-
-            <hr class="my-4">
-
-
-            <!-- HOD LIST -->
-
-            <h4 class="hod-list-title">
-
-                <i class="bi bi-list-ul"></i>
-                HOD List
-
-            </h4>
-
-
-            <div class="table-responsive">
-
-                <table class="table table-bordered table-hover">
-
-                    <thead class="table-success">
-
-                        <tr>
-
-                            <th>ID</th>
-                            <th>HOD Name</th>
-                            <th>Department</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Username</th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody>
-
-                        {% for hod in hods %}
-
-                        <tr>
-
-                            <td>{{ hod[0] }}</td>
-                            <td>{{ hod[1] }}</td>
-                            <td>{{ hod[2] }}</td>
-                            <td>{{ hod[3] }}</td>
-                            <td>{{ hod[4] }}</td>
-                            <td>{{ hod[5] }}</td>
-
-                        </tr>
-
-                        {% endfor %}
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-
-</html>
+                    </

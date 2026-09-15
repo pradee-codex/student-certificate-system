@@ -451,6 +451,10 @@ def reports():
 # Manage HOD
 # ==========================
 
+# ==========================
+# Manage HOD
+# ==========================
+
 @app.route("/manage_hod")
 def manage_hod():
 
@@ -459,31 +463,47 @@ def manage_hod():
 
     cursor = mysql.connection.cursor()
 
-    cursor.execute("""
-        SELECT
-            hods.hod_id,
-            hods.hod_name,
-            hods.department,
-            hods.email,
-            hods.phone,
-            users.username
+    try:
 
-        FROM hods
+        cursor.execute("""
+            SELECT
+                hods.hod_id,
+                hods.hod_name,
+                hods.department,
+                hods.email,
+                hods.phone,
+                users.username
 
-        INNER JOIN users
-        ON hods.user_id = users.id
+            FROM hods
 
-        ORDER BY hod_name
-    """)
+            INNER JOIN users
+            ON hods.user_id = users.id
 
-    hods = cursor.fetchall()
+            ORDER BY hods.hod_name
+        """)
 
-    cursor.close()
+        hods = cursor.fetchall()
 
-    return render_template(
-        "admin/manage_hod.html",
-        hods=hods
-    )
+        cursor.close()
+
+        return render_template(
+            "admin/manage_hod.html",
+            hods=hods
+        )
+
+    except Exception as e:
+
+        cursor.close()
+
+        print("===================================")
+        print("MANAGE HOD ERROR")
+        print("Error:", str(e))
+        print("===================================")
+
+        flash("Unable to load HOD list.")
+
+        return redirect("/admin")
+
 
 # ==========================
 # Add HOD
@@ -504,75 +524,357 @@ def add_hod():
 
     cursor = mysql.connection.cursor()
 
-    # Username already exists?
-    cursor.execute(
-        "SELECT id FROM users WHERE username=%s",
-        (username,)
-    )
+    try:
 
-    existing = cursor.fetchone()
+        # Username already exists?
+        cursor.execute("""
+            SELECT id
+            FROM users
+            WHERE username=%s
+        """, (username,))
 
-    if existing:
-        cursor.close()
-        flash("Username already exists")
-        return redirect("/manage_hod")
+        existing = cursor.fetchone()
 
-    # Insert into users table
-    cursor.execute("""
-        INSERT INTO users
-        (
+        if existing:
+
+            cursor.close()
+
+            flash("Username already exists")
+
+            return redirect("/manage_hod")
+
+
+        # Insert into users table
+        cursor.execute("""
+            INSERT INTO users
+            (
+                username,
+                password,
+                role
+            )
+            VALUES
+            (
+                %s,
+                %s,
+                'hod'
+            )
+        """, (
             username,
-            password,
-            role
-        )
-        VALUES
-        (
-            %s,
-            %s,
-            'hod'
-        )
-    """, (
-        username,
-        password
-    ))
+            password
+        ))
 
-    mysql.connection.commit()
+        user_id = cursor.lastrowid
 
-    user_id = cursor.lastrowid
 
-    # Insert into hods table
-    cursor.execute("""
-        INSERT INTO hods
-        (
+        # Insert into hods table
+        cursor.execute("""
+            INSERT INTO hods
+            (
+                user_id,
+                hod_name,
+                department,
+                email,
+                phone
+            )
+            VALUES
+            (
+                %s,
+                %s,
+                %s,
+                %s,
+                %s
+            )
+        """, (
             user_id,
             hod_name,
             department,
             email,
             phone
+        ))
+
+
+        mysql.connection.commit()
+
+        cursor.close()
+
+        flash("HOD Created Successfully")
+
+        return redirect("/manage_hod")
+
+
+    except Exception as e:
+
+        mysql.connection.rollback()
+
+        cursor.close()
+
+        print("===================================")
+        print("ADD HOD ERROR")
+        print("Error:", str(e))
+        print("===================================")
+
+        flash("Unable to create HOD.")
+
+        return redirect("/manage_hod")
+
+
+# ==========================
+# Edit HOD
+# ==========================
+
+@app.route("/edit_hod/<int:hod_id>", methods=["GET", "POST"])
+def edit_hod(hod_id):
+
+    if session.get("role") != "admin":
+        return redirect("/")
+
+    cursor = mysql.connection.cursor()
+
+    try:
+
+        # --------------------------
+        # POST - Update HOD
+        # --------------------------
+
+        if request.method == "POST":
+
+            hod_name = request.form["hod_name"]
+            department = request.form["department"]
+            email = request.form["email"]
+            phone = request.form["phone"]
+            username = request.form["username"]
+            password = request.form.get("password", "").strip()
+
+
+            # Get user_id
+            cursor.execute("""
+                SELECT user_id
+                FROM hods
+                WHERE hod_id=%s
+            """, (hod_id,))
+
+            hod = cursor.fetchone()
+
+            if not hod:
+
+                cursor.close()
+
+                flash("HOD not found.")
+
+                return redirect("/manage_hod")
+
+
+            user_id = hod[0]
+
+
+            # Check username belongs to another user
+            cursor.execute("""
+                SELECT id
+                FROM users
+                WHERE username=%s
+                AND id!=%s
+            """, (
+                username,
+                user_id
+            ))
+
+            existing = cursor.fetchone()
+
+            if existing:
+
+                cursor.close()
+
+                flash("Username already exists.")
+
+                return redirect(
+                    url_for("edit_hod", hod_id=hod_id)
+                )
+
+
+            # Update HOD details
+            cursor.execute("""
+                UPDATE hods
+                SET
+                    hod_name=%s,
+                    department=%s,
+                    email=%s,
+                    phone=%s
+                WHERE hod_id=%s
+            """, (
+                hod_name,
+                department,
+                email,
+                phone,
+                hod_id
+            ))
+
+
+            # Update username
+            cursor.execute("""
+                UPDATE users
+                SET username=%s
+                WHERE id=%s
+            """, (
+                username,
+                user_id
+            ))
+
+
+            # Update password only if entered
+            if password != "":
+
+                cursor.execute("""
+                    UPDATE users
+                    SET password=%s
+                    WHERE id=%s
+                """, (
+                    password,
+                    user_id
+                ))
+
+
+            mysql.connection.commit()
+
+            cursor.close()
+
+            flash("HOD Updated Successfully")
+
+            return redirect("/manage_hod")
+
+
+        # --------------------------
+        # GET - Show HOD
+        # --------------------------
+
+        cursor.execute("""
+            SELECT
+                hods.hod_id,
+                hods.hod_name,
+                hods.department,
+                hods.email,
+                hods.phone,
+                users.username
+
+            FROM hods
+
+            INNER JOIN users
+            ON hods.user_id = users.id
+
+            WHERE hods.hod_id=%s
+        """, (hod_id,))
+
+        hod = cursor.fetchone()
+
+        cursor.close()
+
+
+        if not hod:
+
+            flash("HOD not found.")
+
+            return redirect("/manage_hod")
+
+
+        return render_template(
+            "admin/edit_hod.html",
+            hod=hod
         )
-        VALUES
-        (
-            %s,
-            %s,
-            %s,
-            %s,
-            %s
-        )
-    """, (
-        user_id,
-        hod_name,
-        department,
-        email,
-        phone
-    ))
 
-    mysql.connection.commit()
 
-    cursor.close()
+    except Exception as e:
 
-    flash("HOD Created Successfully")
+        mysql.connection.rollback()
 
-    return redirect("/manage_hod")
+        cursor.close()
+
+        print("===================================")
+        print("EDIT HOD ERROR")
+        print("HOD ID:", hod_id)
+        print("Error:", str(e))
+        print("===================================")
+
+        flash("Unable to edit HOD.")
+
+        return redirect("/manage_hod")
+
+
+# ==========================
+# Delete HOD
+# ==========================
+
+@app.route("/delete_hod/<int:hod_id>")
+def delete_hod(hod_id):
+
+    if session.get("role") != "admin":
+        return redirect("/")
+
+    cursor = mysql.connection.cursor()
+
+    try:
+
+        # Get linked user_id
+        cursor.execute("""
+            SELECT user_id
+            FROM hods
+            WHERE hod_id=%s
+        """, (hod_id,))
+
+        hod = cursor.fetchone()
+
+        if not hod:
+
+            cursor.close()
+
+            flash("HOD not found.")
+
+            return redirect("/manage_hod")
+
+
+        user_id = hod[0]
+
+
+        # Delete HOD record
+        cursor.execute("""
+            DELETE FROM hods
+            WHERE hod_id=%s
+        """, (hod_id,))
+
+
+        # Delete linked login account
+        cursor.execute("""
+            DELETE FROM users
+            WHERE id=%s
+            AND role='hod'
+        """, (user_id,))
+
+
+        mysql.connection.commit()
+
+        cursor.close()
+
+        flash("HOD Deleted Successfully")
+
+        return redirect("/manage_hod")
+
+
+    except Exception as e:
+
+        mysql.connection.rollback()
+
+        cursor.close()
+
+        print("===================================")
+        print("DELETE HOD ERROR")
+        print("HOD ID:", hod_id)
+        print("Error:", str(e))
+        print("===================================")
+
+        flash("Unable to delete HOD.")
+
+        return redirect("/manage_hod")
+#==================================
+
+
 #-------------------------------
 
 @app.route("/admin_export_zip")
