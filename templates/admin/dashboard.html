@@ -17,7 +17,6 @@
 
 </head>
 
-
 <body>
 
 
@@ -41,11 +40,12 @@
 
     <ul>
 
+
         <!-- DASHBOARD -->
 
         <li class="active">
 
-            <a href="{{ url_for('admin') }}">
+            <a href="/admin">
 
                 <i class="bi bi-grid-fill"></i>
 
@@ -120,7 +120,7 @@
 
         <li>
 
-            <a href="{{ url_for('admin_export_zip') }}">
+            <a href="/download_all">
 
                 <i class="bi bi-download"></i>
 
@@ -135,7 +135,7 @@
 
         <li>
 
-            <a href="{{ url_for('logout') }}">
+            <a href="/logout">
 
                 <i class="bi bi-box-arrow-right"></i>
 
@@ -144,6 +144,7 @@
             </a>
 
         </li>
+
 
     </ul>
 
@@ -342,47 +343,33 @@
 
                 <tbody>
 
-                    {% if students %}
+                    {% for student in students %}
 
-                        {% for student in students %}
+                    <tr>
 
-                        <tr>
+                        <td>
+                            {{ student[1] }}
+                        </td>
 
-                            <td>
-                                {{ student[1] }}
-                            </td>
+                        <td>
+                            {{ student[2] }}
+                        </td>
 
-                            <td>
-                                {{ student[2] }}
-                            </td>
+                        <td>
+                            {{ student[3] }}
+                        </td>
 
-                            <td>
-                                {{ student[3] }}
-                            </td>
+                        <td>
+                            {{ student[4] }}
+                        </td>
 
-                            <td>
-                                {{ student[4] }}
-                            </td>
+                        <td>
+                            {{ student[5] }}
+                        </td>
 
-                            <td>
-                                {{ student[5] }}
-                            </td>
+                    </tr>
 
-                        </tr>
-
-                        {% endfor %}
-
-                    {% else %}
-
-                        <tr>
-
-                            <td colspan="5">
-                                No students found.
-                            </td>
-
-                        </tr>
-
-                    {% endif %}
+                    {% endfor %}
 
                 </tbody>
 
@@ -434,8 +421,8 @@
 
                     <button
                         type="button"
-                        id="downloadAllBtn"
                         class="download-all-btn"
+                        onclick="downloadCertificates()"
                     >
 
                         <i class="bi bi-download"></i>
@@ -507,169 +494,153 @@
                 <tbody>
 
 
-                    {% if certificates %}
+                    {% for certificate in certificates %}
 
-                        {% for certificate in certificates %}
 
+                    <tr>
 
-                        <tr>
 
+                        <!-- STUDENT -->
 
-                            <!-- STUDENT -->
+                        <td>
 
-                            <td>
+                            {{ certificate[0] }}
 
-                                {{ certificate[0] }}
+                        </td>
 
-                            </td>
 
 
+                        <!-- DEPARTMENT -->
 
-                            <!-- DEPARTMENT -->
+                        <td>
 
-                            <td>
+                            {{ certificate[1] }}
 
-                                {{ certificate[1] }}
+                        </td>
 
-                            </td>
 
 
+                        <!-- YEAR -->
 
-                            <!-- YEAR -->
+                        <td>
 
-                            <td>
+                            {{ certificate[2] }}
 
-                                {{ certificate[2] }}
+                        </td>
 
-                            </td>
 
 
+                        <!-- CERTIFICATE -->
 
-                            <!-- CERTIFICATE -->
+                        <td>
 
-                            <td>
+                            {{ certificate[3] }}
 
-                                {{ certificate[3] }}
+                        </td>
 
-                            </td>
 
 
+                        <!-- CATEGORY -->
 
-                            <!-- CATEGORY -->
+                        <td>
 
-                            <td>
+                            {{ certificate[4] }}
 
-                                {{ certificate[4] }}
+                        </td>
 
-                            </td>
 
 
+                        <!-- ACHIEVEMENT -->
 
-                            <!-- ACHIEVEMENT -->
+                        <td>
 
-                            <td>
+                            {% if certificate[5] %}
 
-                                {% if certificate[5] %}
+                                {{ certificate[5] }}
 
-                                    {{ certificate[5] }}
+                            {% else %}
 
-                                {% else %}
+                                -
 
-                                    -
+                            {% endif %}
 
-                                {% endif %}
+                        </td>
 
-                            </td>
 
 
+                        <!-- DATE -->
 
-                            <!-- DATE -->
+                        <td>
 
-                            <td>
+                            {{ certificate[7] }}
 
-                                {{ certificate[6] }}
+                        </td>
 
-                            </td>
 
 
+                        <!-- VIEW -->
 
-                            <!-- VIEW -->
+                        <td>
 
-                            <td>
+                            {% if certificate[6] %}
 
-                                {% if certificate[7] %}
+                                <a
+                                    class="view"
+                                    href="{{ url_for('view', filename=certificate[6]) }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
 
-                                    <a
-                                        class="view"
-                                        href="{{ url_for('view', filename=certificate[7]) }}"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
+                                    <i class="bi bi-eye-fill"></i>
 
-                                        <i class="bi bi-eye-fill"></i>
+                                    View
 
-                                        View
+                                </a>
 
-                                    </a>
+                            {% else %}
 
-                                {% else %}
+                                <span>
+                                    No File
+                                </span>
 
-                                    <span>
-                                        No File
-                                    </span>
+                            {% endif %}
 
-                                {% endif %}
+                        </td>
 
-                            </td>
 
 
+                        <!-- DOWNLOAD -->
 
-                            <!-- DOWNLOAD -->
+                        <td>
 
-                            <td>
+                            {% if certificate[6] %}
 
-                                {% if certificate[7] %}
+                                <a
+                                    class="download"
+                                    href="{{ url_for('download', filename=certificate[6]) }}"
+                                >
 
-                                    <a
-                                        class="download"
-                                        href="{{ url_for('download', filename=certificate[7]) }}"
-                                    >
+                                    <i class="bi bi-download"></i>
 
-                                        <i class="bi bi-download"></i>
+                                    Download
 
-                                        Download
+                                </a>
 
-                                    </a>
+                            {% else %}
 
-                                {% else %}
+                                <span>
+                                    No File
+                                </span>
 
-                                    <span>
-                                        No File
-                                    </span>
+                            {% endif %}
 
-                                {% endif %}
+                        </td>
 
-                            </td>
 
+                    </tr>
 
-                        </tr>
 
-
-                        {% endfor %}
-
-                    {% else %}
-
-                        <tr>
-
-                            <td colspan="9">
-
-                                No certificates found.
-
-                            </td>
-
-                        </tr>
-
-                    {% endif %}
+                    {% endfor %}
 
 
                 </tbody>
@@ -786,68 +757,55 @@ if (searchInput) {
 
 
 /* ==================================================
-   DOWNLOAD ALL / SEARCH DOWNLOAD
+   DOWNLOAD CERTIFICATES
 ================================================== */
 
-const downloadAllBtn =
-    document.getElementById("downloadAllBtn");
+function downloadCertificates() {
 
 
-if (downloadAllBtn) {
+    const searchBox =
+        document.getElementById("searchInput");
 
 
-    downloadAllBtn.addEventListener(
-        "click",
-        function () {
+    if (!searchBox) {
+
+        return;
+
+    }
 
 
-            const searchBox =
-                document.getElementById("searchInput");
-
-
-            let searchText = "";
-
-
-            if (searchBox) {
-
-                searchText =
-                    searchBox.value.trim();
-
-            }
+    const searchText =
+        searchBox.value.trim();
 
 
 
-            /* ==========================================
-               NO SEARCH
-               DOWNLOAD ALL CERTIFICATES
-            ========================================== */
+    /* ==================================================
+       NOTHING SEARCHED
+       → DOWNLOAD ALL CERTIFICATES
+    ================================================== */
 
-            if (searchText === "") {
-
-
-                window.location.href =
-                    "{{ url_for('admin_export_zip') }}";
+    if (searchText === "") {
 
 
-                return;
-
-            }
-
+        window.location.href =
+            "/admin_export_zip";
 
 
-            /* ==========================================
-               SEARCH ENTERED
-               DOWNLOAD ONLY MATCHING CERTIFICATES
-            ========================================== */
+        return;
 
-            window.location.href =
-                "{{ url_for('admin_export_zip') }}" +
-                "?search=" +
-                encodeURIComponent(searchText);
+    }
 
 
-        }
-    );
+
+    /* ==================================================
+       SEARCH TEXT ENTERED
+       → DOWNLOAD ONLY MATCHING CERTIFICATES
+    ================================================== */
+
+    window.location.href =
+        "/admin_export_zip?search=" +
+        encodeURIComponent(searchText);
+
 
 }
 
