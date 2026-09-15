@@ -885,20 +885,21 @@ def delete_hod(hod_id):
 @app.route("/download_all")
 def admin_export_zip():
 
-    # --------------------------------------------------------
+    # ==========================================
     # ADMIN ONLY
-    # --------------------------------------------------------
+    # ==========================================
+
     if session.get("role") != "admin":
         return redirect("/")
 
-    # --------------------------------------------------------
-    # GET SEARCHED STUDENT NAME
-    # --------------------------------------------------------
-    # Main dashboard sends: ?search=StudentName
-    # Old/sidebar link may send: ?student_name=StudentName
-    # --------------------------------------------------------
+    # ==========================================
+    # GET SEARCH NAME
+    # ==========================================
 
-    student_name = request.args.get("search", "").strip()
+    student_name = request.args.get(
+        "search",
+        ""
+    ).strip()
 
     if not student_name:
         student_name = request.args.get(
@@ -906,15 +907,11 @@ def admin_export_zip():
             ""
         ).strip()
 
-    # --------------------------------------------------------
-    # DATABASE CONNECTION
-    # --------------------------------------------------------
+    # ==========================================
+    # DATABASE
+    # ==========================================
 
     cursor = mysql.connection.cursor()
-
-    # --------------------------------------------------------
-    # SEARCHED STUDENT
-    # --------------------------------------------------------
 
     if student_name:
 
@@ -923,21 +920,14 @@ def admin_export_zip():
                 s.student_name,
                 c.certificate_file
             FROM certificates c
-
             INNER JOIN students s
                 ON c.student_id = s.student_id
-
             WHERE s.student_name LIKE %s
-
             AND c.certificate_file IS NOT NULL
             AND c.certificate_file != ''
         """, (
             "%" + student_name + "%",
         ))
-
-    # --------------------------------------------------------
-    # DOWNLOAD ALL STUDENTS
-    # --------------------------------------------------------
 
     else:
 
@@ -946,25 +936,19 @@ def admin_export_zip():
                 s.student_name,
                 c.certificate_file
             FROM certificates c
-
             INNER JOIN students s
                 ON c.student_id = s.student_id
-
             WHERE c.certificate_file IS NOT NULL
             AND c.certificate_file != ''
         """)
-
-    # --------------------------------------------------------
-    # GET DATABASE RESULTS
-    # --------------------------------------------------------
 
     certificates = cursor.fetchall()
 
     cursor.close()
 
-    # --------------------------------------------------------
-    # NO CERTIFICATES FOUND
-    # --------------------------------------------------------
+    # ==========================================
+    # NO DATABASE RECORDS
+    # ==========================================
 
     if not certificates:
 
@@ -975,98 +959,176 @@ def admin_export_zip():
 
         return redirect("/admin")
 
-    # --------------------------------------------------------
-    # CREATE TEMPORARY ZIP FILE
-    # --------------------------------------------------------
+    # ==========================================
+    # TEMP ZIP
+    # ==========================================
 
-    temp = tempfile.NamedTemporaryFile(
+    temp_zip = tempfile.NamedTemporaryFile(
         delete=False,
         suffix=".zip"
     )
 
+    temp_zip.close()
+
     added_files = 0
 
-    # --------------------------------------------------------
+    # ==========================================
     # CREATE ZIP
-    # --------------------------------------------------------
+    # ==========================================
 
     with zipfile.ZipFile(
-        temp.name,
+        temp_zip.name,
         "w",
         zipfile.ZIP_DEFLATED
     ) as zipf:
 
         for row in certificates:
 
-            # Database student name
             student_name_db = row[0]
 
-            # Certificate filename
-            filename = row[1]
+            # Google Drive URL
+            drive_url = row[1]
 
-            # ------------------------------------------------
-            # CHECK FILENAME
-            # ------------------------------------------------
-
-            if not filename:
+            if not drive_url:
                 continue
 
-            # ------------------------------------------------
-            # GET ACTUAL FILE PATH
-            # ------------------------------------------------
+            try:
 
-            filepath = os.path.join(
-                app.config["UPLOAD_FOLDER"],
-                os.path.basename(filename)
-            )
+                # ==================================
+                # EXTRACT GOOGLE DRIVE FILE ID
+                # ==================================
 
-            # ------------------------------------------------
-            # CHECK FILE EXISTS
-            # ------------------------------------------------
+                match = re.search(
+                    r"/d/([a-zA-Z0-9_-]+)",
+                    drive_url
+                )
 
-            if os.path.isfile(filepath):
+                if not match:
 
-                # --------------------------------------------
-                # CREATE STUDENT FOLDER INSIDE ZIP
-                # --------------------------------------------
+                    # Also support ?id=FILE_ID
+                    match = re.search(
+                        r"[?&]id=([a-zA-Z0-9_-]+)",
+                        drive_url
+                    )
+
+                if not match:
+
+                    print(
+                        "Invalid Google Drive URL:",
+                        drive_url
+                    )
+
+                    continue
+
+                drive_file_id = match.group(1)
+
+                # ==================================
+                # GET FILE INFORMATION
+                # ==================================
+
+                file_info = drive_service.files().get(
+                    fileId=drive_file_id,
+                    fields="id,name"
+                ).execute()
+
+                filename = file_info.get(
+                    "name",
+                    "certificate.pdf"
+                )
+
+                # ==================================
+                # DOWNLOAD FROM GOOGLE DRIVE
+                # ==================================
+
+                request_drive = (
+                    drive_service.files().get_media(
+                        fileId=drive_file_id
+                    )
+                )
+
+                file_buffer = io.BytesIO()
+
+                downloader = MediaIoBaseDownload(
+                    file_buffer,
+                    request_drive
+                )
+
+                done = False
+
+                while not done:
+
+                    status, done = (
+                        downloader.next_chunk()
+                    )
+
+                # ==================================
+                # STUDENT FOLDER INSIDE ZIP
+                # ==================================
 
                 safe_student_name = (
                     str(student_name_db)
                     .strip()
                 )
 
-                zip_path = os.path.join(
-                    safe_student_name,
-                    os.path.basename(filename)
+                # Remove unsafe characters
+                safe_student_name = re.sub(
+                    r'[<>:"/\\|?*]',
+                    "_",
+                    safe_student_name
                 )
 
-                # --------------------------------------------
-                # ADD FILE TO ZIP
-                # --------------------------------------------
+                zip_path = os.path.join(
+                    safe_student_name,
+                    filename
+                )
 
-                zipf.write(
-                    filepath,
-                    arcname=zip_path
+                # ==================================
+                # ADD FILE TO ZIP
+                # ==================================
+
+                zipf.writestr(
+                    zip_path,
+                    file_buffer.getvalue()
                 )
 
                 added_files += 1
 
-    # --------------------------------------------------------
-    # NO PHYSICAL FILES FOUND
-    # --------------------------------------------------------
+                print(
+                    "Added to ZIP:",
+                    safe_student_name,
+                    filename
+                )
+
+            except Exception as e:
+
+                print(
+                    "Google Drive error:",
+                    e
+                )
+
+                continue
+
+    # ==========================================
+    # NO FILES DOWNLOADED
+    # ==========================================
 
     if added_files == 0:
 
+        try:
+            os.remove(temp_zip.name)
+        except:
+            pass
+
         flash(
-            "Certificate files not found.",
+            "Certificate files could not be downloaded from Google Drive.",
             "danger"
         )
 
         return redirect("/admin")
 
-    # --------------------------------------------------------
+    # ==========================================
     # ZIP FILE NAME
-    # --------------------------------------------------------
+    # ==========================================
 
     if student_name:
 
@@ -1079,12 +1141,12 @@ def admin_export_zip():
 
         zip_name = "All_Certificates.zip"
 
-    # --------------------------------------------------------
+    # ==========================================
     # SEND ZIP TO ADMIN
-    # --------------------------------------------------------
+    # ==========================================
 
     return send_file(
-        temp.name,
+        temp_zip.name,
         as_attachment=True,
         download_name=zip_name,
         mimetype="application/zip"
