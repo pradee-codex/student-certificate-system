@@ -887,154 +887,377 @@ def admin_export_zip():
 
     cursor = mysql.connection.cursor()
 
-    # ==========================================
-    # GET CERTIFICATES
-    # ==========================================
+    try:
 
-    query = """
-        SELECT
-            students.student_name,
-            students.department,
-            students.year,
-            certificates.certificate_title,
-            certificate_categories.category_name,
-            certificates.achievement,
-            certificates.upload_date,
-            certificates.certificate_file
+        # ==========================================
+        # GET CERTIFICATES FROM DATABASE
+        # ==========================================
 
-        FROM certificates
+        query = """
+            SELECT
+                students.student_name,
+                students.department,
+                students.year,
+                certificates.certificate_title,
+                certificate_categories.category_name,
+                certificates.achievement,
+                certificates.upload_date,
+                certificates.certificate_file
 
-        INNER JOIN students
-            ON certificates.student_id = students.student_id
+            FROM certificates
 
-        INNER JOIN certificate_categories
-            ON certificates.category_id = certificate_categories.category_id
+            INNER JOIN students
+                ON certificates.student_id = students.student_id
 
-        WHERE 1=1
-    """
+            INNER JOIN certificate_categories
+                ON certificates.category_id =
+                   certificate_categories.category_id
 
-    params = []
-
-    # ==========================================
-    # SEARCH FILTER
-    # ==========================================
-
-    if search_text:
-
-        query += """
-            AND (
-                students.student_name LIKE %s
-                OR students.department LIKE %s
-                OR certificates.certificate_title LIKE %s
-                OR students.register_no LIKE %s
-            )
+            WHERE 1=1
         """
 
-        search_pattern = "%" + search_text + "%"
+        params = []
 
-        params.extend([
-            search_pattern,
-            search_pattern,
-            search_pattern,
-            search_pattern
-        ])
+        # ==========================================
+        # SEARCH
+        # ==========================================
+
+        if search_text:
+
+            query += """
+                AND (
+                    students.student_name LIKE %s
+                    OR students.department LIKE %s
+                    OR certificates.certificate_title LIKE %s
+                    OR students.register_no LIKE %s
+                )
+            """
+
+            search_pattern = "%" + search_text + "%"
+
+            params.extend([
+                search_pattern,
+                search_pattern,
+                search_pattern,
+                search_pattern
+            ])
+
+        # ==========================================
+        # ORDER
+        # ==========================================
+
+        query += """
+            ORDER BY certificates.upload_date DESC
+        """
+
+        cursor.execute(
+            query,
+            tuple(params)
+        )
+
+        certificates = cursor.fetchall()
+
+        cursor.close()
+
+    except Exception as e:
+
+        cursor.close()
+
+        print("===================================")
+        print("ADMIN EXPORT DATABASE ERROR")
+        print("Error:", str(e))
+        print("===================================")
+
+        flash("Unable to load certificates.")
+        return redirect("/admin")
 
     # ==========================================
-    # ORDER
-    # ==========================================
-
-    query += """
-        ORDER BY certificates.upload_date DESC
-    """
-
-    cursor.execute(query, tuple(params))
-
-    certificates = cursor.fetchall()
-
-    cursor.close()
-
-    # ==========================================
-    # NO DATABASE RESULT
+    # NO DATABASE RECORD
     # ==========================================
 
     if not certificates:
 
-        flash("No certificates found for the search.")
+        flash("No certificates found.")
 
         return redirect("/admin")
 
     # ==========================================
-    # CERTIFICATE FOLDER
+    # GOOGLE DRIVE SERVICE
     # ==========================================
 
-    cert_folder = os.path.join(
-        app.root_path,
-        "static",
-        "uploads",
-        "certificates"
-    )
+    try:
+
+        drive_service = get_drive_service()
+
+    except Exception as e:
+
+        print("===================================")
+        print("GOOGLE DRIVE CONNECTION ERROR")
+        print("Error:", str(e))
+        print("===================================")
+
+        flash("Unable to connect to Google Drive.")
+
+        return redirect("/admin")
 
     # ==========================================
-    # CREATE TEMP ZIP
+    # CREATE ZIP IN MEMORY
     # ==========================================
 
-    temp_zip = tempfile.NamedTemporaryFile(
-        delete=False,
-        suffix=".zip"
-    )
-
-    zip_path = temp_zip.name
-
-    temp_zip.close()
+    zip_buffer = io.BytesIO()
 
     added_files = 0
 
-    # ==========================================
-    # CREATE ZIP
-    # ==========================================
+    used_names = set()
 
-    with zipfile.ZipFile(
-        zip_path,
-        "w",
-        zipfile.ZIP_DEFLATED
-    ) as zipf:
+    try:
 
-        for certificate in certificates:
+        with zipfile.ZipFile(
+            zip_buffer,
+            "w",
+            zipfile.ZIP_DEFLATED
+        ) as zipf:
 
-            # certificate_file is index 7
-            filename = certificate[7]
+            # ======================================
+            # PROCESS EVERY CERTIFICATE
+            # ======================================
 
-            if not filename:
-                continue
+            for index, certificate in enumerate(certificates):
 
-            file_path = os.path.join(
-                cert_folder,
-                filename
-            )
+                # certificate_file = index 7
+                stored_file = certificate[7]
 
-            if os.path.isfile(file_path):
+                if not stored_file:
+                    continue
 
-                zipf.write(
-                    file_path,
-                    arcname=filename
+                stored_file = str(stored_file).strip()
+
+                # ==================================
+                # GET GOOGLE DRIVE FILE ID
+                # ==================================
+
+                drive_file_id = None
+
+                # ----------------------------------
+                # Case 1:
+                # Direct Drive file ID
+                # ----------------------------------
+
+                if re.fullmatch(
+                    r"[A-Za-z0-9_-]{20,}",
+                    stored_file
+                ):
+                    drive_file_id = stored_file
+
+                # ----------------------------------
+                # Case 2:
+                # /file/d/FILE_ID/view
+                # ----------------------------------
+
+                elif "/file/d/" in stored_file:
+
+                    match = re.search(
+                        r"/file/d/([^/]+)",
+                        stored_file
+                    )
+
+                    if match:
+                        drive_file_id = match.group(1)
+
+                # ----------------------------------
+                # Case 3:
+                # ?id=FILE_ID
+                # ----------------------------------
+
+                elif "id=" in stored_file:
+
+                    match = re.search(
+                        r"[?&]id=([^&]+)",
+                        stored_file
+                    )
+
+                    if match:
+                        drive_file_id = match.group(1)
+
+                # ----------------------------------
+                # Case 4:
+                # Google Drive URL
+                # ----------------------------------
+
+                elif "drive.google.com" in stored_file:
+
+                    match = re.search(
+                        r"/d/([^/]+)",
+                        stored_file
+                    )
+
+                    if match:
+                        drive_file_id = match.group(1)
+
+                # ==================================
+                # DRIVE ID NOT FOUND
+                # ==================================
+
+                if not drive_file_id:
+
+                    print(
+                        "DRIVE FILE ID NOT FOUND:",
+                        stored_file
+                    )
+
+                    continue
+
+                # ==================================
+                # GET DRIVE FILE INFORMATION
+                # ==================================
+
+                try:
+
+                    drive_info = drive_service.files().get(
+                        fileId=drive_file_id,
+                        fields="id,name,mimeType"
+                    ).execute()
+
+                    drive_file_name = drive_info.get(
+                        "name",
+                        f"certificate_{index + 1}"
+                    )
+
+                except Exception as e:
+
+                    print(
+                        "DRIVE FILE INFO ERROR:",
+                        drive_file_id,
+                        str(e)
+                    )
+
+                    continue
+
+                # ==================================
+                # DOWNLOAD FILE FROM GOOGLE DRIVE
+                # ==================================
+
+                try:
+
+                    request_drive = drive_service.files().get(
+                        fileId=drive_file_id,
+                        alt="media"
+                    )
+
+                    file_buffer = io.BytesIO()
+
+                    from googleapiclient.http import MediaIoBaseDownload
+
+                    downloader = MediaIoBaseDownload(
+                        file_buffer,
+                        request_drive
+                    )
+
+                    done = False
+
+                    while not done:
+
+                        status, done = downloader.next_chunk()
+
+                    file_buffer.seek(0)
+
+                except Exception as e:
+
+                    print(
+                        "DRIVE FILE DOWNLOAD ERROR:",
+                        drive_file_id,
+                        str(e)
+                    )
+
+                    continue
+
+                # ==================================
+                # CREATE UNIQUE FILE NAME
+                # ==================================
+
+                original_name = drive_file_name
+
+                file_name = original_name
+
+                counter = 1
+
+                while file_name.lower() in used_names:
+
+                    if "." in original_name:
+
+                        name_part = original_name.rsplit(
+                            ".",
+                            1
+                        )[0]
+
+                        extension = original_name.rsplit(
+                            ".",
+                            1
+                        )[1]
+
+                        file_name = (
+                            f"{name_part}_{counter}."
+                            f"{extension}"
+                        )
+
+                    else:
+
+                        file_name = (
+                            f"{original_name}_{counter}"
+                        )
+
+                    counter += 1
+
+                used_names.add(file_name.lower())
+
+                # ==================================
+                # ADD FILE TO ZIP
+                # ==================================
+
+                zipf.writestr(
+                    file_name,
+                    file_buffer.read()
                 )
 
                 added_files += 1
 
-    # ==========================================
-    # NO PHYSICAL FILE
-    # ==========================================
+                print(
+                    "Added to ZIP:",
+                    file_name
+                )
 
-    if added_files == 0:
+    except Exception as e:
 
-        os.remove(zip_path)
+        print("===================================")
+        print("ADMIN ZIP CREATION ERROR")
+        print("Error:", str(e))
+        print("===================================")
 
-        flash("Certificate files not found.")
+        flash("Unable to create certificate ZIP.")
 
         return redirect("/admin")
 
     # ==========================================
-    # ZIP NAME
+    # NO FILES DOWNLOADED
+    # ==========================================
+
+    if added_files == 0:
+
+        flash(
+            "Certificate files could not be "
+            "downloaded from Google Drive."
+        )
+
+        return redirect("/admin")
+
+    # ==========================================
+    # PREPARE ZIP FOR DOWNLOAD
+    # ==========================================
+
+    zip_buffer.seek(0)
+
+    # ==========================================
+    # ZIP DOWNLOAD NAME
     # ==========================================
 
     if search_text:
@@ -1049,8 +1272,14 @@ def admin_export_zip():
     # SEND ZIP
     # ==========================================
 
+    print("===================================")
+    print("ADMIN ZIP DOWNLOAD")
+    print("Search:", search_text)
+    print("Files:", added_files)
+    print("===================================")
+
     return send_file(
-        zip_path,
+        zip_buffer,
         as_attachment=True,
         download_name=download_name,
         mimetype="application/zip"
