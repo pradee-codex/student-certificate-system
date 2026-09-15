@@ -4779,7 +4779,88 @@ def edit_tutor(tutor_id):
         tutor_id=tutor_id
     )
 #-------------------------------------------
+# ==========================
+# Delete Tutor - HOD
+# ==========================
 
+@app.route("/delete_tutor/<int:tutor_id>")
+def delete_tutor(tutor_id):
+
+    if session.get("role") != "hod":
+        return redirect("/")
+
+    cursor = mysql.connection.cursor()
+
+    try:
+
+        # Get HOD department
+        cursor.execute("""
+            SELECT department
+            FROM hods
+            WHERE user_id=%s
+        """, (session.get("user_id"),))
+
+        hod = cursor.fetchone()
+
+        if not hod:
+            cursor.close()
+            flash("HOD not found")
+            return redirect("/logout")
+
+        hod_department = hod[0]
+
+        # Check tutor belongs to HOD department
+        cursor.execute("""
+            SELECT user_id
+            FROM tutors
+            WHERE tutor_id=%s
+            AND department=%s
+        """, (tutor_id, hod_department))
+
+        tutor = cursor.fetchone()
+
+        if not tutor:
+            cursor.close()
+            flash("Tutor not found.")
+            return redirect("/manage_tutor")
+
+        tutor_user_id = tutor[0]
+
+        # Delete tutor
+        cursor.execute("""
+            DELETE FROM tutors
+            WHERE tutor_id=%s
+        """, (tutor_id,))
+
+        # Delete login account
+        cursor.execute("""
+            DELETE FROM users
+            WHERE id=%s
+            AND role='tutor'
+        """, (tutor_user_id,))
+
+        mysql.connection.commit()
+
+        cursor.close()
+
+        flash("Tutor deleted successfully.")
+
+        return redirect("/manage_tutor")
+
+    except Exception as e:
+
+        mysql.connection.rollback()
+        cursor.close()
+
+        print("===================================")
+        print("DELETE TUTOR ERROR")
+        print("Tutor ID:", tutor_id)
+        print("Error:", str(e))
+        print("===================================")
+
+        flash("Unable to delete tutor.")
+
+        return redirect("/manage_tutor")
 #--------------------
 #sreach box
 #---------------------
