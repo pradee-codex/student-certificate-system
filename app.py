@@ -877,82 +877,118 @@ def delete_hod(hod_id):
 
 #-------------------------------
 
+# ============================================================
+# ADMIN - DOWNLOAD ALL / SEARCHED STUDENT CERTIFICATES
+# ============================================================
+
 @app.route("/admin_export_zip")
 @app.route("/download_all")
 def admin_export_zip():
 
+    # --------------------------------------------------------
+    # ADMIN ONLY
+    # --------------------------------------------------------
     if session.get("role") != "admin":
         return redirect("/")
 
-    # Search from HTML
+    # --------------------------------------------------------
+    # GET SEARCHED STUDENT NAME
+    # --------------------------------------------------------
+    # Main dashboard sends: ?search=StudentName
+    # Old/sidebar link may send: ?student_name=StudentName
+    # --------------------------------------------------------
+
     student_name = request.args.get("search", "").strip()
 
-    # Also support old download_all link
     if not student_name:
         student_name = request.args.get(
             "student_name",
             ""
         ).strip()
 
+    # --------------------------------------------------------
+    # DATABASE CONNECTION
+    # --------------------------------------------------------
+
     cursor = mysql.connection.cursor()
 
-    # ==========================
+    # --------------------------------------------------------
     # SEARCHED STUDENT
-    # ==========================
+    # --------------------------------------------------------
+
     if student_name:
 
         cursor.execute("""
             SELECT
-                s.name,
+                s.student_name,
                 c.certificate_file
             FROM certificates c
+
             INNER JOIN students s
                 ON c.student_id = s.student_id
-            WHERE s.name LIKE %s
+
+            WHERE s.student_name LIKE %s
+
             AND c.certificate_file IS NOT NULL
             AND c.certificate_file != ''
         """, (
             "%" + student_name + "%",
         ))
 
-    # ==========================
-    # ALL STUDENTS
-    # ==========================
+    # --------------------------------------------------------
+    # DOWNLOAD ALL STUDENTS
+    # --------------------------------------------------------
+
     else:
 
         cursor.execute("""
             SELECT
-                s.name,
+                s.student_name,
                 c.certificate_file
             FROM certificates c
+
             INNER JOIN students s
                 ON c.student_id = s.student_id
+
             WHERE c.certificate_file IS NOT NULL
             AND c.certificate_file != ''
         """)
 
+    # --------------------------------------------------------
+    # GET DATABASE RESULTS
+    # --------------------------------------------------------
+
     certificates = cursor.fetchall()
+
     cursor.close()
 
-    # ==========================
-    # NO CERTIFICATES
-    # ==========================
+    # --------------------------------------------------------
+    # NO CERTIFICATES FOUND
+    # --------------------------------------------------------
+
     if not certificates:
+
         flash(
             "No certificates found.",
             "warning"
         )
+
         return redirect("/admin")
 
-    # ==========================
-    # CREATE ZIP
-    # ==========================
+    # --------------------------------------------------------
+    # CREATE TEMPORARY ZIP FILE
+    # --------------------------------------------------------
+
     temp = tempfile.NamedTemporaryFile(
         delete=False,
         suffix=".zip"
     )
 
     added_files = 0
+
+    # --------------------------------------------------------
+    # CREATE ZIP
+    # --------------------------------------------------------
 
     with zipfile.ZipFile(
         temp.name,
@@ -962,23 +998,51 @@ def admin_export_zip():
 
         for row in certificates:
 
+            # Database student name
             student_name_db = row[0]
+
+            # Certificate filename
             filename = row[1]
+
+            # ------------------------------------------------
+            # CHECK FILENAME
+            # ------------------------------------------------
 
             if not filename:
                 continue
+
+            # ------------------------------------------------
+            # GET ACTUAL FILE PATH
+            # ------------------------------------------------
 
             filepath = os.path.join(
                 app.config["UPLOAD_FOLDER"],
                 os.path.basename(filename)
             )
 
+            # ------------------------------------------------
+            # CHECK FILE EXISTS
+            # ------------------------------------------------
+
             if os.path.isfile(filepath):
 
+                # --------------------------------------------
+                # CREATE STUDENT FOLDER INSIDE ZIP
+                # --------------------------------------------
+
+                safe_student_name = (
+                    str(student_name_db)
+                    .strip()
+                )
+
                 zip_path = os.path.join(
-                    student_name_db,
+                    safe_student_name,
                     os.path.basename(filename)
                 )
+
+                # --------------------------------------------
+                # ADD FILE TO ZIP
+                # --------------------------------------------
 
                 zipf.write(
                     filepath,
@@ -987,9 +1051,10 @@ def admin_export_zip():
 
                 added_files += 1
 
-    # ==========================
-    # FILES NOT FOUND
-    # ==========================
+    # --------------------------------------------------------
+    # NO PHYSICAL FILES FOUND
+    # --------------------------------------------------------
+
     if added_files == 0:
 
         flash(
@@ -999,9 +1064,10 @@ def admin_export_zip():
 
         return redirect("/admin")
 
-    # ==========================
+    # --------------------------------------------------------
     # ZIP FILE NAME
-    # ==========================
+    # --------------------------------------------------------
+
     if student_name:
 
         zip_name = (
@@ -1013,9 +1079,10 @@ def admin_export_zip():
 
         zip_name = "All_Certificates.zip"
 
-    # ==========================
-    # DOWNLOAD ZIP
-    # ==========================
+    # --------------------------------------------------------
+    # SEND ZIP TO ADMIN
+    # --------------------------------------------------------
+
     return send_file(
         temp.name,
         as_attachment=True,
