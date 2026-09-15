@@ -30,10 +30,14 @@
             margin:0;
         }
 
+        /* MAIN CONTAINER */
+
         .manage-hod-container{
             max-width:1000px;
             margin:20px auto !important;
         }
+
+        /* MAIN CARD */
 
         .manage-hod-card{
             border:none !important;
@@ -41,6 +45,8 @@
             overflow:hidden;
             box-shadow:0 8px 22px rgba(0,0,0,.10) !important;
         }
+
+        /* HEADER */
 
         .manage-hod-card .card-header{
             padding:16px 20px;
@@ -58,15 +64,21 @@
             margin-right:5px;
         }
 
+        /* BODY */
+
         .manage-hod-card .card-body{
             padding:20px !important;
         }
+
+        /* LABEL */
 
         .manage-hod-card .form-label{
             font-size:11px;
             font-weight:600;
             margin-bottom:5px;
         }
+
+        /* INPUT */
 
         .manage-hod-card .form-control{
             height:36px;
@@ -80,9 +92,13 @@
             box-shadow:none;
         }
 
+        /* FORM SPACING */
+
         .manage-hod-card .mb-3{
             margin-bottom:12px !important;
         }
+
+        /* BUTTONS */
 
         .manage-hod-card .btn{
             padding:7px 16px;
@@ -101,13 +117,19 @@
             margin-right:3px;
         }
 
+        /* BUTTON AREA */
+
         .manage-hod-card .text-center{
             margin-top:8px !important;
         }
 
+        /* DIVIDER */
+
         .manage-hod-card hr{
             margin:18px 0 !important;
         }
+
+        /* HOD LIST TITLE */
 
         .hod-list-title{
             font-size:16px;
@@ -120,6 +142,8 @@
             font-size:15px;
             margin-right:4px;
         }
+
+        /* TABLE */
 
         .manage-hod-card .table{
             margin-bottom:0;
@@ -150,10 +174,12 @@
         .action-btn{
             padding:5px 9px !important;
             font-size:10px !important;
+            font-weight:600;
             border-radius:6px !important;
             text-decoration:none;
             display:inline-flex;
             align-items:center;
+            justify-content:center;
             gap:3px;
         }
 
@@ -161,6 +187,8 @@
             font-size:10px !important;
             margin:0 !important;
         }
+
+        /* RESPONSIVE */
 
         @media(max-width:768px){
 
@@ -196,11 +224,17 @@
                 padding:6px;
             }
 
+            .action-btn{
+                padding:4px 7px !important;
+                font-size:9px !important;
+            }
+
         }
 
     </style>
 
 </head>
+
 
 <body>
 
@@ -208,13 +242,17 @@
 
     <div class="card manage-hod-card">
 
+
         <!-- HEADER -->
 
         <div class="card-header bg-success text-white">
 
             <h3>
+
                 <i class="bi bi-person-badge-fill"></i>
+
                 Manage HOD
+
             </h3>
 
         </div>
@@ -224,18 +262,22 @@
 
         <div class="card-body">
 
+
             <!-- ADD HOD FORM -->
 
             <form action="/add_hod" method="POST">
 
                 <div class="row">
 
+
                     <!-- HOD NAME -->
 
                     <div class="col-md-6 mb-3">
 
                         <label class="form-label">
+
                             HOD Name
+
                         </label>
 
                         <input
@@ -252,7 +294,9 @@
                     <div class="col-md-6 mb-3">
 
                         <label class="form-label">
+
                             Department
+
                         </label>
 
                         <input
@@ -269,7 +313,9 @@
                     <div class="col-md-6 mb-3">
 
                         <label class="form-label">
+
                             Email
+
                         </label>
 
                         <input
@@ -286,7 +332,9 @@
                     <div class="col-md-6 mb-3">
 
                         <label class="form-label">
+
                             Phone
+
                         </label>
 
                         <input
@@ -303,7 +351,9 @@
                     <div class="col-md-6 mb-3">
 
                         <label class="form-label">
+
                             Username
+
                         </label>
 
                         <input
@@ -320,7 +370,9 @@
                     <div class="col-md-6 mb-3">
 
                         <label class="form-label">
+
                             Password
+
                         </label>
 
                         <input
@@ -338,11 +390,13 @@
 
                 <div class="text-center mt-3">
 
+
                     <button
                         type="submit"
                         class="btn btn-success btn-lg">
 
                         <i class="bi bi-plus-circle-fill"></i>
+
                         Create HOD
 
                     </button>
@@ -353,6 +407,168 @@
                         class="btn btn-secondary btn-lg ms-2">
 
                         <i class="bi bi-arrow-left-circle-fill"></i>
+
                         Back
 
-                    </
+                    </a>
+
+                </div>
+
+            </form>
+
+
+            <hr class="my-4">
+
+
+            <!-- HOD LIST -->
+
+            <h4 class="hod-list-title">
+
+                <i class="bi bi-list-ul"></i>
+
+                HOD List
+
+            </h4>
+
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover">
+
+
+                    <!-- TABLE HEADER -->
+
+                    <thead class="table-success">
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>HOD Name</th>
+
+                            <th>Department</th>
+
+                            <th>Email</th>
+
+                            <th>Phone</th>
+
+                            <th>Username</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <!-- TABLE BODY -->
+
+                    <tbody>
+
+                        {% for hod in hods %}
+
+                        <tr>
+
+
+                            <!-- ID -->
+
+                            <td>
+                                {{ hod[0] }}
+                            </td>
+
+
+                            <!-- HOD NAME -->
+
+                            <td>
+                                {{ hod[1] }}
+                            </td>
+
+
+                            <!-- DEPARTMENT -->
+
+                            <td>
+                                {{ hod[2] }}
+                            </td>
+
+
+                            <!-- EMAIL -->
+
+                            <td>
+                                {{ hod[3] }}
+                            </td>
+
+
+                            <!-- PHONE -->
+
+                            <td>
+                                {{ hod[4] }}
+                            </td>
+
+
+                            <!-- USERNAME -->
+
+                            <td>
+                                {{ hod[5] }}
+                            </td>
+
+
+                            <!-- ACTION -->
+
+                            <td>
+
+                                <!-- EDIT -->
+
+                                <a
+                                    href="{{ url_for('edit_hod', hod_id=hod[0]) }}"
+                                    class="btn btn-warning action-btn">
+
+                                    <i class="bi bi-pencil-fill"></i>
+
+                                    Edit
+
+                                </a>
+
+
+                                <!-- DELETE -->
+
+                                <a
+                                    href="{{ url_for('delete_hod', hod_id=hod[0]) }}"
+                                    class="btn btn-danger action-btn ms-1"
+                                    onclick="return confirm('Are you sure you want to delete this HOD?');">
+
+                                    <i class="bi bi-trash-fill"></i>
+
+                                    Delete
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                        <!-- NO HOD -->
+
+                        {% if not hods %}
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="text-center text-muted">
+
+                                No HOD records found.
+
+                            </td>
+
+                        </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
