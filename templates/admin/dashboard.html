@@ -41,6 +41,9 @@
 
     <ul>
 
+
+        <!-- DASHBOARD -->
+
         <li class="active">
 
             <a href="/admin">
@@ -53,6 +56,8 @@
 
         </li>
 
+
+        <!-- STUDENTS -->
 
         <li>
 
@@ -67,6 +72,23 @@
         </li>
 
 
+        <!-- MANAGE HOD -->
+
+        <li>
+
+            <a href="{{ url_for('manage_hod') }}">
+
+                <i class="bi bi-person-badge-fill"></i>
+
+                Manage HOD
+
+            </a>
+
+        </li>
+
+
+        <!-- CERTIFICATES -->
+
         <li>
 
             <a href="#certificates">
@@ -79,6 +101,8 @@
 
         </li>
 
+
+        <!-- REPORTS -->
 
         <li>
 
@@ -93,6 +117,8 @@
         </li>
 
 
+        <!-- DOWNLOAD ALL -->
+
         <li>
 
             <a href="/download_all">
@@ -106,6 +132,8 @@
         </li>
 
 
+        <!-- LOGOUT -->
+
         <li>
 
             <a href="/logout">
@@ -117,6 +145,7 @@
             </a>
 
         </li>
+
 
     </ul>
 
@@ -200,6 +229,8 @@
         <div class="stats">
 
 
+            <!-- TOTAL STUDENTS -->
+
             <div class="stat-card">
 
                 <i class="bi bi-people-fill"></i>
@@ -216,6 +247,8 @@
 
 
 
+            <!-- TOTAL CERTIFICATES -->
+
             <div class="stat-card">
 
                 <i class="bi bi-award-fill"></i>
@@ -231,6 +264,8 @@
             </div>
 
 
+
+            <!-- REPORTS -->
 
             <div class="stat-card">
 
@@ -281,15 +316,25 @@
 
                     <tr>
 
-                        <th>Register No</th>
+                        <th>
+                            Register No
+                        </th>
 
-                        <th>Student Name</th>
+                        <th>
+                            Student Name
+                        </th>
 
-                        <th>Department</th>
+                        <th>
+                            Department
+                        </th>
 
-                        <th>Year</th>
+                        <th>
+                            Year
+                        </th>
 
-                        <th>Email</th>
+                        <th>
+                            Email
+                        </th>
 
                     </tr>
 
@@ -405,23 +450,41 @@
 
                     <tr>
 
-                        <th>Student</th>
+                        <th>
+                            Student
+                        </th>
 
-                        <th>Department</th>
+                        <th>
+                            Department
+                        </th>
 
-                        <th>Year</th>
+                        <th>
+                            Year
+                        </th>
 
-                        <th>Certificate</th>
+                        <th>
+                            Certificate
+                        </th>
 
-                        <th>Category</th>
+                        <th>
+                            Category
+                        </th>
 
-                        <th>Achievement</th>
+                        <th>
+                            Achievement
+                        </th>
 
-                        <th>Date</th>
+                        <th>
+                            Date
+                        </th>
 
-                        <th>View</th>
+                        <th>
+                            View
+                        </th>
 
-                        <th>Download</th>
+                        <th>
+                            Download
+                        </th>
 
                     </tr>
 
@@ -516,10 +579,7 @@
 
 
 
-                        <!-- ==================================================
-                             VIEW CERTIFICATE
-                             FIXED GOOGLE DRIVE VIEW
-                        ================================================== -->
+                        <!-- VIEW -->
 
                         <td>
 
@@ -550,10 +610,7 @@
 
 
 
-                        <!-- ==================================================
-                             DOWNLOAD CERTIFICATE
-                             FLASK DOWNLOAD ROUTE
-                        ================================================== -->
+                        <!-- DOWNLOAD -->
 
                         <td>
 
