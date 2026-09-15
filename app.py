@@ -164,8 +164,52 @@ def login():
 
     flash("Invalid Username or Password")
     return redirect("/")
+#===========================
+@app.route("/forgot_password", methods=["GET", "POST"])
+def forgot_password():
 
-    # ==========================
+    if request.method == "POST":
+
+        username = request.form.get("username")
+        new_password = request.form.get("new_password")
+        confirm_password = request.form.get("confirm_password")
+
+        # Check passwords
+        if new_password != confirm_password:
+            flash("New password and confirm password do not match.")
+            return redirect("/forgot_password")
+
+        cursor = mysql.connection.cursor()
+
+        # Check username exists
+        cursor.execute("""
+            SELECT id
+            FROM users
+            WHERE username = %s
+        """, (username,))
+
+        user = cursor.fetchone()
+
+        if not user:
+            cursor.close()
+            flash("Username not found.")
+            return redirect("/forgot_password")
+
+        # Update password
+        cursor.execute("""
+            UPDATE users
+            SET password = %s
+            WHERE username = %s
+        """, (new_password, username))
+
+        mysql.connection.commit()
+        cursor.close()
+
+        flash("Password changed successfully. Please login.")
+        return redirect("/")
+
+    return render_template("forgot_password.html")
+# ==========================
 # Admin Dashboard
 # ==========================
 
