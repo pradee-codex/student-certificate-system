@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>HOD Leaderboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            font-family: "Poppins", sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f8f7ff,
+                    #f0efff
+                );
+
+            color: #202038;
+
+            min-height: 100vh;
+
+        }
+
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+
+            height: 78px;
+
+            background: #ffffff;
+
+            border-bottom: 1px solid #eceaf5;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 12%;
+
+        }
+
+
+        .logo {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+        }
+
+
+        .logo-icon {
+
+            font-size: 25px;
+
+        }
+
+
+        .logo h2 {
+
+            font-size: 21px;
+
+            color: #22223b;
+
+        }
+
+
+        .logo span {
+
+            color: #7357d9;
+
+        }
+
+
+        .nav-links {
+
+            display: flex;
+
+            gap: 35px;
+
+        }
+
+
+        .nav-links a {
+
+            text-decoration: none;
+
+            color: #37374d;
+
+            font-size: 14px;
+
+            font-weight: 500;
+
+        }
+
+
+        .nav-links a:hover {
+
+            color: #7357d9;
+
+        }
+
+
+        .profile {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            padding: 9px 18px;
+
+            border: 1px solid #ebe8f5;
+
+            border-radius: 25px;
+
+            background: #ffffff;
+
+            box-shadow:
+                0 3px 12px rgba(50,40,100,.06);
+
+        }
+
+
+        .profile i {
+
+            color: #7357d9;
+
+            font-size: 20px;
+
+        }
+
+
+        .profile span {
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+        }
+
+
+        /* ================= MAIN ================= */
+
+        .main {
+
+            width: 76%;
+
+            max-width: 1250px;
+
+            margin: auto;
+
+            padding: 35px 0 60px;
+
+        }
+
+
+        /* ================= TITLE ================= */
+
+        .title-section {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-end;
+
+            margin-bottom: 28px;
+
+        }
+
+
+        .title-left h1 {
+
+            font-size: 31px;
+
+            font-weight: 700;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+        }
+
+
+        .title-left h1 i {
+
+            color: #f2a51a;
+
+        }
+
+
+        .title-left p {
+
+            margin-top: 7px;
+
+            font-size: 14px;
+
+            color: #6f6e82;
+
+        }
+
+
+        /* ================= FILTERS ================= */
+
+        .filters {
+
+            display: flex;
+
+            gap: 12px;
+
+        }
+
+
+        .search-box {
+
+            width: 245px;
+
+            height: 42px;
+
+            background: #ffffff;
+
+            border: 1px solid #e6e3f0;
+
+            border-radius: 22px;
+
+            display: flex;
+
+            align-items: center;
+
+            padding: 0 15px;
+
+        }
+
+
+        .search-box i {
+
+            color: #7357d9;
+
+            margin-right: 9px;
+
+        }
+
+
+        .search-box input {
+
+            border: none;
+
+            outline: none;
+
+            width: 100%;
+
+            font-family: inherit;
+
+            font-size: 12px;
+
+        }
+
+
+        .department-filter {
+
+            height: 42px;
+
+            min-width: 190px;
+
+            padding: 0 15px;
+
+            border-radius: 22px;
+
+            border: 1px solid #e6e3f0;
+
+            background: #ffffff;
+
+            outline: none;
+
+            font-family: inherit;
+
+            font-size: 12px;
+
+            color: #555568;
+
+        }
+
+
+        /* ================= TABLE ================= */
+
+        .leaderboard-card {
+
+            background: #ffffff;
+
+            border-radius: 18px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 8px 30px rgba(50,40,100,.07);
+
+            border: 1px solid #eeeaf7;
+
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+        }
+
+
+        th {
+
+            padding: 18px 15px;
+
+            text-align: left;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            color: #8a879c;
+
+            letter-spacing: .5px;
+
+            white-space: nowrap;
+
+            border-bottom: 1px solid #f0eef6;
+
+        }
+
+
+        th i {
+
+            color: #7257c9;
+
+            margin-right: 5px;
+
+        }
+
+
+        td {
+
+            padding: 18px 15px;
+
+            font-size: 13px;
+
+            color: #333344;
+
+            border-bottom: 1px solid #f4f2f8;
+
+        }
+
+
+        tbody tr:hover {
+
+            background: #faf9ff;
+
+        }
+
+
+        tbody tr:last-child td {
+
+            border-bottom: none;
+
+        }
+
+
+        /* ================= RANK ================= */
+
+        .rank {
+
+            text-align: center;
+
+            width: 75px;
+
+            font-size: 17px;
+
+            font-weight: 600;
+
+        }
+
+
+        .medal {
+
+            font-size: 24px;
+
+        }
+
+
+        /* ================= STUDENT ================= */
+
+        .student-name {
+
+            font-weight: 600;
+
+            color: #29293d;
+
+        }
+
+
+        .register {
+
+            color: #656376;
+
+            font-size: 12px;
+
+        }
+
+
+        .department {
+
+            max-width: 270px;
+
+        }
+
+
+        .certificate-count {
+
+            color: #5e4bb6;
+
+            font-weight: 600;
+
+        }
+
+
+        .points {
+
+            color: #7357d9;
+
+            font-weight: 600;
+
+        }
+
+
+        /* ================= FOOTER ================= */
+
+        footer {
+
+            text-align: center;
+
+            margin-top: 28px;
+
+            color: #8a8799;
+
+            font-size: 11px;
+
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media(max-width: 900px) {
+
+            .navbar {
+
+                padding: 0 5%;
+
+            }
+
+            .main {
+
+                width: 90%;
+
+            }
+
+            .title-section {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 20px;
+
+            }
+
+            .leaderboard-card {
+
+                overflow-x: auto;
+
+            }
+
+            table {
+
+                min-width: 900px;
+
+            }
+
+        }
+
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+
+    <div class="logo">
+
+        <span class="logo-icon">
+            🎓
+        </span>
+
+        <h2>
+            Certificate<span>Portal</span>
+        </h2>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="{{ url_for('hod') }}">
+            Home
+        </a>
+
+        <a href="{{ url_for('leaderboard') }}">
+            Leaderboard
+        </a>
+
+    </div>
+
+
+    <div class="profile">
+
+        <i class="bi bi-person-circle"></i>
+
+        <span>
+            {{ session.get("username", "HOD") }}
+        </span>
+
+    </div>
+
+
+</nav>
+
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+
+    <div class="title-section">
+
+
+        <div class="title-left">
+
+            <h1>
+
+                <i class="bi bi-trophy-fill"></i>
+
+                Leaderboard
+
+            </h1>
+
+
+            <p>
+                Student rankings based on certificate achievements
+            </p>
+
+        </div>
+
+
+
+        <div class="filters">
+
+
+            <div class="search-box">
+
+                <i class="bi bi-search"></i>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search name, register no..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <select
+                id="departmentFilter"
+                class="department-filter"
+            >
+
+                <option value="">
+                    General (All Departments)
+                </option>
+
+
+                {% for department in departments %}
+
+                <option value="{{ department }}">
+
+                    {{ department }}
+
+                </option>
+
+                {% endfor %}
+
+
+            </select>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ================= LEADERBOARD TABLE ================= -->
+
+    <div class="leaderboard-card">
+
+
+        <table id="leaderboardTable">
+
+
+            <thead>
+
+                <tr>
+
+                    <th style="text-align:center;">
+                        🏅 RANK
+                    </th>
+
+                    <th>
+
+                        <i class="bi bi-person-fill"></i>
+
+                        NAME
+
+                    </th>
+
+                    <th>
+
+                        <i class="bi bi-postcard-fill"></i>
+
+                        REGISTER NO
+
+                    </th>
+
+                    <th>
+
+                        <i class="bi bi-building-fill"></i>
+
+                        DEPARTMENT
+
+                    </th>
+
+                    <th>
+
+                        <i class="bi bi-mortarboard-fill"></i>
+
+                        YEAR
+
+                    </th>
+
+                    <th>
+
+                        <i class="bi bi-award-fill"></i>
+
+                        CERTIFICATES
+
+                    </th>
+
+                    <th>
+
+                        📊 TOTAL POINTS
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+                {% for student in students %}
+
+
+                <tr
+                    data-department="{{ student.department|lower }}"
+                >
+
+
+                    <td class="rank">
+
+                        {% if student.rank == 1 %}
+
+                            <span class="medal">
+                                🥇
+                            </span>
+
+                        {% elif student.rank == 2 %}
+
+                            <span class="medal">
+                                🥈
+                            </span>
+
+                        {% elif student.rank == 3 %}
+
+                            <span class="medal">
+                                🥉
+                            </span>
+
+                        {% else %}
+
+                            {{ student.rank }}
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+
+                        <div class="student-name">
+
+                            {{ student.student_name }}
+
+                        </div>
+
+                    </td>
+
+
+                    <td>
+
+                        <div class="register">
+
+                            {{ student.register_no }}
+
+                        </div>
+
+                    </td>
+
+
+                    <td class="department">
+
+                        {{ student.department }}
+
+                    </td>
+
+
+                    <td>
+
+                        {{ student.year }}
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="certificate-count">
+
+                            {{ student.total_certificates }}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="points">
+
+                            {{ student.total_points }}
+
+                        </span>
+
+                    </td>
+
+
+                </tr>
+
+
+                {% else %}
+
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        style="text-align:center;padding:40px;"
+                    >
+
+                        No students found.
+
+                    </td>
+
+                </tr>
+
+
+                {% endfor %}
+
+
+            </tbody>
+
+        </table>
+
+
+    </div>
+
+
+
+    <footer>
+
+        Certificate Portal |
+        Student Certificate Management System |
+        © 2026
+
+    </footer>
+
+
+</main>
+
+
+
+<!-- ================= SEARCH ================= -->
+
+<script>
+
+const searchInput =
+    document.getElementById("searchInput");
+
+const departmentFilter =
+    document.getElementById("departmentFilter");
+
+const rows =
+    document.querySelectorAll(
+        "#leaderboardTable tbody tr"
+    );
+
+
+function filterLeaderboard() {
+
+    const search =
+        searchInput.value
+            .trim()
+            .toLowerCase();
+
+    const department =
+        departmentFilter.value
+            .trim()
+            .toLowerCase();
+
+
+    rows.forEach(function(row) {
+
+        if (!row.dataset.department) {
+            return;
+        }
+
+
+        const text =
+            row.innerText.toLowerCase();
+
+
+        const rowDepartment =
+            row.dataset.department;
+
+
+        const searchMatch =
+            text.includes(search);
+
+
+        const departmentMatch =
+            department === "" ||
+            rowDepartment === department;
+
+
+        if (
+            searchMatch &&
+            departmentMatch
+        ) {
+
+            row.style.display = "";
+
+        } else {
+
+            row.style.display = "none";
+
+        }
+
+    });
+
+}
+
+
+searchInput.addEventListener(
+    "keyup",
+    filterLeaderboard
+);
+
+
+departmentFilter.addEventListener(
+    "change",
+    filterLeaderboard
+);
+
+</script>
+
+
+</body>
+
+</html>
