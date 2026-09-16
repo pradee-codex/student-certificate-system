@@ -6642,7 +6642,120 @@ def student():
         certificates = cursor.fetchall()
 
     cursor.close()
+#======================================
 
+# =========================================
+# LEADERBOARD
+# =========================================
+
+@app.route("/leaderboard")
+def leaderboard():
+
+    role = session.get("role")
+
+    # Only Admin, HOD and Tutor
+    if role not in ["admin", "hod", "tutor"]:
+        return redirect("/")
+
+    cursor = mysql.connection.cursor()
+
+    try:
+
+        cursor.execute("""
+            SELECT
+                students.student_id,
+                students.student_name,
+                students.register_no,
+                students.department,
+                students.year,
+                COUNT(certificates.certificate_id) AS total_certificates
+            FROM students
+            LEFT JOIN certificates
+                ON students.student_id = certificates.student_id
+            GROUP BY
+                students.student_id,
+                students.student_name,
+                students.register_no,
+                students.department,
+                students.year
+            ORDER BY
+                total_certificates DESC,
+                students.student_name ASC
+        """)
+
+        rows = cursor.fetchall()
+
+        # Get departments for filter
+        cursor.execute("""
+            SELECT DISTINCT department
+            FROM students
+            WHERE department IS NOT NULL
+            AND department != ''
+            ORDER BY department
+        """)
+
+        departments = [
+            row[0]
+            for row in cursor.fetchall()
+        ]
+
+        cursor.close()
+
+        leaderboard_data = []
+
+        for rank, student in enumerate(rows, start=1):
+
+            total_certificates = student[5]
+
+            total_points = total_certificates * 10
+
+            leaderboard_data.append({
+                "rank": rank,
+                "student_id": student[0],
+                "student_name": student[1],
+                "register_no": student[2],
+                "department": student[3],
+                "year": student[4],
+                "total_certificates": total_certificates,
+                "total_points": total_points
+            })
+
+        # Select template according to role
+        if role == "admin":
+
+            template = "admin/leaderboard.html"
+
+        elif role == "hod":
+
+            template = "hod/leaderboard.html"
+
+        else:
+
+            template = "tutor/leaderboard.html"
+
+        return render_template(
+            template,
+            students=leaderboard_data,
+            departments=departments
+        )
+
+    except Exception as e:
+
+        mysql.connection.rollback()
+
+        try:
+            cursor.close()
+        except:
+            pass
+
+        print("===================================")
+        print("LEADERBOARD ERROR")
+        print("Error:", str(e))
+        print("===================================")
+
+        flash("Unable to load leaderboard.")
+
+        return redirect("/")
     # =========================================
     # STUDENT DASHBOARD
     # =========================================
