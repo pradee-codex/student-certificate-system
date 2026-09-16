@@ -3257,183 +3257,132 @@ def delete_student(id):
 @app.route("/download_all_tutor")
 def download_all_tutor():
 
-    # =========================================================
-    # TUTOR LOGIN CHECK
-    # =========================================================
-
     if session.get("role") != "tutor":
         return redirect("/")
-
 
     search = request.args.get("student", "").strip()
 
     cursor = mysql.connection.cursor()
 
+    try:
 
-    # =========================================================
-    # GET TUTOR DETAILS
-    # =========================================================
+        # =====================================================
+        # GET TUTOR DEPARTMENT + YEAR
+        # =====================================================
 
-    cursor.execute("""
-        SELECT
-            department,
-            class_year,
-            section
-        FROM tutors
-        WHERE user_id=%s
-    """, (session["user_id"],))
+        cursor.execute("""
+            SELECT department, class_year
+            FROM tutors
+            WHERE user_id = %s
+        """, (session["user_id"],))
 
-    tutor = cursor.fetchone()
+        tutor = cursor.fetchone()
 
+        if not tutor:
+            cursor.close()
+            flash("Tutor details not found.")
+            return redirect("/tutor")
 
-    if not tutor:
+        department = str(tutor[0] or "").strip()
+        class_year = str(tutor[1] or "").strip()
 
-        cursor.close()
+        print("====================================")
+        print("TUTOR ZIP EXPORT")
+        print("Department:", department)
+        print("Year:", class_year)
+        print("Search:", search)
+        print("====================================")
 
-        flash("Tutor not found.")
-
-        return redirect("/tutor")
-
-
-    department = tutor[0]
-    class_year = tutor[1]
-    section = tutor[2]
-
-
-    # Clean values
-
-    if department:
-        department = str(department).strip()
-
-    if class_year:
-        class_year = str(class_year).strip()
-
-    if section:
-        section = str(section).strip()
-
-
-    print("====================================")
-    print("TUTOR ZIP EXPORT")
-    print("Department :", department)
-    print("Class Year :", class_year)
-    print("Section    :", section)
-    print("Search     :", search)
-    print("====================================")
-
-
-    # =========================================================
-    # COMMON FILTER
-    #
-    # IMPORTANT:
-    # SECTION IS NOT USED
-    # =========================================================
-
-    if not class_year:
-
-        # -----------------------------------------
-        # YEAR = NONE
-        # Department students ALL
-        # -----------------------------------------
-
-        student_where = """
-            TRIM(UPPER(students.department))
-            =
-            TRIM(UPPER(%s))
-        """
-
-        student_params = [
-            department
-        ]
-
-    else:
-
-        # -----------------------------------------
-        # SPECIFIC YEAR
+        # =====================================================
+        # BUILD QUERY
         # Department + Year
-        # Section ignored
-        # -----------------------------------------
+        # SECTION NOT USED
+        # =====================================================
 
-        student_where = """
-            TRIM(UPPER(students.department))
-            =
-            TRIM(UPPER(%s))
+        query = """
+            SELECT
+                students.student_name,
+                students.register_no,
+                certificates.certificate_title,
+                certificates.certificate_file
+
+            FROM certificates
+
+            INNER JOIN students
+                ON certificates.student_id = students.student_id
+
+            WHERE
+                TRIM(UPPER(students.department))
+                =
+                TRIM(UPPER(%s))
 
             AND
+                TRIM(UPPER(students.year))
+                =
+                TRIM(UPPER(%s))
 
-            TRIM(UPPER(students.year))
-            =
-            TRIM(UPPER(%s))
+            AND
+                certificates.certificate_file IS NOT NULL
+
+            AND
+                certificates.certificate_file != ''
         """
 
-        student_params = [
+        params = [
             department,
             class_year
         ]
 
+        # =====================================================
+        # SEARCH EXISTS
+        # =====================================================
 
-    # =========================================================
-    # STUDENT SEARCH
-    # =========================================================
+        if search:
 
-    if search:
+            query += """
+                AND students.student_name LIKE %s
+            """
 
-        student_where += """
-            AND students.student_name LIKE %s
+            params.append("%" + search + "%")
+
+        # =====================================================
+        # ORDER
+        # =====================================================
+
+        query += """
+            ORDER BY
+                students.student_name ASC,
+                certificates.upload_date DESC
         """
 
-        student_params.append(
-            "%" + search + "%"
-        )
+        cursor.execute(query, tuple(params))
 
+        files = cursor.fetchall()
 
-    # =========================================================
-    # GET CERTIFICATES
-    # =========================================================
+        cursor.close()
 
-    cursor.execute(f"""
-        SELECT
-            students.student_name,
-            students.register_no,
-            certificates.certificate_title,
-            certificates.certificate_file
+        # =====================================================
+        # NO RECORDS
+        # =====================================================
 
-        FROM certificates
+        if not files:
 
-        INNER JOIN students
-            ON certificates.student_id =
-               students.student_id
+            if search:
+                flash(
+                    "No certificates found for: " + search
+                )
+            else:
+                flash(
+                    "No certificates found for your department and year."
+                )
 
-        WHERE {student_where}
+            return redirect("/tutor")
 
-        ORDER BY
-            students.student_name ASC,
-            certificates.upload_date DESC
-    """, tuple(student_params))
+        print("Certificates found:", len(files))
 
-
-    files = cursor.fetchall()
-
-    cursor.close()
-
-
-    # =========================================================
-    # NO CERTIFICATES
-    # =========================================================
-
-    if not files:
-
-        flash(
-            "No certificates found for the selected students."
-        )
-
-        return redirect("/tutor")
-
-
-    # =========================================================
-    # GOOGLE DRIVE IMPORTS
-    # =========================================================
-
-    try:
+        # =====================================================
+        # GOOGLE DRIVE
+        # =====================================================
 
         import re
         import os
@@ -3443,16 +3392,9 @@ def download_all_tutor():
         from io import BytesIO
 
         from googleapiclient.http import MediaIoBaseDownload
-
         from drive_service import get_drive_service
 
-
-        # =====================================================
-        # GOOGLE DRIVE SERVICE
-        # =====================================================
-
         service = get_drive_service()
-
 
         # =====================================================
         # CREATE TEMP ZIP
@@ -3463,113 +3405,83 @@ def download_all_tutor():
             suffix=".zip"
         )
 
+        zip_file_path = temp.name
         temp.close()
 
-
         added_files = 0
-
 
         # =====================================================
         # CREATE ZIP
         # =====================================================
 
         with zipfile.ZipFile(
-            temp.name,
+            zip_file_path,
             "w",
             compression=zipfile.ZIP_DEFLATED
         ) as zipf:
 
-
             # =================================================
-            # LOOP CERTIFICATES
+            # LOOP THROUGH CERTIFICATES
             # =================================================
 
             for row in files:
 
                 student_name = row[0] or "Student"
-
                 register_no = row[1] or ""
-
-                certificate_title = (
-                    row[2] or "Certificate"
-                )
-
-                certificate_url = (
-                    row[3] or ""
-                )
-
-
-                # =============================================
-                # EXTRACT GOOGLE DRIVE FILE ID
-                # =============================================
-
-                file_id = None
-
-
-                # ---------------------------------------------
-                # /file/d/FILE_ID/view
-                # ---------------------------------------------
-
-                match = re.search(
-                    r"/file/d/([^/]+)",
-                    certificate_url
-                )
-
-                if match:
-
-                    file_id = match.group(1)
-
-
-                # ---------------------------------------------
-                # /d/FILE_ID
-                # ---------------------------------------------
-
-                if not file_id:
-
-                    match = re.search(
-                        r"/d/([^/?]+)",
-                        certificate_url
-                    )
-
-                    if match:
-
-                        file_id = match.group(1)
-
-
-                # ---------------------------------------------
-                # ?id=FILE_ID
-                # ---------------------------------------------
-
-                if not file_id:
-
-                    match = re.search(
-                        r"[?&]id=([^&]+)",
-                        certificate_url
-                    )
-
-                    if match:
-
-                        file_id = match.group(1)
-
-
-                # =============================================
-                # INVALID DRIVE URL
-                # =============================================
-
-                if not file_id:
-
-                    print(
-                        "SKIPPED - Drive ID not found:",
-                        certificate_url
-                    )
-
-                    continue
-
+                certificate_title = row[2] or "Certificate"
+                certificate_url = row[3] or ""
 
                 try:
 
                     # =========================================
-                    # GET DRIVE FILE INFORMATION
+                    # GET GOOGLE DRIVE FILE ID
+                    # =========================================
+
+                    file_id = None
+
+                    match = re.search(
+                        r"/file/d/([^/]+)",
+                        certificate_url
+                    )
+
+                    if match:
+                        file_id = match.group(1)
+
+                    if not file_id:
+
+                        match = re.search(
+                            r"/d/([^/?]+)",
+                            certificate_url
+                        )
+
+                        if match:
+                            file_id = match.group(1)
+
+                    if not file_id:
+
+                        match = re.search(
+                            r"[?&]id=([^&]+)",
+                            certificate_url
+                        )
+
+                        if match:
+                            file_id = match.group(1)
+
+                    # =========================================
+                    # INVALID URL
+                    # =========================================
+
+                    if not file_id:
+
+                        print(
+                            "SKIPPED - Invalid Drive URL:",
+                            certificate_url
+                        )
+
+                        continue
+
+                    # =========================================
+                    # GET DRIVE FILE NAME
                     # =========================================
 
                     file_info = service.files().get(
@@ -3577,45 +3489,33 @@ def download_all_tutor():
                         fields="id,name,mimeType"
                     ).execute()
 
-
                     original_name = file_info.get(
                         "name",
                         "certificate.pdf"
                     )
 
-
                     # =========================================
-                    # DOWNLOAD FROM GOOGLE DRIVE
+                    # DOWNLOAD FILE
                     # =========================================
 
-                    drive_request = (
-                        service.files().get_media(
-                            fileId=file_id
-                        )
+                    drive_request = service.files().get_media(
+                        fileId=file_id
                     )
 
-
                     file_stream = BytesIO()
-
 
                     downloader = MediaIoBaseDownload(
                         file_stream,
                         drive_request
                     )
 
-
                     done = False
-
 
                     while not done:
 
-                        status, done = (
-                            downloader.next_chunk()
-                        )
-
+                        status, done = downloader.next_chunk()
 
                     file_stream.seek(0)
-
 
                     # =========================================
                     # SAFE STUDENT NAME
@@ -3627,11 +3527,8 @@ def download_all_tutor():
                         str(student_name)
                     ).strip()
 
-
                     if not safe_student:
-
                         safe_student = "Student"
-
 
                     # =========================================
                     # SAFE REGISTER NUMBER
@@ -3643,7 +3540,6 @@ def download_all_tutor():
                         str(register_no)
                     ).strip()
 
-
                     # =========================================
                     # SAFE FILE NAME
                     # =========================================
@@ -3654,21 +3550,19 @@ def download_all_tutor():
                         str(original_name)
                     ).strip()
 
-
                     if not safe_filename:
-
                         safe_filename = (
-                            "certificate.pdf"
+                            str(certificate_title)
+                            + ".pdf"
                         )
 
-
                     # =========================================
-                    # CREATE STUDENT FOLDER IN ZIP
+                    # ZIP FOLDER
                     # =========================================
 
                     if safe_register:
 
-                        zip_path = (
+                        zip_entry = (
                             safe_student
                             + "_"
                             + safe_register
@@ -3678,25 +3572,22 @@ def download_all_tutor():
 
                     else:
 
-                        zip_path = (
+                        zip_entry = (
                             safe_student
                             + "/"
                             + safe_filename
                         )
 
-
                     # =========================================
-                    # WRITE FILE INTO ZIP
+                    # WRITE TO ZIP
                     # =========================================
 
                     zipf.writestr(
-                        zip_path,
+                        zip_entry,
                         file_stream.read()
                     )
 
-
                     added_files += 1
-
 
                     print(
                         "ADDED:",
@@ -3705,21 +3596,16 @@ def download_all_tutor():
                         safe_filename
                     )
 
-
                 except Exception as file_error:
 
+                    # One bad file should NOT stop ZIP
                     print(
-                        "CERTIFICATE DOWNLOAD ERROR:"
+                        "SKIPPED CERTIFICATE:"
                     )
 
                     print(
                         "Student:",
                         student_name
-                    )
-
-                    print(
-                        "URL:",
-                        certificate_url
                     )
 
                     print(
@@ -3729,55 +3615,62 @@ def download_all_tutor():
 
                     continue
 
-
         # =====================================================
-        # CHECK WHETHER FILES WERE ADDED
+        # NOTHING ADDED
         # =====================================================
 
         if added_files == 0:
 
             try:
-
-                os.remove(temp.name)
-
-            except:
-
+                os.remove(zip_file_path)
+            except Exception:
                 pass
 
-
             flash(
-                "No valid Google Drive certificates found."
+                "Google Drive certificates could not be downloaded."
             )
 
             return redirect("/tutor")
 
+        # =====================================================
+        # ZIP NAME
+        # =====================================================
 
-        # =====================================================
-        # SUCCESS
-        # =====================================================
+        if search:
+
+            safe_search = re.sub(
+                r'[<>:"/\\|?*]',
+                "_",
+                search
+            ).strip()
+
+            download_name = (
+                safe_search
+                + "_Certificates.zip"
+            )
+
+        else:
+
+            download_name = (
+                "Tutor_Certificates.zip"
+            )
 
         print("====================================")
-        print("TUTOR ZIP CREATED")
-        print("FILES ADDED:", added_files)
-        print("ZIP FILE:", temp.name)
+        print("ZIP CREATED")
+        print("Files added:", added_files)
+        print("ZIP:", zip_file_path)
         print("====================================")
 
-
         # =====================================================
-        # DOWNLOAD ZIP
+        # SEND ZIP
         # =====================================================
 
         return send_file(
-            temp.name,
+            zip_file_path,
             as_attachment=True,
-            download_name="Tutor_Certificates.zip",
+            download_name=download_name,
             mimetype="application/zip"
         )
-
-
-    # =========================================================
-    # ZIP ERROR
-    # =========================================================
 
     except Exception as e:
 
@@ -3786,9 +3679,13 @@ def download_all_tutor():
         print("ERROR:", str(e))
         print("====================================")
 
+        try:
+            cursor.close()
+        except Exception:
+            pass
 
         flash(
-            "Unable to create ZIP: " + str(e)
+            "Unable to create ZIP. Please try again."
         )
 
         return redirect("/tutor")
