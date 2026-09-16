@@ -6648,9 +6648,9 @@ def student():
 # LEADERBOARD
 # =========================================
 
-# =========================================
+# =========================================================
 # LEADERBOARD
-# =========================================
+# =========================================================
 
 @app.route("/leaderboard")
 def leaderboard():
@@ -6680,6 +6680,7 @@ def leaderboard():
                     s.department,
                     s.year,
                     COUNT(c.certificate_id) AS total_certificates
+
                 FROM students s
 
                 LEFT JOIN certificates c
@@ -6697,6 +6698,21 @@ def leaderboard():
                     s.student_name ASC
             """)
 
+            rows = cursor.fetchall()
+
+            cursor.execute("""
+                SELECT DISTINCT department
+                FROM students
+                WHERE department IS NOT NULL
+                AND department != ''
+                ORDER BY department
+            """)
+
+            departments = [
+                row[0]
+                for row in cursor.fetchall()
+            ]
+
         # =====================================================
         # HOD
         # ALL STUDENTS FROM HOD DEPARTMENT
@@ -6707,7 +6723,7 @@ def leaderboard():
             cursor.execute("""
                 SELECT department
                 FROM hods
-                WHERE user_id = %s
+                WHERE user_id=%s
             """, (session["user_id"],))
 
             hod = cursor.fetchone()
@@ -6727,12 +6743,13 @@ def leaderboard():
                     s.department,
                     s.year,
                     COUNT(c.certificate_id) AS total_certificates
+
                 FROM students s
 
                 LEFT JOIN certificates c
                     ON c.student_id = s.student_id
 
-                WHERE s.department = %s
+                WHERE s.department=%s
 
                 GROUP BY
                     s.student_id,
@@ -6746,12 +6763,17 @@ def leaderboard():
                     s.student_name ASC
             """, (department,))
 
+            rows = cursor.fetchall()
+
+            departments = [department]
+
         # =====================================================
         # TUTOR
         # =====================================================
 
         else:
 
+            # Get Tutor details
             cursor.execute("""
                 SELECT
                     tutor_name,
@@ -6759,7 +6781,7 @@ def leaderboard():
                     class_year,
                     section
                 FROM tutors
-                WHERE user_id = %s
+                WHERE user_id=%s
             """, (session["user_id"],))
 
             tutor = cursor.fetchone()
@@ -6774,20 +6796,23 @@ def leaderboard():
             class_year = tutor[2]
             section = tutor[3]
 
-            print("====================================")
+            print("========================================")
             print("TUTOR LEADERBOARD")
-            print("Tutor:", tutor_name)
-            print("Department:", department)
-            print("Class Year:", class_year)
-            print("Section:", section)
-            print("====================================")
+            print("USER ID      :", session["user_id"])
+            print("TUTOR NAME   :", tutor_name)
+            print("DEPARTMENT   :", department)
+            print("CLASS YEAR   :", class_year)
+            print("SECTION      :", section)
+            print("========================================")
 
             # =================================================
-            # YEAR + SECTION ASSIGNED
-            # SHOW ONLY THAT CLASS
+            # CASE 1
+            # YEAR + SECTION NOT ASSIGNED
+            #
+            # Show ALL students from department
             # =================================================
 
-            if class_year is not None and section is not None:
+            if not class_year and not section:
 
                 cursor.execute("""
                     SELECT
@@ -6797,15 +6822,95 @@ def leaderboard():
                         s.department,
                         s.year,
                         COUNT(c.certificate_id) AS total_certificates
+
+                    FROM students s
+
+                    LEFT JOIN certificates c
+                        ON c.student_id = s.student_id
+
+                    WHERE s.department=%s
+
+                    GROUP BY
+                        s.student_id,
+                        s.student_name,
+                        s.register_no,
+                        s.department,
+                        s.year
+
+                    ORDER BY
+                        total_certificates DESC,
+                        s.student_name ASC
+                """, (department,))
+
+            # =================================================
+            # CASE 2
+            # YEAR ASSIGNED BUT SECTION NOT ASSIGNED
+            #
+            # Show all students from that year
+            # =================================================
+
+            elif class_year and not section:
+
+                cursor.execute("""
+                    SELECT
+                        s.student_id,
+                        s.student_name,
+                        s.register_no,
+                        s.department,
+                        s.year,
+                        COUNT(c.certificate_id) AS total_certificates
+
                     FROM students s
 
                     LEFT JOIN certificates c
                         ON c.student_id = s.student_id
 
                     WHERE
-                        s.department = %s
-                        AND s.year = %s
-                        AND s.section = %s
+                        s.department=%s
+                        AND s.year=%s
+
+                    GROUP BY
+                        s.student_id,
+                        s.student_name,
+                        s.register_no,
+                        s.department,
+                        s.year
+
+                    ORDER BY
+                        total_certificates DESC,
+                        s.student_name ASC
+                """, (
+                    department,
+                    class_year
+                ))
+
+            # =================================================
+            # CASE 3
+            # YEAR + SECTION ASSIGNED
+            #
+            # Show ONLY that class
+            # =================================================
+
+            else:
+
+                cursor.execute("""
+                    SELECT
+                        s.student_id,
+                        s.student_name,
+                        s.register_no,
+                        s.department,
+                        s.year,
+                        COUNT(c.certificate_id) AS total_certificates
+
+                    FROM students s
+
+                    LEFT JOIN certificates c
+                        ON c.student_id = s.student_id
+
+                    WHERE
+                        s.department=%s
+                        AND s.year=%s
+                        AND s.section=%s
 
                     GROUP BY
                         s.student_id,
@@ -6823,73 +6928,11 @@ def leaderboard():
                     section
                 ))
 
-            # =================================================
-            # YEAR + SECTION NOT ASSIGNED
-            # SHOW ALL STUDENTS IN DEPARTMENT
-            # =================================================
+            rows = cursor.fetchall()
 
-            else:
-
-                cursor.execute("""
-                    SELECT
-                        s.student_id,
-                        s.student_name,
-                        s.register_no,
-                        s.department,
-                        s.year,
-                        COUNT(c.certificate_id) AS total_certificates
-                    FROM students s
-
-                    LEFT JOIN certificates c
-                        ON c.student_id = s.student_id
-
-                    WHERE s.department = %s
-
-                    GROUP BY
-                        s.student_id,
-                        s.student_name,
-                        s.register_no,
-                        s.department,
-                        s.year
-
-                    ORDER BY
-                        total_certificates DESC,
-                        s.student_name ASC
-                """, (department,))
-
-        # =====================================================
-        # GET STUDENTS
-        # =====================================================
-
-        rows = cursor.fetchall()
-
-        print("Leaderboard students:", len(rows))
-
-        # =====================================================
-        # DEPARTMENT FILTER
-        # =====================================================
-
-        if role == "admin":
-
-            cursor.execute("""
-                SELECT DISTINCT department
-                FROM students
-                WHERE department IS NOT NULL
-                AND department != ''
-                ORDER BY department
-            """)
-
-            departments = [
-                row[0]
-                for row in cursor.fetchall()
-            ]
-
-        else:
-
-            # HOD / Tutor only their department
             departments = [department]
 
-        cursor.close()
+            print("LEADERBOARD STUDENT COUNT:", len(rows))
 
         # =====================================================
         # CREATE LEADERBOARD DATA
@@ -6901,8 +6944,6 @@ def leaderboard():
 
             total_certificates = student[5] or 0
 
-            total_points = total_certificates * 10
-
             leaderboard_data.append({
                 "rank": rank,
                 "student_id": student[0],
@@ -6911,8 +6952,10 @@ def leaderboard():
                 "department": student[3],
                 "year": student[4],
                 "total_certificates": total_certificates,
-                "total_points": total_points
+                "total_points": total_certificates * 10
             })
+
+        cursor.close()
 
         # =====================================================
         # TEMPLATE
@@ -6945,13 +6988,12 @@ def leaderboard():
         except:
             pass
 
-        print("====================================")
+        print("========================================")
         print("LEADERBOARD ERROR")
         print("ERROR:", str(e))
-        print("====================================")
+        print("========================================")
 
         flash("Unable to load leaderboard.")
-
         return redirect("/")
     # =========================================
     # STUDENT DASHBOARD
