@@ -6648,12 +6648,16 @@ def student():
 # LEADERBOARD
 # =========================================
 
+# =========================================
+# LEADERBOARD
+# =========================================
+
 @app.route("/leaderboard")
 def leaderboard():
 
     role = session.get("role")
 
-    # Only Admin, HOD and Tutor
+    # Student cannot access leaderboard
     if role not in ["admin", "hod", "tutor"]:
         return redirect("/")
 
@@ -6661,31 +6665,187 @@ def leaderboard():
 
     try:
 
-        cursor.execute("""
-            SELECT
-                students.student_id,
-                students.student_name,
-                students.register_no,
-                students.department,
-                students.year,
-                COUNT(certificates.certificate_id) AS total_certificates
-            FROM students
-            LEFT JOIN certificates
-                ON students.student_id = certificates.student_id
-            GROUP BY
-                students.student_id,
-                students.student_name,
-                students.register_no,
-                students.department,
-                students.year
-            ORDER BY
-                total_certificates DESC,
-                students.student_name ASC
-        """)
+        # =========================================
+        # ADMIN
+        # Show ALL students
+        # =========================================
+
+        if role == "admin":
+
+            cursor.execute("""
+                SELECT
+                    students.student_id,
+                    students.student_name,
+                    students.register_no,
+                    students.department,
+                    students.year,
+                    COUNT(certificates.certificate_id) AS total_certificates
+                FROM students
+                LEFT JOIN certificates
+                    ON students.student_id = certificates.student_id
+                GROUP BY
+                    students.student_id,
+                    students.student_name,
+                    students.register_no,
+                    students.department,
+                    students.year
+                ORDER BY
+                    total_certificates DESC,
+                    students.student_name ASC
+            """)
+
+        # =========================================
+        # HOD
+        # Show ALL students from HOD department
+        # =========================================
+
+        elif role == "hod":
+
+            # Get logged-in HOD department
+            cursor.execute("""
+                SELECT department
+                FROM hods
+                WHERE user_id = %s
+            """, (session.get("user_id"),))
+
+            hod = cursor.fetchone()
+
+            if not hod:
+                cursor.close()
+                flash("HOD details not found.")
+                return redirect("/")
+
+            hod_department = hod[0]
+
+            cursor.execute("""
+                SELECT
+                    students.student_id,
+                    students.student_name,
+                    students.register_no,
+                    students.department,
+                    students.year,
+                    COUNT(certificates.certificate_id) AS total_certificates
+                FROM students
+                LEFT JOIN certificates
+                    ON students.student_id = certificates.student_id
+                WHERE students.department = %s
+                GROUP BY
+                    students.student_id,
+                    students.student_name,
+                    students.register_no,
+                    students.department,
+                    students.year
+                ORDER BY
+                    total_certificates DESC,
+                    students.student_name ASC
+            """, (hod_department,))
+
+        # =========================================
+        # TUTOR
+        # Show ONLY allotted students
+        # =========================================
+
+        else:
+
+            # Get logged-in tutor details
+            cursor.execute("""
+                SELECT
+                    department,
+                    class_year,
+                    section
+                FROM tutors
+                WHERE user_id = %s
+            """, (session.get("user_id"),))
+
+            tutor = cursor.fetchone()
+
+            if not tutor:
+                cursor.close()
+                flash("Tutor details not found.")
+                return redirect("/")
+
+            tutor_department = tutor[0]
+            tutor_year = tutor[1]
+            tutor_section = tutor[2]
+
+            # -----------------------------------------
+            # Tutor has class year + section
+            # Show only allotted class students
+            # -----------------------------------------
+
+            if tutor_year is not None and tutor_section is not None:
+
+                cursor.execute("""
+                    SELECT
+                        students.student_id,
+                        students.student_name,
+                        students.register_no,
+                        students.department,
+                        students.year,
+                        COUNT(certificates.certificate_id) AS total_certificates
+                    FROM students
+                    LEFT JOIN certificates
+                        ON students.student_id = certificates.student_id
+                    WHERE
+                        students.department = %s
+                        AND students.year = %s
+                        AND students.section = %s
+                    GROUP BY
+                        students.student_id,
+                        students.student_name,
+                        students.register_no,
+                        students.department,
+                        students.year
+                    ORDER BY
+                        total_certificates DESC,
+                        students.student_name ASC
+                """, (
+                    tutor_department,
+                    tutor_year,
+                    tutor_section
+                ))
+
+            # -----------------------------------------
+            # If year/section is NULL
+            # Existing tutor logic:
+            # Show department students
+            # -----------------------------------------
+
+            else:
+
+                cursor.execute("""
+                    SELECT
+                        students.student_id,
+                        students.student_name,
+                        students.register_no,
+                        students.department,
+                        students.year,
+                        COUNT(certificates.certificate_id) AS total_certificates
+                    FROM students
+                    LEFT JOIN certificates
+                        ON students.student_id = certificates.student_id
+                    WHERE students.department = %s
+                    GROUP BY
+                        students.student_id,
+                        students.student_name,
+                        students.register_no,
+                        students.department,
+                        students.year
+                    ORDER BY
+                        total_certificates DESC,
+                        students.student_name ASC
+                """, (tutor_department,))
+
+        # =========================================
+        # Fetch students
+        # =========================================
 
         rows = cursor.fetchall()
 
-        # Get departments for filter
+        # =========================================
+        # Department filter
+        # =========================================
+
         cursor.execute("""
             SELECT DISTINCT department
             FROM students
@@ -6701,11 +6861,15 @@ def leaderboard():
 
         cursor.close()
 
+        # =========================================
+        # Prepare leaderboard data
+        # =========================================
+
         leaderboard_data = []
 
         for rank, student in enumerate(rows, start=1):
 
-            total_certificates = student[5]
+            total_certificates = student[5] or 0
 
             total_points = total_certificates * 10
 
@@ -6720,7 +6884,10 @@ def leaderboard():
                 "total_points": total_points
             })
 
-        # Select template according to role
+        # =========================================
+        # Select template
+        # =========================================
+
         if role == "admin":
 
             template = "admin/leaderboard.html"
