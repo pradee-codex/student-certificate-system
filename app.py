@@ -6642,6 +6642,12 @@ def student():
         certificates = cursor.fetchall()
 
     cursor.close()
+    return render_template(
+            "student/dashboard.html",
+            student=student,
+            certificates=certificates,
+            categories=categories
+        )
 #======================================
 
 # =========================================
