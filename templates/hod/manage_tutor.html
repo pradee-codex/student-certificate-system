@@ -235,6 +235,7 @@
 
 </head>
 
+
 <body>
 
 <div class="container-fluid manage-tutor-container">
@@ -300,7 +301,10 @@
                     </div>
 
 
-                    <!-- Class Year -->
+                    <!-- ======================================
+                         Class Year
+                         None option included
+                    ====================================== -->
 
                     <div class="col-md-6 mb-3">
 
@@ -310,12 +314,15 @@
 
                         <select
                             name="class_year"
-                            class="form-select"
-                            required>
+                            class="form-select">
+
+                            <!-- NONE -->
 
                             <option value="">
-                                Select Year
+                                None
                             </option>
+
+                            <!-- YEARS -->
 
                             <option value="I">
                                 I Year
@@ -338,45 +345,9 @@
                     </div>
 
 
-                    <!-- Section -->
-
-                    <div class="col-md-6 mb-3">
-
-                        <label class="form-label">
-                            Section
-                        </label>
-
-                        <select
-                            name="section"
-                            class="form-select"
-                            required>
-
-                            <option value="">
-                                Select Section
-                            </option>
-
-                            <option value="A">
-                                A
-                            </option>
-
-                            <option value="B">
-                                B
-                            </option>
-
-                            <option value="C">
-                                C
-                            </option>
-
-                            <option value="None">
-                                None
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <!-- Email -->
+                    <!-- ======================================
+                         Email
+                    ====================================== -->
 
                     <div class="col-md-6 mb-3">
 
@@ -393,7 +364,9 @@
                     </div>
 
 
-                    <!-- Username -->
+                    <!-- ======================================
+                         Username
+                    ====================================== -->
 
                     <div class="col-md-6 mb-3">
 
@@ -410,7 +383,9 @@
                     </div>
 
 
-                    <!-- Password -->
+                    <!-- ======================================
+                         Password
+                    ====================================== -->
 
                     <div class="col-md-6 mb-3">
 
@@ -483,13 +458,19 @@
                         <tr>
 
                             <th>ID</th>
+
                             <th>Tutor Name</th>
+
                             <th>Department</th>
+
                             <th>Class Year</th>
-                            <th>Section</th>
+
                             <th>Email</th>
+
                             <th>Username</th>
+
                             <th>Edit</th>
+
                             <th>Delete</th>
 
                         </tr>
@@ -503,32 +484,55 @@
 
                         <tr>
 
+                            <!-- ID -->
+
                             <td>
                                 {{ tutor[0] }}
                             </td>
+
+
+                            <!-- Tutor Name -->
 
                             <td>
                                 {{ tutor[1] }}
                             </td>
 
+
+                            <!-- Department -->
+
                             <td>
                                 {{ tutor[2] }}
                             </td>
 
+
+                            <!-- Class Year -->
+
                             <td>
-                                {{ tutor[3] }}
+
+                                {% if tutor[3] %}
+
+                                    {{ tutor[3] }}
+
+                                {% else %}
+
+                                    None
+
+                                {% endif %}
+
                             </td>
+
+
+                            <!-- Email -->
 
                             <td>
                                 {{ tutor[4] }}
                             </td>
 
-                            <td>
-                                {{ tutor[5] }}
-                            </td>
+
+                            <!-- Username -->
 
                             <td>
-                                {{ tutor[6] }}
+                                {{ tutor[5] }}
                             </td>
 
 
