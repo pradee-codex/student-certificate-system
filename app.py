@@ -3097,6 +3097,37 @@ def add_student():
 
     return redirect("/manage_student")
 
+
+@app.route("/delete_student/<int:id>")
+def delete_student(id):
+
+    if session.get("role") != "tutor":
+        return redirect("/")
+
+    cursor = mysql.connection.cursor()
+
+    cursor.execute("""
+        SELECT user_id
+        FROM students
+        WHERE student_id=%s
+    """, (id,))
+
+    row = cursor.fetchone()
+
+    if row:
+
+        user_id = row[0]
+
+        cursor.execute("DELETE FROM students WHERE student_id=%s", (id,))
+        cursor.execute("DELETE FROM users WHERE id=%s", (user_id,))
+
+        mysql.connection.commit()
+
+    cursor.close()
+
+    flash("Student Deleted Successfully")
+
+    return redirect("/manage_student")
 @app.route("/edit_student/<int:id>")
 def edit_student(id):
 
@@ -3129,10 +3160,15 @@ def edit_student(id):
 
     cursor.close()
 
+    if not student:
+        flash("Student not found")
+        return redirect("/manage_student")
+
     return render_template(
         "tutor/edit_student.html",
         student=student
     )
+
 
 @app.route("/update_student/<int:id>", methods=["POST"])
 def update_student(id):
@@ -3144,50 +3180,66 @@ def update_student(id):
     register_no = request.form["register_no"]
     department = request.form["department"]
     year = request.form["year"]
-    section = request.form["section"]      # NEW
+    section = request.form["section"]
     email = request.form["email"]
     phone = request.form["phone"]
     username = request.form["username"]
 
     cursor = mysql.connection.cursor()
 
-    # Update Student Details
-    cursor.execute("""
-        UPDATE students
-        SET
-            student_name=%s,
-            register_no=%s,
-            department=%s,
-            year=%s,
-            section=%s,
-            email=%s,
-            phone=%s
-        WHERE student_id=%s
-    """, (
-        student_name,
-        register_no,
-        department,
-        year,
-        section,
-        email,
-        phone,
-        id
-    ))
+    try:
 
-    # Get user_id
-    cursor.execute("""
-        SELECT user_id
-        FROM students
-        WHERE student_id=%s
-    """, (id,))
+        # =========================================
+        # UPDATE STUDENT DETAILS
+        # =========================================
 
-    row = cursor.fetchone()
+        cursor.execute("""
+            UPDATE students
+            SET
+                student_name=%s,
+                register_no=%s,
+                department=%s,
+                year=%s,
+                section=%s,
+                email=%s,
+                phone=%s
+            WHERE student_id=%s
+        """, (
+            student_name,
+            register_no,
+            department,
+            year,
+            section,
+            email,
+            phone,
+            id
+        ))
 
-    if row:
+        # =========================================
+        # GET USER ID
+        # =========================================
+
+        cursor.execute("""
+            SELECT user_id
+            FROM students
+            WHERE student_id=%s
+        """, (id,))
+
+        row = cursor.fetchone()
+
+        if not row:
+            mysql.connection.rollback()
+            cursor.close()
+
+            flash("Student not found")
+            return redirect("/manage_student")
 
         user_id = row[0]
 
-        # Check duplicate username
+        # =========================================
+        # CHECK DUPLICATE USERNAME
+        # =========================================
+
         cursor.execute("""
             SELECT id
             FROM users
@@ -3200,11 +3252,16 @@ def update_student(id):
 
         if cursor.fetchone():
 
+            mysql.connection.rollback()
             cursor.close()
+
             flash("Username already exists")
             return redirect(f"/edit_student/{id}")
 
-        # Update username
+        # =========================================
+        # UPDATE USERNAME
+        # =========================================
+
         cursor.execute("""
             UPDATE users
             SET username=%s
@@ -3214,45 +3271,31 @@ def update_student(id):
             user_id
         ))
 
-    mysql.connection.commit()
-
-    cursor.close()
-
-    flash("Student Updated Successfully")
-
-    return redirect("/manage_student")
-
-@app.route("/delete_student/<int:id>")
-def delete_student(id):
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    cursor = mysql.connection.cursor()
-
-    cursor.execute("""
-        SELECT user_id
-        FROM students
-        WHERE student_id=%s
-    """, (id,))
-
-    row = cursor.fetchone()
-
-    if row:
-
-        user_id = row[0]
-
-        cursor.execute("DELETE FROM students WHERE student_id=%s", (id,))
-        cursor.execute("DELETE FROM users WHERE id=%s", (user_id,))
+        # =========================================
+        # COMMIT
+        # =========================================
 
         mysql.connection.commit()
 
-    cursor.close()
+        cursor.close()
 
-    flash("Student Deleted Successfully")
+        flash("Student Updated Successfully")
 
-    return redirect("/manage_student")
+        return redirect("/manage_student")
 
+    except Exception as e:
+
+        mysql.connection.rollback()
+        cursor.close()
+
+        print("===================================")
+        print("UPDATE STUDENT ERROR")
+        print("Error:", str(e))
+        print("===================================")
+
+        flash("Unable to update student")
+
+        return redirect(f"/edit_student/{id}")
 #--
 @app.route("/download_all_tutor")
 def download_all_tutor():
