@@ -6620,77 +6620,103 @@ def student():
 
     cursor = mysql.connection.cursor()
 
-    # =========================================
-    # STUDENT DETAILS
-    # =========================================
+    try:
 
-    cursor.execute("""
-        SELECT
-            student_id,
-            user_id,
-            register_no,
-            student_name,
-            department,
-            year,
-            email,
-            phone,
-            profile_photo
-        FROM students
-        WHERE user_id=%s
-    """, (session["user_id"],))
-
-    student = cursor.fetchone()
-
-    # =========================================
-    # CERTIFICATE CATEGORIES
-    # =========================================
-
-    cursor.execute("""
-        SELECT
-            category_id,
-            category_name
-        FROM certificate_categories
-        ORDER BY category_name
-    """)
-
-    categories = cursor.fetchall()
-
-    # =========================================
-    # STUDENT CERTIFICATES
-    # =========================================
-
-    certificates = []
-
-    if student:
+        # =========================================
+        # STUDENT DETAILS
+        # =========================================
 
         cursor.execute("""
             SELECT
-                certificates.certificate_title,
-                certificate_categories.category_name,
-                certificates.upload_date,
-                certificates.achievement,
-                certificates.certificate_file
+                student_id,
+                user_id,
+                register_no,
+                student_name,
+                department,
+                year,
+                email,
+                phone,
+                profile_photo
+            FROM students
+            WHERE user_id=%s
+        """, (session["user_id"],))
 
-            FROM certificates
+        student = cursor.fetchone()
 
-            LEFT JOIN certificate_categories
-            ON certificates.category_id =
-               certificate_categories.category_id
+        # =========================================
+        # CERTIFICATE CATEGORIES
+        # =========================================
 
-            WHERE certificates.student_id=%s
+        cursor.execute("""
+            SELECT
+                category_id,
+                category_name
+            FROM certificate_categories
+            ORDER BY category_name
+        """)
 
-            ORDER BY certificates.upload_date DESC
-        """, (student[0],))
+        categories = cursor.fetchall()
 
-        certificates = cursor.fetchall()
+        # =========================================
+        # STUDENT CERTIFICATES
+        # =========================================
 
-    cursor.close()
-    return render_template(
+        certificates = []
+
+        if student:
+
+            cursor.execute("""
+                SELECT
+                    certificates.certificate_title,
+                    certificate_categories.category_name,
+                    certificates.upload_date,
+                    certificates.achievement,
+                    certificates.certificate_file
+
+                FROM certificates
+
+                LEFT JOIN certificate_categories
+                    ON certificates.category_id =
+                       certificate_categories.category_id
+
+                WHERE certificates.student_id=%s
+
+                ORDER BY certificates.upload_date DESC
+            """, (student[0],))
+
+            certificates = cursor.fetchall()
+
+        # =========================================
+        # CLOSE CURSOR
+        # =========================================
+
+        cursor.close()
+
+        # =========================================
+        # STUDENT DASHBOARD
+        # =========================================
+
+        return render_template(
             "student/dashboard.html",
             student=student,
             certificates=certificates,
             categories=categories
         )
+
+    except Exception as e:
+
+        mysql.connection.rollback()
+
+        cursor.close()
+
+        print("===================================")
+        print("STUDENT DASHBOARD ERROR")
+        print("Error:", str(e))
+        print("===================================")
+
+        flash("Unable to load student dashboard.")
+
+        return redirect("/")
 #======================================
 
 # =========================================
