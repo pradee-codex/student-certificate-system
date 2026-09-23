@@ -30,10 +30,6 @@
 
     <style>
 
-        /* =====================================================
-           GLOBAL
-        ===================================================== */
-
         * {
             margin: 0;
             padding: 0;
@@ -51,10 +47,7 @@
             min-height: 100vh;
         }
 
-
-        /* =====================================================
-           SIDEBAR
-        ===================================================== */
+        /* SIDEBAR */
 
         .sidebar {
             width: 220px;
@@ -89,10 +82,7 @@
             margin-bottom: 0;
         }
 
-
-        /* =====================================================
-           PROFILE
-        ===================================================== */
+        /* PROFILE */
 
         .profile {
             text-align: center;
@@ -126,10 +116,7 @@
             font-size: 10px;
         }
 
-
-        /* =====================================================
-           SIDEBAR MENU
-        ===================================================== */
+        /* SIDEBAR MENU */
 
         .sidebar ul {
             list-style: none;
@@ -163,10 +150,7 @@
             font-size: 13px;
         }
 
-
-        /* =====================================================
-           MAIN CONTENT
-        ===================================================== */
+        /* MAIN */
 
         .main-content {
             margin-left: 220px;
@@ -174,10 +158,7 @@
             padding: 20px;
         }
 
-
-        /* =====================================================
-           TOP BAR
-        ===================================================== */
+        /* TOPBAR */
 
         .topbar {
             display: flex;
@@ -217,10 +198,7 @@
             font-size: 15px;
         }
 
-
-        /* =====================================================
-           DASHBOARD CARDS
-        ===================================================== */
+        /* DASHBOARD CARDS */
 
         .dashboard-card {
             background: white;
@@ -281,10 +259,7 @@
             margin-bottom: 0;
         }
 
-
-        /* =====================================================
-           STUDENT SEARCH
-        ===================================================== */
+        /* STUDENT SEARCH */
 
         .student-search-card {
             background: white;
@@ -313,11 +288,6 @@
             color: #777;
             margin: 0;
         }
-
-
-        /* =====================================================
-           SEARCH INPUT
-        ===================================================== */
 
         .student-search-box {
             position: relative;
@@ -348,20 +318,10 @@
             box-shadow: 0 0 0 3px rgba(25, 135, 84, .10);
         }
 
-
-        /* =====================================================
-           SEARCH ANALYTICS
-        ===================================================== */
-
         #studentAnalytics {
             display: none;
             margin-top: 18px;
         }
-
-
-        /* =====================================================
-           STUDENT RESULT
-        ===================================================== */
 
         .student-result {
             background: #f8fffb;
@@ -383,11 +343,6 @@
             color: #666;
             margin-bottom: 0;
         }
-
-
-        /* =====================================================
-           MINI STATS
-        ===================================================== */
 
         .student-mini-stats {
             display: grid;
@@ -437,11 +392,6 @@
             color: #2563eb;
         }
 
-
-        /* =====================================================
-           CHARTS
-        ===================================================== */
-
         .student-charts {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -468,11 +418,6 @@
             height: 245px;
         }
 
-
-        /* =====================================================
-           EMPTY SEARCH
-        ===================================================== */
-
         #studentEmpty {
             display: none;
             text-align: center;
@@ -493,10 +438,7 @@
             margin: 0;
         }
 
-
-        /* =====================================================
-           CERTIFICATE TABLE
-        ===================================================== */
+        /* TABLE */
 
         .card {
             background: white;
@@ -519,11 +461,6 @@
             font-size: 10px;
         }
 
-
-        /* =====================================================
-           TABLE SEARCH
-        ===================================================== */
-
         #searchInput {
             width: 230px !important;
             font-size: 11px;
@@ -534,11 +471,6 @@
             font-size: 11px;
             padding: 7px 14px !important;
         }
-
-
-        /* =====================================================
-           TABLE
-        ===================================================== */
 
         .table {
             font-size: 11px;
@@ -581,10 +513,17 @@
             padding: 5px 8px;
         }
 
+        /* PARTICIPATION */
 
-        /* =====================================================
-           FOOTER
-        ===================================================== */
+        .participation-internal {
+            background: #0dcaf0;
+            color: #000;
+        }
+
+        .participation-external {
+            background: #6f42c1;
+            color: white;
+        }
 
         footer {
             margin-bottom: 20px;
@@ -602,11 +541,6 @@
             font-size: 9px;
         }
 
-
-        /* =====================================================
-           EXTRA
-        ===================================================== */
-
         .rounded-4 {
             border-radius: 12px !important;
         }
@@ -615,10 +549,7 @@
             box-shadow: 0 5px 18px rgba(0, 0, 0, .07) !important;
         }
 
-
-        /* =====================================================
-           RESPONSIVE
-        ===================================================== */
+        /* RESPONSIVE */
 
         @media(max-width: 992px) {
 
@@ -690,19 +621,13 @@
 
 </head>
 
-
 <body>
 
 <div class="wrapper">
 
-
-    <!-- =====================================================
-         SIDEBAR
-    ====================================================== -->
+    <!-- SIDEBAR -->
 
     <div class="sidebar">
-
-        <!-- LOGO -->
 
         <div class="logo text-center">
 
@@ -719,7 +644,6 @@
             </p>
 
         </div>
-
 
         <!-- PROFILE -->
 
@@ -740,7 +664,6 @@
 
             {% endif %}
 
-
             <h4>
                 {{ tutor[0] }}
             </h4>
@@ -755,7 +678,6 @@
 
         </div>
 
-
         <!-- MENU -->
 
         <ul>
@@ -767,19 +689,19 @@
                 </a>
             </li>
 
-
             <li>
                 <a href="/manage_student">
                     <i class="bi bi-people-fill"></i>
                     Students
                 </a>
             </li>
+
             <li>
-    <a href="/leaderboard">
-        <i class="bi bi-trophy-fill"></i>
-        Leaderboard
-    </a>
-</li>
+                <a href="/leaderboard">
+                    <i class="bi bi-trophy-fill"></i>
+                    Leaderboard
+                </a>
+            </li>
 
             <li>
                 <a href="/tutor_reports">
@@ -788,7 +710,6 @@
                 </a>
             </li>
 
-
             <li>
                 <a href="/certificate_categories">
                     <i class="bi bi-grid-fill"></i>
@@ -796,14 +717,12 @@
                 </a>
             </li>
 
-
             <li>
                 <a href="/tutor_profile">
                     <i class="bi bi-person-circle"></i>
                     Profile
                 </a>
             </li>
-
 
             <li>
                 <a href="/logout">
@@ -816,13 +735,9 @@
 
     </div>
 
-
-    <!-- =====================================================
-         MAIN CONTENT
-    ====================================================== -->
+    <!-- MAIN CONTENT -->
 
     <div class="main-content">
-
 
         <!-- TOP BAR -->
 
@@ -843,7 +758,6 @@
 
             </div>
 
-
             <div class="top-icons">
 
                 <div class="icon-box">
@@ -858,15 +772,9 @@
 
         </div>
 
-
-        <!-- =================================================
-             DASHBOARD CARDS
-        ================================================== -->
+        <!-- DASHBOARD CARDS -->
 
         <div class="row mt-3 g-3">
-
-
-            <!-- TOTAL STUDENTS -->
 
             <div class="col-lg-3 col-md-6">
 
@@ -892,9 +800,6 @@
 
             </div>
 
-
-            <!-- CERTIFICATES -->
-
             <div class="col-lg-3 col-md-6">
 
                 <div class="dashboard-card">
@@ -919,9 +824,6 @@
 
             </div>
 
-
-            <!-- DEPARTMENT -->
-
             <div class="col-lg-3 col-md-6">
 
                 <div class="dashboard-card">
@@ -945,9 +847,6 @@
                 </div>
 
             </div>
-
-
-            <!-- COMPLETION -->
 
             <div class="col-lg-3 col-md-6">
 
@@ -989,15 +888,9 @@
 
         </div>
 
-
-        <!-- =================================================
-             STUDENT CERTIFICATE SEARCH
-        ================================================== -->
+        <!-- STUDENT CERTIFICATE SEARCH -->
 
         <div class="student-search-card">
-
-
-            <!-- TITLE -->
 
             <div class="student-search-title">
 
@@ -1016,9 +909,6 @@
 
             </div>
 
-
-            <!-- SEARCH BOX -->
-
             <div class="student-search-box">
 
                 <i class="bi bi-search"></i>
@@ -1031,15 +921,7 @@
 
             </div>
 
-
-            <!-- =================================================
-                 ANALYTICS
-            ================================================== -->
-
             <div id="studentAnalytics">
-
-
-                <!-- STUDENT RESULT -->
 
                 <div
                     class="student-result"
@@ -1058,13 +940,7 @@
 
                 </div>
 
-
-                <!-- MINI STATISTICS -->
-
                 <div class="student-mini-stats">
-
-
-                    <!-- TOTAL -->
 
                     <div class="student-mini-stat stat-total">
 
@@ -1080,9 +956,6 @@
 
                     </div>
 
-
-                    <!-- WINNER -->
-
                     <div class="student-mini-stat stat-winner">
 
                         <i class="bi bi-trophy-fill"></i>
@@ -1096,9 +969,6 @@
                         </p>
 
                     </div>
-
-
-                    <!-- PARTICIPATED -->
 
                     <div class="student-mini-stat stat-participated">
 
@@ -1116,13 +986,7 @@
 
                 </div>
 
-
-                <!-- CHARTS -->
-
                 <div class="student-charts">
-
-
-                    <!-- CATEGORY -->
 
                     <div class="student-chart-box">
 
@@ -1138,9 +1002,6 @@
                         </div>
 
                     </div>
-
-
-                    <!-- ACHIEVEMENT -->
 
                     <div class="student-chart-box">
 
@@ -1161,9 +1022,6 @@
 
             </div>
 
-
-            <!-- NO STUDENT -->
-
             <div id="studentEmpty">
 
                 <i class="bi bi-person-x"></i>
@@ -1177,17 +1035,11 @@
 
         </div>
 
-
-        <!-- =================================================
-             STUDENT CERTIFICATES TABLE
-        ================================================== -->
+        <!-- STUDENT CERTIFICATES TABLE -->
 
         <div class="card mt-3 shadow-lg border-0 rounded-4">
 
             <div class="card-body">
-
-
-                <!-- TABLE HEADER -->
 
                 <div
                     class="d-flex justify-content-between align-items-center mb-3 certificate-header">
@@ -1208,11 +1060,7 @@
 
                     </div>
 
-
                     <div class="d-flex align-items-center">
-
-
-                        <!-- TABLE SEARCH -->
 
                         <input
                             type="text"
@@ -1220,9 +1068,6 @@
                             class="form-control rounded-pill me-2"
                             placeholder="🔍 Search Student Name..."
                             autocomplete="off">
-
-
-                        <!-- EXPORT ZIP -->
 
                         <a
                             href="/download_all_tutor"
@@ -1239,15 +1084,11 @@
 
                 </div>
 
-
-                <!-- TABLE -->
-
                 <div class="table-responsive">
 
                     <table
                         class="table table-hover align-middle"
                         id="certificateTable">
-
 
                         <thead class="table-success">
 
@@ -1277,6 +1118,12 @@
                                     Achievement
                                 </th>
 
+                                <!-- NEW PARTICIPATION COLUMN -->
+
+                                <th>
+                                    Participation
+                                </th>
+
                                 <th>
                                     View
                                 </th>
@@ -1293,7 +1140,6 @@
 
                         </thead>
 
-
                         <tbody>
 
                         {% if certificates %}
@@ -1302,18 +1148,16 @@
 
                             <tr>
 
-
                                 <!-- STUDENT -->
 
                                 <td>
 
                                     <div class="d-flex align-items-center">
 
-
-                                        {% if row[6] %}
+                                        {% if row[7] %}
 
                                             <img
-                                                src="{{ url_for('static', filename='uploads/profile/' ~ row[6]) }}"
+                                                src="{{ url_for('static', filename='uploads/profile/' ~ row[7]) }}"
                                                 width="40"
                                                 height="40"
                                                 class="rounded-circle"
@@ -1331,7 +1175,6 @@
 
                                         {% endif %}
 
-
                                         <div class="ms-2">
 
                                             <h6 class="mb-0 fw-bold">
@@ -1340,8 +1183,8 @@
 
                                             <small class="text-muted">
 
-                                                {% if row[7] %}
-                                                    {{ row[7].strftime('%d-%m-%Y') }}
+                                                {% if row[8] %}
+                                                    {{ row[8].strftime('%d-%m-%Y') }}
                                                 {% endif %}
 
                                             </small>
@@ -1351,7 +1194,6 @@
                                     </div>
 
                                 </td>
-
 
                                 <!-- DEPARTMENT -->
 
@@ -1363,13 +1205,11 @@
 
                                 </td>
 
-
                                 <!-- YEAR -->
 
                                 <td>
                                     {{ row[2] }}
                                 </td>
-
 
                                 <!-- CERTIFICATE -->
 
@@ -1381,7 +1221,6 @@
 
                                 </td>
 
-
                                 <!-- CATEGORY -->
 
                                 <td>
@@ -1391,7 +1230,6 @@
                                     </span>
 
                                 </td>
-
 
                                 <!-- ACHIEVEMENT -->
 
@@ -1425,15 +1263,40 @@
 
                                 </td>
 
+                                <!-- PARTICIPATION -->
+
+                                <td>
+
+                                    {% if row[6] == "Internal" %}
+
+                                        <span class="badge participation-internal">
+                                            🏫 Internal
+                                        </span>
+
+                                    {% elif row[6] == "External" %}
+
+                                        <span class="badge participation-external">
+                                            🌐 External
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+                                            -
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
 
                                 <!-- VIEW -->
 
                                 <td>
 
-                                    {% if row[8] %}
+                                    {% if row[9] %}
 
                                         <a
-                                            href="{{ url_for('view', filename=row[8]) }}"
+                                            href="{{ url_for('view', filename=row[9]) }}"
                                             class="btn btn-primary btn-sm"
                                             target="_blank"
                                             rel="noopener noreferrer">
@@ -1453,15 +1316,14 @@
 
                                 </td>
 
-
                                 <!-- DOWNLOAD -->
 
                                 <td>
 
-                                    {% if row[8] %}
+                                    {% if row[9] %}
 
                                         <a
-                                            href="{{ url_for('download', filename=row[8]) }}"
+                                            href="{{ url_for('download', filename=row[9]) }}"
                                             class="btn btn-success btn-sm">
 
                                             <i class="bi bi-download"></i>
@@ -1479,15 +1341,14 @@
 
                                 </td>
 
-
                                 <!-- DELETE -->
 
                                 <td>
 
-                                    {% if row[8] %}
+                                    {% if row[9] %}
 
                                         <form
-                                            action="{{ url_for('delete_certificate', filename=row[8]) }}"
+                                            action="{{ url_for('delete_certificate', filename=row[9]) }}"
                                             method="POST"
                                             style="display: inline;"
                                             onsubmit="return confirm('Are you sure you want to delete this certificate?');">
@@ -1518,14 +1379,12 @@
 
                             {% endfor %}
 
-
                         {% else %}
-
 
                             <tr>
 
                                 <td
-                                    colspan="9"
+                                    colspan="10"
                                     class="text-center p-4">
 
                                     <img
@@ -1551,7 +1410,6 @@
 
                             </tr>
 
-
                         {% endif %}
 
                         </tbody>
@@ -1564,10 +1422,7 @@
 
         </div>
 
-
-        <!-- =================================================
-             FOOTER
-        ================================================== -->
+        <!-- FOOTER -->
 
         <footer class="mt-4">
 
@@ -1576,7 +1431,6 @@
                 <div class="card-body">
 
                     <div class="row align-items-center">
-
 
                         <div class="col-md-6">
 
@@ -1594,7 +1448,6 @@
 
                         </div>
 
-
                         <div class="col-md-6 text-end">
 
                             <small class="text-muted">
@@ -1605,7 +1458,6 @@
                             </small>
 
                         </div>
-
 
                     </div>
 
@@ -1620,18 +1472,11 @@
 </div>
 
 
-<!-- =====================================================
-     STUDENT SEARCH + ANALYTICS SCRIPT
-====================================================== -->
+<!-- STUDENT SEARCH + ANALYTICS SCRIPT -->
 
 <script>
 
 document.addEventListener("DOMContentLoaded", function () {
-
-
-    /* =================================================
-       ELEMENTS
-    ================================================= */
 
     const studentSearchInput =
         document.getElementById("studentSearchInput");
@@ -1666,26 +1511,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const achievementCanvas =
         document.getElementById("achievementChart");
 
-
-    /* =================================================
-       FLASK DATA
-    ================================================= */
-
     const studentData =
         {{ student_chart_data | default([], true) | tojson }};
 
-
-    /* =================================================
-       CHART VARIABLES
-    ================================================= */
-
     let categoryChart = null;
     let achievementChart = null;
-
-
-    /* =================================================
-       HELPER
-    ================================================= */
 
     function getValue(object, keys) {
 
@@ -1696,21 +1526,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 object[key] !== undefined &&
                 object[key] !== null
             ) {
-
                 return object[key];
-
             }
 
         }
 
         return "";
-
     }
-
-
-    /* =================================================
-       FIND STUDENT
-    ================================================= */
 
     function findStudent(searchValue) {
 
@@ -1719,20 +1541,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 .toLowerCase()
                 .trim();
 
-
         if (!searchValue) {
             return null;
         }
 
-
         if (!Array.isArray(studentData)) {
             return null;
         }
-
-
-        /* =============================================
-           GROUPED DATA
-        ============================================= */
 
         const groupedStudent =
             studentData.find(function (student) {
@@ -1743,7 +1558,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 ) {
                     return false;
                 }
-
 
                 const name =
                     getValue(
@@ -1757,7 +1571,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     .toString()
                     .toLowerCase();
 
-
                 const register =
                     getValue(
                         student,
@@ -1770,14 +1583,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     .toString()
                     .toLowerCase();
 
-
                 return (
                     name.includes(searchValue) ||
                     register.includes(searchValue)
                 );
 
             });
-
 
         if (groupedStudent) {
 
@@ -1810,14 +1621,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-
-        /* =============================================
-           FLAT DATA
-        ============================================= */
-
         const matchingRecords =
             studentData.filter(function (record) {
-
 
                 const name =
                     getValue(
@@ -1831,7 +1636,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     .toString()
                     .toLowerCase();
 
-
                 const register =
                     getValue(
                         record,
@@ -1844,7 +1648,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     .toString()
                     .toLowerCase();
 
-
                 return (
                     name.includes(searchValue) ||
                     register.includes(searchValue)
@@ -1852,15 +1655,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
             });
 
-
         if (matchingRecords.length === 0) {
             return null;
         }
 
-
         const first =
             matchingRecords[0];
-
 
         return {
 
@@ -1891,22 +1691,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
-    /* =================================================
-       CREATE CHARTS
-    ================================================= */
-
     function createCharts(records) {
-
 
         const categoryCounts = {};
         const achievementCounts = {};
 
-
         records.forEach(function (record) {
-
-
-            /* CATEGORY */
 
             let category =
                 getValue(
@@ -1919,18 +1709,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     ]
                 );
 
-
             category =
                 category
                     ? category.toString()
                     : "Other";
 
-
             categoryCounts[category] =
                 (categoryCounts[category] || 0) + 1;
-
-
-            /* ACHIEVEMENT */
 
             let achievement =
                 getValue(
@@ -1944,38 +1729,25 @@ document.addEventListener("DOMContentLoaded", function () {
                     ]
                 );
 
-
             achievement =
                 achievement
                     ? achievement.toString()
                     : "Participated";
-
 
             achievementCounts[achievement] =
                 (achievementCounts[achievement] || 0) + 1;
 
         });
 
-
-        /* DESTROY OLD CHARTS */
-
         if (categoryChart) {
-
             categoryChart.destroy();
             categoryChart = null;
-
         }
-
 
         if (achievementChart) {
-
             achievementChart.destroy();
             achievementChart = null;
-
         }
-
-
-        /* CATEGORY CHART */
 
         if (
             categoryCanvas &&
@@ -2015,9 +1787,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             plugins: {
 
                                 legend: {
-
                                     position: "bottom"
-
                                 }
 
                             }
@@ -2028,9 +1798,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
 
         }
-
-
-        /* ACHIEVEMENT CHART */
 
         if (
             achievementCanvas &&
@@ -2079,9 +1846,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     beginAtZero: true,
 
                                     ticks: {
-
                                         precision: 0
-
                                     }
 
                                 }
@@ -2091,9 +1856,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             plugins: {
 
                                 legend: {
-
                                     display: false
-
                                 }
 
                             }
@@ -2101,17 +1864,11 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
 
                     }
-
                 );
 
         }
 
     }
-
-
-    /* =================================================
-       CLEAR RESULTS
-    ================================================= */
 
     function clearStudentResults() {
 
@@ -2125,37 +1882,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
         participatedCount.innerText = "0";
 
-
         if (categoryChart) {
-
             categoryChart.destroy();
             categoryChart = null;
-
         }
 
-
         if (achievementChart) {
-
             achievementChart.destroy();
             achievementChart = null;
-
         }
 
     }
 
-
-    /* =================================================
-       STUDENT SEARCH
-    ================================================= */
-
     function performStudentSearch() {
-
 
         const value =
             studentSearchInput.value.trim();
-
-
-        /* EMPTY SEARCH */
 
         if (!value) {
 
@@ -2165,14 +1907,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-
-        /* FIND STUDENT */
-
         const student =
             findStudent(value);
-
-
-        /* NOT FOUND */
 
         if (!student) {
 
@@ -2186,28 +1922,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
             participatedCount.innerText = "0";
 
-
             if (categoryChart) {
-
                 categoryChart.destroy();
                 categoryChart = null;
-
             }
 
-
             if (achievementChart) {
-
                 achievementChart.destroy();
                 achievementChart = null;
-
             }
 
             return;
 
         }
-
-
-        /* FOUND */
 
         studentEmpty.style.display = "none";
 
@@ -2215,35 +1942,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
         studentResult.style.display = "block";
 
-
         studentResultName.innerText =
             student.name || "Student";
 
-
         studentResultRegister.innerText =
             student.register || "-";
-
 
         const records =
             Array.isArray(student.records)
                 ? student.records
                 : [];
 
-
-        /* TOTAL */
-
         totalCertificates.innerText =
             records.length;
-
-
-        /* WINNER / PARTICIPATED */
 
         let winners = 0;
         let participated = 0;
 
-
         records.forEach(function (record) {
-
 
             const achievement =
                 getValue(
@@ -2260,16 +1976,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 .toLowerCase()
                 .trim();
 
-
             if (
-
                 achievement.includes("winner") ||
                 achievement.includes("win") ||
                 achievement.includes("1st") ||
                 achievement.includes("first") ||
                 achievement.includes("prize") ||
                 achievement.includes("rank")
-
             ) {
 
                 winners++;
@@ -2283,25 +1996,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
         });
 
-
         winnerCount.innerText =
             winners;
-
 
         participatedCount.innerText =
             participated;
 
-
-        /* CREATE CHARTS */
-
         createCharts(records);
 
     }
-
-
-    /* =================================================
-       STUDENT SEARCH EVENT
-    ================================================= */
 
     if (studentSearchInput) {
 
@@ -2315,20 +2018,15 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-/* =====================================================
-   TABLE SEARCH + EXPORT ZIP
-===================================================== */
+/* TABLE SEARCH + EXPORT */
 
 document.addEventListener("DOMContentLoaded", function () {
-
 
     const searchInput =
         document.getElementById("searchInput");
 
-
     const exportZipBtn =
         document.getElementById("exportZipBtn");
-
 
     if (searchInput) {
 
@@ -2336,26 +2034,21 @@ document.addEventListener("DOMContentLoaded", function () {
             "keyup",
             function () {
 
-
                 let value =
                     this.value
                         .toLowerCase()
                         .trim();
-
 
                 let rows =
                     document.querySelectorAll(
                         "#certificateTable tbody tr"
                     );
 
-
                 rows.forEach(function (row) {
-
 
                     let text =
                         row.innerText
                             .toLowerCase();
-
 
                     if (
                         text.indexOf(value) > -1
@@ -2372,18 +2065,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 });
 
-
-                /* =====================================
-                   UPDATE EXPORT ZIP LINK
-                ===================================== */
-
                 if (exportZipBtn) {
 
                     if (value) {
 
                         exportZipBtn.href =
                             "/download_all_tutor?student=" +
-                            encodeURIComponent(this.value.trim());
+                            encodeURIComponent(
+                                searchInput.value.trim()
+                            );
 
                     }
                     else {
@@ -2404,15 +2094,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </script>
 
-
-<!-- =====================================================
-     BOOTSTRAP JS
-====================================================== -->
-
 <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
 </script>
-
 
 </body>
 
