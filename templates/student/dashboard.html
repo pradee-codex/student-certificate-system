@@ -37,45 +37,75 @@ SIDEBAR
     <ul>
 
         <li class="active">
+
             <a href="/student">
+
                 <i class="bi bi-grid-fill"></i>
+
                 Dashboard
+
             </a>
+
         </li>
 
         <li>
+
             <a href="#upload">
+
                 <i class="bi bi-cloud-arrow-up-fill"></i>
+
                 Upload Certificate
+
             </a>
+
         </li>
 
         <li>
+
             <a href="#certificates">
+
                 <i class="bi bi-file-earmark-text-fill"></i>
+
                 My Certificates
+
             </a>
+
         </li>
 
         <li>
+
             <a href="#analytics">
+
                 <i class="bi bi-bar-chart-fill"></i>
+
                 Analytics
+
             </a>
+
         </li>
 
         <li>
+
             <a href="/student_profile">
+
                 <i class="bi bi-person-circle"></i>
+
                 My Profile
+
             </a>
+
         </li>
 
         <li>
+
             <a href="/logout">
+
                 <i class="bi bi-box-arrow-right"></i>
+
                 Logout
+
             </a>
+
         </li>
 
     </ul>
@@ -89,13 +119,21 @@ MAIN
 
 <div class="main">
 
+
     <!-- =====================================================
          TOPBAR
     ====================================================== -->
 
     <div class="topbar">
 
-        
+        <div class="search">
+
+            <input
+                type="text"
+                placeholder="Search your certificates...">
+
+        </div>
+
 
         <div class="user-box">
 
@@ -116,6 +154,7 @@ MAIN
                 ) }}">
 
             {% endif %}
+
 
             <div>
 
@@ -155,6 +194,7 @@ MAIN
 
             </div>
 
+
             <div class="right">
 
                 {% if student[8] %}
@@ -176,6 +216,7 @@ MAIN
                     class="student-photo">
 
                 {% endif %}
+
 
                 <form
                     action="/upload_student_photo"
@@ -223,6 +264,7 @@ MAIN
                 </h2>
 
             </div>
+
 
             <div class="card-body">
 
@@ -420,6 +462,7 @@ MAIN
 
                 </h2>
 
+
                 <input
                     type="text"
                     id="searchInput"
@@ -449,6 +492,8 @@ MAIN
 
                                 <th>Category</th>
 
+                                <th>Upload Date</th>
+
                                 <th>Achievement</th>
 
                                 <th>View</th>
@@ -470,24 +515,44 @@ MAIN
 
                             <tr>
 
+
                                 <!-- S.No -->
 
                                 <td>
+
                                     {{ loop.index }}
+
                                 </td>
 
 
                                 <!-- Certificate -->
 
                                 <td>
+
                                     {{ certificate[0] }}
+
                                 </td>
 
 
                                 <!-- Category -->
 
                                 <td>
+
                                     {{ certificate[1] }}
+
+                                </td>
+
+
+                                <!-- Upload Date -->
+
+                                <td>
+
+                                    {% if certificate[2] %}
+
+                                        {{ certificate[2].strftime('%d-%m-%Y') }}
+
+                                    {% endif %}
+
                                 </td>
 
 
@@ -495,19 +560,19 @@ MAIN
 
                                 <td>
 
-                                    {% if certificate[2] == "Winner" %}
+                                    {% if certificate[3] == "Winner" %}
 
                                         <span class="badge bg-success">
                                             🏆 Winner
                                         </span>
 
-                                    {% elif certificate[2] == "Runner" %}
+                                    {% elif certificate[3] == "Runner" %}
 
                                         <span class="badge bg-warning text-dark">
                                             🥈 Runner
                                         </span>
 
-                                    {% elif certificate[2] == "Participated" %}
+                                    {% elif certificate[3] == "Participated" %}
 
                                         <span class="badge bg-primary">
                                             🎖 Participated
@@ -524,16 +589,18 @@ MAIN
                                 </td>
 
 
-                                <!-- VIEW -->
+                                <!-- =================================================
+                                     VIEW
+                                ================================================== -->
 
                                 <td>
 
-                                    {% if certificate[3] %}
+                                    {% if certificate[4] %}
 
                                     <a
                                         href="{{ url_for(
                                             'view',
-                                            filename=certificate[3]
+                                            filename=certificate[4]
                                         ) }}"
                                         target="_blank"
                                         rel="noopener noreferrer"
@@ -556,16 +623,18 @@ MAIN
                                 </td>
 
 
-                                <!-- DOWNLOAD -->
+                                <!-- =================================================
+                                     DOWNLOAD
+                                ================================================== -->
 
                                 <td>
 
-                                    {% if certificate[3] %}
+                                    {% if certificate[4] %}
 
                                     <a
                                         href="{{ url_for(
                                             'download',
-                                            filename=certificate[3]
+                                            filename=certificate[4]
                                         ) }}"
                                         class="btn btn-primary btn-sm">
 
@@ -586,16 +655,18 @@ MAIN
                                 </td>
 
 
-                                <!-- DELETE -->
+                                <!-- =================================================
+                                     DELETE
+                                ================================================== -->
 
                                 <td>
 
-                                    {% if certificate[3] %}
+                                    {% if certificate[4] %}
 
                                     <form
                                         action="{{ url_for(
                                             'delete_certificate',
-                                            filename=certificate[3]
+                                            filename=certificate[4]
                                         ) }}"
                                         method="POST"
                                         style="display:inline;">
@@ -623,18 +694,20 @@ MAIN
 
                                 </td>
 
+
                             </tr>
 
                             {% endfor %}
 
                         {% else %}
 
+
                             <!-- No Certificates -->
 
                             <tr>
 
                                 <td
-                                    colspan="7"
+                                    colspan="8"
                                     class="text-center p-5">
 
                                     <img
