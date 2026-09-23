@@ -3859,9 +3859,13 @@ def search_certificate_tutor():
 
     cursor = mysql.connection.cursor()
 
-    # Tutor Details
+    # =========================================================
+    # TUTOR DETAILS
+    # =========================================================
+
     cursor.execute("""
         SELECT
+            department,
             class_year,
             section
         FROM tutors
@@ -3874,48 +3878,124 @@ def search_certificate_tutor():
         cursor.close()
         return ""
 
-    class_year = tutor[0]
-    section = tutor[1]
+    department = tutor[0]
+    class_year = tutor[1]
+    section = tutor[2]
 
-    cursor.execute("""
+    # =========================================================
+    # STUDENT FILTER
+    # =========================================================
+
+    if not class_year:
+
+        student_where = """
+            TRIM(UPPER(students.department))
+            =
+            TRIM(UPPER(%s))
+        """
+
+        params = [
+            department
+        ]
+
+    else:
+
+        student_where = """
+            TRIM(UPPER(students.department))
+            =
+            TRIM(UPPER(%s))
+
+            AND
+
+            TRIM(UPPER(students.year))
+            =
+            TRIM(UPPER(%s))
+        """
+
+        params = [
+            department,
+            class_year
+        ]
+
+    # =========================================================
+    # SEARCH
+    # =========================================================
+
+    search_condition = ""
+
+    if search:
+
+        search_condition = """
+            AND (
+                students.student_name LIKE %s
+                OR students.register_no LIKE %s
+                OR students.department LIKE %s
+                OR certificates.certificate_title LIKE %s
+            )
+        """
+
+        search_value = "%" + search + "%"
+
+        params.extend([
+            search_value,
+            search_value,
+            search_value,
+            search_value
+        ])
+
+    # =========================================================
+    # CERTIFICATES
+    # =========================================================
+
+    cursor.execute(f"""
+
         SELECT
+
             students.student_name,
             students.department,
             students.year,
+
             certificates.certificate_title,
+
             certificate_categories.category_name,
+
             certificates.achievement,
+
+            certificates.participate,
+
             certificates.certificate_file,
+
             certificates.upload_date,
+
             certificates.certificate_id
 
         FROM certificates
 
         INNER JOIN students
-            ON certificates.student_id = students.student_id
+            ON certificates.student_id =
+               students.student_id
 
         INNER JOIN certificate_categories
-            ON certificates.category_id = certificate_categories.category_id
+            ON certificates.category_id =
+               certificate_categories.category_id
 
         WHERE
-            students.year=%s
-            AND students.section=%s
-            AND (
-                students.student_name LIKE %s
-                OR certificates.certificate_title LIKE %s
-            )
+            {student_where}
 
-        ORDER BY certificates.upload_date DESC
-    """, (
-        class_year,
-        section,
-        "%" + search + "%",
-        "%" + search + "%"
-    ))
+            {search_condition}
+
+        ORDER BY
+            certificates.upload_date DESC
+
+    """, tuple(params))
 
     data = cursor.fetchall()
 
     cursor.close()
+
+    # =========================================================
+    # HTML
+    # =========================================================
 
     html = ""
 
@@ -3937,41 +4017,123 @@ def search_certificate_tutor():
             <td>
         """
 
+        # Achievement
+
         if row[5] == "Winner":
-            html += '<span class="badge bg-success">🏆 Winner</span>'
+
+            html += """
+            <span class="badge bg-success">
+                🏆 Winner
+            </span>
+            """
 
         elif row[5] == "Runner":
-            html += '<span class="badge bg-warning text-dark">🥈 Runner</span>'
+
+            html += """
+            <span class="badge bg-warning text-dark">
+                🥈 Runner
+            </span>
+            """
 
         elif row[5] == "Participated":
-            html += '<span class="badge bg-primary">🎖 Participated</span>'
+
+            html += """
+            <span class="badge bg-primary">
+                🎖 Participated
+            </span>
+            """
 
         else:
-            html += '<span class="badge bg-secondary">📜 Others</span>'
+
+            html += """
+            <span class="badge bg-secondary">
+                📜 Others
+            </span>
+            """
+
+        html += """
+            </td>
+
+            <td>
+        """
+
+        # =====================================================
+        # PARTICIPATION
+        # =====================================================
+
+        if row[6] == "Internal":
+
+            html += """
+            <span class="badge bg-info text-dark">
+                🏫 Internal
+            </span>
+            """
+
+        elif row[6] == "External":
+
+            html += """
+            <span class="badge bg-dark">
+                🌐 External
+            </span>
+            """
+
+        else:
+
+            html += """
+            <span class="text-muted">
+                -
+            </span>
+            """
 
         html += f"""
             </td>
 
-            <td>{row[7]}</td>
+            <td>
+                {row[8]}
+            </td>
 
             <td>
-                <a href="/view/{row[6]}" class="btn btn-primary btn-sm">
+                <a
+                    href="/view/{row[7]}"
+                    target="_blank"
+                    class="btn btn-primary btn-sm">
+
+                    <i class="bi bi-eye-fill"></i>
                     View
+
                 </a>
             </td>
 
             <td>
-                <a href="/download/{row[6]}" class="btn btn-success btn-sm">
+                <a
+                    href="/download/{row[7]}"
+                    class="btn btn-success btn-sm">
+
+                    <i class="bi bi-download"></i>
                     Download
+
                 </a>
             </td>
 
             <td>
-                <a href="/delete_certificate/{row[8]}"
-                   class="btn btn-danger btn-sm"
-                   onclick="return confirm('Delete this certificate?')">
-                    Delete
-                </a>
+
+                <form
+                    action="/delete_certificate/{row[7]}"
+                    method="POST"
+                    style="display:inline;">
+
+                    <button
+                        type="submit"
+                        class="btn btn-danger btn-sm"
+                        onclick="return confirm('Delete this certificate?')">
+
+                        <i class="bi bi-trash-fill"></i>
+                        Delete
+
+                    </button>
+
+                </form>
+
             </td>
 
         </tr>
