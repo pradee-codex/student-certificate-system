@@ -1357,13 +1357,13 @@ def tutor():
     # =========================================================
     # COMMON STUDENT FILTER
     #
+    # Section is NOT used.
+    #
     # No class year
-    #     -> All students from department
+    #   -> All students from department
     #
     # Class year assigned
-    #     -> Department + year
-    #
-    # Section is intentionally NOT used
+    #   -> Department + year
     # =========================================================
 
     if not class_year:
@@ -1456,7 +1456,8 @@ def tutor():
     # CERTIFICATE LIST
     #
     # IMPORTANT:
-    # DATABASE COLUMN = participation
+    # participation column removed because
+    # it does NOT exist in database.
     # =========================================================
 
     cursor.execute(f"""
@@ -1467,7 +1468,6 @@ def tutor():
             certificates.certificate_title,
             certificate_categories.category_name,
             certificates.achievement,
-            certificates.participation,
             students.profile_photo,
             certificates.upload_date,
             certificates.certificate_file
@@ -1521,9 +1521,8 @@ def tutor():
 
             "category": row[4] if row[4] else "Others",
 
-            "achievement": row[5] if row[5] else "Others",
+            "achievement": row[5] if row[5] else "Others"
 
-            "participation": row[6] if row[6] else "No"
         })
 
     # =========================================================
@@ -1622,35 +1621,6 @@ def tutor():
     achievement_report = cursor.fetchall()
 
     # =========================================================
-    # PARTICIPATION DISTRIBUTION
-    #
-    # IMPORTANT:
-    # certificates.participation
-    # =========================================================
-
-    cursor.execute(f"""
-        SELECT
-            certificates.participation,
-            COUNT(certificates.certificate_id)
-
-        FROM certificates
-
-        INNER JOIN students
-            ON certificates.student_id =
-               students.student_id
-
-        WHERE {student_where}
-
-        GROUP BY
-            certificates.participation
-
-        ORDER BY
-            COUNT(certificates.certificate_id) DESC
-    """, student_params)
-
-    participation_report = cursor.fetchall()
-
-    # =========================================================
     # STUDENT + CATEGORY REPORT
     # =========================================================
 
@@ -1714,36 +1684,17 @@ def tutor():
     student_achievement_report = cursor.fetchall()
 
     # =========================================================
-    # STUDENT + PARTICIPATION REPORT
+    # PARTICIPATION REPORT
     #
-    # IMPORTANT:
-    # certificates.participation
+    # Database-ல் participation column இல்லாததால்
+    # empty list அனுப்புகிறோம்.
+    #
+    # Template-ல் variable இருந்தாலும் error வராது.
     # =========================================================
 
-    cursor.execute(f"""
-        SELECT
-            students.student_name,
-            certificates.participation,
-            COUNT(certificates.certificate_id)
+    participation_report = []
 
-        FROM certificates
-
-        INNER JOIN students
-            ON certificates.student_id =
-               students.student_id
-
-        WHERE {student_where}
-
-        GROUP BY
-            students.student_id,
-            students.student_name,
-            certificates.participation
-
-        ORDER BY
-            students.student_name ASC
-    """, student_params)
-
-    student_participation_report = cursor.fetchall()
+    student_participation_report = []
 
     # =========================================================
     # DEBUG INFORMATION
@@ -1775,18 +1726,8 @@ def tutor():
     )
 
     print(
-        "PARTICIPATION REPORT:",
-        participation_report
-    )
-
-    print(
         "STUDENT CHART DATA:",
         student_chart_data
-    )
-
-    print(
-        "STUDENT PARTICIPATION REPORT:",
-        student_participation_report
     )
 
     print("====================================")
