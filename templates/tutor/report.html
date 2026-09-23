@@ -14,31 +14,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
           rel="stylesheet">
 
-
-    <!-- =====================================================
-         COMPACT SIZE + PERFECT CIRCLE PROFILE IMAGE
-    ====================================================== -->
-
     <style>
 
         body {
             font-size: 13px !important;
         }
 
-
-        /* =================================================
-           MAIN CONTAINER
-        ================================================= */
-
         .container {
             max-width: 1400px !important;
             padding: 20px !important;
         }
-
-
-        /* =================================================
-           TOP BAR
-        ================================================= */
 
         .topbar {
             padding: 16px 20px !important;
@@ -63,11 +48,6 @@
             font-size: 11px !important;
         }
 
-
-        /* =================================================
-           SUMMARY CARDS
-        ================================================= */
-
         .cards {
             gap: 14px !important;
             margin-bottom: 18px !important;
@@ -90,22 +70,12 @@
             font-size: 11px !important;
         }
 
-
-        /* =================================================
-           TUTOR PROFILE BOX
-        ================================================= */
-
         .profile-box {
             padding: 18px !important;
             margin-bottom: 18px !important;
             border-radius: 14px !important;
             gap: 20px !important;
         }
-
-
-        /* =================================================
-           PERFECT CIRCLE PROFILE IMAGE
-        ================================================= */
 
         .profile-left {
             display: flex !important;
@@ -132,11 +102,6 @@
             flex-shrink: 0 !important;
         }
 
-
-        /* =================================================
-           PROFILE RIGHT
-        ================================================= */
-
         .profile-right h2 {
             font-size: 18px !important;
         }
@@ -149,11 +114,6 @@
             font-size: 11px !important;
             padding: 6px 9px !important;
         }
-
-
-        /* =================================================
-           REPORT BOXES
-        ================================================= */
 
         .report-box {
             padding: 18px !important;
@@ -169,11 +129,6 @@
             font-size: 10px !important;
         }
 
-
-        /* =================================================
-           REPORT TABLES
-        ================================================= */
-
         .report-box table {
             font-size: 11px !important;
         }
@@ -183,11 +138,6 @@
             font-size: 11px !important;
             padding: 8px 9px !important;
         }
-
-
-        /* =================================================
-           QUICK STATISTICS
-        ================================================= */
 
         .stats-grid {
             gap: 12px !important;
@@ -210,11 +160,6 @@
             font-size: 10px !important;
         }
 
-
-        /* =================================================
-           SEARCH
-        ================================================= */
-
         #searchInput {
             width: 280px !important;
             height: 36px !important;
@@ -227,14 +172,10 @@
             font-size: 11px !important;
         }
 
-
-        /* =================================================
-           CERTIFICATE TABLE
-        ================================================= */
-
         #certificateTable th {
             font-size: 11px !important;
             padding: 8px 9px !important;
+            white-space: nowrap;
         }
 
         #certificateTable td {
@@ -249,12 +190,8 @@
         #certificateTable .badge {
             font-size: 9px !important;
             padding: 4px 7px !important;
+            white-space: nowrap;
         }
-
-
-        /* =================================================
-           VIEW + DOWNLOAD BUTTONS
-        ================================================= */
 
         .view-btn,
         .download-btn {
@@ -264,11 +201,6 @@
             text-decoration: none !important;
             display: inline-block !important;
         }
-
-
-        /* =================================================
-           REPORT SUMMARY
-        ================================================= */
 
         .summary-area {
             gap: 12px !important;
@@ -287,11 +219,6 @@
             font-size: 21px !important;
         }
 
-
-        /* =================================================
-           FOOTER
-        ================================================= */
-
         .footer {
             padding: 16px !important;
             margin-top: 18px !important;
@@ -308,10 +235,27 @@
             font-size: 10px !important;
         }
 
+        /* PARTICIPATED / ACHIEVEMENT */
 
-        /* =================================================
-           RESPONSIVE - TABLET
-        ================================================= */
+        .achievement-participated {
+            background: #0d6efd !important;
+            color: white !important;
+        }
+
+        .achievement-winner {
+            background: #198754 !important;
+            color: white !important;
+        }
+
+        .achievement-runner {
+            background: #ffc107 !important;
+            color: #212529 !important;
+        }
+
+        .achievement-other {
+            background: #6c757d !important;
+            color: white !important;
+        }
 
         @media (max-width: 992px) {
 
@@ -335,11 +279,6 @@
                 gap: 15px !important;
             }
         }
-
-
-        /* =================================================
-           RESPONSIVE - MOBILE
-        ================================================= */
 
         @media (max-width: 768px) {
 
@@ -367,9 +306,6 @@
             .card {
                 padding: 15px !important;
             }
-
-
-            /* MOBILE PERFECT CIRCLE */
 
             .profile-box {
                 flex-direction: column !important;
@@ -410,11 +346,6 @@
             }
         }
 
-
-        /* =================================================
-           SMALL MOBILE
-        ================================================= */
-
         @media (max-width: 500px) {
 
             .cards {
@@ -438,11 +369,6 @@
                 font-size: 16px !important;
             }
         }
-
-
-        /* =================================================
-           PRINT STYLE
-        ================================================= */
 
         @media print {
 
@@ -502,7 +428,6 @@
 
         </div>
 
-
         <div class="top-buttons">
 
             <a href="{{ url_for('tutor') }}"
@@ -513,7 +438,6 @@
 
             </a>
 
-
             <a href="/tutor_export_excel"
                class="btn excel">
 
@@ -522,7 +446,6 @@
 
             </a>
 
-
             <a href="/tutor_export_pdf"
                class="btn pdf">
 
@@ -530,7 +453,6 @@
                 PDF
 
             </a>
-
 
             <button
                 type="button"
@@ -552,7 +474,6 @@
     ====================================================== -->
 
     <div class="cards">
-
 
         <div class="card green">
 
@@ -622,9 +543,6 @@
 
     <div class="profile-box">
 
-
-        <!-- PROFILE IMAGE -->
-
         <div class="profile-left">
 
             {% if tutor[4] %}
@@ -651,8 +569,6 @@
 
         </div>
 
-
-        <!-- PROFILE DETAILS -->
 
         <div class="profile-right">
 
@@ -890,7 +806,6 @@
 
         <div class="stats-grid">
 
-
             <div class="mini-card">
 
                 <i class="bi bi-people-fill"></i>
@@ -964,7 +879,6 @@
 
         <div class="box-header">
 
-
             <div>
 
                 <h2>
@@ -980,8 +894,6 @@
 
             </div>
 
-
-            <!-- SEARCH + DOWNLOAD ALL -->
 
             <div class="report-search-actions">
 
@@ -1014,7 +926,6 @@
         <div style="overflow-x:auto;">
 
             <table id="certificateTable">
-
 
                 <thead>
 
@@ -1063,11 +974,9 @@
 
                 <tbody>
 
-
                     {% for certificate in certificates %}
 
                     <tr>
-
 
                         <!-- STUDENT -->
 
@@ -1107,48 +1016,192 @@
                             {{ certificate[4] }}
                         </td>
 
+                        <!-- =================================================
+     PARTICIPATION SUMMARY
+================================================== -->
 
-                        <!-- ACHIEVEMENT -->
+<div class="report-box">
+
+    <div class="box-header">
+
+        <h2>
+
+            <i class="bi bi-globe2"></i>
+
+            Participation Summary
+
+        </h2>
+
+        <small>
+            Internal and External participation details
+        </small>
+
+    </div>
+
+
+    <div style="overflow-x:auto;">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Participation
+                    </th>
+
+                    <th>
+                        Total Certificates
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for participation in participation_report %}
+
+                <tr>
+
+                    <td>
+
+                        {% set participation_name =
+                            participation[0]|string|trim %}
+
+
+                        {% if participation_name|lower == "internal" %}
+
+                            <span
+                                class="badge"
+                                style="
+                                    background:#0dcaf0;
+                                    color:#212529;
+                                ">
+
+                                🏫 Internal
+
+                            </span>
+
+
+                        {% elif participation_name|lower == "external" %}
+
+                            <span
+                                class="badge"
+                                style="
+                                    background:#212529;
+                                    color:white;
+                                ">
+
+                                🌐 External
+
+                            </span>
+
+
+                        {% else %}
+
+                            <span class="badge achievement-other">
+
+                                📜 {{ participation_name }}
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+                        {{ participation[1] }}
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+
+                    <td
+                        colspan="2"
+                        style="text-align:center;">
+
+                        No participation data found.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+                        <!-- =================================================
+                             ACHIEVEMENT
+                        ================================================== -->
 
                         <td>
 
-                            {% if certificate[5] == "Participated" %}
+                            {% set achievement =
+                                certificate[5]|string|trim %}
 
-                                <span class="badge bg-primary">
+
+                            {% if achievement|lower == "participated" %}
+
+                                <span class="badge achievement-participated">
 
                                     🏅 Participated
 
                                 </span>
 
-                            {% elif certificate[5] == "Winner" %}
 
-                                <span class="badge bg-success">
+                            {% elif achievement|lower == "winner" %}
+
+                                <span class="badge achievement-winner">
 
                                     🥇 Winner
 
                                 </span>
 
-                            {% elif certificate[5] == "Runner Up" %}
 
-                                <span class="badge bg-warning text-dark">
+                            {% elif achievement|lower == "runner up" %}
+
+                                <span class="badge achievement-runner">
 
                                     🥈 Runner Up
 
                                 </span>
 
-                            {% elif certificate[5] == "Runner" %}
 
-                                <span class="badge bg-warning text-dark">
+                            {% elif achievement|lower == "runner" %}
+
+                                <span class="badge achievement-runner">
 
                                     🥈 Runner
 
                                 </span>
 
+
+                            {% elif achievement == "" or achievement|lower == "none" %}
+
+                                <span class="badge achievement-other">
+
+                                    📜 Not Specified
+
+                                </span>
+
+
                             {% else %}
 
-                                <span class="badge bg-secondary">
+                                <span class="badge achievement-other">
 
-                                    📜 {{ certificate[5] }}
+                                    📜 {{ achievement }}
 
                                 </span>
 
@@ -1164,22 +1217,17 @@
                         </td>
 
 
-                        <!-- =================================================
-                             VIEW
-                             IMPORTANT:
-                             DO NOT DIRECTLY OPEN GOOGLE DRIVE URL
-                             USE FLASK VIEW ROUTE
-                        ================================================== -->
+                        <!-- VIEW -->
 
                         <td>
 
-                            {% if certificate[6] %}
+                            {% if certificate[8] %}
 
                                 <a
                                     class="view-btn"
                                     href="{{ url_for(
                                         'view',
-                                        filename=certificate[6]
+                                        filename=certificate[8]
                                     ) }}"
                                     target="_blank"
                                     rel="noopener noreferrer">
@@ -1200,20 +1248,17 @@
                         </td>
 
 
-                        <!-- =================================================
-                             DOWNLOAD
-                             EXISTING DOWNLOAD ROUTE - UNCHANGED
-                        ================================================== -->
+                        <!-- DOWNLOAD -->
 
                         <td>
 
-                            {% if certificate[6] %}
+                            {% if certificate[8] %}
 
                                 <a
                                     class="download-btn"
                                     href="{{ url_for(
                                         'download',
-                                        filename=certificate[6]
+                                        filename=certificate[8]
                                     ) }}">
 
                                     <i class="bi bi-download"></i>
@@ -1236,7 +1281,6 @@
 
 
                     {% else %}
-
 
                     <tr>
 
@@ -1261,9 +1305,143 @@
 
                     </tr>
 
-
                     {% endfor %}
 
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ACHIEVEMENT SUMMARY
+    ====================================================== -->
+
+    <div class="report-box">
+
+        <div class="box-header">
+
+            <h2>
+
+                <i class="bi bi-trophy-fill"></i>
+                Achievement Summary
+
+            </h2>
+
+            <small>
+                Student participation and achievement details
+            </small>
+
+        </div>
+
+
+        <div style="overflow-x:auto;">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Achievement
+                        </th>
+
+                        <th>
+                            Total Certificates
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for achievement in achievement_report %}
+
+                    <tr>
+
+                        <td>
+
+                            {% set achievement_name =
+                                achievement[0]|string|trim %}
+
+
+                            {% if achievement_name|lower == "participated" %}
+
+                                <span class="badge achievement-participated">
+
+                                    🏅 Participated
+
+                                </span>
+
+
+                            {% elif achievement_name|lower == "winner" %}
+
+                                <span class="badge achievement-winner">
+
+                                    🥇 Winner
+
+                                </span>
+
+
+                            {% elif achievement_name|lower == "runner up" %}
+
+                                <span class="badge achievement-runner">
+
+                                    🥈 Runner Up
+
+                                </span>
+
+
+                            {% elif achievement_name|lower == "runner" %}
+
+                                <span class="badge achievement-runner">
+
+                                    🥈 Runner
+
+                                </span>
+
+
+                            {% else %}
+
+                                <span class="badge achievement-other">
+
+                                    📜 {{ achievement_name }}
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+                            {{ achievement[1] }}
+                        </td>
+
+                    </tr>
+
+
+                    {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="2"
+                            style="text-align:center;">
+
+                            No achievement data found.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
 
                 </tbody>
 
@@ -1358,7 +1536,6 @@
 
     <div class="footer">
 
-
         <div class="footer-left">
 
             <h3>
@@ -1386,7 +1563,6 @@
             </p>
 
         </div>
-
 
     </div>
 
@@ -1477,11 +1653,6 @@ function downloadReports() {
         searchBox.value.trim();
 
 
-    /* ================================================
-       EMPTY SEARCH
-       DOWNLOAD ALL
-    ================================================= */
-
     if (searchText === "") {
 
         window.location.href =
@@ -1490,11 +1661,6 @@ function downloadReports() {
         return;
     }
 
-
-    /* ================================================
-       SEARCH ENTERED
-       DOWNLOAD MATCHING CERTIFICATES
-    ================================================= */
 
     window.location.href =
         "/export_zip?search=" +

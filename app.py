@@ -1351,11 +1351,9 @@ def tutor():
     print("SECTION       :", section)
     print("====================================")
 
-
     # =========================================================
     # COMMON STUDENT FILTER
     #
-    # IMPORTANT:
     # Section is NOT used.
     #
     # Year = None
@@ -1366,11 +1364,6 @@ def tutor():
     # =========================================================
 
     if not class_year:
-
-        # -----------------------------------------
-        # YEAR = NONE
-        # Show ALL students in department
-        # -----------------------------------------
 
         student_where = """
             TRIM(UPPER(students.department))
@@ -1383,11 +1376,6 @@ def tutor():
         )
 
     else:
-
-        # -----------------------------------------
-        # SPECIFIC YEAR
-        # Section completely ignored
-        # -----------------------------------------
 
         student_where = """
             TRIM(UPPER(students.department))
@@ -1406,12 +1394,10 @@ def tutor():
             class_year
         )
 
-
     print("------------------------------------")
     print("STUDENT WHERE :", student_where)
     print("STUDENT PARAMS:", student_params)
     print("------------------------------------")
-
 
     # =========================================================
     # DASHBOARD - TOTAL STUDENTS
@@ -1424,7 +1410,6 @@ def tutor():
     """, student_params)
 
     total_students = cursor.fetchone()[0]
-
 
     # =========================================================
     # DASHBOARD - TOTAL CERTIFICATES
@@ -1441,7 +1426,6 @@ def tutor():
     """, student_params)
 
     total_certificates = cursor.fetchone()[0]
-
 
     # =========================================================
     # STUDENT LIST
@@ -1464,9 +1448,10 @@ def tutor():
 
     students = cursor.fetchall()
 
-
     # =========================================================
     # CERTIFICATE LIST
+    #
+    # PARTICIPATE ADDED
     # =========================================================
 
     cursor.execute(f"""
@@ -1477,6 +1462,7 @@ def tutor():
             certificates.certificate_title,
             certificate_categories.category_name,
             certificates.achievement,
+            certificates.participate,
             students.profile_photo,
             certificates.upload_date,
             certificates.certificate_file
@@ -1497,12 +1483,10 @@ def tutor():
 
     certificates = cursor.fetchall()
 
-
     # =========================================================
     # STUDENT SEARCH + CHART DATA
     # =========================================================
 
-    # Student name -> Register number
     student_lookup = {
         str(student[0]).strip().lower(): student[1]
         for student in students
@@ -1531,10 +1515,11 @@ def tutor():
 
             "category": row[4] if row[4] else "Others",
 
-            "achievement": row[5] if row[5] else "Others"
+            "achievement": row[5] if row[5] else "Others",
+
+            "participate": row[6] if row[6] else "No"
 
         })
-
 
     # =========================================================
     # STUDENT-WISE CERTIFICATE COUNT
@@ -1567,13 +1552,11 @@ def tutor():
 
     student_certificate_counts = cursor.fetchall()
 
-
     # =========================================================
     # TOP STUDENTS
     # =========================================================
 
     top_students = student_certificate_counts[:10]
-
 
     # =========================================================
     # CERTIFICATE CATEGORY DISTRIBUTION
@@ -1606,7 +1589,6 @@ def tutor():
 
     category_report = cursor.fetchall()
 
-
     # =========================================================
     # ACHIEVEMENT TYPE DISTRIBUTION
     # =========================================================
@@ -1633,6 +1615,31 @@ def tutor():
 
     achievement_report = cursor.fetchall()
 
+    # =========================================================
+    # PARTICIPATE DISTRIBUTION
+    # =========================================================
+
+    cursor.execute(f"""
+        SELECT
+            certificates.participate,
+            COUNT(certificates.certificate_id)
+
+        FROM certificates
+
+        INNER JOIN students
+            ON certificates.student_id =
+               students.student_id
+
+        WHERE {student_where}
+
+        GROUP BY
+            certificates.participate
+
+        ORDER BY
+            COUNT(certificates.certificate_id) DESC
+    """, student_params)
+
+    participate_report = cursor.fetchall()
 
     # =========================================================
     # STUDENT + CATEGORY REPORT
@@ -1668,7 +1675,6 @@ def tutor():
 
     student_category_report = cursor.fetchall()
 
-
     # =========================================================
     # STUDENT + ACHIEVEMENT REPORT
     # =========================================================
@@ -1698,6 +1704,34 @@ def tutor():
 
     student_achievement_report = cursor.fetchall()
 
+    # =========================================================
+    # STUDENT + PARTICIPATE REPORT
+    # =========================================================
+
+    cursor.execute(f"""
+        SELECT
+            students.student_name,
+            certificates.participate,
+            COUNT(certificates.certificate_id)
+
+        FROM certificates
+
+        INNER JOIN students
+            ON certificates.student_id =
+               students.student_id
+
+        WHERE {student_where}
+
+        GROUP BY
+            students.student_id,
+            students.student_name,
+            certificates.participate
+
+        ORDER BY
+            students.student_name ASC
+    """, student_params)
+
+    student_participate_report = cursor.fetchall()
 
     # =========================================================
     # DEBUG INFORMATION
@@ -1712,22 +1746,29 @@ def tutor():
     print("TOTAL CERTIFICATES  :", total_certificates)
     print("STUDENTS FOUND      :", len(students))
     print("CERTIFICATES FOUND  :", len(certificates))
+
     print(
         "STUDENT CERTIFICATE COUNTS:",
         student_certificate_counts
     )
+
     print("CATEGORY REPORT:", category_report)
     print("ACHIEVEMENT REPORT:", achievement_report)
+    print("PARTICIPATE REPORT:", participate_report)
     print("STUDENT CHART DATA:", student_chart_data)
-    print("====================================")
 
+    print(
+        "STUDENT PARTICIPATE REPORT:",
+        student_participate_report
+    )
+
+    print("====================================")
 
     # =========================================================
     # CLOSE CURSOR
     # =========================================================
 
     cursor.close()
-
 
     # =========================================================
     # RENDER TUTOR DASHBOARD
@@ -1736,37 +1777,22 @@ def tutor():
     return render_template(
         "tutor/dashboard.html",
 
-        # -----------------------------------------------------
         # Tutor Details
-        # -----------------------------------------------------
-
         tutor=tutor,
         tutor_name=tutor_name,
         department=department,
         class_year=class_year,
         section=section,
 
-
-        # -----------------------------------------------------
         # Dashboard
-        # -----------------------------------------------------
-
         total_students=total_students,
         total_certificates=total_certificates,
 
-
-        # -----------------------------------------------------
         # Student / Certificate Lists
-        # -----------------------------------------------------
-
         students=students,
         certificates=certificates,
 
-
-        # -----------------------------------------------------
         # Graph / Report Data
-        # -----------------------------------------------------
-
         top_students=top_students,
 
         student_certificate_counts=
@@ -1778,17 +1804,19 @@ def tutor():
         achievement_report=
             achievement_report,
 
+        participate_report=
+            participate_report,
+
         student_category_report=
             student_category_report,
 
         student_achievement_report=
             student_achievement_report,
 
+        student_participate_report=
+            student_participate_report,
 
-        # -----------------------------------------------------
         # Student Search + Charts
-        # -----------------------------------------------------
-
         student_chart_data=
             student_chart_data
     )
@@ -1916,9 +1944,6 @@ def tutor_reports():
 
     if class_year is None or section is None:
 
-        # No year / section
-        # Count all students from tutor department
-
         cursor.execute("""
             SELECT COUNT(*)
             FROM students
@@ -1926,8 +1951,6 @@ def tutor_reports():
         """, (department,))
 
     else:
-
-        # Year + section assigned
 
         cursor.execute("""
             SELECT COUNT(*)
@@ -1946,31 +1969,21 @@ def tutor_reports():
 
     if class_year is None or section is None:
 
-        # All certificates from department
-
         cursor.execute("""
             SELECT COUNT(*)
             FROM certificates
-
             INNER JOIN students
-                ON certificates.student_id =
-                   students.student_id
-
+                ON certificates.student_id = students.student_id
             WHERE students.department=%s
         """, (department,))
 
     else:
 
-        # Certificates from assigned year + section
-
         cursor.execute("""
             SELECT COUNT(*)
             FROM certificates
-
             INNER JOIN students
-                ON certificates.student_id =
-                   students.student_id
-
+                ON certificates.student_id = students.student_id
             WHERE students.department=%s
             AND students.year=%s
             AND students.section=%s
@@ -1990,9 +2003,7 @@ def tutor_reports():
                 department,
                 COUNT(*)
             FROM students
-
             WHERE department=%s
-
             GROUP BY department
         """, (department,))
 
@@ -2003,11 +2014,9 @@ def tutor_reports():
                 department,
                 COUNT(*)
             FROM students
-
             WHERE department=%s
             AND year=%s
             AND section=%s
-
             GROUP BY department
         """, (department, class_year, section))
 
@@ -2020,16 +2029,12 @@ def tutor_reports():
 
     if class_year is None or section is None:
 
-        # Show year-wise students from department
-
         cursor.execute("""
             SELECT
                 year,
                 COUNT(*)
             FROM students
-
             WHERE department=%s
-
             GROUP BY year
             ORDER BY year
         """, (department,))
@@ -2041,11 +2046,9 @@ def tutor_reports():
                 year,
                 COUNT(*)
             FROM students
-
             WHERE department=%s
             AND year=%s
             AND section=%s
-
             GROUP BY year
             ORDER BY year
         """, (department, class_year, section))
@@ -2055,11 +2058,21 @@ def tutor_reports():
 
     # =========================================================
     # Certificate Report
+    #
+    # IMPORTANT COLUMN ORDER:
+    #
+    # 0 = Student Name
+    # 1 = Department
+    # 2 = Year
+    # 3 = Certificate Title
+    # 4 = Category
+    # 5 = Achievement
+    # 6 = Participation
+    # 7 = Certificate File
+    # 8 = Upload Date
     # =========================================================
 
     if class_year is None or section is None:
-
-        # ALL certificates from tutor department
 
         cursor.execute("""
             SELECT
@@ -2069,6 +2082,7 @@ def tutor_reports():
                 certificates.certificate_title,
                 certificate_categories.category_name,
                 certificates.achievement,
+                certificates.participation,
                 certificates.certificate_file,
                 certificates.upload_date
 
@@ -2089,8 +2103,6 @@ def tutor_reports():
 
     else:
 
-        # Certificates from tutor's year + section
-
         cursor.execute("""
             SELECT
                 students.student_name,
@@ -2099,6 +2111,7 @@ def tutor_reports():
                 certificates.certificate_title,
                 certificate_categories.category_name,
                 certificates.achievement,
+                certificates.participation,
                 certificates.certificate_file,
                 certificates.upload_date
 
@@ -2123,6 +2136,104 @@ def tutor_reports():
 
 
     # =========================================================
+    # Achievement Report
+    # =========================================================
+
+    if class_year is None or section is None:
+
+        cursor.execute("""
+            SELECT
+                COALESCE(certificates.achievement, 'Not Specified'),
+                COUNT(*)
+
+            FROM certificates
+
+            INNER JOIN students
+                ON certificates.student_id =
+                   students.student_id
+
+            WHERE students.department=%s
+
+            GROUP BY certificates.achievement
+
+            ORDER BY COUNT(*) DESC
+        """, (department,))
+
+    else:
+
+        cursor.execute("""
+            SELECT
+                COALESCE(certificates.achievement, 'Not Specified'),
+                COUNT(*)
+
+            FROM certificates
+
+            INNER JOIN students
+                ON certificates.student_id =
+                   students.student_id
+
+            WHERE students.department=%s
+            AND students.year=%s
+            AND students.section=%s
+
+            GROUP BY certificates.achievement
+
+            ORDER BY COUNT(*) DESC
+        """, (department, class_year, section))
+
+    achievement_report = cursor.fetchall()
+
+
+    # =========================================================
+    # Participation Report
+    # =========================================================
+
+    if class_year is None or section is None:
+
+        cursor.execute("""
+            SELECT
+                COALESCE(certificates.participation, 'Not Specified'),
+                COUNT(*)
+
+            FROM certificates
+
+            INNER JOIN students
+                ON certificates.student_id =
+                   students.student_id
+
+            WHERE students.department=%s
+
+            GROUP BY certificates.participation
+
+            ORDER BY COUNT(*) DESC
+        """, (department,))
+
+    else:
+
+        cursor.execute("""
+            SELECT
+                COALESCE(certificates.participation, 'Not Specified'),
+                COUNT(*)
+
+            FROM certificates
+
+            INNER JOIN students
+                ON certificates.student_id =
+                   students.student_id
+
+            WHERE students.department=%s
+            AND students.year=%s
+            AND students.section=%s
+
+            GROUP BY certificates.participation
+
+            ORDER BY COUNT(*) DESC
+        """, (department, class_year, section))
+
+    participation_report = cursor.fetchall()
+
+
+    # =========================================================
     # Debug
     # =========================================================
 
@@ -2135,6 +2246,8 @@ def tutor_reports():
     print("TOTAL STUDENTS:", total_students)
     print("TOTAL CERTIFICATES:", total_certificates)
     print("CERTIFICATE COUNT:", len(certificates))
+    print("ACHIEVEMENT REPORT:", achievement_report)
+    print("PARTICIPATION REPORT:", participation_report)
     print("========================================")
 
 
@@ -2142,7 +2255,7 @@ def tutor_reports():
 
 
     # =========================================================
-    # Send to Template
+    # Send To Template
     # =========================================================
 
     return render_template(
@@ -2152,7 +2265,9 @@ def tutor_reports():
         total_certificates=total_certificates,
         department_report=department_report,
         year_report=year_report,
-        certificates=certificates
+        certificates=certificates,
+        achievement_report=achievement_report,
+        participation_report=participation_report
     )
 #--------------------
 @app.route("/view_certificate/<filename>")
