@@ -1298,3693 +1298,3448 @@ def admin_export_zip():
 
 
 #------------------------------------
-@app.route("/tutor")
-def tutor():
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    cursor = mysql.connection.cursor()
-
-    # =========================================================
-    # TUTOR DETAILS
-    # =========================================================
-
-    cursor.execute("""
-        SELECT
-            tutor_name,
-            department,
-            class_year,
-            section,
-            profile_photo
-        FROM tutors
-        WHERE user_id=%s
-    """, (session["user_id"],))
-
-    tutor = cursor.fetchone()
-
-    if not tutor:
-        cursor.close()
-        flash("Tutor not assigned.")
-        return redirect("/logout")
-
-    tutor_name = tutor[0]
-    department = tutor[1]
-    class_year = tutor[2]
-    section = tutor[3]
-
-    # =========================================================
-    # CLEAN TUTOR VALUES
-    # =========================================================
-
-    if department:
-        department = str(department).strip()
-
-    if class_year:
-        class_year = str(class_year).strip()
-
-    if section:
-        section = str(section).strip()
-
-    print("====================================")
-    print("LOGIN USER ID :", session["user_id"])
-    print("TUTOR DATA    :", tutor)
-    print("DEPARTMENT    :", department)
-    print("CLASS YEAR    :", class_year)
-    print("SECTION       :", section)
-    print("====================================")
-
-    # =========================================================
-    # COMMON STUDENT FILTER
-    #
-    # Section is NOT used.
-    #
-    # No class year
-    #   -> All students from department
-    #
-    # Class year assigned
-    #   -> Department + year
-    # =========================================================
-
-    if not class_year:
-
-        student_where = """
-            TRIM(UPPER(students.department))
-            =
-            TRIM(UPPER(%s))
-        """
-
-        student_params = (
-            department,
-        )
-
-    else:
-
-        student_where = """
-            TRIM(UPPER(students.department))
-            =
-            TRIM(UPPER(%s))
-
-            AND
-
-            TRIM(UPPER(students.year))
-            =
-            TRIM(UPPER(%s))
-        """
-
-        student_params = (
-            department,
-            class_year
-        )
-
-    print("------------------------------------")
-    print("STUDENT WHERE :", student_where)
-    print("STUDENT PARAMS:", student_params)
-    print("------------------------------------")
-
-    # =========================================================
-    # TOTAL STUDENTS
-    # =========================================================
-
-    cursor.execute(f"""
-        SELECT COUNT(*)
-        FROM students
-        WHERE {student_where}
-    """, student_params)
-
-    total_students = cursor.fetchone()[0]
-
-    # =========================================================
-    # TOTAL CERTIFICATES
-    # =========================================================
-
-    cursor.execute(f"""
-        SELECT COUNT(*)
-        FROM certificates
-
-        INNER JOIN students
-            ON certificates.student_id =
-               students.student_id
-
-        WHERE {student_where}
-    """, student_params)
-
-    total_certificates = cursor.fetchone()[0]
-
-    # =========================================================
-    # STUDENT LIST
-    # =========================================================
-
-    cursor.execute(f"""
-        SELECT
-            students.student_name,
-            students.register_no,
-            students.department,
-            students.year,
-            students.email
-
-        FROM students
-
-        WHERE {student_where}
-
-        ORDER BY students.student_name ASC
-    """, student_params)
-
-    students = cursor.fetchall()
-
-    # =========================================================
-    # CERTIFICATE LIST
-    #
-    # IMPORTANT:
-    # participation column removed because
-    # it does NOT exist in database.
-    # =========================================================
-
-    cursor.execute(f"""
-        SELECT
-            students.student_name,
-            students.department,
-            students.year,
-            certificates.certificate_title,
-            certificate_categories.category_name,
-            certificates.achievement,
-            students.profile_photo,
-            certificates.upload_date,
-            certificates.certificate_file
-
-        FROM certificates
-
-        INNER JOIN students
-            ON certificates.student_id =
-               students.student_id
-
-        INNER JOIN certificate_categories
-            ON certificates.category_id =
-               certificate_categories.category_id
-
-        WHERE {student_where}
-
-        ORDER BY certificates.upload_date DESC
-    """, student_params)
-
-    certificates = cursor.fetchall()
-
-    # =========================================================
-    # STUDENT SEARCH + CHART DATA
-    # =========================================================
-
-    student_lookup = {
-        str(student[0]).strip().lower(): student[1]
-        for student in students
-    }
-
-    student_chart_data = []
-
-    for row in certificates:
-
-        student_name = row[0] if row[0] else ""
-
-        student_chart_data.append({
-
-            "name": student_name,
-
-            "register_no": student_lookup.get(
-                str(student_name).strip().lower(),
-                ""
-            ),
-
-            "department": row[1] if row[1] else "",
-
-            "year": row[2] if row[2] else "",
-
-            "certificate": row[3] if row[3] else "",
-
-            "category": row[4] if row[4] else "Others",
-
-            "achievement": row[5] if row[5] else "Others"
-
-        })
-
-    # =========================================================
-    # STUDENT-WISE CERTIFICATE COUNT
-    # =========================================================
-
-    cursor.execute(f"""
-        SELECT
-            students.student_name,
-            students.register_no,
-            students.department,
-            COUNT(certificates.student_id)
-                AS total_certificates
-
-        FROM students
-
-        LEFT JOIN certificates
-            ON students.student_id =
-               certificates.student_id
-
-        WHERE {student_where}
-
-        GROUP BY
-            students.student_id,
-            students.student_name,
-            students.register_no,
-            students.department
-
-        ORDER BY
-            total_certificates DESC
-    """, student_params)
-
-    student_certificate_counts = cursor.fetchall()
-
-    # =========================================================
-    # TOP STUDENTS
-    # =========================================================
-
-    top_students = student_certificate_counts[:10]
-
-    # =========================================================
-    # CERTIFICATE CATEGORY DISTRIBUTION
-    # =========================================================
-
-    cursor.execute(f"""
-        SELECT
-            certificate_categories.category_name,
-            COUNT(certificates.certificate_id)
-
-        FROM certificates
-
-        INNER JOIN students
-            ON certificates.student_id =
-               students.student_id
-
-        INNER JOIN certificate_categories
-            ON certificates.category_id =
-               certificate_categories.category_id
-
-        WHERE {student_where}
-
-        GROUP BY
-            certificate_categories.category_id,
-            certificate_categories.category_name
-
-        ORDER BY
-            COUNT(certificates.certificate_id) DESC
-    """, student_params)
-
-    category_report = cursor.fetchall()
-
-    # =========================================================
-    # ACHIEVEMENT TYPE DISTRIBUTION
-    # =========================================================
-
-    cursor.execute(f"""
-        SELECT
-            certificates.achievement,
-            COUNT(certificates.certificate_id)
-
-        FROM certificates
-
-        INNER JOIN students
-            ON certificates.student_id =
-               students.student_id
-
-        WHERE {student_where}
-
-        GROUP BY
-            certificates.achievement
-
-        ORDER BY
-            COUNT(certificates.certificate_id) DESC
-    """, student_params)
-
-    achievement_report = cursor.fetchall()
-
-    # =========================================================
-    # STUDENT + CATEGORY REPORT
-    # =========================================================
-
-    cursor.execute(f"""
-        SELECT
-            students.student_name,
-            certificate_categories.category_name,
-            COUNT(certificates.certificate_id)
-
-        FROM certificates
-
-        INNER JOIN students
-            ON certificates.student_id =
-               students.student_id
-
-        INNER JOIN certificate_categories
-            ON certificates.category_id =
-               certificate_categories.category_id
-
-        WHERE {student_where}
-
-        GROUP BY
-            students.student_id,
-            students.student_name,
-            certificate_categories.category_id,
-            certificate_categories.category_name
-
-        ORDER BY
-            students.student_name ASC
-    """, student_params)
-
-    student_category_report = cursor.fetchall()
-
-    # =========================================================
-    # STUDENT + ACHIEVEMENT REPORT
-    # =========================================================
-
-    cursor.execute(f"""
-        SELECT
-            students.student_name,
-            certificates.achievement,
-            COUNT(certificates.certificate_id)
-
-        FROM certificates
-
-        INNER JOIN students
-            ON certificates.student_id =
-               students.student_id
-
-        WHERE {student_where}
-
-        GROUP BY
-            students.student_id,
-            students.student_name,
-            certificates.achievement
-
-        ORDER BY
-            students.student_name ASC
-    """, student_params)
-
-    student_achievement_report = cursor.fetchall()
-
-    # =========================================================
-    # PARTICIPATION REPORT
-    #
-    # Database-ல் participation column இல்லாததால்
-    # empty list அனுப்புகிறோம்.
-    #
-    # Template-ல் variable இருந்தாலும் error வராது.
-    # =========================================================
-
-    participation_report = []
-
-    student_participation_report = []
-
-    # =========================================================
-    # DEBUG INFORMATION
-    # =========================================================
-
-    print("====================================")
-    print("TUTOR NAME          :", tutor_name)
-    print("DEPARTMENT          :", department)
-    print("CLASS YEAR          :", class_year)
-    print("SECTION             :", section)
-    print("TOTAL STUDENTS      :", total_students)
-    print("TOTAL CERTIFICATES  :", total_certificates)
-    print("STUDENTS FOUND      :", len(students))
-    print("CERTIFICATES FOUND  :", len(certificates))
-
-    print(
-        "STUDENT CERTIFICATE COUNTS:",
-        student_certificate_counts
-    )
-
-    print(
-        "CATEGORY REPORT:",
-        category_report
-    )
-
-    print(
-        "ACHIEVEMENT REPORT:",
-        achievement_report
-    )
-
-    print(
-        "STUDENT CHART DATA:",
-        student_chart_data
-    )
-
-    print("====================================")
-
-    # =========================================================
-    # CLOSE CURSOR
-    # =========================================================
-
-    cursor.close()
-
-    # =========================================================
-    # RENDER TUTOR DASHBOARD
-    # =========================================================
-
-    return render_template(
-        "tutor/dashboard.html",
-
-        # Tutor Details
-        tutor=tutor,
-        tutor_name=tutor_name,
-        department=department,
-        class_year=class_year,
-        section=section,
-
-        # Dashboard
-        total_students=total_students,
-        total_certificates=total_certificates,
-
-        # Student / Certificate Lists
-        students=students,
-        certificates=certificates,
-
-        # Graph / Report Data
-        top_students=top_students,
-
-        student_certificate_counts=
-            student_certificate_counts,
-
-        category_report=
-            category_report,
-
-        achievement_report=
-            achievement_report,
-
-        participation_report=
-            participation_report,
-
-        student_category_report=
-            student_category_report,
-
-        student_achievement_report=
-            student_achievement_report,
-
-        student_participation_report=
-            student_participation_report,
-
-        # Student Search + Charts
-        student_chart_data=
-            student_chart_data
-    )
-#=====================================================
-    
-
-@app.route("/tutor_profile")
-def tutor_profile():
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    cursor = mysql.connection.cursor()
-
-    cursor.execute("""
-        SELECT
-            tutors.tutor_id,
-            tutors.tutor_name,
-            tutors.department,
-            tutors.class_year,
-            tutors.section,
-            tutors.email,
-            tutors.phone,
-            users.username,
-            tutors.profile_photo
-
-        FROM tutors
-
-        INNER JOIN users
-            ON tutors.user_id = users.id
-
-        WHERE users.id=%s
-    """, (session["user_id"],))
-
-    tutor = cursor.fetchone()
-
-    cursor.close()
-
-    return render_template(
-        "tutor/profile.html",
-        tutor=tutor
-    )
-
-@app.route("/update_tutor_profile", methods=["POST"])
-def update_tutor_profile():
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    name = request.form["name"]
-    email = request.form["email"]
-    phone = request.form["phone"]
-    class_year = request.form["class_year"]
-    section = request.form["section"]
-
-    cursor = mysql.connection.cursor()
-
-    cursor.execute("""
-        UPDATE tutors
-        SET
-            tutor_name=%s,
-            class_year=%s,
-            section=%s,
-            email=%s,
-            phone=%s
-        WHERE user_id=%s
-    """, (
-        name,
-        class_year,
-        section,
-        email,
-        phone,
-        session["user_id"]
-    ))
-
-    mysql.connection.commit()
-
-    cursor.close()
-
-    flash("Profile Updated Successfully")
-
-    return redirect("/tutor_profile")
-
-#---------------------------
-#       report
-#----------------------------
-@app.route("/tutor_reports")
-def tutor_reports():
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    cursor = mysql.connection.cursor()
-
-    # =========================================================
-    # Tutor Details
-    # =========================================================
-
-    cursor.execute("""
-        SELECT
-            tutor_name,
-            department,
-            class_year,
-            section,
-            profile_photo
-        FROM tutors
-        WHERE user_id=%s
-    """, (session["user_id"],))
-
-    tutor = cursor.fetchone()
-
-    if not tutor:
-        cursor.close()
-        return redirect("/tutor")
-
-    tutor_name = tutor[0]
-    department = tutor[1]
-    class_year = tutor[2]
-    section = tutor[3]
-
-
-    # =========================================================
-    # Total Students
-    # =========================================================
-
-    if class_year is None or section is None:
-
-        cursor.execute("""
-            SELECT COUNT(*)
-            FROM students
-            WHERE department=%s
-        """, (department,))
-
-    else:
-
-        cursor.execute("""
-            SELECT COUNT(*)
-            FROM students
-            WHERE department=%s
-            AND year=%s
-            AND section=%s
-        """, (department, class_year, section))
-
-    total_students = cursor.fetchone()[0]
-
-
-    # =========================================================
-    # Total Certificates
-    # =========================================================
-
-    if class_year is None or section is None:
-
-        cursor.execute("""
-            SELECT COUNT(*)
-            FROM certificates
-            INNER JOIN students
-                ON certificates.student_id = students.student_id
-            WHERE students.department=%s
-        """, (department,))
-
-    else:
-
-        cursor.execute("""
-            SELECT COUNT(*)
-            FROM certificates
-            INNER JOIN students
-                ON certificates.student_id = students.student_id
-            WHERE students.department=%s
-            AND students.year=%s
-            AND students.section=%s
-        """, (department, class_year, section))
-
-    total_certificates = cursor.fetchone()[0]
-
-
-    # =========================================================
-    # Department Report
-    # =========================================================
-
-    if class_year is None or section is None:
-
-        cursor.execute("""
-            SELECT
-                department,
-                COUNT(*)
-            FROM students
-            WHERE department=%s
-            GROUP BY department
-        """, (department,))
-
-    else:
-
-        cursor.execute("""
-            SELECT
-                department,
-                COUNT(*)
-            FROM students
-            WHERE department=%s
-            AND year=%s
-            AND section=%s
-            GROUP BY department
-        """, (department, class_year, section))
-
-    department_report = cursor.fetchall()
-
-
-    # =========================================================
-    # Year Report
-    # =========================================================
-
-    if class_year is None or section is None:
-
-        cursor.execute("""
-            SELECT
-                year,
-                COUNT(*)
-            FROM students
-            WHERE department=%s
-            GROUP BY year
-            ORDER BY year
-        """, (department,))
-
-    else:
-
-        cursor.execute("""
-            SELECT
-                year,
-                COUNT(*)
-            FROM students
-            WHERE department=%s
-            AND year=%s
-            AND section=%s
-            GROUP BY year
-            ORDER BY year
-        """, (department, class_year, section))
-
-    year_report = cursor.fetchall()
-
-
-    # =========================================================
-    # Certificate Report
-    #
-    # IMPORTANT COLUMN ORDER:
-    #
-    # 0 = Student Name
-    # 1 = Department
-    # 2 = Year
-    # 3 = Certificate Title
-    # 4 = Category
-    # 5 = Achievement
-    # 6 = Participation
-    # 7 = Certificate File
-    # 8 = Upload Date
-    # =========================================================
-
-    if class_year is None or section is None:
-
-        cursor.execute("""
-            SELECT
-                students.student_name,
-                students.department,
-                students.year,
-                certificates.certificate_title,
-                certificate_categories.category_name,
-                certificates.achievement,
-                certificates.participation,
-                certificates.certificate_file,
-                certificates.upload_date
-
-            FROM certificates
-
-            INNER JOIN students
-                ON certificates.student_id =
-                   students.student_id
-
-            INNER JOIN certificate_categories
-                ON certificates.category_id =
-                   certificate_categories.category_id
-
-            WHERE students.department=%s
-
-            ORDER BY certificates.upload_date DESC
-        """, (department,))
-
-    else:
-
-        cursor.execute("""
-            SELECT
-                students.student_name,
-                students.department,
-                students.year,
-                certificates.certificate_title,
-                certificate_categories.category_name,
-                certificates.achievement,
-                certificates.participation,
-                certificates.certificate_file,
-                certificates.upload_date
-
-            FROM certificates
-
-            INNER JOIN students
-                ON certificates.student_id =
-                   students.student_id
-
-            INNER JOIN certificate_categories
-                ON certificates.category_id =
-                   certificate_categories.category_id
-
-            WHERE students.department=%s
-            AND students.year=%s
-            AND students.section=%s
-
-            ORDER BY certificates.upload_date DESC
-        """, (department, class_year, section))
-
-    certificates = cursor.fetchall()
-
-
-    # =========================================================
-    # Achievement Report
-    # =========================================================
-
-    if class_year is None or section is None:
-
-        cursor.execute("""
-            SELECT
-                COALESCE(certificates.achievement, 'Not Specified'),
-                COUNT(*)
-
-            FROM certificates
-
-            INNER JOIN students
-                ON certificates.student_id =
-                   students.student_id
-
-            WHERE students.department=%s
-
-            GROUP BY certificates.achievement
-
-            ORDER BY COUNT(*) DESC
-        """, (department,))
-
-    else:
-
-        cursor.execute("""
-            SELECT
-                COALESCE(certificates.achievement, 'Not Specified'),
-                COUNT(*)
-
-            FROM certificates
-
-            INNER JOIN students
-                ON certificates.student_id =
-                   students.student_id
-
-            WHERE students.department=%s
-            AND students.year=%s
-            AND students.section=%s
-
-            GROUP BY certificates.achievement
-
-            ORDER BY COUNT(*) DESC
-        """, (department, class_year, section))
-
-    achievement_report = cursor.fetchall()
-
-
-    # =========================================================
-    # Participation Report
-    # =========================================================
-
-    if class_year is None or section is None:
-
-        cursor.execute("""
-            SELECT
-                COALESCE(certificates.participation, 'Not Specified'),
-                COUNT(*)
-
-            FROM certificates
-
-            INNER JOIN students
-                ON certificates.student_id =
-                   students.student_id
-
-            WHERE students.department=%s
-
-            GROUP BY certificates.participation
-
-            ORDER BY COUNT(*) DESC
-        """, (department,))
-
-    else:
-
-        cursor.execute("""
-            SELECT
-                COALESCE(certificates.participation, 'Not Specified'),
-                COUNT(*)
-
-            FROM certificates
-
-            INNER JOIN students
-                ON certificates.student_id =
-                   students.student_id
-
-            WHERE students.department=%s
-            AND students.year=%s
-            AND students.section=%s
-
-            GROUP BY certificates.participation
-
-            ORDER BY COUNT(*) DESC
-        """, (department, class_year, section))
-
-    participation_report = cursor.fetchall()
-
-
-    # =========================================================
-    # Debug
-    # =========================================================
-
-    print("========================================")
-    print("TUTOR REPORT")
-    print("TUTOR:", tutor_name)
-    print("DEPARTMENT:", department)
-    print("CLASS YEAR:", class_year)
-    print("SECTION:", section)
-    print("TOTAL STUDENTS:", total_students)
-    print("TOTAL CERTIFICATES:", total_certificates)
-    print("CERTIFICATE COUNT:", len(certificates))
-    print("ACHIEVEMENT REPORT:", achievement_report)
-    print("PARTICIPATION REPORT:", participation_report)
-    print("========================================")
-
-
-    cursor.close()
-
-
-    # =========================================================
-    # Send To Template
-    # =========================================================
-
-    return render_template(
-        "tutor/report.html",
-        tutor=tutor,
-        total_students=total_students,
-        total_certificates=total_certificates,
-        department_report=department_report,
-        year_report=year_report,
-        certificates=certificates,
-        achievement_report=achievement_report,
-        participation_report=participation_report
-    )
-#--------------------
-@app.route("/view_certificate/<filename>")
-def view_certificate(filename):
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    cert_folder = os.path.join(
-        app.root_path,
-        "static",
-        "uploads",
-        "certificates"
-    )
-
-    file_path = os.path.join(cert_folder, filename)
-
-    if not os.path.isfile(file_path):
-        return "Certificate file not found", 404
-
-    return send_file(
-        file_path,
-        as_attachment=False
-    )
-#-------------------------------------
-
-@app.route("/tutor_export_excel")
-def tutor_export_excel():
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    cursor = mysql.connection.cursor()
-
-    # ==========================
-    # GET TUTOR DETAILS
-    # ==========================
-
-    cursor.execute("""
-        SELECT
-            tutor_name,
-            department,
-            class_year,
-            section
-        FROM tutors
-        WHERE user_id=%s
-    """, (session["user_id"],))
-
-    tutor = cursor.fetchone()
-
-    if not tutor:
-        cursor.close()
-        flash("Tutor not assigned.")
-        return redirect("/tutor")
-
-    tutor_name = tutor[0]
-    department = tutor[1]
-    class_year = tutor[2]
-    section = tutor[3]
-
-    # ==========================
-    # GET CERTIFICATE RECORDS
-    # ==========================
-
-    if class_year is not None and section is not None:
-
-        cursor.execute("""
-            SELECT
-                students.register_no,
-                students.student_name,
-                students.department,
-                students.year,
-                students.section,
-                certificates.certificate_title,
-                certificate_categories.category_name,
-                certificates.achievement,
-                certificates.upload_date
-
-            FROM certificates
-
-            INNER JOIN students
-                ON certificates.student_id = students.student_id
-
-            LEFT JOIN certificate_categories
-                ON certificates.category_id = certificate_categories.category_id
-
-            WHERE students.year=%s
-            AND students.section=%s
-
-            ORDER BY students.student_name
-        """, (class_year, section))
-
-    else:
-
-        cursor.execute("""
-            SELECT
-                students.register_no,
-                students.student_name,
-                students.department,
-                students.year,
-                students.section,
-                certificates.certificate_title,
-                certificate_categories.category_name,
-                certificates.achievement,
-                certificates.upload_date
-
-            FROM certificates
-
-            INNER JOIN students
-                ON certificates.student_id = students.student_id
-
-            LEFT JOIN certificate_categories
-                ON certificates.category_id = certificate_categories.category_id
-
-            WHERE students.department=%s
-
-            ORDER BY students.student_name
-        """, (department,))
-
-    records = cursor.fetchall()
-
-    print("Tutor:", tutor_name)
-    print("Department:", department)
-    print("Class Year:", class_year)
-    print("Section:", section)
-    print("Total Records:", len(records))
-
-    cursor.close()
-
-    # ==========================
-    # CREATE EXCEL
-    # ==========================
-
-    workbook = Workbook()
-
-    sheet = workbook.active
-    sheet.title = "Tutor Report"
-
-    headers = [
-        "Register No",
-        "Student Name",
-        "Department",
-        "Year",
-        "Section",
-        "Certificate",
-        "Category",
-        "Achievement",
-        "Upload Date"
-    ]
-
-    sheet.append(headers)
-
-    for row in records:
-
-        upload_date = row[8]
-
-        if upload_date:
-            upload_date = upload_date.strftime("%d-%m-%Y")
-
-        sheet.append([
-            row[0],
-            row[1],
-            row[2],
-            row[3],
-            row[4],
-            row[5],
-            row[6],
-            row[7],
-            upload_date
-        ])
-
-    output = BytesIO()
-
-    workbook.save(output)
-
-    output.seek(0)
-
-    return send_file(
-        output,
-        as_attachment=True,
-        download_name="Tutor_Report.xlsx",
-        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
-
-#--------------------------
-@app.route("/tutor_export_pdf")
-def tutor_export_pdf():
-
-    # ==============================
-    # TUTOR LOGIN CHECK
-    # ==============================
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-
-    cursor = mysql.connection.cursor()
-
-
-    # ==============================
-    # GET TUTOR DETAILS
-    # ==============================
-
-    cursor.execute("""
-        SELECT
-            tutor_name,
-            department,
-            class_year,
-            section
-        FROM tutors
-        WHERE user_id = %s
-    """, (session.get("user_id"),))
-
-    tutor = cursor.fetchone()
-
-
-    if not tutor:
-
-        cursor.close()
-
-        flash("Tutor details not found.")
-
-        return redirect("/tutor")
-
-
-    tutor_name = tutor[0]
-    department = tutor[1]
-    class_year = tutor[2]
-    section = tutor[3]
-
-
-    # ==============================
-    # GET CERTIFICATE RECORDS
-    # ==============================
-
-    # IMPORTANT:
-    # If class_year and section are available,
-    # filter using year + section.
-    #
-    # If they are NULL, use department
-    # temporarily so certificates are shown.
-
-    if class_year is not None and section is not None:
-
-        cursor.execute("""
-            SELECT
-                students.register_no,
-                students.student_name,
-                students.department,
-                students.year,
-                certificates.certificate_title,
-                certificate_categories.category_name,
-                certificates.achievement,
-                certificates.upload_date
-
-            FROM certificates
-
-            INNER JOIN students
-                ON certificates.student_id = students.student_id
-
-            LEFT JOIN certificate_categories
-                ON certificates.category_id =
-                   certificate_categories.category_id
-
-            WHERE students.year = %s
-              AND students.section = %s
-
-            ORDER BY certificates.upload_date DESC
-        """, (class_year, section))
-
-    else:
-
-        # ==========================================
-        # FALLBACK
-        # Tutor class_year / section is NULL
-        # So use tutor department
-        # ==========================================
-
-        cursor.execute("""
-            SELECT
-                students.register_no,
-                students.student_name,
-                students.department,
-                students.year,
-                certificates.certificate_title,
-                certificate_categories.category_name,
-                certificates.achievement,
-                certificates.upload_date
-
-            FROM certificates
-
-            INNER JOIN students
-                ON certificates.student_id = students.student_id
-
-            LEFT JOIN certificate_categories
-                ON certificates.category_id =
-                   certificate_categories.category_id
-
-            WHERE students.department = %s
-
-            ORDER BY certificates.upload_date DESC
-        """, (department,))
-
-
-    records = cursor.fetchall()
-
-
-    cursor.close()
-
-
-    # ==============================
-    # CREATE PDF
-    # ==============================
-
-    from io import BytesIO
-
-    from reportlab.pdfgen import canvas
-
-    from reportlab.lib.pagesizes import A4
-
-    from reportlab.lib import colors
-
-
-    buffer = BytesIO()
-
-
-    pdf = canvas.Canvas(
-        buffer,
-        pagesize=A4
-    )
-
-
-    width, height = A4
-
-
-    # ==============================
-    # TITLE
-    # ==============================
-
-    pdf.setTitle(
-        "Tutor Certificate Report"
-    )
-
-
-    pdf.setFont(
-        "Helvetica-Bold",
-        20
-    )
-
-    pdf.drawCentredString(
-        width / 2,
-        height - 50,
-        "STUDENT CERTIFICATE MANAGEMENT SYSTEM"
-    )
-
-
-    pdf.setFont(
-        "Helvetica-Bold",
-        16
-    )
-
-    pdf.drawCentredString(
-        width / 2,
-        height - 80,
-        "Tutor Certificate Report"
-    )
-
-
-    # ==============================
-    # TUTOR INFORMATION
-    # ==============================
-
-    y = height - 125
-
-
-    pdf.setFont(
-        "Helvetica",
-        11
-    )
-
-
-    pdf.drawString(
-        50,
-        y,
-        f"Tutor Name : {tutor_name}"
-    )
-
-    y -= 22
-
-
-    pdf.drawString(
-        50,
-        y,
-        f"Department : {department}"
-    )
-
-    y -= 22
-
-
-    pdf.drawString(
-        50,
-        y,
-        f"Class Year : {class_year if class_year else 'All'}"
-    )
-
-    y -= 22
-
-
-    pdf.drawString(
-        50,
-        y,
-        f"Section : {section if section else 'All'}"
-    )
-
-    y -= 35
-
-
-    # ==============================
-    # TOTAL RECORDS
-    # ==============================
-
-    pdf.setFont(
-        "Helvetica-Bold",
-        12
-    )
-
-
-    pdf.drawString(
-        50,
-        y,
-        f"Total Certificate Records : {len(records)}"
-    )
-
-
-    y -= 30
-
-
-    # ==============================
-    # TABLE HEADER
-    # ==============================
-
-    pdf.setFont(
-        "Helvetica-Bold",
-        8
-    )
-
-
-    columns = [
-        ("Reg No", 50),
-        ("Student", 110),
-        ("Department", 190),
-        ("Year", 275),
-        ("Certificate", 320),
-        ("Category", 405),
-        ("Achievement", 480),
-        ("Date", 555)
-    ]
-
-
-    for title, x in columns:
-
-        pdf.drawString(
-            x,
-            y,
-            title
-        )
-
-
-    y -= 8
-
-
-    pdf.line(
-        50,
-        y,
-        width - 40,
-        y
-    )
-
-
-    y -= 18
-
-
-    # ==============================
-    # CERTIFICATE RECORDS
-    # ==============================
-
-    pdf.setFont(
-        "Helvetica",
-        7
-    )
-
-
-    if records:
-
-        for record in records:
-
-            register_no = record[0]
-            student_name = record[1]
-            student_department = record[2]
-            student_year = record[3]
-            certificate_title = record[4]
-            category_name = record[5]
-            achievement = record[6]
-            upload_date = record[7]
-
-
-            # Format date
-
-            if upload_date:
-
-                try:
-
-                    date_text = upload_date.strftime(
-                        "%d-%m-%Y"
-                    )
-
-                except:
-
-                    date_text = str(upload_date)
-
-            else:
-
-                date_text = "-"
-
-
-            # Convert values safely
-
-            register_no = str(
-                register_no or "-"
-            )
-
-            student_name = str(
-                student_name or "-"
-            )
-
-            student_department = str(
-                student_department or "-"
-            )
-
-            student_year = str(
-                student_year or "-"
-            )
-
-            certificate_title = str(
-                certificate_title or "-"
-            )
-
-            category_name = str(
-                category_name or "-"
-            )
-
-            achievement = str(
-                achievement or "-"
-            )
-
-
-            # Draw row
-
-            pdf.drawString(
-                50,
-                y,
-                register_no[:10]
-            )
-
-
-            pdf.drawString(
-                110,
-                y,
-                student_name[:14]
-            )
-
-
-            pdf.drawString(
-                190,
-                y,
-                student_department[:12]
-            )
-
-
-            pdf.drawString(
-                275,
-                y,
-                student_year[:8]
-            )
-
-
-            pdf.drawString(
-                320,
-                y,
-                certificate_title[:14]
-            )
-
-
-            pdf.drawString(
-                405,
-                y,
-                category_name[:12]
-            )
-
-
-            pdf.drawString(
-                480,
-                y,
-                achievement[:12]
-            )
-
-
-            pdf.drawString(
-                555,
-                y,
-                date_text
-            )
-
-
-            y -= 20
-
-
-            # ==========================
-            # NEW PAGE
-            # ==========================
-
-            if y < 50:
-
-                pdf.showPage()
-
-
-                y = height - 50
-
-
-                pdf.setFont(
-                    "Helvetica-Bold",
-                    12
-                )
-
-
-                pdf.drawString(
-                    50,
-                    y,
-                    "Tutor Certificate Report - Continued"
-                )
-
-
-                y -= 30
-
-
-                pdf.setFont(
-                    "Helvetica",
-                    7
-                )
-
-
-    else:
-
-        pdf.setFont(
-            "Helvetica-Bold",
-            12
-        )
-
-
-        pdf.drawCentredString(
-            width / 2,
-            y,
-            "No certificate records found."
-        )
-
-
-    # ==============================
-    # FOOTER
-    # ==============================
-
-    pdf.setFont(
-        "Helvetica",
-        8
-    )
-
-
-    pdf.drawCentredString(
-        width / 2,
-        30,
-        "© 2026 Student Certificate Management System | Designed By PRADEEP From AIDS"
-    )
-
-
-    # ==============================
-    # SAVE PDF
-    # ==============================
-
-    pdf.save()
-
-
-    buffer.seek(0)
-
-
-    from flask import send_file
-
-
-    return send_file(
-    buffer,
-    as_attachment=True,
-    download_name="Tutor_Certificate_Report.pdf",
-    mimetype="application/pdf"
-)
-#------------------------------
-
-@app.route("/manage_student")
-def manage_student():
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    cursor = mysql.connection.cursor()
-
-    # ===========================
-    # Get Tutor Details
-    # ===========================
-    cursor.execute("""
-        SELECT
-            department,
-            class_year,
-            section
-        FROM tutors
-        WHERE user_id=%s
-    """, (session["user_id"],))
-
-    tutor = cursor.fetchone()
-
-    if not tutor:
-        cursor.close()
-        flash("Tutor not assigned.")
-        return redirect("/tutor")
-
-    department = tutor[0]
-    class_year = tutor[1]
-    section = tutor[2]
-
-    # ===========================
-    # Case 1
-    # Department only
-    # Show ALL department students
-    # ===========================
-    if not class_year and not section:
-
-        cursor.execute("""
-            SELECT
-                s.student_id,
-                s.student_name,
-                s.register_no,
-                s.department,
-                s.year,
-                s.section,
-                s.email,
-                s.phone,
-                u.username
-
-            FROM students s
-
-            JOIN users u
-            ON s.user_id=u.id
-
-            WHERE s.department=%s
-
-            ORDER BY s.student_name
-        """, (department,))
-
-    # ===========================
-    # Case 2
-    # Department + Year
-    # Show all students of that year
-    # ===========================
-    elif class_year and not section:
-
-        cursor.execute("""
-            SELECT
-                s.student_id,
-                s.student_name,
-                s.register_no,
-                s.department,
-                s.year,
-                s.section,
-                s.email,
-                s.phone,
-                u.username
-
-            FROM students s
-
-            JOIN users u
-            ON s.user_id=u.id
-
-            WHERE
-                s.department=%s
-                AND s.year=%s
-
-            ORDER BY s.student_name
-        """, (
-            department,
-            class_year
-        ))
-
-    # ===========================
-    # Case 3
-    # Department + Year + Section
-    # ===========================
-    else:
-
-        cursor.execute("""
-            SELECT
-                s.student_id,
-                s.student_name,
-                s.register_no,
-                s.department,
-                s.year,
-                s.section,
-                s.email,
-                s.phone,
-                u.username
-
-            FROM students s
-
-            JOIN users u
-            ON s.user_id=u.id
-
-            WHERE
-                s.department=%s
-                AND s.year=%s
-                AND s.section=%s
-
-            ORDER BY s.student_name
-        """, (
-            department,
-            class_year,
-            section
-        ))
-
-    students = cursor.fetchall()
-
-    cursor.close()
-
-    return render_template(
-        "tutor/manage_student.html",
-        students=students,
-        department=department,
-        class_year=class_year,
-        section=section
-    )
-
-# ==========================
-# Add Student
-# ==========================
-
-@app.route("/add_student", methods=["POST"])
-def add_student():
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    student_name = request.form["student_name"]
-    register_no = request.form["register_no"]
-    department = request.form["department"]
-    year = request.form["year"]
-    section = request.form["section"]      # NEW
-    email = request.form["email"]
-    phone = request.form["phone"]
-    username = request.form["username"]
-    password = request.form["password"]
-
-    cursor = mysql.connection.cursor()
-
-    # Check username
-    cursor.execute(
-        "SELECT id FROM users WHERE username=%s",
-        (username,)
-    )
-
-    if cursor.fetchone():
-        cursor.close()
-        flash("Username already exists")
-        return redirect("/manage_student")
-
-    # Insert into users
-    cursor.execute("""
-        INSERT INTO users
-        (
-            username,
-            password,
-            role
-        )
-        VALUES
-        (
-            %s,
-            %s,
-            'student'
-        )
-    """, (
-        username,
-        password
-    ))
-
-    mysql.connection.commit()
-
-    user_id = cursor.lastrowid
-
-    # Insert into students
-    cursor.execute("""
-        INSERT INTO students
-        (
-            user_id,
-            student_name,
-            register_no,
-            department,
-            year,
-            section,
-            email,
-            phone
-        )
-        VALUES
-        (
-            %s,
-            %s,
-            %s,
-            %s,
-            %s,
-            %s,
-            %s,
-            %s
-        )
-    """, (
-        user_id,
-        student_name,
-        register_no,
-        department,
-        year,
-        section,
-        email,
-        phone
-    ))
-
-    mysql.connection.commit()
-
-    cursor.close()
-
-    flash("Student Created Successfully")
-
-    return redirect("/manage_student")
-
-
-@app.route("/delete_student/<int:id>")
-def delete_student(id):
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    cursor = mysql.connection.cursor()
-
-    cursor.execute("""
-        SELECT user_id
-        FROM students
-        WHERE student_id=%s
-    """, (id,))
-
-    row = cursor.fetchone()
-
-    if row:
-
-        user_id = row[0]
-
-        cursor.execute("DELETE FROM students WHERE student_id=%s", (id,))
-        cursor.execute("DELETE FROM users WHERE id=%s", (user_id,))
-
-        mysql.connection.commit()
-
-    cursor.close()
-
-    flash("Student Deleted Successfully")
-
-    return redirect("/manage_student")
-@app.route("/edit_student/<int:id>")
-def edit_student(id):
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    cursor = mysql.connection.cursor()
-
-    cursor.execute("""
-        SELECT
-            students.student_id,
-            students.student_name,
-            students.register_no,
-            students.department,
-            students.year,
-            students.section,
-            students.email,
-            students.phone,
-            users.username
-
-        FROM students
-
-        INNER JOIN users
-            ON students.user_id = users.id
-
-        WHERE students.student_id=%s
-    """, (id,))
-
-    student = cursor.fetchone()
-
-    cursor.close()
-
-    if not student:
-        flash("Student not found")
-        return redirect("/manage_student")
-
-    return render_template(
-        "tutor/edit_student.html",
-        student=student
-    )
-
-
-@app.route("/update_student/<int:id>", methods=["POST"])
-def update_student(id):
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    student_name = request.form["student_name"]
-    register_no = request.form["register_no"]
-    department = request.form["department"]
-    year = request.form["year"]
-    section = request.form["section"]
-    email = request.form["email"]
-    phone = request.form["phone"]
-    username = request.form["username"]
-
-    cursor = mysql.connection.cursor()
-
-    try:
-
-        # =========================================
-        # UPDATE STUDENT DETAILS
-        # =========================================
-
-        cursor.execute("""
-            UPDATE students
-            SET
-                student_name=%s,
-                register_no=%s,
-                department=%s,
-                year=%s,
-                section=%s,
-                email=%s,
-                phone=%s
-            WHERE student_id=%s
-        """, (
-            student_name,
-            register_no,
-            department,
-            year,
-            section,
-            email,
-            phone,
-            id
-        ))
-
-        # =========================================
-        # GET USER ID
-        # =========================================
-
-        cursor.execute("""
-            SELECT user_id
-            FROM students
-            WHERE student_id=%s
-        """, (id,))
-
-        row = cursor.fetchone()
-
-        if not row:
-            mysql.connection.rollback()
-            cursor.close()
-
-            flash("Student not found")
-            return redirect("/manage_student")
-
-        user_id = row[0]
-
-        # =========================================
-        # CHECK DUPLICATE USERNAME
-        # =========================================
-
-        cursor.execute("""
-            SELECT id
-            FROM users
-            WHERE username=%s
-            AND id!=%s
-        """, (
-            username,
-            user_id
-        ))
-
-        if cursor.fetchone():
-
-            mysql.connection.rollback()
-            cursor.close()
-
-            flash("Username already exists")
-            return redirect(f"/edit_student/{id}")
-
-        # =========================================
-        # UPDATE USERNAME
-        # =========================================
-
-        cursor.execute("""
-            UPDATE users
-            SET username=%s
-            WHERE id=%s
-        """, (
-            username,
-            user_id
-        ))
-
-        # =========================================
-        # COMMIT
-        # =========================================
-
-        mysql.connection.commit()
-
-        cursor.close()
-
-        flash("Student Updated Successfully")
-
-        return redirect("/manage_student")
-
-    except Exception as e:
-
-        mysql.connection.rollback()
-        cursor.close()
-
-        print("===================================")
-        print("UPDATE STUDENT ERROR")
-        print("Error:", str(e))
-        print("===================================")
-
-        flash("Unable to update student")
-
-        return redirect(f"/edit_student/{id}")
-#--
-@app.route("/download_all_tutor")
-def download_all_tutor():
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    search = request.args.get("student", "").strip()
-
-    cursor = mysql.connection.cursor()
-
-    try:
-
-        # =====================================================
-        # GET TUTOR DEPARTMENT + YEAR
-        # =====================================================
-
-        cursor.execute("""
-            SELECT department, class_year
-            FROM tutors
-            WHERE user_id = %s
-        """, (session["user_id"],))
-
-        tutor = cursor.fetchone()
-
-        if not tutor:
-            cursor.close()
-            flash("Tutor details not found.")
-            return redirect("/tutor")
-
-        department = str(tutor[0] or "").strip()
-        class_year = str(tutor[1] or "").strip()
-
-        print("====================================")
-        print("TUTOR ZIP EXPORT")
-        print("Department:", department)
-        print("Year:", class_year)
-        print("Search:", search)
-        print("====================================")
-
-        # =====================================================
-        # BUILD QUERY
-        # Department + Year
-        # SECTION NOT USED
-        # =====================================================
-
-        query = """
-            SELECT
-                students.student_name,
-                students.register_no,
-                certificates.certificate_title,
-                certificates.certificate_file
-
-            FROM certificates
-
-            INNER JOIN students
-                ON certificates.student_id = students.student_id
-
-            WHERE
-                TRIM(UPPER(students.department))
-                =
-                TRIM(UPPER(%s))
-
-            AND
-                TRIM(UPPER(students.year))
-                =
-                TRIM(UPPER(%s))
-
-            AND
-                certificates.certificate_file IS NOT NULL
-
-            AND
-                certificates.certificate_file != ''
-        """
-
-        params = [
-            department,
-            class_year
-        ]
-
-        # =====================================================
-        # SEARCH EXISTS
-        # =====================================================
-
-        if search:
-
-            query += """
-                AND students.student_name LIKE %s
-            """
-
-            params.append("%" + search + "%")
-
-        # =====================================================
-        # ORDER
-        # =====================================================
-
-        query += """
-            ORDER BY
-                students.student_name ASC,
-                certificates.upload_date DESC
-        """
-
-        cursor.execute(query, tuple(params))
-
-        files = cursor.fetchall()
-
-        cursor.close()
-
-        # =====================================================
-        # NO RECORDS
-        # =====================================================
-
-        if not files:
-
-            if search:
-                flash(
-                    "No certificates found for: " + search
-                )
-            else:
-                flash(
-                    "No certificates found for your department and year."
-                )
-
-            return redirect("/tutor")
-
-        print("Certificates found:", len(files))
-
-        # =====================================================
-        # GOOGLE DRIVE
-        # =====================================================
-
-        import re
-        import os
-        import tempfile
-        import zipfile
-
-        from io import BytesIO
-
-        from googleapiclient.http import MediaIoBaseDownload
-        from drive_service import get_drive_service
-
-        service = get_drive_service()
-
-        # =====================================================
-        # CREATE TEMP ZIP
-        # =====================================================
-
-        temp = tempfile.NamedTemporaryFile(
-            delete=False,
-            suffix=".zip"
-        )
-
-        zip_file_path = temp.name
-        temp.close()
-
-        added_files = 0
-
-        # =====================================================
-        # CREATE ZIP
-        # =====================================================
-
-        with zipfile.ZipFile(
-            zip_file_path,
-            "w",
-            compression=zipfile.ZIP_DEFLATED
-        ) as zipf:
-
-            # =================================================
-            # LOOP THROUGH CERTIFICATES
-            # =================================================
-
-            for row in files:
-
-                student_name = row[0] or "Student"
-                register_no = row[1] or ""
-                certificate_title = row[2] or "Certificate"
-                certificate_url = row[3] or ""
-
-                try:
-
-                    # =========================================
-                    # GET GOOGLE DRIVE FILE ID
-                    # =========================================
-
-                    file_id = None
-
-                    match = re.search(
-                        r"/file/d/([^/]+)",
-                        certificate_url
-                    )
-
-                    if match:
-                        file_id = match.group(1)
-
-                    if not file_id:
-
-                        match = re.search(
-                            r"/d/([^/?]+)",
-                            certificate_url
-                        )
-
-                        if match:
-                            file_id = match.group(1)
-
-                    if not file_id:
-
-                        match = re.search(
-                            r"[?&]id=([^&]+)",
-                            certificate_url
-                        )
-
-                        if match:
-                            file_id = match.group(1)
-
-                    # =========================================
-                    # INVALID URL
-                    # =========================================
-
-                    if not file_id:
-
-                        print(
-                            "SKIPPED - Invalid Drive URL:",
-                            certificate_url
-                        )
-
-                        continue
-
-                    # =========================================
-                    # GET DRIVE FILE NAME
-                    # =========================================
-
-                    file_info = service.files().get(
-                        fileId=file_id,
-                        fields="id,name,mimeType"
-                    ).execute()
-
-                    original_name = file_info.get(
-                        "name",
-                        "certificate.pdf"
-                    )
-
-                    # =========================================
-                    # DOWNLOAD FILE
-                    # =========================================
-
-                    drive_request = service.files().get_media(
-                        fileId=file_id
-                    )
-
-                    file_stream = BytesIO()
-
-                    downloader = MediaIoBaseDownload(
-                        file_stream,
-                        drive_request
-                    )
-
-                    done = False
-
-                    while not done:
-
-                        status, done = downloader.next_chunk()
-
-                    file_stream.seek(0)
-
-                    # =========================================
-                    # SAFE STUDENT NAME
-                    # =========================================
-
-                    safe_student = re.sub(
-                        r'[<>:"/\\|?*]',
-                        "_",
-                        str(student_name)
-                    ).strip()
-
-                    if not safe_student:
-                        safe_student = "Student"
-
-                    # =========================================
-                    # SAFE REGISTER NUMBER
-                    # =========================================
-
-                    safe_register = re.sub(
-                        r'[<>:"/\\|?*]',
-                        "_",
-                        str(register_no)
-                    ).strip()
-
-                    # =========================================
-                    # SAFE FILE NAME
-                    # =========================================
-
-                    safe_filename = re.sub(
-                        r'[<>:"/\\|?*]',
-                        "_",
-                        str(original_name)
-                    ).strip()
-
-                    if not safe_filename:
-                        safe_filename = (
-                            str(certificate_title)
-                            + ".pdf"
-                        )
-
-                    # =========================================
-                    # ZIP FOLDER
-                    # =========================================
-
-                    if safe_register:
-
-                        zip_entry = (
-                            safe_student
-                            + "_"
-                            + safe_register
-                            + "/"
-                            + safe_filename
-                        )
-
-                    else:
-
-                        zip_entry = (
-                            safe_student
-                            + "/"
-                            + safe_filename
-                        )
-
-                    # =========================================
-                    # WRITE TO ZIP
-                    # =========================================
-
-                    zipf.writestr(
-                        zip_entry,
-                        file_stream.read()
-                    )
-
-                    added_files += 1
-
-                    print(
-                        "ADDED:",
-                        student_name,
-                        "->",
-                        safe_filename
-                    )
-
-                except Exception as file_error:
-
-                    # One bad file should NOT stop ZIP
-                    print(
-                        "SKIPPED CERTIFICATE:"
-                    )
-
-                    print(
-                        "Student:",
-                        student_name
-                    )
-
-                    print(
-                        "Error:",
-                        str(file_error)
-                    )
-
-                    continue
-
-        # =====================================================
-        # NOTHING ADDED
-        # =====================================================
-
-        if added_files == 0:
-
-            try:
-                os.remove(zip_file_path)
-            except Exception:
-                pass
-
-            flash(
-                "Google Drive certificates could not be downloaded."
-            )
-
-            return redirect("/tutor")
-
-        # =====================================================
-        # ZIP NAME
-        # =====================================================
-
-        if search:
-
-            safe_search = re.sub(
-                r'[<>:"/\\|?*]',
-                "_",
-                search
-            ).strip()
-
-            download_name = (
-                safe_search
-                + "_Certificates.zip"
-            )
-
-        else:
-
-            download_name = (
-                "Tutor_Certificates.zip"
-            )
-
-        print("====================================")
-        print("ZIP CREATED")
-        print("Files added:", added_files)
-        print("ZIP:", zip_file_path)
-        print("====================================")
-
-        # =====================================================
-        # SEND ZIP
-        # =====================================================
-
-        return send_file(
-            zip_file_path,
-            as_attachment=True,
-            download_name=download_name,
-            mimetype="application/zip"
-        )
-
-    except Exception as e:
-
-        print("====================================")
-        print("TUTOR ZIP ERROR")
-        print("ERROR:", str(e))
-        print("====================================")
-
-        try:
-            cursor.close()
-        except Exception:
-            pass
-
-        flash(
-            "Unable to create ZIP. Please try again."
-        )
-
-        return redirect("/tutor")
-#sreach
-
-@app.route("/search_certificate_tutor")
-def search_certificate_tutor():
-
-    if session.get("role") != "tutor":
-        return ""
-
-    search = request.args.get("search", "").strip()
-
-    cursor = mysql.connection.cursor()
-
-    # =========================================================
-    # TUTOR DETAILS
-    # =========================================================
-
-    cursor.execute("""
-        SELECT
-            department,
-            class_year,
-            section
-        FROM tutors
-        WHERE user_id=%s
-    """, (session["user_id"],))
-
-    tutor = cursor.fetchone()
-
-    if not tutor:
-        cursor.close()
-        return ""
-
-    department = tutor[0]
-    class_year = tutor[1]
-    section = tutor[2]
-
-    # =========================================================
-    # STUDENT FILTER
-    # =========================================================
-
-    if not class_year:
-
-        student_where = """
-            TRIM(UPPER(students.department))
-            =
-            TRIM(UPPER(%s))
-        """
-
-        params = [
-            department
-        ]
-
-    else:
-
-        student_where = """
-            TRIM(UPPER(students.department))
-            =
-            TRIM(UPPER(%s))
-
-            AND
-
-            TRIM(UPPER(students.year))
-            =
-            TRIM(UPPER(%s))
-        """
-
-        params = [
-            department,
-            class_year
-        ]
-
-    # =========================================================
-    # SEARCH
-    # =========================================================
-
-    search_condition = ""
-
-    if search:
-
-        search_condition = """
-            AND (
-                students.student_name LIKE %s
-                OR students.register_no LIKE %s
-                OR students.department LIKE %s
-                OR certificates.certificate_title LIKE %s
-            )
-        """
-
-        search_value = "%" + search + "%"
-
-        params.extend([
-            search_value,
-            search_value,
-            search_value,
-            search_value
-        ])
-
-    # =========================================================
-    # CERTIFICATES
-    # =========================================================
-
-    cursor.execute(f"""
-
-        SELECT
-
-            students.student_name,
-            students.department,
-            students.year,
-
-            certificates.certificate_title,
-
-            certificate_categories.category_name,
-
-            certificates.achievement,
-
-            certificates.participation,
-
-            certificates.certificate_file,
-
-            certificates.upload_date,
-
-            certificates.certificate_id
-
-        FROM certificates
-
-        INNER JOIN students
-            ON certificates.student_id =
-               students.student_id
-
-        INNER JOIN certificate_categories
-            ON certificates.category_id =
-               certificate_categories.category_id
-
-        WHERE
-            {student_where}
-
-            {search_condition}
-
-        ORDER BY
-            certificates.upload_date DESC
-
-    """, tuple(params))
-
-    data = cursor.fetchall()
-
-    cursor.close()
-
-    # =========================================================
-    # HTML
-    # =========================================================
-
-    html = ""
-
-    for row in data:
-
-        html += f"""
-        <tr>
-
-            <td>{row[0]}</td>
-
-            <td>{row[1]}</td>
-
-            <td>{row[2]}</td>
-
-            <td>{row[3]}</td>
-
-            <td>{row[4]}</td>
-
-            <td>
-        """
-
-        # Achievement
-
-        if row[5] == "Winner":
-
-            html += """
-            <span class="badge bg-success">
-                🏆 Winner
-            </span>
-            """
-
-        elif row[5] == "Runner":
-
-            html += """
-            <span class="badge bg-warning text-dark">
-                🥈 Runner
-            </span>
-            """
-
-        elif row[5] == "Participated":
-
-            html += """
-            <span class="badge bg-primary">
-                🎖 Participated
-            </span>
-            """
-
-        else:
-
-            html += """
-            <span class="badge bg-secondary">
-                📜 Others
-            </span>
-            """
-
-        html += """
-            </td>
-
-            <td>
-        """
-
-        # =====================================================
-        # PARTICIPATION
-        # =====================================================
-
-        if row[6] == "Internal":
-
-            html += """
-            <span class="badge bg-info text-dark">
-                🏫 Internal
-            </span>
-            """
-
-        elif row[6] == "External":
-
-            html += """
-            <span class="badge bg-dark">
-                🌐 External
-            </span>
-            """
-
-        else:
-
-            html += """
-            <span class="text-muted">
-                -
-            </span>
-            """
-
-        html += f"""
-            </td>
-
-            <td>
-                {row[8]}
-            </td>
-
-            <td>
-                <a
-                    href="/view/{row[7]}"
-                    target="_blank"
-                    class="btn btn-primary btn-sm">
-
-                    <i class="bi bi-eye-fill"></i>
-                    View
-
-                </a>
-            </td>
-
-            <td>
-                <a
-                    href="/download/{row[7]}"
-                    class="btn btn-success btn-sm">
-
-                    <i class="bi bi-download"></i>
-                    Download
-
-                </a>
-            </td>
-
-            <td>
-
-                <form
-                    action="/delete_certificate/{row[7]}"
-                    method="POST"
-                    style="display:inline;">
-
-                    <button
-                        type="submit"
-                        class="btn btn-danger btn-sm"
-                        onclick="return confirm('Delete this certificate?')">
-
-                        <i class="bi bi-trash-fill"></i>
-                        Delete
-
-                    </button>
-
-                </form>
-
-            </td>
-
-        </tr>
-        """
-
-    return html
-#---------------------------
-#upload profile
-#---------------------------
-
-@app.route("/upload_tutor_photo", methods=["POST"])
-def upload_tutor_photo():
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    file = request.files["profile_photo"]
-
-    if not file or file.filename == "":
-        flash("Please select a photo")
-        return redirect("/tutor_profile")
-
-    filename = secure_filename(file.filename)
-    file.save(os.path.join(app.config["PROFILE_FOLDER"], filename))
-
-    cursor = mysql.connection.cursor()
-
-    # tutors table
-    cursor.execute("""
-        UPDATE tutors
-        SET profile_photo=%s
-        WHERE user_id=%s
-    """, (filename, session["user_id"]))
-
-    # users table
-    cursor.execute("""
-        UPDATE users
-        SET profile_photo=%s
-        WHERE id=%s
-    """, (filename, session["user_id"]))
-
-    mysql.connection.commit()
-    cursor.close()
-
-    flash("Profile Photo Updated Successfully")
-
-    return redirect("/tutor_profile")
-
-# ==========================
-# Certificate Categories
-# ==========================
-
-@app.route("/certificate_categories")
-def certificate_categories():
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    cursor = mysql.connection.cursor()
-
-    # Tutor Details
-    cursor.execute("""
-        SELECT
-            class_year,
-            section
-        FROM tutors
-        WHERE user_id=%s
-    """, (session["user_id"],))
-
-    tutor = cursor.fetchone()
-
-    if not tutor:
-        cursor.close()
-        flash("Tutor not assigned.")
-        return redirect("/tutor")
-
-    class_year = tutor[0]
-    section = tutor[1]
-
-    # Category-wise Certificate Count
-    cursor.execute("""
-        SELECT
-            cc.category_id,
-            cc.category_name,
-            COUNT(c.certificate_id) AS total_count
-
-        FROM certificate_categories cc
-
-        LEFT JOIN certificates c
-            ON cc.category_id = c.category_id
-
-        LEFT JOIN students s
-            ON c.student_id = s.student_id
-
-        WHERE
-            (
-                s.year=%s
-                AND s.section=%s
-            )
-            OR s.student_id IS NULL
-
-        GROUP BY
-            cc.category_id,
-            cc.category_name
-
-        ORDER BY
-            cc.category_name
-    """, (
-        class_year,
-        section
-    ))
-
-    categories = cursor.fetchall()
-
-    cursor.close()
-
-    return render_template(
-        "tutor/certificate_categories.html",
-        categories=categories
-    )
-# ==========================
-# Add Category
-# ==========================
-
-@app.route("/add_category", methods=["POST"])
-def add_category():
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    category_name = request.form["category_name"]
-
-    cursor = mysql.connection.cursor()
-
-    cursor.execute("""
-        INSERT INTO certificate_categories
-        (category_name)
-        VALUES (%s)
-    """, (category_name,))
-
-    mysql.connection.commit()
-
-    cursor.close()
-
-    flash("Category Added Successfully")
-
-    return redirect("/certificate_categories")
-
-
-# ==========================
-# Edit Category
-# ==========================
-@app.route("/edit_category/<int:id>")
-def edit_category():
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    cursor = mysql.connection.cursor()
-
-    cursor.execute("""
-        SELECT
-            category_id,
-            category_name
-        FROM certificate_categories
-        WHERE category_id=%s
-    """, (id,))
-
-    category = cursor.fetchone()
-
-    cursor.close()
-
-    return render_template(
-        "tutor/edit_category.html",
-        category=category
-    )
-
-# ==========================
-# Update Category
-# ==========================
-
-
-@app.route("/update_category/<int:id>", methods=["POST"])
-def update_category(id):
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    category_name = request.form["category_name"]
-
-    cursor = mysql.connection.cursor()
-
-    cursor.execute("""
-        UPDATE certificate_categories
-        SET category_name=%s
-        WHERE category_id=%s
-    """, (
-        category_name,
-        id
-    ))
-
-    mysql.connection.commit()
-
-    cursor.close()
-
-    flash("Category Updated Successfully")
-
-    return redirect("/certificate_categories")
-
-# ==========================
-# Delete Category
-# ==========================
-
-@app.route("/delete_category/<int:id>")
-def delete_category(id):
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    cursor = mysql.connection.cursor()
-
-    cursor.execute("""
-        DELETE FROM certificate_categories
-        WHERE category_id=%s
-    """, (id,))
-
-    mysql.connection.commit()
-
-    cursor.close()
-
-    flash("Category Deleted Successfully")
-
-    return redirect("/certificate_categories")
-#---------------------------
-
-@app.route("/upload_students", methods=["POST"])
-def upload_students():
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    file = request.files["excel_file"]
-
-    if file.filename == "":
-        flash("Please select an Excel file")
-        return redirect("/manage_student")
-
-    if not file.filename.lower().endswith(".xlsx"):
-        flash("Please upload only .xlsx file")
-        return redirect("/manage_student")
-
-    filename = secure_filename(file.filename)
-    filepath = os.path.join(UPLOAD_FOLDER, filename)
-    file.save(filepath)
-
-    # Read Excel Sheet
-    df = pd.read_excel(
-        filepath,
-        sheet_name="studentss",
-        engine="openpyxl"
-    )
-
-    print(df.columns.tolist())
-
-    cursor = mysql.connection.cursor()
-
-    for _, row in df.iterrows():
-
-        username = row["Username"]
-        password = row["Password"]
-
-        # Check Username
-        cursor.execute(
-            "SELECT id FROM users WHERE username=%s",
-            (username,)
-        )
-
-        existing = cursor.fetchone()
-
-        if existing:
-
-            user_id = existing[0]
-
-        else:
-
-            cursor.execute("""
-                INSERT INTO users
-                (
-                    username,
-                    password,
-                    role
-                )
-                VALUES
-                (
-                    %s,
-                    %s,
-                    'student'
-                )
-            """, (
-                username,
-                password
-            ))
-
-            mysql.connection.commit()
-
-            user_id = cursor.lastrowid
-
-        # Check Register Number
-        cursor.execute(
-            """
-            SELECT student_id
-            FROM students
-            WHERE register_no=%s
-            """,
-            (row["Register Number"],)
-        )
-
-        if cursor.fetchone():
-            continue
-
-        # Insert Student
-        cursor.execute("""
-            INSERT INTO students
-            (
-                user_id,
-                register_no,
-                student_name,
-                department,
-                year,
-                section,
-                email,
-                phone
-            )
-            VALUES
-            (
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s
-            )
-        """, (
-            user_id,
-            row["Register Number"],
-            row["Student Name"],
-            row["Department"],
-            row["Year"],
-            row["Section"],
-            row["Email Address"],
-            row["Phone Number"]
-        ))
-
-    mysql.connection.commit()
-
-    cursor.close()
-
-    flash("Students Imported Successfully")
-
-    return redirect("/manage_student")
-
-#----------------------------
-
-@app.route("/download_sample_excel")
-def download_sample_excel():
-
-    sample_path = os.path.join(app.root_path, "static", "sample")
-
-    return send_from_directory(
-        sample_path,
-        "sample_certificate.xlsx",
-        as_attachment=True
-    )
-
-#-----------------------------
-
-
-@app.route("/export_zip")
-def export_zip():
-
-    if session.get("role") != "tutor":
-        return redirect("/")
-
-    # Search box value
-    student_name = request.args.get("student_name", "").strip()
-
-    cursor = mysql.connection.cursor()
-
-    # =========================================================
-    # Get Tutor Details
-    # =========================================================
-
-    cursor.execute("""
-        SELECT
-            department,
-            class_year,
-            section
-        FROM tutors
-        WHERE user_id=%s
-    """, (session["user_id"],))
-
-    tutor = cursor.fetchone()
-
-    if not tutor:
-        cursor.close()
-        flash("Tutor not assigned.")
-        return redirect("/tutor")
-
-    department = tutor[0]
-    class_year = tutor[1]
-    section = tutor[2]
-
-    # =========================================================
-    # Get Certificate Files
-    # =========================================================
-
-    if class_year is None or section is None:
-
-        # -----------------------------------------------------
-        # No year / section
-        # Department-wise certificates
-        # -----------------------------------------------------
-
-        if student_name:
-
-            cursor.execute("""
-                SELECT
-                    certificates.certificate_file
-                FROM certificates
-
-                INNER JOIN students
-                    ON certificates.student_id =
-                       students.student_id
-
-                WHERE students.department=%s
-                AND students.student_name LIKE %s
-            """, (
-                department,
-                "%" + student_name + "%"
-            ))
-
-        else:
-
-            # Empty search = ALL department certificates
-
-            cursor.execute("""
-                SELECT
-                    certificates.certificate_file
-                FROM certificates
-
-                INNER JOIN students
-                    ON certificates.student_id =
-                       students.student_id
-
-                WHERE students.department=%s
-            """, (department,))
-
-    else:
-
-        # -----------------------------------------------------
-        # Year + Section assigned
-        # -----------------------------------------------------
-
-        if student_name:
-
-            cursor.execute("""
-                SELECT
-                    certificates.certificate_file
-                FROM certificates
-
-                INNER JOIN students
-                    ON certificates.student_id =
-                       students.student_id
-
-                WHERE students.department=%s
-                AND students.year=%s
-                AND students.section=%s
-                AND students.student_name LIKE %s
-            """, (
-                department,
-                class_year,
-                section,
-                "%" + student_name + "%"
-            ))
-
-        else:
-
-            # Empty search = ALL certificates
-            # from tutor's assigned class
-
-            cursor.execute("""
-                SELECT
-                    certificates.certificate_file
-                FROM certificates
-
-                INNER JOIN students
-                    ON certificates.student_id =
-                       students.student_id
-
-                WHERE students.department=%s
-                AND students.year=%s
-                AND students.section=%s
-            """, (
-                department,
-                class_year,
-                section
-            ))
-
-    certificates = cursor.fetchall()
-
-    cursor.close()
-
-    # =========================================================
-    # No Certificates
-    # =========================================================
-
-    if not certificates:
-        flash("No certificates found.")
-        return redirect("/tutor")
-
-    # =========================================================
-    # Certificate Folder
-    # =========================================================
-
-    cert_folder = os.path.join(
-        app.root_path,
-        "static",
-        "uploads",
-        "certificates"
-    )
-
-    # =========================================================
-    # Create Temporary ZIP
-    # =========================================================
-
-    temp_zip = tempfile.NamedTemporaryFile(
-        delete=False,
-        suffix=".zip"
-    )
-
-    zip_path = temp_zip.name
-    temp_zip.close()
-
-    # =========================================================
-    # Add Only Selected Certificate Files
-    # =========================================================
-
-    added_files = 0
-
-    with zipfile.ZipFile(
-        zip_path,
-        "w",
-        zipfile.ZIP_DEFLATED
-    ) as zipf:
-
-        for certificate in certificates:
-
-            certificate_file = certificate[0]
-
-            if not certificate_file:
-                continue
-
-            file_path = os.path.join(
-                cert_folder,
-                certificate_file
-            )
-
-            if os.path.isfile(file_path):
-
-                zipf.write(
-                    file_path,
-                    arcname=os.path.basename(file_path)
-                )
-
-                added_files += 1
-
-    # =========================================================
-    # No Physical Files Found
-    # =========================================================
-
-    if added_files == 0:
-
-        try:
-            os.remove(zip_path)
-        except:
-            pass
-
-        flash("Certificate files not found.")
-        return redirect("/tutor")
-
-    # =========================================================
-    # ZIP File Name
-    # =========================================================
-
-    if student_name:
-
-        safe_name = student_name.replace(" ", "_")
-
-        zip_name = safe_name + "_Certificates.zip"
-
-    else:
-
-        zip_name = "Certificates.zip"
-
-    # =========================================================
-    # Download ZIP
-    # =========================================================
-
-    return send_file(
-        zip_path,
-        as_attachment=True,
-        download_name=zip_name,
-        mimetype="application/zip"
-    )
-
-#===========================
-# ============================================================
-# DELETE CERTIFICATE - TUTOR
-# ============================================================
-
-
-# ----------------------------------------------------
-        # DELETE FROM DATABASE
-        # ----------------------------------------------------
-
-@app.route("/delete_certificate/<path:filename>", methods=["POST"])
-def delete_certificate(filename):
-
-    role = session.get("role")
-
-    # Student or Tutor only
-    if role not in ["student", "tutor"]:
-        flash("Unauthorized access.")
-        return redirect("/")
-
-    cursor = mysql.connection.cursor()
-
-    try:
-
-        # ====================================================
-        # STUDENT DELETE
-        # ====================================================
-
-        if role == "student":
-
-            cursor.execute("""
-                DELETE FROM certificates
-                WHERE certificate_file = %s
-                AND student_id = (
-                    SELECT student_id
-                    FROM students
-                    WHERE user_id = %s
-                )
-            """, (
-                filename,
-                session["user_id"]
-            ))
-
-            mysql.connection.commit()
-
-            if cursor.rowcount > 0:
-                flash("Certificate deleted successfully.")
-            else:
-                flash("Certificate not found.")
-
-            return redirect("/student")
-
-
-        # ====================================================
-        # TUTOR DELETE
-        # ====================================================
-
-        if role == "tutor":
-
-            # ------------------------------------------------
-            # GET TUTOR DETAILS
-            # ------------------------------------------------
-
-            cursor.execute("""
-                SELECT
-                    department,
-                    class_year,
-                    section
-                FROM tutors
-                WHERE user_id = %s
-            """, (session["user_id"],))
-
-            tutor = cursor.fetchone()
-
-            if not tutor:
-                flash("Tutor not found.")
-                return redirect("/tutor")
-
-            tutor_department = tutor[0]
-            tutor_year = tutor[1]
-            tutor_section = tutor[2]
-
-
-            # ------------------------------------------------
-            # FIND CERTIFICATE + STUDENT DETAILS
-            # ------------------------------------------------
-
-            cursor.execute("""
-                SELECT
-                    certificates.certificate_id,
-                    certificates.certificate_file,
-                    students.department,
-                    students.year,
-                    students.section
-                FROM certificates
-
-                INNER JOIN students
-                    ON certificates.student_id =
-                       students.student_id
-
-                WHERE certificates.certificate_file = %s
-            """, (filename,))
-
-            certificate = cursor.fetchone()
-
-            if not certificate:
-                flash("Certificate not found.")
-                return redirect("/tutor")
-
-            certificate_id = certificate[0]
-            certificate_file = certificate[1]
-            student_department = certificate[2]
-            student_year = certificate[3]
-            student_section = certificate[4]
-
-
-            # ------------------------------------------------
-            # CHECK TUTOR ACCESS
-            # ------------------------------------------------
-
-            # Department check
-            if (
-                tutor_department
-                and student_department
-                and str(tutor_department).strip().lower()
-                != str(student_department).strip().lower()
-            ):
-                flash("You are not authorized to delete this certificate.")
-                return redirect("/tutor")
-
-
-            # Year check
-            if (
-                tutor_year
-                and student_year
-                and str(tutor_year).strip().lower()
-                != str(student_year).strip().lower()
-            ):
-                flash("You are not authorized to delete this certificate.")
-                return redirect("/tutor")
-
-
-            # Section check
-            if (
-                tutor_section
-                and student_section
-                and str(tutor_section).strip().lower()
-                != str(student_section).strip().lower()
-            ):
-                flash("You are not authorized to delete this certificate.")
-                return redirect("/tutor")
-
-
-            # ------------------------------------------------
-            # DELETE FROM GOOGLE DRIVE
-            # ------------------------------------------------
-
-            if (
-                certificate_file.startswith("http://")
-                or certificate_file.startswith("https://")
-            ):
-
-                if (
-                    "drive.google.com" in certificate_file
-                    or "drive.usercontent.google.com"
-                    in certificate_file
-                ):
-
-                    import re
-
-                    file_id = None
-
-                    # /file/d/FILE_ID/view
-                    match = re.search(
-                        r"/file/d/([^/]+)",
-                        certificate_file
-                    )
-
-                    if match:
-                        file_id = match.group(1)
-
-
-                    # ?id=FILE_ID
-                    if not file_id:
-
-                        match = re.search(
-                            r"[?&]id=([^&]+)",
-                            certificate_file
-                        )
-
-                        if match:
-                            file_id = match.group(1)
-
-
-                    if file_id:
-
-                        try:
-
-                            from drive_service import get_drive_service
-
-                            service = get_drive_service()
-
-                            service.files().delete(
-                                fileId=file_id
-                            ).execute()
-
-                            print(
-                                "GOOGLE DRIVE FILE DELETED:",
-                                file_id
-                            )
-
-                        except Exception as e:
-
-                            print(
-                                "GOOGLE DRIVE DELETE ERROR:",
-                                str(e)
-                            )
-
-                            flash(
-                                "Unable to delete certificate from Google Drive."
-                            )
-
-                            return redirect("/tutor")
-
-
-            # ------------------------------------------------
-            # DELETE FROM DATABASE
-            # ------------------------------------------------
-
-            cursor.execute("""
-                DELETE FROM certificates
-                WHERE certificate_id = %s
-            """, (certificate_id,))
-
-            mysql.connection.commit()
-
-            print(
-                "CERTIFICATE DELETED:",
-                certificate_id
-            )
-
-            flash("Certificate deleted successfully.")
-
-            return redirect("/tutor")
-
-
-    except Exception as e:
-
-        mysql.connection.rollback()
-
-        print("================================")
-        print("DELETE CERTIFICATE ERROR")
-        print("Filename :", filename)
-        print("Error    :", str(e))
-        print("================================")
-
-        flash("Unable to delete certificate.")
-
-        if role == "student":
-            return redirect("/student")
-        else:
-            return redirect("/tutor")
-
-
-    finally:
-        cursor.close()
+@app.route("/tutor") 
+def tutor(): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    # ========================================================= 
+    # TUTOR DETAILS 
+    # ========================================================= 
+ 
+    cursor.execute(""" 
+        SELECT 
+            tutor_name, 
+            department, 
+            class_year, 
+            section, 
+            profile_photo 
+        FROM tutors 
+        WHERE user_id=%s 
+    """, (session["user_id"],)) 
+ 
+    tutor = cursor.fetchone() 
+ 
+    if not tutor: 
+        cursor.close() 
+        flash("Tutor not assigned.") 
+        return redirect("/logout") 
+ 
+    tutor_name = tutor[0] 
+    department = tutor[1] 
+    class_year = tutor[2] 
+    section = tutor[3] 
+ 
+    # Convert empty values to None 
+    if department: 
+        department = str(department).strip() 
+ 
+    if class_year: 
+        class_year = str(class_year).strip() 
+ 
+    if section: 
+        section = str(section).strip() 
+ 
+    print("====================================") 
+    print("LOGIN USER ID :", session["user_id"]) 
+    print("TUTOR DATA    :", tutor) 
+    print("DEPARTMENT    :", department) 
+    print("CLASS YEAR    :", class_year) 
+    print("SECTION       :", section) 
+    print("====================================") 
+ 
+ 
+    # ========================================================= 
+    # COMMON STUDENT FILTER 
+    # 
+    # IMPORTANT: 
+    # Section is NOT used. 
+    # 
+    # Year = None 
+    #     -> All students from tutor department 
+    # 
+    # Year = I / II / III / IV 
+    #     -> Students from department + selected year 
+    # ========================================================= 
+ 
+    if not class_year: 
+ 
+        # ----------------------------------------- 
+        # YEAR = NONE 
+        # Show ALL students in department 
+        # ----------------------------------------- 
+ 
+        student_where = """ 
+            TRIM(UPPER(students.department)) 
+            = 
+            TRIM(UPPER(%s)) 
+        """ 
+ 
+        student_params = ( 
+            department, 
+        ) 
+ 
+    else: 
+ 
+        # ----------------------------------------- 
+        # SPECIFIC YEAR 
+        # Section completely ignored 
+        # ----------------------------------------- 
+ 
+        student_where = """ 
+            TRIM(UPPER(students.department)) 
+            = 
+            TRIM(UPPER(%s)) 
+ 
+            AND 
+ 
+            TRIM(UPPER(students.year)) 
+            = 
+            TRIM(UPPER(%s)) 
+        """ 
+ 
+        student_params = ( 
+            department, 
+            class_year 
+        ) 
+ 
+ 
+    print("------------------------------------") 
+    print("STUDENT WHERE :", student_where) 
+    print("STUDENT PARAMS:", student_params) 
+    print("------------------------------------") 
+ 
+ 
+    # ========================================================= 
+    # DASHBOARD - TOTAL STUDENTS 
+    # ========================================================= 
+ 
+    cursor.execute(f""" 
+        SELECT COUNT(*) 
+        FROM students 
+        WHERE {student_where} 
+    """, student_params) 
+ 
+    total_students = cursor.fetchone()[0] 
+ 
+ 
+    # ========================================================= 
+    # DASHBOARD - TOTAL CERTIFICATES 
+    # ========================================================= 
+ 
+    cursor.execute(f""" 
+        SELECT COUNT(*) 
+        FROM certificates 
+ 
+        INNER JOIN students 
+            ON certificates.student_id = students.student_id 
+ 
+        WHERE {student_where} 
+    """, student_params) 
+ 
+    total_certificates = cursor.fetchone()[0] 
+ 
+ 
+    # ========================================================= 
+    # STUDENT LIST 
+    # ========================================================= 
+ 
+    cursor.execute(f""" 
+        SELECT 
+            students.student_name, 
+            students.register_no, 
+            students.department, 
+            students.year, 
+            students.email 
+ 
+        FROM students 
+ 
+        WHERE {student_where} 
+ 
+        ORDER BY students.student_name ASC 
+    """, student_params) 
+ 
+    students = cursor.fetchall() 
+ 
+ 
+    # ========================================================= 
+    # CERTIFICATE LIST 
+    # ========================================================= 
+ 
+    cursor.execute(f""" 
+        SELECT 
+            students.student_name, 
+            students.department, 
+            students.year, 
+            certificates.certificate_title, 
+            certificate_categories.category_name, 
+            certificates.achievement, 
+            students.profile_photo, 
+            certificates.upload_date, 
+            certificates.certificate_file 
+ 
+        FROM certificates 
+ 
+        INNER JOIN students 
+            ON certificates.student_id = students.student_id 
+ 
+        INNER JOIN certificate_categories 
+            ON certificates.category_id = 
+               certificate_categories.category_id 
+ 
+        WHERE {student_where} 
+ 
+        ORDER BY certificates.upload_date DESC 
+    """, student_params) 
+ 
+    certificates = cursor.fetchall() 
+ 
+ 
+    # ========================================================= 
+    # STUDENT SEARCH + CHART DATA 
+    # ========================================================= 
+ 
+    # Student name -> Register number 
+    student_lookup = { 
+        str(student[0]).strip().lower(): student[1] 
+        for student in students 
+    } 
+ 
+    student_chart_data = [] 
+ 
+    for row in certificates: 
+ 
+        student_name = row[0] if row[0] else "" 
+ 
+        student_chart_data.append({ 
+ 
+            "name": student_name, 
+ 
+            "register_no": student_lookup.get( 
+                str(student_name).strip().lower(), 
+                "" 
+            ), 
+ 
+            "department": row[1] if row[1] else "", 
+ 
+            "year": row[2] if row[2] else "", 
+ 
+            "certificate": row[3] if row[3] else "", 
+ 
+            "category": row[4] if row[4] else "Others", 
+ 
+            "achievement": row[5] if row[5] else "Others" 
+ 
+        }) 
+ 
+ 
+    # ========================================================= 
+    # STUDENT-WISE CERTIFICATE COUNT 
+    # ========================================================= 
+ 
+    cursor.execute(f""" 
+        SELECT 
+            students.student_name, 
+            students.register_no, 
+            students.department, 
+            COUNT(certificates.student_id) AS total_certificates 
+ 
+        FROM students 
+ 
+        LEFT JOIN certificates 
+            ON students.student_id = 
+               certificates.student_id 
+ 
+        WHERE {student_where} 
+ 
+        GROUP BY 
+            students.student_id, 
+            students.student_name, 
+            students.register_no, 
+            students.department 
+ 
+        ORDER BY 
+            total_certificates DESC 
+    """, student_params) 
+ 
+    student_certificate_counts = cursor.fetchall() 
+ 
+ 
+    # ========================================================= 
+    # TOP STUDENTS 
+    # ========================================================= 
+ 
+    top_students = student_certificate_counts[:10] 
+ 
+ 
+    # ========================================================= 
+    # CERTIFICATE CATEGORY DISTRIBUTION 
+    # ========================================================= 
+ 
+    cursor.execute(f""" 
+        SELECT 
+            certificate_categories.category_name, 
+            COUNT(certificates.certificate_id) 
+ 
+        FROM certificates 
+ 
+        INNER JOIN students 
+            ON certificates.student_id = 
+               students.student_id 
+ 
+        INNER JOIN certificate_categories 
+            ON certificates.category_id = 
+               certificate_categories.category_id 
+ 
+        WHERE {student_where} 
+ 
+        GROUP BY 
+            certificate_categories.category_id, 
+            certificate_categories.category_name 
+ 
+        ORDER BY 
+            COUNT(certificates.certificate_id) DESC 
+    """, student_params) 
+ 
+    category_report = cursor.fetchall() 
+ 
+ 
+    # ========================================================= 
+    # ACHIEVEMENT TYPE DISTRIBUTION 
+    # ========================================================= 
+ 
+    cursor.execute(f""" 
+        SELECT 
+            certificates.achievement, 
+            COUNT(certificates.certificate_id) 
+ 
+        FROM certificates 
+ 
+        INNER JOIN students 
+            ON certificates.student_id = 
+               students.student_id 
+ 
+        WHERE {student_where} 
+ 
+        GROUP BY 
+            certificates.achievement 
+ 
+        ORDER BY 
+            COUNT(certificates.certificate_id) DESC 
+    """, student_params) 
+ 
+    achievement_report = cursor.fetchall() 
+ 
+ 
+    # ========================================================= 
+    # STUDENT + CATEGORY REPORT 
+    # ========================================================= 
+ 
+    cursor.execute(f""" 
+        SELECT 
+            students.student_name, 
+            certificate_categories.category_name, 
+            COUNT(certificates.certificate_id) 
+ 
+        FROM certificates 
+ 
+        INNER JOIN students 
+            ON certificates.student_id = 
+               students.student_id 
+ 
+        INNER JOIN certificate_categories 
+            ON certificates.category_id = 
+               certificate_categories.category_id 
+ 
+        WHERE {student_where} 
+ 
+        GROUP BY 
+            students.student_id, 
+            students.student_name, 
+            certificate_categories.category_id, 
+            certificate_categories.category_name 
+ 
+        ORDER BY 
+            students.student_name ASC 
+    """, student_params) 
+ 
+    student_category_report = cursor.fetchall() 
+ 
+ 
+    # ========================================================= 
+    # STUDENT + ACHIEVEMENT REPORT 
+    # ========================================================= 
+ 
+    cursor.execute(f""" 
+        SELECT 
+            students.student_name, 
+            certificates.achievement, 
+            COUNT(certificates.certificate_id) 
+ 
+        FROM certificates 
+ 
+        INNER JOIN students 
+            ON certificates.student_id = 
+               students.student_id 
+ 
+        WHERE {student_where} 
+ 
+        GROUP BY 
+            students.student_id, 
+            students.student_name, 
+            certificates.achievement 
+ 
+        ORDER BY 
+            students.student_name ASC 
+    """, student_params) 
+ 
+    student_achievement_report = cursor.fetchall() 
+ 
+ 
+    # ========================================================= 
+    # DEBUG INFORMATION 
+    # ========================================================= 
+ 
+    print("====================================") 
+    print("TUTOR NAME          :", tutor_name) 
+    print("DEPARTMENT          :", department) 
+    print("CLASS YEAR          :", class_year) 
+    print("SECTION             :", section) 
+    print("TOTAL STUDENTS      :", total_students) 
+    print("TOTAL CERTIFICATES  :", total_certificates) 
+    print("STUDENTS FOUND      :", len(students)) 
+    print("CERTIFICATES FOUND  :", len(certificates)) 
+    print( 
+        "STUDENT CERTIFICATE COUNTS:", 
+        student_certificate_counts 
+    ) 
+    print("CATEGORY REPORT:", category_report) 
+    print("ACHIEVEMENT REPORT:", achievement_report) 
+    print("STUDENT CHART DATA:", student_chart_data) 
+    print("====================================") 
+ 
+ 
+    # ========================================================= 
+    # CLOSE CURSOR 
+    # ========================================================= 
+ 
+    cursor.close() 
+ 
+ 
+    # ========================================================= 
+    # RENDER TUTOR DASHBOARD 
+    # ========================================================= 
+ 
+    return render_template( 
+        "tutor/dashboard.html", 
+ 
+        # ----------------------------------------------------- 
+        # Tutor Details 
+        # ----------------------------------------------------- 
+ 
+        tutor=tutor, 
+        tutor_name=tutor_name, 
+        department=department, 
+        class_year=class_year, 
+        section=section, 
+ 
+ 
+        # ----------------------------------------------------- 
+        # Dashboard 
+        # ----------------------------------------------------- 
+ 
+        total_students=total_students, 
+        total_certificates=total_certificates, 
+ 
+ 
+        # ----------------------------------------------------- 
+        # Student / Certificate Lists 
+        # ----------------------------------------------------- 
+ 
+        students=students, 
+        certificates=certificates, 
+ 
+ 
+        # ----------------------------------------------------- 
+        # Graph / Report Data 
+        # ----------------------------------------------------- 
+ 
+        top_students=top_students, 
+ 
+        student_certificate_counts= 
+            student_certificate_counts, 
+ 
+        category_report= 
+            category_report, 
+ 
+        achievement_report= 
+            achievement_report, 
+ 
+        student_category_report= 
+            student_category_report, 
+ 
+        student_achievement_report= 
+            student_achievement_report, 
+ 
+ 
+        # ----------------------------------------------------- 
+        # Student Search + Charts 
+        # ----------------------------------------------------- 
+ 
+        student_chart_data= 
+            student_chart_data 
+    ) 
+#===================================================== 
+     
+ 
+@app.route("/tutor_profile") 
+def tutor_profile(): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    cursor.execute(""" 
+        SELECT 
+            tutors.tutor_id, 
+            tutors.tutor_name, 
+            tutors.department, 
+            tutors.class_year, 
+            tutors.section, 
+            tutors.email, 
+            tutors.phone, 
+            users.username, 
+            tutors.profile_photo 
+ 
+        FROM tutors 
+ 
+        INNER JOIN users 
+            ON tutors.user_id = users.id 
+ 
+        WHERE users.id=%s 
+    """, (session["user_id"],)) 
+ 
+    tutor = cursor.fetchone() 
+ 
+    cursor.close() 
+ 
+    return render_template( 
+        "tutor/profile.html", 
+        tutor=tutor 
+    ) 
+ 
+@app.route("/update_tutor_profile", methods=["POST"]) 
+def update_tutor_profile(): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    name = request.form["name"] 
+    email = request.form["email"] 
+    phone = request.form["phone"] 
+    class_year = request.form["class_year"] 
+    section = request.form["section"] 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    cursor.execute(""" 
+        UPDATE tutors 
+        SET 
+            tutor_name=%s, 
+            class_year=%s, 
+            section=%s, 
+            email=%s, 
+            phone=%s 
+        WHERE user_id=%s 
+    """, ( 
+        name, 
+        class_year, 
+        section, 
+        email, 
+        phone, 
+        session["user_id"] 
+    )) 
+ 
+    mysql.connection.commit() 
+ 
+    cursor.close() 
+ 
+    flash("Profile Updated Successfully") 
+ 
+    return redirect("/tutor_profile") 
+ 
+#--------------------------- 
+#       report 
+#---------------------------- 
+@app.route("/tutor_reports") 
+def tutor_reports(): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    # ========================================================= 
+    # Tutor Details 
+    # ========================================================= 
+ 
+    cursor.execute(""" 
+        SELECT 
+            tutor_name, 
+            department, 
+            class_year, 
+            section, 
+            profile_photo 
+        FROM tutors 
+        WHERE user_id=%s 
+    """, (session["user_id"],)) 
+ 
+    tutor = cursor.fetchone() 
+ 
+    if not tutor: 
+        cursor.close() 
+        return redirect("/tutor") 
+ 
+    tutor_name = tutor[0] 
+    department = tutor[1] 
+    class_year = tutor[2] 
+    section = tutor[3] 
+ 
+ 
+    # ========================================================= 
+    # Total Students 
+    # ========================================================= 
+ 
+    if class_year is None or section is None: 
+ 
+        # No year / section 
+        # Count all students from tutor department 
+ 
+        cursor.execute(""" 
+            SELECT COUNT(*) 
+            FROM students 
+            WHERE department=%s 
+        """, (department,)) 
+ 
+    else: 
+ 
+        # Year + section assigned 
+ 
+        cursor.execute(""" 
+            SELECT COUNT(*) 
+            FROM students 
+            WHERE department=%s 
+            AND year=%s 
+            AND section=%s 
+        """, (department, class_year, section)) 
+ 
+    total_students = cursor.fetchone()[0] 
+ 
+ 
+    # ========================================================= 
+    # Total Certificates 
+    # ========================================================= 
+ 
+    if class_year is None or section is None: 
+ 
+        # All certificates from department 
+ 
+        cursor.execute(""" 
+            SELECT COUNT(*) 
+            FROM certificates 
+ 
+            INNER JOIN students 
+                ON certificates.student_id = 
+                   students.student_id 
+ 
+            WHERE students.department=%s 
+        """, (department,)) 
+ 
+    else: 
+ 
+        # Certificates from assigned year + section 
+ 
+        cursor.execute(""" 
+            SELECT COUNT(*) 
+            FROM certificates 
+ 
+            INNER JOIN students 
+                ON certificates.student_id = 
+                   students.student_id 
+ 
+            WHERE students.department=%s 
+            AND students.year=%s 
+            AND students.section=%s 
+        """, (department, class_year, section)) 
+ 
+    total_certificates = cursor.fetchone()[0] 
+ 
+ 
+    # ========================================================= 
+    # Department Report 
+    # ========================================================= 
+ 
+    if class_year is None or section is None: 
+ 
+        cursor.execute(""" 
+            SELECT 
+                department, 
+                COUNT(*) 
+            FROM students 
+ 
+            WHERE department=%s 
+ 
+            GROUP BY department 
+        """, (department,)) 
+ 
+    else: 
+ 
+        cursor.execute(""" 
+            SELECT 
+                department, 
+                COUNT(*) 
+            FROM students 
+ 
+            WHERE department=%s 
+            AND year=%s 
+            AND section=%s 
+ 
+            GROUP BY department 
+        """, (department, class_year, section)) 
+ 
+    department_report = cursor.fetchall() 
+ 
+ 
+    # ========================================================= 
+    # Year Report 
+    # ========================================================= 
+ 
+    if class_year is None or section is None: 
+ 
+        # Show year-wise students from department 
+ 
+        cursor.execute(""" 
+            SELECT 
+                year, 
+                COUNT(*) 
+            FROM students 
+ 
+            WHERE department=%s 
+ 
+            GROUP BY year 
+            ORDER BY year 
+        """, (department,)) 
+ 
+    else: 
+ 
+        cursor.execute(""" 
+            SELECT 
+                year, 
+                COUNT(*) 
+            FROM students 
+ 
+            WHERE department=%s 
+            AND year=%s 
+            AND section=%s 
+ 
+            GROUP BY year 
+            ORDER BY year 
+        """, (department, class_year, section)) 
+ 
+    year_report = cursor.fetchall() 
+ 
+ 
+    # ========================================================= 
+    # Certificate Report 
+    # ========================================================= 
+ 
+    if class_year is None or section is None: 
+ 
+        # ALL certificates from tutor department 
+ 
+        cursor.execute(""" 
+            SELECT 
+                students.student_name, 
+                students.department, 
+                students.year, 
+                certificates.certificate_title, 
+                certificate_categories.category_name, 
+                certificates.achievement, 
+                certificates.certificate_file, 
+                certificates.upload_date 
+ 
+            FROM certificates 
+ 
+            INNER JOIN students 
+                ON certificates.student_id = 
+                   students.student_id 
+ 
+            INNER JOIN certificate_categories 
+                ON certificates.category_id = 
+                   certificate_categories.category_id 
+ 
+            WHERE students.department=%s 
+ 
+            ORDER BY certificates.upload_date DESC 
+        """, (department,)) 
+ 
+    else: 
+ 
+        # Certificates from tutor's year + section 
+ 
+        cursor.execute(""" 
+            SELECT 
+                students.student_name, 
+                students.department, 
+                students.year, 
+                certificates.certificate_title, 
+                certificate_categories.category_name, 
+                certificates.achievement, 
+                certificates.certificate_file, 
+                certificates.upload_date 
+ 
+            FROM certificates 
+ 
+            INNER JOIN students 
+                ON certificates.student_id = 
+                   students.student_id 
+ 
+            INNER JOIN certificate_categories 
+                ON certificates.category_id = 
+                   certificate_categories.category_id 
+ 
+            WHERE students.department=%s 
+            AND students.year=%s 
+            AND students.section=%s 
+ 
+            ORDER BY certificates.upload_date DESC 
+        """, (department, class_year, section)) 
+ 
+    certificates = cursor.fetchall() 
+ 
+ 
+    # ========================================================= 
+    # Debug 
+    # ========================================================= 
+ 
+    print("========================================") 
+    print("TUTOR REPORT") 
+    print("TUTOR:", tutor_name) 
+    print("DEPARTMENT:", department) 
+    print("CLASS YEAR:", class_year) 
+    print("SECTION:", section) 
+    print("TOTAL STUDENTS:", total_students) 
+    print("TOTAL CERTIFICATES:", total_certificates) 
+    print("CERTIFICATE COUNT:", len(certificates)) 
+    print("========================================") 
+ 
+ 
+    cursor.close() 
+ 
+ 
+    # ========================================================= 
+    # Send to Template 
+    # ========================================================= 
+ 
+    return render_template( 
+        "tutor/report.html", 
+        tutor=tutor, 
+        total_students=total_students, 
+        total_certificates=total_certificates, 
+        department_report=department_report, 
+        year_report=year_report, 
+        certificates=certificates 
+    ) 
+#-------------------- 
+@app.route("/view_certificate/<filename>") 
+def view_certificate(filename): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    cert_folder = os.path.join( 
+        app.root_path, 
+        "static", 
+        "uploads", 
+        "certificates" 
+    ) 
+ 
+    file_path = os.path.join(cert_folder, filename) 
+ 
+    if not os.path.isfile(file_path): 
+        return "Certificate file not found", 404 
+ 
+    return send_file( 
+        file_path, 
+        as_attachment=False 
+    ) 
+#------------------------------------- 
+ 
+@app.route("/tutor_export_excel") 
+def tutor_export_excel(): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    # ========================== 
+    # GET TUTOR DETAILS 
+    # ========================== 
+ 
+    cursor.execute(""" 
+        SELECT 
+            tutor_name, 
+            department, 
+            class_year, 
+            section 
+        FROM tutors 
+        WHERE user_id=%s 
+    """, (session["user_id"],)) 
+ 
+    tutor = cursor.fetchone() 
+ 
+    if not tutor: 
+        cursor.close() 
+        flash("Tutor not assigned.") 
+        return redirect("/tutor") 
+ 
+    tutor_name = tutor[0] 
+    department = tutor[1] 
+    class_year = tutor[2] 
+    section = tutor[3] 
+ 
+    # ========================== 
+    # GET CERTIFICATE RECORDS 
+    # ========================== 
+ 
+    if class_year is not None and section is not None: 
+ 
+        cursor.execute(""" 
+            SELECT 
+                students.register_no, 
+                students.student_name, 
+                students.department, 
+                students.year, 
+                students.section, 
+                certificates.certificate_title, 
+                certificate_categories.category_name, 
+                certificates.achievement, 
+                certificates.upload_date 
+ 
+            FROM certificates 
+ 
+            INNER JOIN students 
+                ON certificates.student_id = students.student_id 
+ 
+            LEFT JOIN certificate_categories 
+                ON certificates.category_id = certificate_categories.category_id 
+ 
+            WHERE students.year=%s 
+            AND students.section=%s 
+ 
+            ORDER BY students.student_name 
+        """, (class_year, section)) 
+ 
+    else: 
+ 
+        cursor.execute(""" 
+            SELECT 
+                students.register_no, 
+                students.student_name, 
+                students.department, 
+                students.year, 
+                students.section, 
+                certificates.certificate_title, 
+                certificate_categories.category_name, 
+                certificates.achievement, 
+                certificates.upload_date 
+ 
+            FROM certificates 
+ 
+            INNER JOIN students 
+                ON certificates.student_id = students.student_id 
+ 
+            LEFT JOIN certificate_categories 
+                ON certificates.category_id = certificate_categories.category_id 
+ 
+            WHERE students.department=%s 
+ 
+            ORDER BY students.student_name 
+        """, (department,)) 
+ 
+    records = cursor.fetchall() 
+ 
+    print("Tutor:", tutor_name) 
+    print("Department:", department) 
+    print("Class Year:", class_year) 
+    print("Section:", section) 
+    print("Total Records:", len(records)) 
+ 
+    cursor.close() 
+ 
+    # ========================== 
+    # CREATE EXCEL 
+    # ========================== 
+ 
+    workbook = Workbook() 
+ 
+    sheet = workbook.active 
+    sheet.title = "Tutor Report" 
+ 
+    headers = [ 
+        "Register No", 
+        "Student Name", 
+        "Department", 
+        "Year", 
+        "Section", 
+        "Certificate", 
+        "Category", 
+        "Achievement", 
+        "Upload Date" 
+    ] 
+ 
+    sheet.append(headers) 
+ 
+    for row in records: 
+ 
+        upload_date = row[8] 
+ 
+        if upload_date: 
+            upload_date = upload_date.strftime("%d-%m-%Y") 
+ 
+        sheet.append([ 
+            row[0], 
+            row[1], 
+            row[2], 
+            row[3], 
+            row[4], 
+            row[5], 
+            row[6], 
+            row[7], 
+            upload_date 
+        ]) 
+ 
+    output = BytesIO() 
+ 
+    workbook.save(output) 
+ 
+    output.seek(0) 
+ 
+    return send_file( 
+        output, 
+        as_attachment=True, 
+        download_name="Tutor_Report.xlsx", 
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
+    ) 
+ 
+#-------------------------- 
+@app.route("/tutor_export_pdf") 
+def tutor_export_pdf(): 
+ 
+    # ============================== 
+    # TUTOR LOGIN CHECK 
+    # ============================== 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+ 
+    # ============================== 
+    # GET TUTOR DETAILS 
+    # ============================== 
+ 
+    cursor.execute(""" 
+        SELECT 
+            tutor_name, 
+            department, 
+            class_year, 
+            section 
+        FROM tutors 
+        WHERE user_id = %s 
+    """, (session.get("user_id"),)) 
+ 
+    tutor = cursor.fetchone() 
+ 
+ 
+    if not tutor: 
+ 
+        cursor.close() 
+ 
+        flash("Tutor details not found.") 
+ 
+        return redirect("/tutor") 
+ 
+ 
+    tutor_name = tutor[0] 
+    department = tutor[1] 
+    class_year = tutor[2] 
+    section = tutor[3] 
+ 
+ 
+    # ============================== 
+    # GET CERTIFICATE RECORDS 
+    # ============================== 
+ 
+    # IMPORTANT: 
+    # If class_year and section are available, 
+    # filter using year + section. 
+    # 
+    # If they are NULL, use department 
+    # temporarily so certificates are shown. 
+ 
+    if class_year is not None and section is not None: 
+ 
+        cursor.execute(""" 
+            SELECT 
+                students.register_no, 
+                students.student_name, 
+                students.department, 
+                students.year, 
+                certificates.certificate_title, 
+                certificate_categories.category_name, 
+                certificates.achievement, 
+                certificates.upload_date 
+ 
+            FROM certificates 
+ 
+            INNER JOIN students 
+                ON certificates.student_id = students.student_id 
+ 
+            LEFT JOIN certificate_categories 
+                ON certificates.category_id = 
+                   certificate_categories.category_id 
+ 
+            WHERE students.year = %s 
+              AND students.section = %s 
+ 
+            ORDER BY certificates.upload_date DESC 
+        """, (class_year, section)) 
+ 
+    else: 
+ 
+        # ========================================== 
+        # FALLBACK 
+        # Tutor class_year / section is NULL 
+        # So use tutor department 
+        # ========================================== 
+ 
+        cursor.execute(""" 
+            SELECT 
+                students.register_no, 
+                students.student_name, 
+                students.department, 
+                students.year, 
+                certificates.certificate_title, 
+                certificate_categories.category_name, 
+                certificates.achievement, 
+                certificates.upload_date 
+ 
+            FROM certificates 
+ 
+            INNER JOIN students 
+                ON certificates.student_id = students.student_id 
+ 
+            LEFT JOIN certificate_categories 
+                ON certificates.category_id = 
+                   certificate_categories.category_id 
+ 
+            WHERE students.department = %s 
+ 
+            ORDER BY certificates.upload_date DESC 
+        """, (department,)) 
+ 
+ 
+    records = cursor.fetchall() 
+ 
+ 
+    cursor.close() 
+ 
+ 
+    # ============================== 
+    # CREATE PDF 
+    # ============================== 
+ 
+    from io import BytesIO 
+ 
+    from reportlab.pdfgen import canvas 
+ 
+    from reportlab.lib.pagesizes import A4 
+ 
+    from reportlab.lib import colors 
+ 
+ 
+    buffer = BytesIO() 
+ 
+ 
+    pdf = canvas.Canvas( 
+        buffer, 
+        pagesize=A4 
+    ) 
+ 
+ 
+    width, height = A4 
+ 
+ 
+    # ============================== 
+    # TITLE 
+    # ============================== 
+ 
+    pdf.setTitle( 
+        "Tutor Certificate Report" 
+    ) 
+ 
+ 
+    pdf.setFont( 
+        "Helvetica-Bold", 
+        20 
+    ) 
+ 
+    pdf.drawCentredString( 
+        width / 2, 
+        height - 50, 
+        "STUDENT CERTIFICATE MANAGEMENT SYSTEM" 
+    ) 
+ 
+ 
+    pdf.setFont( 
+        "Helvetica-Bold", 
+        16 
+    ) 
+ 
+    pdf.drawCentredString( 
+        width / 2, 
+        height - 80, 
+        "Tutor Certificate Report" 
+    ) 
+ 
+ 
+    # ============================== 
+    # TUTOR INFORMATION 
+    # ============================== 
+ 
+    y = height - 125 
+ 
+ 
+    pdf.setFont( 
+        "Helvetica", 
+        11 
+    ) 
+ 
+ 
+    pdf.drawString( 
+        50, 
+        y, 
+        f"Tutor Name : {tutor_name}" 
+    ) 
+ 
+    y -= 22 
+ 
+ 
+    pdf.drawString( 
+        50, 
+        y, 
+        f"Department : {department}" 
+    ) 
+ 
+    y -= 22 
+ 
+ 
+    pdf.drawString( 
+        50, 
+        y, 
+        f"Class Year : {class_year if class_year else 'All'}" 
+    ) 
+ 
+    y -= 22 
+ 
+ 
+    pdf.drawString( 
+        50, 
+        y, 
+        f"Section : {section if section else 'All'}" 
+    ) 
+ 
+    y -= 35 
+ 
+ 
+    # ============================== 
+    # TOTAL RECORDS 
+    # ============================== 
+ 
+    pdf.setFont( 
+        "Helvetica-Bold", 
+        12 
+    ) 
+ 
+ 
+    pdf.drawString( 
+        50, 
+        y, 
+        f"Total Certificate Records : {len(records)}" 
+    ) 
+ 
+ 
+    y -= 30 
+ 
+ 
+    # ============================== 
+    # TABLE HEADER 
+    # ============================== 
+ 
+    pdf.setFont( 
+        "Helvetica-Bold", 
+        8 
+    ) 
+ 
+ 
+    columns = [ 
+        ("Reg No", 50), 
+        ("Student", 110), 
+        ("Department", 190), 
+        ("Year", 275), 
+        ("Certificate", 320), 
+        ("Category", 405), 
+        ("Achievement", 480), 
+        ("Date", 555) 
+    ] 
+ 
+ 
+    for title, x in columns: 
+ 
+        pdf.drawString( 
+            x, 
+            y, 
+            title 
+        ) 
+ 
+ 
+    y -= 8 
+ 
+ 
+    pdf.line( 
+        50, 
+        y, 
+        width - 40, 
+        y 
+    ) 
+ 
+ 
+    y -= 18 
+ 
+ 
+    # ============================== 
+    # CERTIFICATE RECORDS 
+    # ============================== 
+ 
+    pdf.setFont( 
+        "Helvetica", 
+        7 
+    ) 
+ 
+ 
+    if records: 
+ 
+        for record in records: 
+ 
+            register_no = record[0] 
+            student_name = record[1] 
+            student_department = record[2] 
+            student_year = record[3] 
+            certificate_title = record[4] 
+            category_name = record[5] 
+            achievement = record[6] 
+            upload_date = record[7] 
+ 
+ 
+            # Format date 
+ 
+            if upload_date: 
+ 
+                try: 
+ 
+                    date_text = upload_date.strftime( 
+                        "%d-%m-%Y" 
+                    ) 
+ 
+                except: 
+ 
+                    date_text = str(upload_date) 
+ 
+            else: 
+ 
+                date_text = "-" 
+ 
+ 
+            # Convert values safely 
+ 
+            register_no = str( 
+                register_no or "-" 
+            ) 
+ 
+            student_name = str( 
+                student_name or "-" 
+            ) 
+ 
+            student_department = str( 
+                student_department or "-" 
+            ) 
+ 
+            student_year = str( 
+                student_year or "-" 
+            ) 
+ 
+            certificate_title = str( 
+                certificate_title or "-" 
+            ) 
+ 
+            category_name = str( 
+                category_name or "-" 
+            ) 
+ 
+            achievement = str( 
+                achievement or "-" 
+            ) 
+ 
+ 
+            # Draw row 
+ 
+            pdf.drawString( 
+                50, 
+                y, 
+                register_no[:10] 
+            ) 
+ 
+ 
+            pdf.drawString( 
+                110, 
+                y, 
+                student_name[:14] 
+            ) 
+ 
+ 
+            pdf.drawString( 
+                190, 
+                y, 
+                student_department[:12] 
+            ) 
+ 
+ 
+            pdf.drawString( 
+                275, 
+                y, 
+                student_year[:8] 
+            ) 
+ 
+ 
+            pdf.drawString( 
+                320, 
+                y, 
+                certificate_title[:14] 
+            ) 
+ 
+ 
+            pdf.drawString( 
+                405, 
+                y, 
+                category_name[:12] 
+            ) 
+ 
+ 
+            pdf.drawString( 
+                480, 
+                y, 
+                achievement[:12] 
+            ) 
+ 
+ 
+            pdf.drawString( 
+                555, 
+                y, 
+                date_text 
+            ) 
+ 
+ 
+            y -= 20 
+ 
+ 
+            # ========================== 
+            # NEW PAGE 
+            # ========================== 
+ 
+            if y < 50: 
+ 
+                pdf.showPage() 
+ 
+ 
+                y = height - 50 
+ 
+ 
+                pdf.setFont( 
+                    "Helvetica-Bold", 
+                    12 
+                ) 
+ 
+ 
+                pdf.drawString( 
+                    50, 
+                    y, 
+                    "Tutor Certificate Report - Continued" 
+                ) 
+ 
+ 
+                y -= 30 
+ 
+ 
+                pdf.setFont( 
+                    "Helvetica", 
+                    7 
+                ) 
+ 
+ 
+    else: 
+ 
+        pdf.setFont( 
+            "Helvetica-Bold", 
+            12 
+        ) 
+ 
+ 
+        pdf.drawCentredString( 
+            width / 2, 
+            y, 
+            "No certificate records found." 
+        ) 
+ 
+ 
+    # ============================== 
+    # FOOTER 
+    # ============================== 
+ 
+    pdf.setFont( 
+        "Helvetica", 
+        8 
+    ) 
+ 
+ 
+    pdf.drawCentredString( 
+        width / 2, 
+        30, 
+        "© 2026 Student Certificate Management System | Designed By PRADEEP From AIDS" 
+    ) 
+ 
+ 
+    # ============================== 
+    # SAVE PDF 
+    # ============================== 
+ 
+    pdf.save() 
+ 
+ 
+    buffer.seek(0) 
+ 
+ 
+    from flask import send_file 
+ 
+ 
+    return send_file( 
+    buffer, 
+    as_attachment=True, 
+    download_name="Tutor_Certificate_Report.pdf", 
+    mimetype="application/pdf" 
+) 
+#------------------------------ 
+ 
+@app.route("/manage_student") 
+def manage_student(): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    # =========================== 
+    # Get Tutor Details 
+    # =========================== 
+    cursor.execute(""" 
+        SELECT 
+            department, 
+            class_year, 
+            section 
+        FROM tutors 
+        WHERE user_id=%s 
+    """, (session["user_id"],)) 
+ 
+    tutor = cursor.fetchone() 
+ 
+    if not tutor: 
+        cursor.close() 
+        flash("Tutor not assigned.") 
+        return redirect("/tutor") 
+ 
+    department = tutor[0] 
+    class_year = tutor[1] 
+    section = tutor[2] 
+ 
+    # =========================== 
+    # Case 1 
+    # Department only 
+    # Show ALL department students 
+    # =========================== 
+    if not class_year and not section: 
+ 
+        cursor.execute(""" 
+            SELECT 
+                s.student_id, 
+                s.student_name, 
+                s.register_no, 
+                s.department, 
+                s.year, 
+                s.section, 
+                s.email, 
+                s.phone, 
+                u.username 
+ 
+            FROM students s 
+ 
+            JOIN users u 
+            ON s.user_id=u.id 
+ 
+            WHERE s.department=%s 
+ 
+            ORDER BY s.student_name 
+        """, (department,)) 
+ 
+    # =========================== 
+    # Case 2 
+    # Department + Year 
+    # Show all students of that year 
+    # =========================== 
+    elif class_year and not section: 
+ 
+        cursor.execute(""" 
+            SELECT 
+                s.student_id, 
+                s.student_name, 
+                s.register_no, 
+                s.department, 
+                s.year, 
+                s.section, 
+                s.email, 
+                s.phone, 
+                u.username 
+ 
+            FROM students s 
+ 
+            JOIN users u 
+            ON s.user_id=u.id 
+ 
+            WHERE 
+                s.department=%s 
+                AND s.year=%s 
+ 
+            ORDER BY s.student_name 
+        """, ( 
+            department, 
+            class_year 
+        )) 
+ 
+    # =========================== 
+    # Case 3 
+    # Department + Year + Section 
+    # =========================== 
+    else: 
+ 
+        cursor.execute(""" 
+            SELECT 
+                s.student_id, 
+                s.student_name, 
+                s.register_no, 
+                s.department, 
+                s.year, 
+                s.section, 
+                s.email, 
+                s.phone, 
+                u.username 
+ 
+            FROM students s 
+ 
+            JOIN users u 
+            ON s.user_id=u.id 
+ 
+            WHERE 
+                s.department=%s 
+                AND s.year=%s 
+                AND s.section=%s 
+ 
+            ORDER BY s.student_name 
+        """, ( 
+            department, 
+            class_year, 
+            section 
+        )) 
+ 
+    students = cursor.fetchall() 
+ 
+    cursor.close() 
+ 
+    return render_template( 
+        "tutor/manage_student.html", 
+        students=students, 
+        department=department, 
+        class_year=class_year, 
+        section=section 
+    ) 
+ 
+# ========================== 
+# Add Student 
+# ========================== 
+ 
+@app.route("/add_student", methods=["POST"]) 
+def add_student(): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    student_name = request.form["student_name"] 
+    register_no = request.form["register_no"] 
+    department = request.form["department"] 
+    year = request.form["year"] 
+    section = request.form["section"]      # NEW 
+    email = request.form["email"] 
+    phone = request.form["phone"] 
+    username = request.form["username"] 
+    password = request.form["password"] 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    # Check username 
+    cursor.execute( 
+        "SELECT id FROM users WHERE username=%s", 
+        (username,) 
+    ) 
+ 
+    if cursor.fetchone(): 
+        cursor.close() 
+        flash("Username already exists") 
+        return redirect("/manage_student") 
+ 
+    # Insert into users 
+    cursor.execute(""" 
+        INSERT INTO users 
+        ( 
+            username, 
+            password, 
+            role 
+        ) 
+        VALUES 
+        ( 
+            %s, 
+            %s, 
+            'student' 
+        ) 
+    """, ( 
+        username, 
+        password 
+    )) 
+ 
+    mysql.connection.commit() 
+ 
+    user_id = cursor.lastrowid 
+ 
+    # Insert into students 
+    cursor.execute(""" 
+        INSERT INTO students 
+        ( 
+            user_id, 
+            student_name, 
+            register_no, 
+            department, 
+            year, 
+            section, 
+            email, 
+            phone 
+        ) 
+        VALUES 
+        ( 
+            %s, 
+            %s, 
+            %s, 
+            %s, 
+            %s, 
+            %s, 
+            %s, 
+            %s 
+        ) 
+    """, ( 
+        user_id, 
+        student_name, 
+        register_no, 
+        department, 
+        year, 
+        section, 
+        email, 
+        phone 
+    )) 
+ 
+    mysql.connection.commit() 
+ 
+    cursor.close() 
+ 
+    flash("Student Created Successfully") 
+ 
+    return redirect("/manage_student") 
+ 
+ 
+@app.route("/delete_student/<int:id>") 
+def delete_student(id): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    cursor.execute(""" 
+        SELECT user_id 
+        FROM students 
+        WHERE student_id=%s 
+    """, (id,)) 
+ 
+    row = cursor.fetchone() 
+ 
+    if row: 
+ 
+        user_id = row[0] 
+ 
+        cursor.execute("DELETE FROM students WHERE student_id=%s", (id,)) 
+        cursor.execute("DELETE FROM users WHERE id=%s", (user_id,)) 
+ 
+        mysql.connection.commit() 
+ 
+    cursor.close() 
+ 
+    flash("Student Deleted Successfully") 
+ 
+    return redirect("/manage_student") 
+@app.route("/edit_student/<int:id>") 
+def edit_student(id): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    cursor.execute(""" 
+        SELECT 
+            students.student_id, 
+            students.student_name, 
+            students.register_no, 
+            students.department, 
+            students.year, 
+            students.section, 
+            students.email, 
+            students.phone, 
+            users.username 
+ 
+        FROM students 
+ 
+        INNER JOIN users 
+            ON students.user_id = users.id 
+ 
+        WHERE students.student_id=%s 
+    """, (id,)) 
+ 
+    student = cursor.fetchone() 
+ 
+    cursor.close() 
+ 
+    if not student: 
+        flash("Student not found") 
+        return redirect("/manage_student") 
+ 
+    return render_template( 
+        "tutor/edit_student.html", 
+        student=student 
+    ) 
+ 
+ 
+@app.route("/update_student/<int:id>", methods=["POST"]) 
+def update_student(id): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    student_name = request.form["student_name"] 
+    register_no = request.form["register_no"] 
+    department = request.form["department"] 
+    year = request.form["year"] 
+    section = request.form["section"] 
+    email = request.form["email"] 
+    phone = request.form["phone"] 
+    username = request.form["username"] 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    try: 
+ 
+        # ========================================= 
+        # UPDATE STUDENT DETAILS 
+        # ========================================= 
+ 
+        cursor.execute(""" 
+            UPDATE students 
+            SET 
+                student_name=%s, 
+                register_no=%s, 
+                department=%s, 
+                year=%s, 
+                section=%s, 
+                email=%s, 
+                phone=%s 
+            WHERE student_id=%s 
+        """, ( 
+            student_name, 
+            register_no, 
+            department, 
+            year, 
+            section, 
+            email, 
+            phone, 
+            id 
+        )) 
+ 
+        # ========================================= 
+        # GET USER ID 
+        # ========================================= 
+ 
+        cursor.execute(""" 
+            SELECT user_id 
+            FROM students 
+            WHERE student_id=%s 
+        """, (id,)) 
+ 
+        row = cursor.fetchone() 
+ 
+        if not row: 
+            mysql.connection.rollback() 
+            cursor.close() 
+ 
+            flash("Student not found") 
+            return redirect("/manage_student") 
+ 
+        user_id = row[0] 
+ 
+        # ========================================= 
+        # CHECK DUPLICATE USERNAME 
+        # ========================================= 
+ 
+        cursor.execute(""" 
+            SELECT id 
+            FROM users 
+            WHERE username=%s 
+            AND id!=%s 
+        """, ( 
+            username, 
+            user_id 
+        )) 
+ 
+        if cursor.fetchone(): 
+ 
+            mysql.connection.rollback() 
+            cursor.close() 
+ 
+            flash("Username already exists") 
+            return redirect(f"/edit_student/{id}") 
+ 
+        # ========================================= 
+        # UPDATE USERNAME 
+        # ========================================= 
+ 
+        cursor.execute(""" 
+            UPDATE users 
+            SET username=%s 
+            WHERE id=%s 
+        """, ( 
+            username, 
+            user_id 
+        )) 
+ 
+        # ========================================= 
+        # COMMIT 
+        # ========================================= 
+ 
+        mysql.connection.commit() 
+ 
+        cursor.close() 
+ 
+        flash("Student Updated Successfully") 
+ 
+        return redirect("/manage_student") 
+ 
+    except Exception as e: 
+ 
+        mysql.connection.rollback() 
+        cursor.close() 
+ 
+        print("===================================") 
+        print("UPDATE STUDENT ERROR") 
+        print("Error:", str(e)) 
+        print("===================================") 
+ 
+        flash("Unable to update student") 
+ 
+        return redirect(f"/edit_student/{id}") 
+#-- 
+@app.route("/download_all_tutor") 
+def download_all_tutor(): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    search = request.args.get("student", "").strip() 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    try: 
+ 
+        # ===================================================== 
+        # GET TUTOR DEPARTMENT + YEAR 
+        # ===================================================== 
+ 
+        cursor.execute(""" 
+            SELECT department, class_year 
+            FROM tutors 
+            WHERE user_id = %s 
+        """, (session["user_id"],)) 
+ 
+        tutor = cursor.fetchone() 
+ 
+        if not tutor: 
+            cursor.close() 
+            flash("Tutor details not found.") 
+            return redirect("/tutor") 
+ 
+        department = str(tutor[0] or "").strip() 
+        class_year = str(tutor[1] or "").strip() 
+ 
+        print("====================================") 
+        print("TUTOR ZIP EXPORT") 
+        print("Department:", department) 
+        print("Year:", class_year) 
+        print("Search:", search) 
+        print("====================================") 
+ 
+        # ===================================================== 
+        # BUILD QUERY 
+        # Department + Year 
+        # SECTION NOT USED 
+        # ===================================================== 
+ 
+        query = """ 
+            SELECT 
+                students.student_name, 
+                students.register_no, 
+                certificates.certificate_title, 
+                certificates.certificate_file 
+ 
+            FROM certificates 
+ 
+            INNER JOIN students 
+                ON certificates.student_id = students.student_id 
+ 
+            WHERE 
+                TRIM(UPPER(students.department)) 
+                = 
+                TRIM(UPPER(%s)) 
+ 
+            AND 
+                TRIM(UPPER(students.year)) 
+                = 
+                TRIM(UPPER(%s)) 
+ 
+            AND 
+                certificates.certificate_file IS NOT NULL 
+ 
+            AND 
+                certificates.certificate_file != '' 
+        """ 
+ 
+        params = [ 
+            department, 
+            class_year 
+        ] 
+ 
+        # ===================================================== 
+        # SEARCH EXISTS 
+        # ===================================================== 
+ 
+        if search: 
+ 
+            query += """ 
+                AND students.student_name LIKE %s 
+            """ 
+ 
+            params.append("%" + search + "%") 
+ 
+        # ===================================================== 
+        # ORDER 
+        # ===================================================== 
+ 
+        query += """ 
+            ORDER BY 
+                students.student_name ASC, 
+                certificates.upload_date DESC 
+        """ 
+ 
+        cursor.execute(query, tuple(params)) 
+ 
+        files = cursor.fetchall() 
+ 
+        cursor.close() 
+ 
+        # ===================================================== 
+        # NO RECORDS 
+        # ===================================================== 
+ 
+        if not files: 
+ 
+            if search: 
+                flash( 
+                    "No certificates found for: " + search 
+                ) 
+            else: 
+                flash( 
+                    "No certificates found for your department and year." 
+                ) 
+ 
+            return redirect("/tutor") 
+ 
+        print("Certificates found:", len(files)) 
+ 
+        # ===================================================== 
+        # GOOGLE DRIVE 
+        # ===================================================== 
+ 
+        import re 
+        import os 
+        import tempfile 
+        import zipfile 
+ 
+        from io import BytesIO 
+ 
+        from googleapiclient.http import MediaIoBaseDownload 
+        from drive_service import get_drive_service 
+ 
+        service = get_drive_service() 
+ 
+        # ===================================================== 
+        # CREATE TEMP ZIP 
+        # ===================================================== 
+ 
+        temp = tempfile.NamedTemporaryFile( 
+            delete=False, 
+            suffix=".zip" 
+        ) 
+ 
+        zip_file_path = temp.name 
+        temp.close() 
+ 
+        added_files = 0 
+ 
+        # ===================================================== 
+        # CREATE ZIP 
+        # ===================================================== 
+ 
+        with zipfile.ZipFile( 
+            zip_file_path, 
+            "w", 
+            compression=zipfile.ZIP_DEFLATED 
+        ) as zipf: 
+ 
+            # ================================================= 
+            # LOOP THROUGH CERTIFICATES 
+            # ================================================= 
+ 
+            for row in files: 
+ 
+                student_name = row[0] or "Student" 
+                register_no = row[1] or "" 
+                certificate_title = row[2] or "Certificate" 
+                certificate_url = row[3] or "" 
+ 
+                try: 
+ 
+                    # ========================================= 
+                    # GET GOOGLE DRIVE FILE ID 
+                    # ========================================= 
+ 
+                    file_id = None 
+ 
+                    match = re.search( 
+                        r"/file/d/([^/]+)", 
+                        certificate_url 
+                    ) 
+ 
+                    if match: 
+                        file_id = match.group(1) 
+ 
+                    if not file_id: 
+ 
+                        match = re.search( 
+                            r"/d/([^/?]+)", 
+                            certificate_url 
+                        ) 
+ 
+                        if match: 
+                            file_id = match.group(1) 
+ 
+                    if not file_id: 
+ 
+                        match = re.search( 
+                            r"[?&]id=([^&]+)", 
+                            certificate_url 
+                        ) 
+ 
+                        if match: 
+                            file_id = match.group(1) 
+ 
+                    # ========================================= 
+                    # INVALID URL 
+                    # ========================================= 
+ 
+                    if not file_id: 
+ 
+                        print( 
+                            "SKIPPED - Invalid Drive URL:", 
+                            certificate_url 
+                        ) 
+ 
+                        continue 
+ 
+                    # ========================================= 
+                    # GET DRIVE FILE NAME 
+                    # ========================================= 
+ 
+                    file_info = service.files().get( 
+                        fileId=file_id, 
+                        fields="id,name,mimeType" 
+                    ).execute() 
+ 
+                    original_name = file_info.get( 
+                        "name", 
+                        "certificate.pdf" 
+                    ) 
+ 
+                    # ========================================= 
+                    # DOWNLOAD FILE 
+                    # ========================================= 
+ 
+                    drive_request = service.files().get_media( 
+                        fileId=file_id 
+                    ) 
+ 
+                    file_stream = BytesIO() 
+ 
+                    downloader = MediaIoBaseDownload( 
+                        file_stream, 
+                        drive_request 
+                    ) 
+ 
+                    done = False 
+ 
+                    while not done: 
+ 
+                        status, done = downloader.next_chunk() 
+ 
+                    file_stream.seek(0) 
+ 
+                    # ========================================= 
+                    # SAFE STUDENT NAME 
+                    # ========================================= 
+ 
+                    safe_student = re.sub( 
+                        r'[<>:"/\\|?*]', 
+                        "_", 
+                        str(student_name) 
+                    ).strip() 
+ 
+                    if not safe_student: 
+                        safe_student = "Student" 
+ 
+                    # ========================================= 
+                    # SAFE REGISTER NUMBER 
+                    # ========================================= 
+ 
+                    safe_register = re.sub( 
+                        r'[<>:"/\\|?*]', 
+                        "_", 
+                        str(register_no) 
+                    ).strip() 
+ 
+                    # ========================================= 
+                    # SAFE FILE NAME 
+                    # ========================================= 
+ 
+                    safe_filename = re.sub( 
+                        r'[<>:"/\\|?*]', 
+                        "_", 
+                        str(original_name) 
+                    ).strip() 
+ 
+                    if not safe_filename: 
+                        safe_filename = ( 
+                            str(certificate_title) 
+                            + ".pdf" 
+                        ) 
+ 
+                    # ========================================= 
+                    # ZIP FOLDER 
+                    # ========================================= 
+ 
+                    if safe_register: 
+ 
+                        zip_entry = ( 
+                            safe_student 
+                            + "_" 
+                            + safe_register 
+                            + "/" 
+                            + safe_filename 
+                        ) 
+ 
+                    else: 
+ 
+                        zip_entry = ( 
+                            safe_student 
+                            + "/" 
+                            + safe_filename 
+                        ) 
+ 
+                    # ========================================= 
+                    # WRITE TO ZIP 
+                    # ========================================= 
+ 
+                    zipf.writestr( 
+                        zip_entry, 
+                        file_stream.read() 
+                    ) 
+ 
+                    added_files += 1 
+ 
+                    print( 
+                        "ADDED:", 
+                        student_name, 
+                        "->", 
+                        safe_filename 
+                    ) 
+ 
+                except Exception as file_error: 
+ 
+                    # One bad file should NOT stop ZIP 
+                    print( 
+                        "SKIPPED CERTIFICATE:" 
+                    ) 
+ 
+                    print( 
+                        "Student:", 
+                        student_name 
+                    ) 
+ 
+                    print( 
+                        "Error:", 
+                        str(file_error) 
+                    ) 
+ 
+                    continue 
+ 
+        # ===================================================== 
+        # NOTHING ADDED 
+        # ===================================================== 
+ 
+        if added_files == 0: 
+ 
+            try: 
+                os.remove(zip_file_path) 
+            except Exception: 
+                pass 
+ 
+            flash( 
+                "Google Drive certificates could not be downloaded." 
+            ) 
+ 
+            return redirect("/tutor") 
+ 
+        # ===================================================== 
+        # ZIP NAME 
+        # ===================================================== 
+ 
+        if search: 
+ 
+            safe_search = re.sub( 
+                r'[<>:"/\\|?*]', 
+                "_", 
+                search 
+            ).strip() 
+ 
+            download_name = ( 
+                safe_search 
+                + "_Certificates.zip" 
+            ) 
+ 
+        else: 
+ 
+            download_name = ( 
+                "Tutor_Certificates.zip" 
+            ) 
+ 
+        print("====================================") 
+        print("ZIP CREATED") 
+        print("Files added:", added_files) 
+        print("ZIP:", zip_file_path) 
+        print("====================================") 
+ 
+        # ===================================================== 
+        # SEND ZIP 
+        # ===================================================== 
+ 
+        return send_file( 
+            zip_file_path, 
+            as_attachment=True, 
+            download_name=download_name, 
+            mimetype="application/zip" 
+        ) 
+ 
+    except Exception as e: 
+ 
+        print("====================================") 
+        print("TUTOR ZIP ERROR") 
+        print("ERROR:", str(e)) 
+        print("====================================") 
+ 
+        try: 
+            cursor.close() 
+        except Exception: 
+            pass 
+ 
+        flash( 
+            "Unable to create ZIP. Please try again." 
+        ) 
+ 
+        return redirect("/tutor") 
+#sreach 
+ 
+@app.route("/search_certificate_tutor") 
+def search_certificate_tutor(): 
+ 
+    if session.get("role") != "tutor": 
+        return "" 
+ 
+    search = request.args.get("search", "").strip() 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    # Tutor Details 
+    cursor.execute(""" 
+        SELECT 
+            class_year, 
+            section 
+        FROM tutors 
+        WHERE user_id=%s 
+    """, (session["user_id"],)) 
+ 
+    tutor = cursor.fetchone() 
+ 
+    if not tutor: 
+        cursor.close() 
+        return "" 
+ 
+    class_year = tutor[0] 
+    section = tutor[1] 
+ 
+    cursor.execute(""" 
+        SELECT 
+            students.student_name, 
+            students.department, 
+            students.year, 
+            certificates.certificate_title, 
+            certificate_categories.category_name, 
+            certificates.achievement, 
+            certificates.certificate_file, 
+            certificates.upload_date, 
+            certificates.certificate_id 
+ 
+        FROM certificates 
+ 
+        INNER JOIN students 
+            ON certificates.student_id = students.student_id 
+ 
+        INNER JOIN certificate_categories 
+            ON certificates.category_id = certificate_categories.category_id 
+ 
+        WHERE 
+            students.year=%s 
+            AND students.section=%s 
+            AND ( 
+                students.student_name LIKE %s 
+                OR certificates.certificate_title LIKE %s 
+            ) 
+ 
+        ORDER BY certificates.upload_date DESC 
+    """, ( 
+        class_year, 
+        section, 
+        "%" + search + "%", 
+        "%" + search + "%" 
+    )) 
+ 
+    data = cursor.fetchall() 
+ 
+    cursor.close() 
+ 
+    html = "" 
+ 
+    for row in data: 
+ 
+        html += f""" 
+        <tr> 
+ 
+            <td>{row[0]}</td> 
+ 
+            <td>{row[1]}</td> 
+ 
+            <td>{row[2]}</td> 
+ 
+            <td>{row[3]}</td> 
+ 
+            <td>{row[4]}</td> 
+ 
+            <td> 
+        """ 
+ 
+        if row[5] == "Winner": 
+            html += '<span class="badge bg-success">🏆 Winner</span>' 
+ 
+        elif row[5] == "Runner": 
+            html += '<span class="badge bg-warning text-dark">🥈 Runner</span>' 
+ 
+        elif row[5] == "Participated": 
+            html += '<span class="badge bg-primary">🎖 Participated</span>' 
+ 
+        else: 
+            html += '<span class="badge bg-secondary">📜 Others</span>' 
+ 
+        html += f""" 
+            </td> 
+ 
+            <td>{row[7]}</td> 
+ 
+            <td> 
+                <a href="/view/{row[6]}" class="btn btn-primary btn-sm"> 
+                    View 
+                </a> 
+            </td> 
+ 
+            <td> 
+                <a href="/download/{row[6]}" class="btn btn-success btn-sm"> 
+                    Download 
+                </a> 
+            </td> 
+ 
+            <td> 
+                <a href="/delete_certificate/{row[8]}" 
+                   class="btn btn-danger btn-sm" 
+                   onclick="return confirm('Delete this certificate?')"> 
+                    Delete 
+                </a> 
+            </td> 
+ 
+        </tr> 
+        """ 
+ 
+    return html 
+#--------------------------- 
+#upload profile 
+#--------------------------- 
+ 
+@app.route("/upload_tutor_photo", methods=["POST"]) 
+def upload_tutor_photo(): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    file = request.files["profile_photo"] 
+ 
+    if not file or file.filename == "": 
+        flash("Please select a photo") 
+        return redirect("/tutor_profile") 
+ 
+    filename = secure_filename(file.filename) 
+    file.save(os.path.join(app.config["PROFILE_FOLDER"], filename)) 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    # tutors table 
+    cursor.execute(""" 
+        UPDATE tutors 
+        SET profile_photo=%s 
+        WHERE user_id=%s 
+    """, (filename, session["user_id"])) 
+ 
+    # users table 
+    cursor.execute(""" 
+        UPDATE users 
+        SET profile_photo=%s 
+        WHERE id=%s 
+    """, (filename, session["user_id"])) 
+ 
+    mysql.connection.commit() 
+    cursor.close() 
+ 
+    flash("Profile Photo Updated Successfully") 
+ 
+    return redirect("/tutor_profile") 
+ 
+# ========================== 
+# Certificate Categories 
+# ========================== 
+ 
+@app.route("/certificate_categories") 
+def certificate_categories(): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    # Tutor Details 
+    cursor.execute(""" 
+        SELECT 
+            class_year, 
+            section 
+        FROM tutors 
+        WHERE user_id=%s 
+    """, (session["user_id"],)) 
+ 
+    tutor = cursor.fetchone() 
+ 
+    if not tutor: 
+        cursor.close() 
+        flash("Tutor not assigned.") 
+        return redirect("/tutor") 
+ 
+    class_year = tutor[0] 
+    section = tutor[1] 
+ 
+    # Category-wise Certificate Count 
+    cursor.execute(""" 
+        SELECT 
+            cc.category_id, 
+            cc.category_name, 
+            COUNT(c.certificate_id) AS total_count 
+ 
+        FROM certificate_categories cc 
+ 
+        LEFT JOIN certificates c 
+            ON cc.category_id = c.category_id 
+ 
+        LEFT JOIN students s 
+            ON c.student_id = s.student_id 
+ 
+        WHERE 
+            ( 
+                s.year=%s 
+                AND s.section=%s 
+            ) 
+            OR s.student_id IS NULL 
+ 
+        GROUP BY 
+            cc.category_id, 
+            cc.category_name 
+ 
+        ORDER BY 
+            cc.category_name 
+    """, ( 
+        class_year, 
+        section 
+    )) 
+ 
+    categories = cursor.fetchall() 
+ 
+    cursor.close() 
+ 
+    return render_template( 
+        "tutor/certificate_categories.html", 
+        categories=categories 
+    ) 
+# ========================== 
+# Add Category 
+# ========================== 
+ 
+@app.route("/add_category", methods=["POST"]) 
+def add_category(): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    category_name = request.form["category_name"] 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    cursor.execute(""" 
+        INSERT INTO certificate_categories 
+        (category_name) 
+        VALUES (%s) 
+    """, (category_name,)) 
+ 
+    mysql.connection.commit() 
+ 
+    cursor.close() 
+ 
+    flash("Category Added Successfully") 
+ 
+    return redirect("/certificate_categories") 
+ 
+ 
+# ========================== 
+# Edit Category 
+# ========================== 
+@app.route("/edit_category/<int:id>") 
+def edit_category(): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    cursor.execute(""" 
+        SELECT 
+            category_id, 
+            category_name 
+        FROM certificate_categories 
+        WHERE category_id=%s 
+    """, (id,)) 
+ 
+    category = cursor.fetchone() 
+ 
+    cursor.close() 
+ 
+    return render_template( 
+        "tutor/edit_category.html", 
+        category=category 
+    ) 
+ 
+# ========================== 
+# Update Category 
+# ========================== 
+ 
+ 
+@app.route("/update_category/<int:id>", methods=["POST"]) 
+def update_category(id): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    category_name = request.form["category_name"] 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    cursor.execute(""" 
+        UPDATE certificate_categories 
+        SET category_name=%s 
+        WHERE category_id=%s 
+    """, ( 
+        category_name, 
+        id 
+    )) 
+ 
+    mysql.connection.commit() 
+ 
+    cursor.close() 
+ 
+    flash("Category Updated Successfully") 
+ 
+    return redirect("/certificate_categories") 
+ 
+# ========================== 
+# Delete Category 
+# ========================== 
+ 
+@app.route("/delete_category/<int:id>") 
+def delete_category(id): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    cursor.execute(""" 
+        DELETE FROM certificate_categories 
+        WHERE category_id=%s 
+    """, (id,)) 
+ 
+    mysql.connection.commit() 
+ 
+    cursor.close() 
+ 
+    flash("Category Deleted Successfully") 
+ 
+    return redirect("/certificate_categories") 
+#--------------------------- 
+ 
+@app.route("/upload_students", methods=["POST"]) 
+def upload_students(): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    file = request.files["excel_file"] 
+ 
+    if file.filename == "": 
+        flash("Please select an Excel file") 
+        return redirect("/manage_student") 
+ 
+    if not file.filename.lower().endswith(".xlsx"): 
+        flash("Please upload only .xlsx file") 
+        return redirect("/manage_student") 
+ 
+    filename = secure_filename(file.filename) 
+    filepath = os.path.join(UPLOAD_FOLDER, filename) 
+    file.save(filepath) 
+ 
+    # Read Excel Sheet 
+    df = pd.read_excel( 
+        filepath, 
+        sheet_name="studentss", 
+        engine="openpyxl" 
+    ) 
+ 
+    print(df.columns.tolist()) 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    for _, row in df.iterrows(): 
+ 
+        username = row["Username"] 
+        password = row["Password"] 
+ 
+        # Check Username 
+        cursor.execute( 
+            "SELECT id FROM users WHERE username=%s", 
+            (username,) 
+        ) 
+ 
+        existing = cursor.fetchone() 
+ 
+        if existing: 
+ 
+            user_id = existing[0] 
+ 
+        else: 
+ 
+            cursor.execute(""" 
+                INSERT INTO users 
+                ( 
+                    username, 
+                    password, 
+                    role 
+                ) 
+                VALUES 
+                ( 
+                    %s, 
+                    %s, 
+                    'student' 
+                ) 
+            """, ( 
+                username, 
+                password 
+            )) 
+ 
+            mysql.connection.commit() 
+ 
+            user_id = cursor.lastrowid 
+ 
+        # Check Register Number 
+        cursor.execute( 
+            """ 
+            SELECT student_id 
+            FROM students 
+            WHERE register_no=%s 
+            """, 
+            (row["Register Number"],) 
+        ) 
+ 
+        if cursor.fetchone(): 
+            continue 
+ 
+        # Insert Student 
+        cursor.execute(""" 
+            INSERT INTO students 
+            ( 
+                user_id, 
+                register_no, 
+                student_name, 
+                department, 
+                year, 
+                section, 
+                email, 
+                phone 
+            ) 
+            VALUES 
+            ( 
+                %s, 
+                %s, 
+                %s, 
+                %s, 
+                %s, 
+                %s, 
+                %s, 
+                %s 
+            ) 
+        """, ( 
+            user_id, 
+            row["Register Number"], 
+            row["Student Name"], 
+            row["Department"], 
+            row["Year"], 
+            row["Section"], 
+            row["Email Address"], 
+            row["Phone Number"] 
+        )) 
+ 
+    mysql.connection.commit() 
+ 
+    cursor.close() 
+ 
+    flash("Students Imported Successfully") 
+ 
+    return redirect("/manage_student") 
+ 
+#---------------------------- 
+ 
+@app.route("/download_sample_excel") 
+def download_sample_excel(): 
+ 
+    sample_path = os.path.join(app.root_path, "static", "sample") 
+ 
+    return send_from_directory( 
+        sample_path, 
+        "sample_certificate.xlsx", 
+        as_attachment=True 
+    ) 
+ 
+#----------------------------- 
+ 
+ 
+@app.route("/export_zip") 
+def export_zip(): 
+ 
+    if session.get("role") != "tutor": 
+        return redirect("/") 
+ 
+    # Search box value 
+    student_name = request.args.get("student_name", "").strip() 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    # ========================================================= 
+    # Get Tutor Details 
+    # ========================================================= 
+ 
+    cursor.execute(""" 
+        SELECT 
+            department, 
+            class_year, 
+            section 
+        FROM tutors 
+        WHERE user_id=%s 
+    """, (session["user_id"],)) 
+ 
+    tutor = cursor.fetchone() 
+ 
+    if not tutor: 
+        cursor.close() 
+        flash("Tutor not assigned.") 
+        return redirect("/tutor") 
+ 
+    department = tutor[0] 
+    class_year = tutor[1] 
+    section = tutor[2] 
+ 
+    # ========================================================= 
+    # Get Certificate Files 
+    # ========================================================= 
+ 
+    if class_year is None or section is None: 
+ 
+        # ----------------------------------------------------- 
+        # No year / section 
+        # Department-wise certificates 
+        # ----------------------------------------------------- 
+ 
+        if student_name: 
+ 
+            cursor.execute(""" 
+                SELECT 
+                    certificates.certificate_file 
+                FROM certificates 
+ 
+                INNER JOIN students 
+                    ON certificates.student_id = 
+                       students.student_id 
+ 
+                WHERE students.department=%s 
+                AND students.student_name LIKE %s 
+            """, ( 
+                department, 
+                "%" + student_name + "%" 
+            )) 
+ 
+        else: 
+ 
+            # Empty search = ALL department certificates 
+ 
+            cursor.execute(""" 
+                SELECT 
+                    certificates.certificate_file 
+                FROM certificates 
+ 
+                INNER JOIN students 
+                    ON certificates.student_id = 
+                       students.student_id 
+ 
+                WHERE students.department=%s 
+            """, (department,)) 
+ 
+    else: 
+ 
+        # ----------------------------------------------------- 
+        # Year + Section assigned 
+        # ----------------------------------------------------- 
+ 
+        if student_name: 
+ 
+            cursor.execute(""" 
+                SELECT 
+                    certificates.certificate_file 
+                FROM certificates 
+ 
+                INNER JOIN students 
+                    ON certificates.student_id = 
+                       students.student_id 
+ 
+                WHERE students.department=%s 
+                AND students.year=%s 
+                AND students.section=%s 
+                AND students.student_name LIKE %s 
+            """, ( 
+                department, 
+                class_year, 
+                section, 
+                "%" + student_name + "%" 
+            )) 
+ 
+        else: 
+ 
+            # Empty search = ALL certificates 
+            # from tutor's assigned class 
+ 
+            cursor.execute(""" 
+                SELECT 
+                    certificates.certificate_file 
+                FROM certificates 
+ 
+                INNER JOIN students 
+                    ON certificates.student_id = 
+                       students.student_id 
+ 
+                WHERE students.department=%s 
+                AND students.year=%s 
+                AND students.section=%s 
+            """, ( 
+                department, 
+                class_year, 
+                section 
+            )) 
+ 
+    certificates = cursor.fetchall() 
+ 
+    cursor.close() 
+ 
+    # ========================================================= 
+    # No Certificates 
+    # ========================================================= 
+ 
+    if not certificates: 
+        flash("No certificates found.") 
+        return redirect("/tutor") 
+ 
+    # ========================================================= 
+    # Certificate Folder 
+    # ========================================================= 
+ 
+    cert_folder = os.path.join( 
+        app.root_path, 
+        "static", 
+        "uploads", 
+        "certificates" 
+    ) 
+ 
+    # ========================================================= 
+    # Create Temporary ZIP 
+    # ========================================================= 
+ 
+    temp_zip = tempfile.NamedTemporaryFile( 
+        delete=False, 
+        suffix=".zip" 
+    ) 
+ 
+    zip_path = temp_zip.name 
+    temp_zip.close() 
+ 
+    # ========================================================= 
+    # Add Only Selected Certificate Files 
+    # ========================================================= 
+ 
+    added_files = 0 
+ 
+    with zipfile.ZipFile( 
+        zip_path, 
+        "w", 
+        zipfile.ZIP_DEFLATED 
+    ) as zipf: 
+ 
+        for certificate in certificates: 
+ 
+            certificate_file = certificate[0] 
+ 
+            if not certificate_file: 
+                continue 
+ 
+            file_path = os.path.join( 
+                cert_folder, 
+                certificate_file 
+            ) 
+ 
+            if os.path.isfile(file_path): 
+ 
+                zipf.write( 
+                    file_path, 
+                    arcname=os.path.basename(file_path) 
+                ) 
+ 
+                added_files += 1 
+ 
+    # ========================================================= 
+    # No Physical Files Found 
+    # ========================================================= 
+ 
+    if added_files == 0: 
+ 
+        try: 
+            os.remove(zip_path) 
+        except: 
+            pass 
+ 
+        flash("Certificate files not found.") 
+        return redirect("/tutor") 
+ 
+    # ========================================================= 
+    # ZIP File Name 
+    # ========================================================= 
+ 
+    if student_name: 
+ 
+        safe_name = student_name.replace(" ", "_") 
+ 
+        zip_name = safe_name + "_Certificates.zip" 
+ 
+    else: 
+ 
+        zip_name = "Certificates.zip" 
+ 
+    # ========================================================= 
+    # Download ZIP 
+    # ========================================================= 
+ 
+    return send_file( 
+        zip_path, 
+        as_attachment=True, 
+        download_name=zip_name, 
+        mimetype="application/zip" 
+    ) 
+ 
+#=========================== 
+# ============================================================ 
+# DELETE CERTIFICATE - TUTOR 
+# ============================================================ 
+ 
+ 
+# ---------------------------------------------------- 
+        # DELETE FROM DATABASE 
+        # ---------------------------------------------------- 
+ 
+@app.route("/delete_certificate/<path:filename>", methods=["POST"]) 
+def delete_certificate(filename): 
+ 
+    role = session.get("role") 
+ 
+    # Student or Tutor only 
+    if role not in ["student", "tutor"]: 
+        flash("Unauthorized access.") 
+        return redirect("/") 
+ 
+    cursor = mysql.connection.cursor() 
+ 
+    try: 
+ 
+        # ==================================================== 
+        # STUDENT DELETE 
+        # ==================================================== 
+ 
+        if role == "student": 
+ 
+            cursor.execute(""" 
+                DELETE FROM certificates 
+                WHERE certificate_file = %s 
+                AND student_id = ( 
+                    SELECT student_id 
+                    FROM students 
+                    WHERE user_id = %s 
+                ) 
+            """, ( 
+                filename, 
+                session["user_id"] 
+            )) 
+ 
+            mysql.connection.commit() 
+ 
+            if cursor.rowcount > 0: 
+                flash("Certificate deleted successfully.") 
+            else: 
+                flash("Certificate not found.") 
+ 
+            return redirect("/student") 
+ 
+ 
+        # ==================================================== 
+        # TUTOR DELETE 
+        # ==================================================== 
+ 
+        if role == "tutor": 
+ 
+            # ------------------------------------------------ 
+            # GET TUTOR DETAILS 
+            # ------------------------------------------------ 
+ 
+            cursor.execute(""" 
+                SELECT 
+                    department, 
+                    class_year, 
+                    section 
+                FROM tutors 
+                WHERE user_id = %s 
+            """, (session["user_id"],)) 
+ 
+            tutor = cursor.fetchone() 
+ 
+            if not tutor: 
+                flash("Tutor not found.") 
+                return redirect("/tutor") 
+ 
+            tutor_department = tutor[0] 
+            tutor_year = tutor[1] 
+            tutor_section = tutor[2] 
+ 
+ 
+            # ------------------------------------------------ 
+            # FIND CERTIFICATE + STUDENT DETAILS 
+            # ------------------------------------------------ 
+ 
+            cursor.execute(""" 
+                SELECT 
+                    certificates.certificate_id, 
+                    certificates.certificate_file, 
+                    students.department, 
+                    students.year, 
+                    students.section 
+                FROM certificates 
+ 
+                INNER JOIN students 
+                    ON certificates.student_id = 
+                       students.student_id 
+ 
+                WHERE certificates.certificate_file = %s 
+            """, (filename,)) 
+ 
+            certificate = cursor.fetchone() 
+ 
+            if not certificate: 
+                flash("Certificate not found.") 
+                return redirect("/tutor") 
+ 
+            certificate_id = certificate[0] 
+            certificate_file = certificate[1] 
+            student_department = certificate[2] 
+            student_year = certificate[3] 
+            student_section = certificate[4] 
+ 
+ 
+            # ------------------------------------------------ 
+            # CHECK TUTOR ACCESS 
+            # ------------------------------------------------ 
+ 
+            # Department check 
+            if ( 
+                tutor_department 
+                and student_department 
+                and str(tutor_department).strip().lower() 
+                != str(student_department).strip().lower() 
+            ): 
+                flash("You are not authorized to delete this certificate.") 
+                return redirect("/tutor") 
+ 
+ 
+            # Year check 
+            if ( 
+                tutor_year 
+                and student_year 
+                and str(tutor_year).strip().lower() 
+                != str(student_year).strip().lower() 
+            ): 
+                flash("You are not authorized to delete this certificate.") 
+                return redirect("/tutor") 
+ 
+ 
+            # Section check 
+            if ( 
+                tutor_section 
+                and student_section 
+                and str(tutor_section).strip().lower() 
+                != str(student_section).strip().lower() 
+            ): 
+                flash("You are not authorized to delete this certificate.") 
+                return redirect("/tutor") 
+ 
+ 
+            # ------------------------------------------------ 
+            # DELETE FROM GOOGLE DRIVE 
+            # ------------------------------------------------ 
+ 
+            if ( 
+                certificate_file.startswith("http://") 
+                or certificate_file.startswith("https://") 
+            ): 
+ 
+                if ( 
+                    "drive.google.com" in certificate_file 
+                    or "drive.usercontent.google.com" 
+                    in certificate_file 
+                ): 
+ 
+                    import re 
+ 
+                    file_id = None 
+ 
+                    # /file/d/FILE_ID/view 
+                    match = re.search( 
+                        r"/file/d/([^/]+)", 
+                        certificate_file 
+                    ) 
+ 
+                    if match: 
+                        file_id = match.group(1) 
+ 
+ 
+                    # ?id=FILE_ID 
+                    if not file_id: 
+ 
+                        match = re.search( 
+                            r"[?&]id=([^&]+)", 
+                            certificate_file 
+                        ) 
+ 
+                        if match: 
+                            file_id = match.group(1) 
+ 
+ 
+                    if file_id: 
+ 
+                        try: 
+ 
+                            from drive_service import get_drive_service 
+ 
+                            service = get_drive_service() 
+ 
+                            service.files().delete( 
+                                fileId=file_id 
+                            ).execute() 
+ 
+                            print( 
+                                "GOOGLE DRIVE FILE DELETED:", 
+                                file_id 
+                            ) 
+ 
+                        except Exception as e: 
+ 
+                            print( 
+                                "GOOGLE DRIVE DELETE ERROR:", 
+                                str(e) 
+                            ) 
+ 
+                            flash( 
+                                "Unable to delete certificate from Google Drive." 
+                            ) 
+ 
+                            return redirect("/tutor") 
+ 
+ 
+            # ------------------------------------------------ 
+            # DELETE FROM DATABASE 
+            # ------------------------------------------------ 
+ 
+            cursor.execute(""" 
+                DELETE FROM certificates 
+                WHERE certificate_id = %s 
+            """, (certificate_id,)) 
+ 
+            mysql.connection.commit() 
+ 
+            print( 
+                "CERTIFICATE DELETED:", 
+                certificate_id 
+            ) 
+ 
+            flash("Certificate deleted successfully.") 
+ 
+            return redirect("/tutor") 
+ 
+ 
+    except Exception as e: 
+ 
+        mysql.connection.rollback() 
+ 
+        print("================================") 
+        print("DELETE CERTIFICATE ERROR") 
+        print("Filename :", filename) 
+        print("Error    :", str(e)) 
+        print("================================") 
+ 
+        flash("Unable to delete certificate.") 
+ 
+        if role == "student": 
+            return redirect("/student") 
+        else: 
+            return redirect("/tutor") 
+ 
+ 
+    finally: 
+        cursor.close() 
 # ==========================
 # HOD Dashboard
 # ==========================
@@ -6865,103 +6620,77 @@ def student():
 
     cursor = mysql.connection.cursor()
 
-    try:
+    # =========================================
+    # STUDENT DETAILS
+    # =========================================
 
-        # =========================================
-        # STUDENT DETAILS
-        # =========================================
+    cursor.execute("""
+        SELECT
+            student_id,
+            user_id,
+            register_no,
+            student_name,
+            department,
+            year,
+            email,
+            phone,
+            profile_photo
+        FROM students
+        WHERE user_id=%s
+    """, (session["user_id"],))
+
+    student = cursor.fetchone()
+
+    # =========================================
+    # CERTIFICATE CATEGORIES
+    # =========================================
+
+    cursor.execute("""
+        SELECT
+            category_id,
+            category_name
+        FROM certificate_categories
+        ORDER BY category_name
+    """)
+
+    categories = cursor.fetchall()
+
+    # =========================================
+    # STUDENT CERTIFICATES
+    # =========================================
+
+    certificates = []
+
+    if student:
 
         cursor.execute("""
             SELECT
-                student_id,
-                user_id,
-                register_no,
-                student_name,
-                department,
-                year,
-                email,
-                phone,
-                profile_photo
-            FROM students
-            WHERE user_id=%s
-        """, (session["user_id"],))
+                certificates.certificate_title,
+                certificate_categories.category_name,
+                certificates.upload_date,
+                certificates.achievement,
+                certificates.certificate_file
 
-        student = cursor.fetchone()
+            FROM certificates
 
-        # =========================================
-        # CERTIFICATE CATEGORIES
-        # =========================================
+            LEFT JOIN certificate_categories
+            ON certificates.category_id =
+               certificate_categories.category_id
 
-        cursor.execute("""
-            SELECT
-                category_id,
-                category_name
-            FROM certificate_categories
-            ORDER BY category_name
-        """)
+            WHERE certificates.student_id=%s
 
-        categories = cursor.fetchall()
+            ORDER BY certificates.upload_date DESC
+        """, (student[0],))
 
-        # =========================================
-        # STUDENT CERTIFICATES
-        # =========================================
+        certificates = cursor.fetchall()
 
-        certificates = []
-
-        if student:
-
-            cursor.execute("""
-                SELECT
-                    certificates.certificate_title,
-                    certificate_categories.category_name,
-                    certificates.upload_date,
-                    certificates.achievement,
-                    certificates.certificate_file
-
-                FROM certificates
-
-                LEFT JOIN certificate_categories
-                    ON certificates.category_id =
-                       certificate_categories.category_id
-
-                WHERE certificates.student_id=%s
-
-                ORDER BY certificates.upload_date DESC
-            """, (student[0],))
-
-            certificates = cursor.fetchall()
-
-        # =========================================
-        # CLOSE CURSOR
-        # =========================================
-
-        cursor.close()
-
-        # =========================================
-        # STUDENT DASHBOARD
-        # =========================================
-
-        return render_template(
+    cursor.close()
+    return render_template(
             "student/dashboard.html",
             student=student,
             certificates=certificates,
             categories=categories
         )
-
-    except Exception as e:
-
-        mysql.connection.rollback()
-
-        cursor.close()
-
-        print("===================================")
-        print("STUDENT DASHBOARD ERROR")
-        print("Error:", str(e))
-        print("===================================")
-
-        flash("Unable to load student dashboard.")
-
-        return redirect("/")
 #======================================
 
 # =========================================

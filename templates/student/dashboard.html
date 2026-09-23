@@ -18,9 +18,8 @@
 
 <body>
 
-
 <!-- =========================================================
-     SIDEBAR
+SIDEBAR
 ========================================================= -->
 
 <div class="sidebar">
@@ -35,84 +34,48 @@
 
     </div>
 
-
     <ul>
 
         <li class="active">
-
             <a href="/student">
-
                 <i class="bi bi-grid-fill"></i>
-
                 Dashboard
-
             </a>
-
         </li>
 
-
         <li>
-
             <a href="#upload">
-
                 <i class="bi bi-cloud-arrow-up-fill"></i>
-
                 Upload Certificate
-
             </a>
-
         </li>
 
-
         <li>
-
             <a href="#certificates">
-
                 <i class="bi bi-file-earmark-text-fill"></i>
-
                 My Certificates
-
             </a>
-
         </li>
 
-
         <li>
-
             <a href="#analytics">
-
                 <i class="bi bi-bar-chart-fill"></i>
-
                 Analytics
-
             </a>
-
         </li>
 
-
         <li>
-
             <a href="/student_profile">
-
                 <i class="bi bi-person-circle"></i>
-
                 My Profile
-
             </a>
-
         </li>
 
-
         <li>
-
             <a href="/logout">
-
                 <i class="bi bi-box-arrow-right"></i>
-
                 Logout
-
             </a>
-
         </li>
 
     </ul>
@@ -121,11 +84,10 @@
 
 
 <!-- =========================================================
-     MAIN
+MAIN
 ========================================================= -->
 
 <div class="main">
-
 
     <!-- =====================================================
          TOPBAR
@@ -133,14 +95,7 @@
 
     <div class="topbar">
 
-        <div class="search">
-
-            <input
-                type="text"
-                placeholder="Search your certificates...">
-
-        </div>
-
+        
 
         <div class="user-box">
 
@@ -161,7 +116,6 @@
                 ) }}">
 
             {% endif %}
-
 
             <div>
 
@@ -201,7 +155,6 @@
 
             </div>
 
-
             <div class="right">
 
                 {% if student[8] %}
@@ -223,7 +176,6 @@
                     class="student-photo">
 
                 {% endif %}
-
 
                 <form
                     action="/upload_student_photo"
@@ -272,7 +224,6 @@
 
             </div>
 
-
             <div class="card-body">
 
                 <form
@@ -283,9 +234,7 @@
                     <div class="row">
 
 
-                        <!-- =================================
-                             CERTIFICATE NAME
-                        ================================== -->
+                        <!-- Certificate Name -->
 
                         <div class="col-md-6 mb-3">
 
@@ -303,9 +252,7 @@
                         </div>
 
 
-                        <!-- =================================
-                             CATEGORY
-                        ================================== -->
+                        <!-- Category -->
 
                         <div class="col-md-6 mb-3">
 
@@ -335,9 +282,7 @@
                         </div>
 
 
-                        <!-- =================================
-                             ACHIEVEMENT
-                        ================================== -->
+                        <!-- Achievement -->
 
                         <div class="col-md-6 mb-3">
 
@@ -375,41 +320,7 @@
                         </div>
 
 
-                        <!-- =================================
-                             PARTICIPATION
-                        ================================== -->
-
-                        <div class="col-md-6 mb-3">
-
-                            <label class="form-label">
-                                Participation
-                            </label>
-
-                            <select
-                                name="participation"
-                                class="form-select"
-                                required>
-
-                                <option value="">
-                                    Select Participation
-                                </option>
-
-                                <option value="Internal">
-                                    🏫 Internal
-                                </option>
-
-                                <option value="External">
-                                    🌐 External
-                                </option>
-
-                            </select>
-
-                        </div>
-
-
-                        <!-- =================================
-                             UPLOAD FILE
-                        ================================== -->
+                        <!-- Upload File -->
 
                         <div class="col-md-12 mb-3">
 
@@ -428,9 +339,7 @@
                         </div>
 
 
-                        <!-- =================================
-                             UPLOAD BUTTON
-                        ================================== -->
+                        <!-- Upload Button -->
 
                         <div class="col-md-12 text-center">
 
@@ -511,7 +420,6 @@
 
                 </h2>
 
-
                 <input
                     type="text"
                     id="searchInput"
@@ -541,11 +449,7 @@
 
                                 <th>Category</th>
 
-                                <th>Upload Date</th>
-
                                 <th>Achievement</th>
-
-                                <th>Participation</th>
 
                                 <th>View</th>
 
@@ -566,44 +470,24 @@
 
                             <tr>
 
-
                                 <!-- S.No -->
 
                                 <td>
-
                                     {{ loop.index }}
-
                                 </td>
 
 
                                 <!-- Certificate -->
 
                                 <td>
-
                                     {{ certificate[0] }}
-
                                 </td>
 
 
                                 <!-- Category -->
 
                                 <td>
-
                                     {{ certificate[1] }}
-
-                                </td>
-
-
-                                <!-- Upload Date -->
-
-                                <td>
-
-                                    {% if certificate[2] %}
-
-                                        {{ certificate[2].strftime('%d-%m-%Y') }}
-
-                                    {% endif %}
-
                                 </td>
 
 
@@ -611,36 +495,28 @@
 
                                 <td>
 
-                                    {% if certificate[3] == "Winner" %}
+                                    {% if certificate[2] == "Winner" %}
 
                                         <span class="badge bg-success">
-
                                             🏆 Winner
-
                                         </span>
 
-                                    {% elif certificate[3] == "Runner" %}
+                                    {% elif certificate[2] == "Runner" %}
 
                                         <span class="badge bg-warning text-dark">
-
                                             🥈 Runner
-
                                         </span>
 
-                                    {% elif certificate[3] == "Participated" %}
+                                    {% elif certificate[2] == "Participated" %}
 
                                         <span class="badge bg-primary">
-
                                             🎖 Participated
-
                                         </span>
 
                                     {% else %}
 
                                         <span class="badge bg-secondary">
-
                                             📜 Others
-
                                         </span>
 
                                     {% endif %}
@@ -648,53 +524,16 @@
                                 </td>
 
 
-                                <!-- =================================
-                                     PARTICIPATION
-                                ================================== -->
+                                <!-- VIEW -->
 
                                 <td>
 
-                                    {% if certificate[4] == "Internal" %}
-
-                                        <span class="badge bg-info text-dark">
-
-                                            🏫 Internal
-
-                                        </span>
-
-                                    {% elif certificate[4] == "External" %}
-
-                                        <span class="badge bg-dark">
-
-                                            🌐 External
-
-                                        </span>
-
-                                    {% else %}
-
-                                        <span class="text-muted">
-
-                                            -
-
-                                        </span>
-
-                                    {% endif %}
-
-                                </td>
-
-
-                                <!-- =================================
-                                     VIEW
-                                ================================== -->
-
-                                <td>
-
-                                    {% if certificate[5] %}
+                                    {% if certificate[3] %}
 
                                     <a
                                         href="{{ url_for(
                                             'view',
-                                            filename=certificate[5]
+                                            filename=certificate[3]
                                         ) }}"
                                         target="_blank"
                                         rel="noopener noreferrer"
@@ -709,9 +548,7 @@
                                     {% else %}
 
                                     <span class="text-muted">
-
                                         No File
-
                                     </span>
 
                                     {% endif %}
@@ -719,18 +556,16 @@
                                 </td>
 
 
-                                <!-- =================================
-                                     DOWNLOAD
-                                ================================== -->
+                                <!-- DOWNLOAD -->
 
                                 <td>
 
-                                    {% if certificate[5] %}
+                                    {% if certificate[3] %}
 
                                     <a
                                         href="{{ url_for(
                                             'download',
-                                            filename=certificate[5]
+                                            filename=certificate[3]
                                         ) }}"
                                         class="btn btn-primary btn-sm">
 
@@ -743,9 +578,7 @@
                                     {% else %}
 
                                     <span class="text-muted">
-
                                         No File
-
                                     </span>
 
                                     {% endif %}
@@ -753,18 +586,16 @@
                                 </td>
 
 
-                                <!-- =================================
-                                     DELETE
-                                ================================== -->
+                                <!-- DELETE -->
 
                                 <td>
 
-                                    {% if certificate[5] %}
+                                    {% if certificate[3] %}
 
                                     <form
                                         action="{{ url_for(
                                             'delete_certificate',
-                                            filename=certificate[5]
+                                            filename=certificate[3]
                                         ) }}"
                                         method="POST"
                                         style="display:inline;">
@@ -785,15 +616,12 @@
                                     {% else %}
 
                                     <span class="text-muted">
-
                                         No File
-
                                     </span>
 
                                     {% endif %}
 
                                 </td>
-
 
                             </tr>
 
@@ -801,13 +629,12 @@
 
                         {% else %}
 
-
                             <!-- No Certificates -->
 
                             <tr>
 
                                 <td
-                                    colspan="9"
+                                    colspan="7"
                                     class="text-center p-5">
 
                                     <img
@@ -924,15 +751,11 @@
                             <i class="bi bi-award-fill"></i>
 
                             <h1>
-
                                 {{ certificates|length }}
-
                             </h1>
 
                             <p>
-
                                 Total Certificates
-
                             </p>
 
                         </div>
@@ -960,9 +783,7 @@
                             </h1>
 
                             <p>
-
                                 Technical Certificates
-
                             </p>
 
                         </div>
@@ -990,9 +811,7 @@
                             </h1>
 
                             <p>
-
                                 Other Certificates
-
                             </p>
 
                         </div>
@@ -1025,7 +844,7 @@
 
 
 <!-- =========================================================
-     PAGE LOAD
+PAGE LOAD
 ========================================================= -->
 
 <script>
@@ -1037,7 +856,6 @@ window.onload = function() {
 };
 
 </script>
-
 
 </body>
 
