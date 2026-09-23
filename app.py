@@ -1874,286 +1874,240 @@ def update_tutor_profile():
  
 #--------------------------- 
 #       report 
-#---------------------------- 
-@app.route("/tutor_reports") 
-def tutor_reports(): 
- 
-    if session.get("role") != "tutor": 
-        return redirect("/") 
- 
-    cursor = mysql.connection.cursor() 
- 
-    # ========================================================= 
-    # Tutor Details 
-    # ========================================================= 
- 
-    cursor.execute(""" 
-        SELECT 
-            tutor_name, 
-            department, 
-            class_year, 
-            section, 
-            profile_photo 
-        FROM tutors 
-        WHERE user_id=%s 
-    """, (session["user_id"],)) 
- 
-    tutor = cursor.fetchone() 
- 
-    if not tutor: 
-        cursor.close() 
-        return redirect("/tutor") 
- 
-    tutor_name = tutor[0] 
-    department = tutor[1] 
-    class_year = tutor[2] 
-    section = tutor[3] 
- 
- 
-    # ========================================================= 
-    # Total Students 
-    # ========================================================= 
- 
-    if class_year is None or section is None: 
- 
-        # No year / section 
-        # Count all students from tutor department 
- 
-        cursor.execute(""" 
-            SELECT COUNT(*) 
-            FROM students 
-            WHERE department=%s 
-        """, (department,)) 
- 
-    else: 
- 
-        # Year + section assigned 
- 
-        cursor.execute(""" 
-            SELECT COUNT(*) 
-            FROM students 
-            WHERE department=%s 
-            AND year=%s 
-            AND section=%s 
-        """, (department, class_year, section)) 
- 
-    total_students = cursor.fetchone()[0] 
- 
- 
-    # ========================================================= 
-    # Total Certificates 
-    # ========================================================= 
- 
-    if class_year is None or section is None: 
- 
-        # All certificates from department 
- 
-        cursor.execute(""" 
-            SELECT COUNT(*) 
-            FROM certificates 
- 
-            INNER JOIN students 
-                ON certificates.student_id = 
-                   students.student_id 
- 
-            WHERE students.department=%s 
-        """, (department,)) 
- 
-    else: 
- 
-        # Certificates from assigned year + section 
- 
-        cursor.execute(""" 
-            SELECT COUNT(*) 
-            FROM certificates 
- 
-            INNER JOIN students 
-                ON certificates.student_id = 
-                   students.student_id 
- 
-            WHERE students.department=%s 
-            AND students.year=%s 
-            AND students.section=%s 
-        """, (department, class_year, section)) 
- 
-    total_certificates = cursor.fetchone()[0] 
- 
- 
-    # ========================================================= 
-    # Department Report 
-    # ========================================================= 
- 
-    if class_year is None or section is None: 
- 
-        cursor.execute(""" 
-            SELECT 
-                department, 
-                COUNT(*) 
-            FROM students 
- 
-            WHERE department=%s 
- 
-            GROUP BY department 
-        """, (department,)) 
- 
-    else: 
- 
-        cursor.execute(""" 
-            SELECT 
-                department, 
-                COUNT(*) 
-            FROM students 
- 
-            WHERE department=%s 
-            AND year=%s 
-            AND section=%s 
- 
-            GROUP BY department 
-        """, (department, class_year, section)) 
- 
-    department_report = cursor.fetchall() 
- 
- 
-    # ========================================================= 
-    # Year Report 
-    # ========================================================= 
- 
-    if class_year is None or section is None: 
- 
-        # Show year-wise students from department 
- 
-        cursor.execute(""" 
-            SELECT 
-                year, 
-                COUNT(*) 
-            FROM students 
- 
-            WHERE department=%s 
- 
-            GROUP BY year 
-            ORDER BY year 
-        """, (department,)) 
- 
-    else: 
- 
-        cursor.execute(""" 
-            SELECT 
-                year, 
-                COUNT(*) 
-            FROM students 
- 
-            WHERE department=%s 
-            AND year=%s 
-            AND section=%s 
- 
-            GROUP BY year 
-            ORDER BY year 
-        """, (department, class_year, section)) 
- 
-    year_report = cursor.fetchall() 
- 
- 
-    # ========================================================= 
-    # Certificate Report 
-    # ========================================================= 
- 
-    if class_year is None or section is None: 
- 
-        # ALL certificates from tutor department 
- 
-        cursor.execute(""" 
-            SELECT 
-                students.student_name, 
-                students.department, 
-                students.year, 
-                certificates.certificate_title, 
-                certificate_categories.category_name, 
-                certificates.achievement, 
-                certificates.certificate_file, 
-                certificates.upload_date 
- 
-            FROM certificates 
- 
-            INNER JOIN students 
-                ON certificates.student_id = 
-                   students.student_id 
- 
-            INNER JOIN certificate_categories 
-                ON certificates.category_id = 
-                   certificate_categories.category_id 
- 
-            WHERE students.department=%s 
- 
-            ORDER BY certificates.upload_date DESC 
-        """, (department,)) 
- 
-    else: 
- 
-        # Certificates from tutor's year + section 
- 
-        cursor.execute(""" 
-            SELECT 
-                students.student_name, 
-                students.department, 
-                students.year, 
-                certificates.certificate_title, 
-                certificate_categories.category_name, 
-                certificates.achievement, 
-                certificates.certificate_file, 
-                certificates.upload_date 
- 
-            FROM certificates 
- 
-            INNER JOIN students 
-                ON certificates.student_id = 
-                   students.student_id 
- 
-            INNER JOIN certificate_categories 
-                ON certificates.category_id = 
-                   certificate_categories.category_id 
- 
-            WHERE students.department=%s 
-            AND students.year=%s 
-            AND students.section=%s 
- 
-            ORDER BY certificates.upload_date DESC 
-        """, (department, class_year, section)) 
- 
-    certificates = cursor.fetchall() 
- 
- 
-    # ========================================================= 
-    # Debug 
-    # ========================================================= 
- 
-    print("========================================") 
-    print("TUTOR REPORT") 
-    print("TUTOR:", tutor_name) 
-    print("DEPARTMENT:", department) 
-    print("CLASS YEAR:", class_year) 
-    print("SECTION:", section) 
-    print("TOTAL STUDENTS:", total_students) 
-    print("TOTAL CERTIFICATES:", total_certificates) 
-    print("CERTIFICATE COUNT:", len(certificates)) 
-    print("========================================") 
- 
- 
-    cursor.close() 
- 
- 
-    # ========================================================= 
-    # Send to Template 
-    # ========================================================= 
- 
-    return render_template( 
-        "tutor/report.html", 
-        tutor=tutor, 
-        total_students=total_students, 
-        total_certificates=total_certificates, 
-        department_report=department_report, 
-        year_report=year_report, 
-        certificates=certificates 
-    ) 
+#---------------------------
+@app.route("/tutor_reports")
+def tutor_reports():
+
+    if session.get("role") != "tutor":
+        return redirect("/")
+
+    cursor = mysql.connection.cursor()
+
+    # =========================================================
+    # TUTOR DETAILS
+    # =========================================================
+
+    cursor.execute("""
+        SELECT
+            tutor_name,
+            department,
+            class_year,
+            section,
+            profile_photo
+        FROM tutors
+        WHERE user_id=%s
+    """, (session["user_id"],))
+
+    tutor = cursor.fetchone()
+
+    if not tutor:
+        cursor.close()
+        return redirect("/tutor")
+
+    tutor_name = tutor[0]
+    department = tutor[1]
+    class_year = tutor[2]
+    section = tutor[3]
+
+    # =========================================================
+    # NORMALIZE TUTOR VALUES
+    # =========================================================
+
+    department = str(department).strip() if department else None
+    class_year = str(class_year).strip() if class_year else None
+    section = str(section).strip() if section else None
+
+    # Treat NULL / empty / "All" as no restriction
+    all_years = (
+        class_year is None
+        or class_year == ""
+        or class_year.lower() == "all"
+    )
+
+    all_sections = (
+        section is None
+        or section == ""
+        or section.lower() == "all"
+    )
+
+    # =========================================================
+    # BUILD STUDENT FILTER
+    # =========================================================
+
+    student_where = """
+        students.department=%s
+    """
+
+    student_params = [department]
+
+    if not all_years:
+        student_where += """
+            AND students.year=%s
+        """
+        student_params.append(class_year)
+
+    if not all_sections:
+        student_where += """
+            AND students.section=%s
+        """
+        student_params.append(section)
+
+    # =========================================================
+    # TOTAL STUDENTS
+    # =========================================================
+
+    cursor.execute(
+        f"""
+        SELECT COUNT(*)
+        FROM students
+        WHERE {student_where}
+        """,
+        tuple(student_params)
+    )
+
+    total_students = cursor.fetchone()[0]
+
+    # =========================================================
+    # TOTAL CERTIFICATES
+    # =========================================================
+
+    certificate_where = """
+        students.department=%s
+    """
+
+    certificate_params = [department]
+
+    if not all_years:
+        certificate_where += """
+            AND students.year=%s
+        """
+        certificate_params.append(class_year)
+
+    if not all_sections:
+        certificate_where += """
+            AND students.section=%s
+        """
+        certificate_params.append(section)
+
+    cursor.execute(
+        f"""
+        SELECT COUNT(*)
+        FROM certificates
+        INNER JOIN students
+            ON certificates.student_id = students.student_id
+        WHERE {certificate_where}
+        """,
+        tuple(certificate_params)
+    )
+
+    total_certificates = cursor.fetchone()[0]
+
+    # =========================================================
+    # DEPARTMENT REPORT
+    # =========================================================
+
+    cursor.execute(
+        f"""
+        SELECT
+            students.department,
+            COUNT(*)
+        FROM students
+        WHERE {student_where}
+        GROUP BY students.department
+        ORDER BY students.department
+        """,
+        tuple(student_params)
+    )
+
+    department_report = cursor.fetchall()
+
+    # =========================================================
+    # YEAR REPORT
+    # =========================================================
+
+    cursor.execute(
+        f"""
+        SELECT
+            students.year,
+            COUNT(*)
+        FROM students
+        WHERE {student_where}
+        GROUP BY students.year
+        ORDER BY students.year
+        """,
+        tuple(student_params)
+    )
+
+    year_report = cursor.fetchall()
+
+    # =========================================================
+    # CERTIFICATE REPORT
+    # =========================================================
+
+    cursor.execute(
+        f"""
+        SELECT
+            students.student_name,
+            students.department,
+            students.year,
+            certificates.certificate_title,
+            certificate_categories.category_name,
+            certificates.achievement,
+            certificates.certificate_file,
+            certificates.upload_date
+
+        FROM certificates
+
+        INNER JOIN students
+            ON certificates.student_id = students.student_id
+
+        LEFT JOIN certificate_categories
+            ON certificates.category_id =
+               certificate_categories.category_id
+
+        WHERE {certificate_where}
+
+        ORDER BY certificates.upload_date DESC
+        """,
+        tuple(certificate_params)
+    )
+
+    certificates = cursor.fetchall()
+
+    # =========================================================
+    # DEBUG
+    # =========================================================
+
+    print("========================================")
+    print("TUTOR REPORT")
+    print("TUTOR       :", tutor_name)
+    print("DEPARTMENT  :", department)
+    print("CLASS YEAR  :", class_year)
+    print("SECTION     :", section)
+    print("ALL YEARS   :", all_years)
+    print("ALL SECTIONS:", all_sections)
+    print("STUDENTS    :", total_students)
+    print("CERTIFICATES:", total_certificates)
+    print("DEPARTMENTS :", len(department_report))
+    print("YEARS       :", len(year_report))
+    print("CERT COUNT  :", len(certificates))
+    print("========================================")
+
+    cursor.close()
+
+    # =========================================================
+    # SEND DATA TO TEMPLATE
+    # =========================================================
+
+    return render_template(
+        "tutor/report.html",
+        tutor=tutor,
+        total_students=total_students,
+        total_certificates=total_certificates,
+        department_report=department_report,
+        year_report=year_report,
+        certificates=certificates
+    )
 #-------------------- 
 @app.route("/view_certificate/<filename>") 
 def view_certificate(filename): 
