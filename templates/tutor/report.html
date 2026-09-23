@@ -11,1666 +11,1500 @@
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/tutor_report.css') }}">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-          rel="stylesheet">
-
-    <style>
-
-        body {
-            font-size: 13px !important;
-        }
-
-        .container {
-            max-width: 1400px !important;
-            padding: 20px !important;
-        }
-
-        .topbar {
-            padding: 16px 20px !important;
-            margin-bottom: 18px !important;
-            border-radius: 14px !important;
-        }
-
-        .topbar h1 {
-            font-size: 22px !important;
-        }
-
-        .topbar p {
-            font-size: 11px !important;
-        }
-
-        .top-buttons {
-            gap: 7px !important;
-        }
-
-        .top-buttons .btn {
-            padding: 7px 11px !important;
-            font-size: 11px !important;
-        }
-
-        .cards {
-            gap: 14px !important;
-            margin-bottom: 18px !important;
-        }
-
-        .card {
-            padding: 18px !important;
-            border-radius: 14px !important;
-        }
-
-        .card > i {
-            font-size: 26px !important;
-        }
-
-        .card h2 {
-            font-size: 25px !important;
-        }
-
-        .card p {
-            font-size: 11px !important;
-        }
-
-        .profile-box {
-            padding: 18px !important;
-            margin-bottom: 18px !important;
-            border-radius: 14px !important;
-            gap: 20px !important;
-        }
-
-        .profile-left {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-        }
-
-        .profile-left .profile-img,
-        .profile-img {
-            width: 75px !important;
-            height: 75px !important;
-            min-width: 75px !important;
-            min-height: 75px !important;
-            max-width: 75px !important;
-            max-height: 75px !important;
-            aspect-ratio: 1 / 1 !important;
-            border-radius: 50% !important;
-            object-fit: cover !important;
-            display: block !important;
-            overflow: hidden !important;
-            border: 4px solid #198754 !important;
-            background: #ffffff !important;
-            box-sizing: border-box !important;
-            flex-shrink: 0 !important;
-        }
-
-        .profile-right h2 {
-            font-size: 18px !important;
-        }
-
-        .info-table {
-            font-size: 11px !important;
-        }
-
-        .info-table td {
-            font-size: 11px !important;
-            padding: 6px 9px !important;
-        }
-
-        .report-box {
-            padding: 18px !important;
-            margin-bottom: 18px !important;
-            border-radius: 14px !important;
-        }
-
-        .box-header h2 {
-            font-size: 18px !important;
-        }
-
-        .box-header small {
-            font-size: 10px !important;
-        }
-
-        .report-box table {
-            font-size: 11px !important;
-        }
-
-        .report-box table th,
-        .report-box table td {
-            font-size: 11px !important;
-            padding: 8px 9px !important;
-        }
-
-        .stats-grid {
-            gap: 12px !important;
-        }
-
-        .mini-card {
-            padding: 14px !important;
-            border-radius: 11px !important;
-        }
-
-        .mini-card i {
-            font-size: 22px !important;
-        }
-
-        .mini-card h3 {
-            font-size: 21px !important;
-        }
-
-        .mini-card p {
-            font-size: 10px !important;
-        }
-
-        #searchInput {
-            width: 280px !important;
-            height: 36px !important;
-            padding: 7px 12px !important;
-            font-size: 11px !important;
-        }
-
-        .download-all-btn {
-            padding: 7px 12px !important;
-            font-size: 11px !important;
-        }
-
-        #certificateTable th {
-            font-size: 11px !important;
-            padding: 8px 9px !important;
-            white-space: nowrap;
-        }
-
-        #certificateTable td {
-            font-size: 11px !important;
-            padding: 8px 9px !important;
-        }
-
-        #certificateTable strong {
-            font-size: 11px !important;
-        }
-
-        #certificateTable .badge {
-            font-size: 9px !important;
-            padding: 4px 7px !important;
-            white-space: nowrap;
-        }
-
-        .view-btn,
-        .download-btn {
-            padding: 6px 9px !important;
-            font-size: 10px !important;
-            border-radius: 6px !important;
-            text-decoration: none !important;
-            display: inline-block !important;
-        }
-
-        .summary-area {
-            gap: 12px !important;
-        }
-
-        .summary-card {
-            padding: 14px !important;
-            border-radius: 11px !important;
-        }
-
-        .summary-card h3 {
-            font-size: 12px !important;
-        }
-
-        .summary-card span {
-            font-size: 21px !important;
-        }
-
-        .footer {
-            padding: 16px !important;
-            margin-top: 18px !important;
-            border-radius: 11px !important;
-        }
-
-        .footer-left h3 {
-            font-size: 14px !important;
-        }
-
-        .footer-left p,
-        .footer-right p,
-        .footer-right {
-            font-size: 10px !important;
-        }
-
-        /* PARTICIPATED / ACHIEVEMENT */
-
-        .achievement-participated {
-            background: #0d6efd !important;
-            color: white !important;
-        }
-
-        .achievement-winner {
-            background: #198754 !important;
-            color: white !important;
-        }
-
-        .achievement-runner {
-            background: #ffc107 !important;
-            color: #212529 !important;
-        }
-
-        .achievement-other {
-            background: #6c757d !important;
-            color: white !important;
-        }
-
-        @media (max-width: 992px) {
-
-            .container {
-                padding: 15px !important;
-            }
-
-            .topbar {
-                padding: 15px !important;
-            }
-
-            .topbar h1 {
-                font-size: 20px !important;
-            }
-
-            .cards {
-                grid-template-columns: repeat(2, 1fr) !important;
-            }
-
-            .profile-box {
-                gap: 15px !important;
-            }
-        }
-
-        @media (max-width: 768px) {
-
-            .container {
-                padding: 12px !important;
-            }
-
-            .topbar {
-                padding: 14px !important;
-            }
-
-            .topbar h1 {
-                font-size: 19px !important;
-            }
-
-            .top-buttons {
-                flex-wrap: wrap !important;
-            }
-
-            .cards {
-                grid-template-columns: 1fr 1fr !important;
-                gap: 10px !important;
-            }
-
-            .card {
-                padding: 15px !important;
-            }
-
-            .profile-box {
-                flex-direction: column !important;
-                align-items: center !important;
-                text-align: center !important;
-            }
-
-            .profile-left {
-                display: flex !important;
-                justify-content: center !important;
-                align-items: center !important;
-            }
-
-            .profile-left .profile-img,
-            .profile-img {
-                width: 75px !important;
-                height: 75px !important;
-                min-width: 75px !important;
-                min-height: 75px !important;
-                max-width: 75px !important;
-                max-height: 75px !important;
-                aspect-ratio: 1 / 1 !important;
-                border-radius: 50% !important;
-                object-fit: cover !important;
-                display: block !important;
-                overflow: hidden !important;
-                border: 4px solid #198754 !important;
-                flex-shrink: 0 !important;
-            }
-
-            .report-search-actions {
-                flex-wrap: wrap !important;
-                gap: 8px !important;
-            }
-
-            #searchInput {
-                width: 100% !important;
-            }
-        }
-
-        @media (max-width: 500px) {
-
-            .cards {
-                grid-template-columns: 1fr !important;
-            }
-
-            .top-buttons .btn {
-                font-size: 10px !important;
-                padding: 6px 9px !important;
-            }
-
-            .card h2 {
-                font-size: 23px !important;
-            }
-
-            .report-box {
-                padding: 14px !important;
-            }
-
-            .box-header h2 {
-                font-size: 16px !important;
-            }
-        }
-
-        @media print {
-
-            body {
-                background: #ffffff !important;
-            }
-
-            .top-buttons {
-                display: none !important;
-            }
-
-            .report-search-actions {
-                display: none !important;
-            }
-
-            .report-box {
-                page-break-inside: avoid;
-            }
-
-            .footer {
-                margin-top: 30px;
-                text-align: center;
-            }
-
-            .view-btn,
-            .download-btn {
-                display: none !important;
-            }
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-<div class="container">
-
-
-    <!-- =====================================================
-         TOP BAR
-    ====================================================== -->
-
-    <div class="topbar">
-
-        <div>
-
-            <h1>
-                <i class="bi bi-bar-chart-line-fill"></i>
-                Tutor Reports Dashboard
-            </h1>
-
-            <p>
-                Student Certificate Management System
-            </p>
-
-        </div>
-
-        <div class="top-buttons">
-
-            <a href="{{ url_for('tutor') }}"
-               class="btn dashboard">
-
-                <i class="bi bi-speedometer2"></i>
-                Dashboard
-
-            </a>
-
-            <a href="/tutor_export_excel"
-               class="btn excel">
-
-                <i class="bi bi-file-earmark-excel-fill"></i>
-                Excel
-
-            </a>
-
-            <a href="/tutor_export_pdf"
-               class="btn pdf">
-
-                <i class="bi bi-file-earmark-pdf-fill"></i>
-                PDF
-
-            </a>
-
-            <button
-                type="button"
-                onclick="window.print()"
-                class="btn print">
-
-                <i class="bi bi-printer-fill"></i>
-                Print
-
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <!-- =====================================================
-         SUMMARY CARDS
-    ====================================================== -->
-
-    <div class="cards">
-
-        <div class="card green">
-
-            <i class="bi bi-people-fill"></i>
-
-            <h2>
-                {{ total_students }}
-            </h2>
-
-            <p>
-                Total Students
-            </p>
-
-        </div>
-
-
-        <div class="card blue">
-
-            <i class="bi bi-award-fill"></i>
-
-            <h2>
-                {{ total_certificates }}
-            </h2>
-
-            <p>
-                Total Certificates
-            </p>
-
-        </div>
-
-
-        <div class="card orange">
-
-            <i class="bi bi-building"></i>
-
-            <h2>
-                {{ department_report|length }}
-            </h2>
-
-            <p>
-                Departments
-            </p>
-
-        </div>
-
-
-        <div class="card purple">
-
-            <i class="bi bi-calendar3"></i>
-
-            <h2>
-                {{ year_report|length }}
-            </h2>
-
-            <p>
-                Years
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <!-- =====================================================
-         TUTOR PROFILE
-    ====================================================== -->
-
-    <div class="profile-box">
-
-        <div class="profile-left">
-
-            {% if tutor[4] %}
-
-                <img
-                    src="{{ url_for(
-                        'static',
-                        filename='uploads/profile/' ~ tutor[4]
-                    ) }}"
-                    class="profile-img"
-                    alt="Tutor Profile">
-
-            {% else %}
-
-                <img
-                    src="{{ url_for(
-                        'static',
-                        filename='images/default_profile.png'
-                    ) }}"
-                    class="profile-img"
-                    alt="Default Profile">
-
-            {% endif %}
-
-        </div>
-
-
-        <div class="profile-right">
-
-            <h2>
-
-                <i class="bi bi-person-badge-fill"></i>
-                Tutor Information
-
-            </h2>
-
-
-            <table class="info-table">
-
-                <tr>
-
-                    <td>
-                        <b>Name</b>
-                    </td>
-
-                    <td>
-                        {{ tutor[0] }}
-                    </td>
-
-                </tr>
-
-
-                <tr>
-
-                    <td>
-                        <b>Department</b>
-                    </td>
-
-                    <td>
-                        {{ tutor[1] }}
-                    </td>
-
-                </tr>
-
-
-                <tr>
-
-                    <td>
-                        <b>Class Year</b>
-                    </td>
-
-                    <td>
-                        {{ tutor[2] if tutor[2] else 'All' }}
-                    </td>
-
-                </tr>
-
-
-                <tr>
-
-                    <td>
-                        <b>Section</b>
-                    </td>
-
-                    <td>
-                        {{ tutor[3] if tutor[3] else 'All' }}
-                    </td>
-
-                </tr>
-
-            </table>
-
-        </div>
-
-    </div>
-
-
-    <!-- =====================================================
-         DEPARTMENT REPORT
-    ====================================================== -->
-
-    <div class="report-box">
-
-        <div class="box-header">
-
-            <h2>
-                <i class="bi bi-building-fill"></i>
-                Department Wise Report
-            </h2>
-
-        </div>
-
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>
-                        Department
-                    </th>
-
-                    <th>
-                        Total Students
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody>
-
-                {% for dept in department_report %}
-
-                <tr>
-
-                    <td>
-                        {{ dept[0] }}
-                    </td>
-
-                    <td>
-                        {{ dept[1] }}
-                    </td>
-
-                </tr>
-
-                {% else %}
-
-                <tr>
-
-                    <td
-                        colspan="2"
-                        style="text-align:center;">
-
-                        No department data found.
-
-                    </td>
-
-                </tr>
-
-                {% endfor %}
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-
-    <!-- =====================================================
-         YEAR REPORT
-    ====================================================== -->
-
-    <div class="report-box">
-
-        <div class="box-header">
-
-            <h2>
-                <i class="bi bi-calendar-check-fill"></i>
-                Year Wise Report
-            </h2>
-
-        </div>
-
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>
-                        Year
-                    </th>
-
-                    <th>
-                        Total Students
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody>
-
-                {% for year in year_report %}
-
-                <tr>
-
-                    <td>
-                        {{ year[0] }}
-                    </td>
-
-                    <td>
-                        {{ year[1] }}
-                    </td>
-
-                </tr>
-
-                {% else %}
-
-                <tr>
-
-                    <td
-                        colspan="2"
-                        style="text-align:center;">
-
-                        No year data found.
-
-                    </td>
-
-                </tr>
-
-                {% endfor %}
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-
-    <!-- =====================================================
-         QUICK STATISTICS
-    ====================================================== -->
-
-    <div class="report-box">
-
-        <div class="box-header">
-
-            <h2>
-                <i class="bi bi-graph-up-arrow"></i>
-                Quick Statistics
-            </h2>
-
-        </div>
-
-
-        <div class="stats-grid">
-
-            <div class="mini-card">
-
-                <i class="bi bi-people-fill"></i>
-
-                <h3>
-                    {{ total_students }}
-                </h3>
-
-                <p>
-                    Students Under Tutor
-                </p>
-
-            </div>
-
-
-            <div class="mini-card">
-
-                <i class="bi bi-award-fill"></i>
-
-                <h3>
-                    {{ total_certificates }}
-                </h3>
-
-                <p>
-                    Total Certificates
-                </p>
-
-            </div>
-
-
-            <div class="mini-card">
-
-                <i class="bi bi-building-fill"></i>
-
-                <h3>
-                    {{ department_report|length }}
-                </h3>
-
-                <p>
-                    Departments
-                </p>
-
-            </div>
-
-
-            <div class="mini-card">
-
-                <i class="bi bi-calendar3"></i>
-
-                <h3>
-                    {{ year_report|length }}
-                </h3>
-
-                <p>
-                    Academic Years
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- =====================================================
-         RECENT CERTIFICATE UPLOADS
-    ====================================================== -->
-
-    <div class="report-box">
-
-
-        <div class="box-header">
-
-            <div>
-
-                <h2>
-
-                    <i class="bi bi-clock-history"></i>
-                    Recent Certificate Uploads
-
-                </h2>
-
-                <small>
-                    Search and manage certificates
-                </small>
-
-            </div>
-
-
-            <div class="report-search-actions">
-
-                <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="Search Student / Register No / Department / Certificate..."
-                    autocomplete="off">
-
-
-                <button
-                    type="button"
-                    onclick="downloadReports()"
-                    class="download-all-btn">
-
-                    <i class="bi bi-download"></i>
-                    Download All
-
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <!-- =================================================
-             CERTIFICATE TABLE
-        ================================================== -->
-
-        <div style="overflow-x:auto;">
-
-            <table id="certificateTable">
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            Student
-                        </th>
-
-                        <th>
-                            Department
-                        </th>
-
-                        <th>
-                            Year
-                        </th>
-
-                        <th>
-                            Certificate
-                        </th>
-
-                        <th>
-                            Category
-                        </th>
-
-                        <th>
-                            Achievement
-                        </th>
-
-                        <th>
-                            Upload Date
-                        </th>
-
-                        <th>
-                            View
-                        </th>
-
-                        <th>
-                            Download
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                    {% for certificate in certificates %}
-
-                    <tr>
-
-                        <!-- STUDENT -->
-
-                        <td>
-
-                            <strong>
-                                {{ certificate[0] }}
-                            </strong>
-
-                        </td>
-
-
-                        <!-- DEPARTMENT -->
-
-                        <td>
-                            {{ certificate[1] }}
-                        </td>
-
-
-                        <!-- YEAR -->
-
-                        <td>
-                            {{ certificate[2] }}
-                        </td>
-
-
-                        <!-- CERTIFICATE -->
-
-                        <td>
-                            {{ certificate[3] }}
-                        </td>
-
-
-                        <!-- CATEGORY -->
-
-                        <td>
-                            {{ certificate[4] }}
-                        </td>
-
-                        <!-- =================================================
-     PARTICIPATION SUMMARY
-================================================== -->
-
-<div class="report-box">
-
-    <div class="box-header">
-
-        <h2>
-
-            <i class="bi bi-globe2"></i>
-
-            Participation Summary
-
-        </h2>
-
-        <small>
-            Internal and External participation details
-        </small>
-
-    </div>
-
-
-    <div style="overflow-x:auto;">
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>
-                        Participation
-                    </th>
-
-                    <th>
-                        Total Certificates
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody>
-
-            {% for participation in participation_report %}
-
-                <tr>
-
-                    <td>
-
-                        {% set participation_name =
-                            participation[0]|string|trim %}
-
-
-                        {% if participation_name|lower == "internal" %}
-
-                            <span
-                                class="badge"
-                                style="
-                                    background:#0dcaf0;
-                                    color:#212529;
-                                ">
-
-                                🏫 Internal
-
-                            </span>
-
-
-                        {% elif participation_name|lower == "external" %}
-
-                            <span
-                                class="badge"
-                                style="
-                                    background:#212529;
-                                    color:white;
-                                ">
-
-                                🌐 External
-
-                            </span>
-
-
-                        {% else %}
-
-                            <span class="badge achievement-other">
-
-                                📜 {{ participation_name }}
-
-                            </span>
-
-                        {% endif %}
-
-                    </td>
-
-
-                    <td>
-                        {{ participation[1] }}
-                    </td>
-
-                </tr>
-
-            {% else %}
-
-                <tr>
-
-                    <td
-                        colspan="2"
-                        style="text-align:center;">
-
-                        No participation data found.
-
-                    </td>
-
-                </tr>
-
-            {% endfor %}
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-</div>
-                        <!-- =================================================
-                             ACHIEVEMENT
-                        ================================================== -->
-
-                        <td>
-
-                            {% set achievement =
-                                certificate[5]|string|trim %}
-
-
-                            {% if achievement|lower == "participated" %}
-
-                                <span class="badge achievement-participated">
-
-                                    🏅 Participated
-
-                                </span>
-
-
-                            {% elif achievement|lower == "winner" %}
-
-                                <span class="badge achievement-winner">
-
-                                    🥇 Winner
-
-                                </span>
-
-
-                            {% elif achievement|lower == "runner up" %}
-
-                                <span class="badge achievement-runner">
-
-                                    🥈 Runner Up
-
-                                </span>
-
-
-                            {% elif achievement|lower == "runner" %}
-
-                                <span class="badge achievement-runner">
-
-                                    🥈 Runner
-
-                                </span>
-
-
-                            {% elif achievement == "" or achievement|lower == "none" %}
-
-                                <span class="badge achievement-other">
-
-                                    📜 Not Specified
-
-                                </span>
-
-
-                            {% else %}
-
-                                <span class="badge achievement-other">
-
-                                    📜 {{ achievement }}
-
-                                </span>
-
-                            {% endif %}
-
-                        </td>
-
-
-                        <!-- UPLOAD DATE -->
-
-                        <td>
-                            {{ certificate[7] }}
-                        </td>
-
-
-                        <!-- VIEW -->
-
-                        <td>
-
-                            {% if certificate[8] %}
-
-                                <a
-                                    class="view-btn"
-                                    href="{{ url_for(
-                                        'view',
-                                        filename=certificate[8]
-                                    ) }}"
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-
-                                    <i class="bi bi-eye-fill"></i>
-                                    View
-
-                                </a>
-
-                            {% else %}
-
-                                <span>
-                                    No File
-                                </span>
-
-                            {% endif %}
-
-                        </td>
-
-
-                        <!-- DOWNLOAD -->
-
-                        <td>
-
-                            {% if certificate[8] %}
-
-                                <a
-                                    class="download-btn"
-                                    href="{{ url_for(
-                                        'download',
-                                        filename=certificate[8]
-                                    ) }}">
-
-                                    <i class="bi bi-download"></i>
-                                    Download
-
-                                </a>
-
-                            {% else %}
-
-                                <span>
-                                    No File
-                                </span>
-
-                            {% endif %}
-
-                        </td>
-
-
-                    </tr>
-
-
-                    {% else %}
-
-                    <tr>
-
-                        <td
-                            colspan="9"
-                            style="text-align:center;padding:40px;">
-
-                            <i
-                                class="bi bi-award"
-                                style="font-size:45px;">
-                            </i>
-
-                            <h3>
-                                No Certificates Found
-                            </h3>
-
-                            <p>
-                                No student certificates have been uploaded.
-                            </p>
-
-                        </td>
-
-                    </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-
-    <!-- =====================================================
-         ACHIEVEMENT SUMMARY
-    ====================================================== -->
-
-    <div class="report-box">
-
-        <div class="box-header">
-
-            <h2>
-
-                <i class="bi bi-trophy-fill"></i>
-                Achievement Summary
-
-            </h2>
-
-            <small>
-                Student participation and achievement details
-            </small>
-
-        </div>
-
-
-        <div style="overflow-x:auto;">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            Achievement
-                        </th>
-
-                        <th>
-                            Total Certificates
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                    {% for achievement in achievement_report %}
-
-                    <tr>
-
-                        <td>
-
-                            {% set achievement_name =
-                                achievement[0]|string|trim %}
-
-
-                            {% if achievement_name|lower == "participated" %}
-
-                                <span class="badge achievement-participated">
-
-                                    🏅 Participated
-
-                                </span>
-
-
-                            {% elif achievement_name|lower == "winner" %}
-
-                                <span class="badge achievement-winner">
-
-                                    🥇 Winner
-
-                                </span>
-
-
-                            {% elif achievement_name|lower == "runner up" %}
-
-                                <span class="badge achievement-runner">
-
-                                    🥈 Runner Up
-
-                                </span>
-
-
-                            {% elif achievement_name|lower == "runner" %}
-
-                                <span class="badge achievement-runner">
-
-                                    🥈 Runner
-
-                                </span>
-
-
-                            {% else %}
-
-                                <span class="badge achievement-other">
-
-                                    📜 {{ achievement_name }}
-
-                                </span>
-
-                            {% endif %}
-
-                        </td>
-
-
-                        <td>
-                            {{ achievement[1] }}
-                        </td>
-
-                    </tr>
-
-
-                    {% else %}
-
-                    <tr>
-
-                        <td
-                            colspan="2"
-                            style="text-align:center;">
-
-                            No achievement data found.
-
-                        </td>
-
-                    </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-
-    <!-- =====================================================
-         REPORT SUMMARY
-    ====================================================== -->
-
-    <div class="report-box">
-
-        <div class="box-header">
-
-            <h2>
-
-                <i class="bi bi-clipboard-data-fill"></i>
-                Report Summary
-
-            </h2>
-
-        </div>
-
-
-        <div class="summary-area">
-
-
-            <div class="summary-card">
-
-                <h3>
-                    Total Students
-                </h3>
-
-                <span>
-                    {{ total_students }}
-                </span>
-
-            </div>
-
-
-            <div class="summary-card">
-
-                <h3>
-                    Total Certificates
-                </h3>
-
-                <span>
-                    {{ total_certificates }}
-                </span>
-
-            </div>
-
-
-            <div class="summary-card">
-
-                <h3>
-                    Departments
-                </h3>
-
-                <span>
-                    {{ department_report|length }}
-                </span>
-
-            </div>
-
-
-            <div class="summary-card">
-
-                <h3>
-                    Academic Years
-                </h3>
-
-                <span>
-                    {{ year_report|length }}
-                </span>
-
-            </div>
-
-
-        </div>
-
-    </div>
-
-
-    <!-- =====================================================
-         FOOTER
-    ====================================================== -->
-
-    <div class="footer">
-
-        <div class="footer-left">
-
-            <h3>
-
-                <i class="bi bi-mortarboard-fill"></i>
-                Student Certificate Management System
-
-            </h3>
-
-            <p>
-                Tutor Report Dashboard
-            </p>
-
-        </div>
-
-
-        <div class="footer-right">
-
-            <p>
-                Generated by Tutor Panel
-            </p>
-
-            <p>
-                © 2026 Designed By PRADEEP From AIDS
-            </p>
-
-        </div>
-
-    </div>
-
-
-</div>
-
-
-<!-- =====================================================
-     SEARCH SCRIPT
-====================================================== -->
-
-<script>
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    const searchInput =
-        document.getElementById("searchInput");
-
-
-    const tableRows =
-        document.querySelectorAll(
-            "#certificateTable tbody tr"
-        );
-
-
-    if (!searchInput) {
-        return;
-    }
-
-
-    searchInput.addEventListener(
-        "keyup",
-        function () {
-
-            const filter =
-                this.value
-                    .toLowerCase()
-                    .trim();
-
-
-            tableRows.forEach(function (row) {
-
-                const text =
-                    row.innerText.toLowerCase();
-
-
-                if (
-                    filter === "" ||
-                    text.includes(filter)
-                ) {
-
-                    row.style.display = "";
-
-                } else {
-
-                    row.style.display = "none";
-
-                }
-
-            });
-
-        }
-    );
-
-});
-
-</script>
-
-
-<!-- =====================================================
-     DOWNLOAD REPORTS
-====================================================== -->
-
-<script>
-
-function downloadReports() {
-
-    const searchBox =
-        document.getElementById("searchInput");
-
-
-    if (!searchBox) {
-        return;
-    }
-
-
-    const searchText =
-        searchBox.value.trim();
-
-
-    if (searchText === "") {
-
-        window.location.href =
-            "/export_zip";
-
-        return;
-    }
-
-
-    window.location.href =
-        "/export_zip?search=" +
-        encodeURIComponent(searchText);
-
-}
-
-</script>
-
-
-</body>
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" 
+          rel="stylesheet"> 
+ 
+ 
+    <!-- ===================================================== 
+         COMPACT SIZE + PERFECT CIRCLE PROFILE IMAGE 
+    ====================================================== --> 
+ 
+    <style> 
+ 
+        body { 
+            font-size: 13px !important; 
+        } 
+ 
+ 
+        /* ================================================= 
+           MAIN CONTAINER 
+        ================================================= */ 
+ 
+        .container { 
+            max-width: 1400px !important; 
+            padding: 20px !important; 
+        } 
+ 
+ 
+        /* ================================================= 
+           TOP BAR 
+        ================================================= */ 
+ 
+        .topbar { 
+            padding: 16px 20px !important; 
+            margin-bottom: 18px !important; 
+            border-radius: 14px !important; 
+        } 
+ 
+        .topbar h1 { 
+            font-size: 22px !important; 
+        } 
+ 
+        .topbar p { 
+            font-size: 11px !important; 
+        } 
+ 
+        .top-buttons { 
+            gap: 7px !important; 
+        } 
+ 
+        .top-buttons .btn { 
+            padding: 7px 11px !important; 
+            font-size: 11px !important; 
+        } 
+ 
+ 
+        /* ================================================= 
+           SUMMARY CARDS 
+        ================================================= */ 
+ 
+        .cards { 
+            gap: 14px !important; 
+            margin-bottom: 18px !important; 
+        } 
+ 
+        .card { 
+            padding: 18px !important; 
+            border-radius: 14px !important; 
+        } 
+ 
+        .card > i { 
+            font-size: 26px !important; 
+        } 
+ 
+        .card h2 { 
+            font-size: 25px !important; 
+        } 
+ 
+        .card p { 
+            font-size: 11px !important; 
+        } 
+ 
+ 
+        /* ================================================= 
+           TUTOR PROFILE BOX 
+        ================================================= */ 
+ 
+        .profile-box { 
+            padding: 18px !important; 
+            margin-bottom: 18px !important; 
+            border-radius: 14px !important; 
+            gap: 20px !important; 
+        } 
+ 
+ 
+        /* ================================================= 
+           PERFECT CIRCLE PROFILE IMAGE 
+        ================================================= */ 
+ 
+        .profile-left { 
+            display: flex !important; 
+            align-items: center !important; 
+            justify-content: center !important; 
+        } 
+ 
+        .profile-left .profile-img, 
+        .profile-img { 
+            width: 75px !important; 
+            height: 75px !important; 
+            min-width: 75px !important; 
+            min-height: 75px !important; 
+            max-width: 75px !important; 
+            max-height: 75px !important; 
+            aspect-ratio: 1 / 1 !important; 
+            border-radius: 50% !important; 
+            object-fit: cover !important; 
+            display: block !important; 
+            overflow: hidden !important; 
+            border: 4px solid #198754 !important; 
+            background: #ffffff !important; 
+            box-sizing: border-box !important; 
+            flex-shrink: 0 !important; 
+        } 
+ 
+ 
+        /* ================================================= 
+           PROFILE RIGHT 
+        ================================================= */ 
+ 
+        .profile-right h2 { 
+            font-size: 18px !important; 
+        } 
+ 
+        .info-table { 
+            font-size: 11px !important; 
+        } 
+ 
+        .info-table td { 
+            font-size: 11px !important; 
+            padding: 6px 9px !important; 
+        } 
+ 
+ 
+        /* ================================================= 
+           REPORT BOXES 
+        ================================================= */ 
+ 
+        .report-box { 
+            padding: 18px !important; 
+            margin-bottom: 18px !important; 
+            border-radius: 14px !important; 
+        } 
+ 
+        .box-header h2 { 
+            font-size: 18px !important; 
+        } 
+ 
+        .box-header small { 
+            font-size: 10px !important; 
+        } 
+ 
+ 
+        /* ================================================= 
+           REPORT TABLES 
+        ================================================= */ 
+ 
+        .report-box table { 
+            font-size: 11px !important; 
+        } 
+ 
+        .report-box table th, 
+        .report-box table td { 
+            font-size: 11px !important; 
+            padding: 8px 9px !important; 
+        } 
+ 
+ 
+        /* ================================================= 
+           QUICK STATISTICS 
+        ================================================= */ 
+ 
+        .stats-grid { 
+            gap: 12px !important; 
+        } 
+ 
+        .mini-card { 
+            padding: 14px !important; 
+            border-radius: 11px !important; 
+        } 
+ 
+        .mini-card i { 
+            font-size: 22px !important; 
+        } 
+ 
+        .mini-card h3 { 
+            font-size: 21px !important; 
+        } 
+ 
+        .mini-card p { 
+            font-size: 10px !important; 
+        } 
+ 
+ 
+        /* ================================================= 
+           SEARCH 
+        ================================================= */ 
+ 
+        #searchInput { 
+            width: 280px !important; 
+            height: 36px !important; 
+            padding: 7px 12px !important; 
+            font-size: 11px !important; 
+        } 
+ 
+        .download-all-btn { 
+            padding: 7px 12px !important; 
+            font-size: 11px !important; 
+        } 
+ 
+ 
+        /* ================================================= 
+           CERTIFICATE TABLE 
+        ================================================= */ 
+ 
+        #certificateTable th { 
+            font-size: 11px !important; 
+            padding: 8px 9px !important; 
+        } 
+ 
+        #certificateTable td { 
+            font-size: 11px !important; 
+            padding: 8px 9px !important; 
+        } 
+ 
+        #certificateTable strong { 
+            font-size: 11px !important; 
+        } 
+ 
+        #certificateTable .badge { 
+            font-size: 9px !important; 
+            padding: 4px 7px !important; 
+        } 
+ 
+ 
+        /* ================================================= 
+           VIEW + DOWNLOAD BUTTONS 
+        ================================================= */ 
+ 
+        .view-btn, 
+        .download-btn { 
+            padding: 6px 9px !important; 
+            font-size: 10px !important; 
+            border-radius: 6px !important; 
+            text-decoration: none !important; 
+            display: inline-block !important; 
+        } 
+ 
+ 
+        /* ================================================= 
+           REPORT SUMMARY 
+        ================================================= */ 
+ 
+        .summary-area { 
+            gap: 12px !important; 
+        } 
+ 
+        .summary-card { 
+            padding: 14px !important; 
+            border-radius: 11px !important; 
+        } 
+ 
+        .summary-card h3 { 
+            font-size: 12px !important; 
+        } 
+ 
+        .summary-card span { 
+            font-size: 21px !important; 
+        } 
+ 
+ 
+        /* ================================================= 
+           FOOTER 
+        ================================================= */ 
+ 
+        .footer { 
+            padding: 16px !important; 
+            margin-top: 18px !important; 
+            border-radius: 11px !important; 
+        } 
+ 
+        .footer-left h3 { 
+            font-size: 14px !important; 
+        } 
+ 
+        .footer-left p, 
+        .footer-right p, 
+        .footer-right { 
+            font-size: 10px !important; 
+        } 
+ 
+ 
+        /* ================================================= 
+           RESPONSIVE - TABLET 
+        ================================================= */ 
+ 
+        @media (max-width: 992px) { 
+ 
+            .container { 
+                padding: 15px !important; 
+            } 
+ 
+            .topbar { 
+                padding: 15px !important; 
+            } 
+ 
+            .topbar h1 { 
+                font-size: 20px !important; 
+            } 
+ 
+            .cards { 
+                grid-template-columns: repeat(2, 1fr) !important; 
+            } 
+ 
+            .profile-box { 
+                gap: 15px !important; 
+            } 
+        } 
+ 
+ 
+        /* ================================================= 
+           RESPONSIVE - MOBILE 
+        ================================================= */ 
+ 
+        @media (max-width: 768px) { 
+ 
+            .container { 
+                padding: 12px !important; 
+            } 
+ 
+            .topbar { 
+                padding: 14px !important; 
+            } 
+ 
+            .topbar h1 { 
+                font-size: 19px !important; 
+            } 
+ 
+            .top-buttons { 
+                flex-wrap: wrap !important; 
+            } 
+ 
+            .cards { 
+                grid-template-columns: 1fr 1fr !important; 
+                gap: 10px !important; 
+            } 
+ 
+            .card { 
+                padding: 15px !important; 
+            } 
+ 
+ 
+            /* MOBILE PERFECT CIRCLE */ 
+ 
+            .profile-box { 
+                flex-direction: column !important; 
+                align-items: center !important; 
+                text-align: center !important; 
+            } 
+ 
+            .profile-left { 
+                display: flex !important; 
+                justify-content: center !important; 
+                align-items: center !important; 
+            } 
+ 
+            .profile-left .profile-img, 
+            .profile-img { 
+                width: 75px !important; 
+                height: 75px !important; 
+                min-width: 75px !important; 
+                min-height: 75px !important; 
+                max-width: 75px !important; 
+                max-height: 75px !important; 
+                aspect-ratio: 1 / 1 !important; 
+                border-radius: 50% !important; 
+                object-fit: cover !important; 
+                display: block !important; 
+                overflow: hidden !important; 
+                border: 4px solid #198754 !important; 
+                flex-shrink: 0 !important; 
+            } 
+ 
+            .report-search-actions { 
+                flex-wrap: wrap !important; 
+                gap: 8px !important; 
+            } 
+ 
+            #searchInput { 
+                width: 100% !important; 
+            } 
+        } 
+ 
+ 
+        /* ================================================= 
+           SMALL MOBILE 
+        ================================================= */ 
+ 
+        @media (max-width: 500px) { 
+ 
+            .cards { 
+                grid-template-columns: 1fr !important; 
+            } 
+ 
+            .top-buttons .btn { 
+                font-size: 10px !important; 
+                padding: 6px 9px !important; 
+            } 
+ 
+            .card h2 { 
+                font-size: 23px !important; 
+            } 
+ 
+            .report-box { 
+                padding: 14px !important; 
+            } 
+ 
+            .box-header h2 { 
+                font-size: 16px !important; 
+            } 
+        } 
+ 
+ 
+        /* ================================================= 
+           PRINT STYLE 
+        ================================================= */ 
+ 
+        @media print { 
+ 
+            body { 
+                background: #ffffff !important; 
+            } 
+ 
+            .top-buttons { 
+                display: none !important; 
+            } 
+ 
+            .report-search-actions { 
+                display: none !important; 
+            } 
+ 
+            .report-box { 
+                page-break-inside: avoid; 
+            } 
+ 
+            .footer { 
+                margin-top: 30px; 
+                text-align: center; 
+            } 
+ 
+            .view-btn, 
+            .download-btn { 
+                display: none !important; 
+            } 
+        } 
+ 
+    </style> 
+ 
+</head> 
+ 
+ 
+<body> 
+ 
+<div class="container"> 
+ 
+ 
+    <!-- ===================================================== 
+         TOP BAR 
+    ====================================================== --> 
+ 
+    <div class="topbar"> 
+ 
+        <div> 
+ 
+            <h1> 
+                <i class="bi bi-bar-chart-line-fill"></i> 
+                Tutor Reports Dashboard 
+            </h1> 
+ 
+            <p> 
+                Student Certificate Management System 
+            </p> 
+ 
+        </div> 
+ 
+ 
+        <div class="top-buttons"> 
+ 
+            <a href="{{ url_for('tutor') }}" 
+               class="btn dashboard"> 
+ 
+                <i class="bi bi-speedometer2"></i> 
+                Dashboard 
+ 
+            </a> 
+ 
+ 
+            <a href="/tutor_export_excel" 
+               class="btn excel"> 
+ 
+                <i class="bi bi-file-earmark-excel-fill"></i> 
+                Excel 
+ 
+            </a> 
+ 
+ 
+            <a href="/tutor_export_pdf" 
+               class="btn pdf"> 
+ 
+                <i class="bi bi-file-earmark-pdf-fill"></i> 
+                PDF 
+ 
+            </a> 
+ 
+ 
+            <button 
+                type="button" 
+                onclick="window.print()" 
+                class="btn print"> 
+ 
+                <i class="bi bi-printer-fill"></i> 
+                Print 
+ 
+            </button> 
+ 
+        </div> 
+ 
+    </div> 
+ 
+ 
+    <!-- ===================================================== 
+         SUMMARY CARDS 
+    ====================================================== --> 
+ 
+    <div class="cards"> 
+ 
+ 
+        <div class="card green"> 
+ 
+            <i class="bi bi-people-fill"></i> 
+ 
+            <h2> 
+                {{ total_students }} 
+            </h2> 
+ 
+            <p> 
+                Total Students 
+            </p> 
+ 
+        </div> 
+ 
+ 
+        <div class="card blue"> 
+ 
+            <i class="bi bi-award-fill"></i> 
+ 
+            <h2> 
+                {{ total_certificates }} 
+            </h2> 
+ 
+            <p> 
+                Total Certificates 
+            </p> 
+ 
+        </div> 
+ 
+ 
+        <div class="card orange"> 
+ 
+            <i class="bi bi-building"></i> 
+ 
+            <h2> 
+                {{ department_report|length }} 
+            </h2> 
+ 
+            <p> 
+                Departments 
+            </p> 
+ 
+        </div> 
+ 
+ 
+        <div class="card purple"> 
+ 
+            <i class="bi bi-calendar3"></i> 
+ 
+            <h2> 
+                {{ year_report|length }} 
+            </h2> 
+ 
+            <p> 
+                Years 
+            </p> 
+ 
+        </div> 
+ 
+    </div> 
+ 
+ 
+    <!-- ===================================================== 
+         TUTOR PROFILE 
+    ====================================================== --> 
+ 
+    <div class="profile-box"> 
+ 
+ 
+        <!-- PROFILE IMAGE --> 
+ 
+        <div class="profile-left"> 
+ 
+            {% if tutor[4] %} 
+ 
+                <img 
+                    src="{{ url_for( 
+                        'static', 
+                        filename='uploads/profile/' ~ tutor[4] 
+                    ) }}" 
+                    class="profile-img" 
+                    alt="Tutor Profile"> 
+ 
+            {% else %} 
+ 
+                <img 
+                    src="{{ url_for( 
+                        'static', 
+                        filename='images/default_profile.png' 
+                    ) }}" 
+                    class="profile-img" 
+                    alt="Default Profile"> 
+ 
+            {% endif %} 
+ 
+        </div> 
+ 
+ 
+        <!-- PROFILE DETAILS --> 
+ 
+        <div class="profile-right"> 
+ 
+            <h2> 
+ 
+                <i class="bi bi-person-badge-fill"></i> 
+                Tutor Information 
+ 
+            </h2> 
+ 
+ 
+            <table class="info-table"> 
+ 
+                <tr> 
+ 
+                    <td> 
+                        <b>Name</b> 
+                    </td> 
+ 
+                    <td> 
+                        {{ tutor[0] }} 
+                    </td> 
+ 
+                </tr> 
+ 
+ 
+                <tr> 
+ 
+                    <td> 
+                        <b>Department</b> 
+                    </td> 
+ 
+                    <td> 
+                        {{ tutor[1] }} 
+                    </td> 
+ 
+                </tr> 
+ 
+ 
+                <tr> 
+ 
+                    <td> 
+                        <b>Class Year</b> 
+                    </td> 
+ 
+                    <td> 
+                        {{ tutor[2] if tutor[2] else 'All' }} 
+                    </td> 
+ 
+                </tr> 
+ 
+ 
+                <tr> 
+ 
+                    <td> 
+                        <b>Section</b> 
+                    </td> 
+ 
+                    <td> 
+                        {{ tutor[3] if tutor[3] else 'All' }} 
+                    </td> 
+ 
+                </tr> 
+ 
+            </table> 
+ 
+        </div> 
+ 
+    </div> 
+ 
+ 
+    <!-- ===================================================== 
+         DEPARTMENT REPORT 
+    ====================================================== --> 
+ 
+    <div class="report-box"> 
+ 
+        <div class="box-header"> 
+ 
+            <h2> 
+                <i class="bi bi-building-fill"></i> 
+                Department Wise Report 
+            </h2> 
+ 
+        </div> 
+ 
+ 
+        <table> 
+ 
+            <thead> 
+ 
+                <tr> 
+ 
+                    <th> 
+                        Department 
+                    </th> 
+ 
+                    <th> 
+                        Total Students 
+                    </th> 
+ 
+                </tr> 
+ 
+            </thead> 
+ 
+ 
+            <tbody> 
+ 
+                {% for dept in department_report %} 
+ 
+                <tr> 
+ 
+                    <td> 
+                        {{ dept[0] }} 
+                    </td> 
+ 
+                    <td> 
+                        {{ dept[1] }} 
+                    </td> 
+ 
+                </tr> 
+ 
+                {% else %} 
+ 
+                <tr> 
+ 
+                    <td 
+                        colspan="2" 
+                        style="text-align:center;"> 
+ 
+                        No department data found. 
+ 
+                    </td> 
+ 
+                </tr> 
+ 
+                {% endfor %} 
+ 
+            </tbody> 
+ 
+        </table> 
+ 
+    </div> 
+ 
+ 
+    <!-- ===================================================== 
+         YEAR REPORT 
+    ====================================================== --> 
+ 
+    <div class="report-box"> 
+ 
+        <div class="box-header"> 
+ 
+            <h2> 
+                <i class="bi bi-calendar-check-fill"></i> 
+                Year Wise Report 
+            </h2> 
+ 
+        </div> 
+ 
+ 
+        <table> 
+ 
+            <thead> 
+ 
+                <tr> 
+ 
+                    <th> 
+                        Year 
+                    </th> 
+ 
+                    <th> 
+                        Total Students 
+                    </th> 
+ 
+                </tr> 
+ 
+            </thead> 
+ 
+ 
+            <tbody> 
+ 
+                {% for year in year_report %} 
+ 
+                <tr> 
+ 
+                    <td> 
+                        {{ year[0] }} 
+                    </td> 
+ 
+                    <td> 
+                        {{ year[1] }} 
+                    </td> 
+ 
+                </tr> 
+ 
+                {% else %} 
+ 
+                <tr> 
+ 
+                    <td 
+                        colspan="2" 
+                        style="text-align:center;"> 
+ 
+                        No year data found. 
+ 
+                    </td> 
+ 
+                </tr> 
+ 
+                {% endfor %} 
+ 
+            </tbody> 
+ 
+        </table> 
+ 
+    </div> 
+ 
+ 
+    <!-- ===================================================== 
+         QUICK STATISTICS 
+    ====================================================== --> 
+ 
+    <div class="report-box"> 
+ 
+        <div class="box-header"> 
+ 
+            <h2> 
+                <i class="bi bi-graph-up-arrow"></i> 
+                Quick Statistics 
+            </h2> 
+ 
+        </div> 
+ 
+ 
+        <div class="stats-grid"> 
+ 
+ 
+            <div class="mini-card"> 
+ 
+                <i class="bi bi-people-fill"></i> 
+ 
+                <h3> 
+                    {{ total_students }} 
+                </h3> 
+ 
+                <p> 
+                    Students Under Tutor 
+                </p> 
+ 
+            </div> 
+ 
+ 
+            <div class="mini-card"> 
+ 
+                <i class="bi bi-award-fill"></i> 
+ 
+                <h3> 
+                    {{ total_certificates }} 
+                </h3> 
+ 
+                <p> 
+                    Total Certificates 
+                </p> 
+ 
+            </div> 
+ 
+ 
+            <div class="mini-card"> 
+ 
+                <i class="bi bi-building-fill"></i> 
+ 
+                <h3> 
+                    {{ department_report|length }} 
+                </h3> 
+ 
+                <p> 
+                    Departments 
+                </p> 
+ 
+            </div> 
+ 
+ 
+            <div class="mini-card"> 
+ 
+                <i class="bi bi-calendar3"></i> 
+ 
+                <h3> 
+                    {{ year_report|length }} 
+                </h3> 
+ 
+                <p> 
+                    Academic Years 
+                </p> 
+ 
+            </div> 
+ 
+        </div> 
+ 
+    </div> 
+ 
+ 
+    <!-- ===================================================== 
+         RECENT CERTIFICATE UPLOADS 
+    ====================================================== --> 
+ 
+    <div class="report-box"> 
+ 
+ 
+        <div class="box-header"> 
+ 
+ 
+            <div> 
+ 
+                <h2> 
+ 
+                    <i class="bi bi-clock-history"></i> 
+                    Recent Certificate Uploads 
+ 
+                </h2> 
+ 
+                <small> 
+                    Search and manage certificates 
+                </small> 
+ 
+            </div> 
+ 
+ 
+            <!-- SEARCH + DOWNLOAD ALL --> 
+ 
+            <div class="report-search-actions"> 
+ 
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Search Student / Register No / Department / Certificate..." 
+                    autocomplete="off"> 
+ 
+ 
+                <button 
+                    type="button" 
+                    onclick="downloadReports()" 
+                    class="download-all-btn"> 
+ 
+                    <i class="bi bi-download"></i> 
+                    Download All 
+ 
+                </button> 
+ 
+            </div> 
+ 
+        </div> 
+ 
+ 
+        <!-- ================================================= 
+             CERTIFICATE TABLE 
+        ================================================== --> 
+ 
+        <div style="overflow-x:auto;"> 
+ 
+            <table id="certificateTable"> 
+ 
+ 
+                <thead> 
+ 
+                    <tr> 
+ 
+                        <th> 
+                            Student 
+                        </th> 
+ 
+                        <th> 
+                            Department 
+                        </th> 
+ 
+                        <th> 
+                            Year 
+                        </th> 
+ 
+                        <th> 
+                            Certificate 
+                        </th> 
+ 
+                        <th> 
+                            Category 
+                        </th> 
+ 
+                        <th> 
+                            Achievement 
+                        </th> 
+ 
+                        <th> 
+                            Upload Date 
+                        </th> 
+ 
+                        <th> 
+                            View 
+                        </th> 
+ 
+                        <th> 
+                            Download 
+                        </th> 
+ 
+                    </tr> 
+ 
+                </thead> 
+ 
+ 
+                <tbody> 
+ 
+ 
+                    {% for certificate in certificates %} 
+ 
+                    <tr> 
+ 
+ 
+                        <!-- STUDENT --> 
+ 
+                        <td> 
+ 
+                            <strong> 
+                                {{ certificate[0] }} 
+                            </strong> 
+ 
+                        </td> 
+ 
+ 
+                        <!-- DEPARTMENT --> 
+ 
+                        <td> 
+                            {{ certificate[1] }} 
+                        </td> 
+ 
+ 
+                        <!-- YEAR --> 
+ 
+                        <td> 
+                            {{ certificate[2] }} 
+                        </td> 
+ 
+ 
+                        <!-- CERTIFICATE --> 
+ 
+                        <td> 
+                            {{ certificate[3] }} 
+                        </td> 
+ 
+ 
+                        <!-- CATEGORY --> 
+ 
+                        <td> 
+                            {{ certificate[4] }} 
+                        </td> 
+ 
+ 
+                        <!-- ACHIEVEMENT --> 
+ 
+                        <td> 
+ 
+                            {% if certificate[5] == "Participated" %} 
+ 
+                                <span class="badge bg-primary"> 
+ 
+                                    🏅 Participated 
+ 
+                                </span> 
+ 
+                            {% elif certificate[5] == "Winner" %} 
+ 
+                                <span class="badge bg-success"> 
+ 
+                                    🥇 Winner 
+ 
+                                </span> 
+ 
+                            {% elif certificate[5] == "Runner Up" %} 
+ 
+                                <span class="badge bg-warning text-dark"> 
+ 
+                                    🥈 Runner Up 
+ 
+                                </span> 
+ 
+                            {% elif certificate[5] == "Runner" %} 
+ 
+                                <span class="badge bg-warning text-dark"> 
+ 
+                                    🥈 Runner 
+ 
+                                </span> 
+ 
+                            {% else %} 
+ 
+                                <span class="badge bg-secondary"> 
+ 
+                                    📜 {{ certificate[5] }} 
+ 
+                                </span> 
+ 
+                            {% endif %} 
+ 
+                        </td> 
+ 
+ 
+                        <!-- UPLOAD DATE --> 
+ 
+                        <td> 
+                            {{ certificate[7] }} 
+                        </td> 
+ 
+ 
+                        <!-- ================================================= 
+                             VIEW 
+                             IMPORTANT: 
+                             DO NOT DIRECTLY OPEN GOOGLE DRIVE URL 
+                             USE FLASK VIEW ROUTE 
+                        ================================================== --> 
+ 
+                        <td> 
+ 
+                            {% if certificate[6] %} 
+ 
+                                <a 
+                                    class="view-btn" 
+                                    href="{{ url_for( 
+                                        'view', 
+                                        filename=certificate[6] 
+                                    ) }}" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"> 
+ 
+                                    <i class="bi bi-eye-fill"></i> 
+                                    View 
+ 
+                                </a> 
+ 
+                            {% else %} 
+ 
+                                <span> 
+                                    No File 
+                                </span> 
+ 
+                            {% endif %} 
+ 
+                        </td> 
+ 
+ 
+                        <!-- ================================================= 
+                             DOWNLOAD 
+                             EXISTING DOWNLOAD ROUTE - UNCHANGED 
+                        ================================================== --> 
+ 
+                        <td> 
+ 
+                            {% if certificate[6] %} 
+ 
+                                <a 
+                                    class="download-btn" 
+                                    href="{{ url_for( 
+                                        'download', 
+                                        filename=certificate[6] 
+                                    ) }}"> 
+ 
+                                    <i class="bi bi-download"></i> 
+                                    Download 
+ 
+                                </a> 
+ 
+                            {% else %} 
+ 
+                                <span> 
+                                    No File 
+                                </span> 
+ 
+                            {% endif %} 
+ 
+                        </td> 
+ 
+ 
+                    </tr> 
+ 
+ 
+                    {% else %} 
+ 
+ 
+                    <tr> 
+ 
+                        <td 
+                            colspan="9" 
+                            style="text-align:center;padding:40px;"> 
+ 
+                            <i 
+                                class="bi bi-award" 
+                                style="font-size:45px;"> 
+                            </i> 
+ 
+                            <h3> 
+                                No Certificates Found 
+                            </h3> 
+ 
+                            <p> 
+                                No student certificates have been uploaded. 
+                            </p> 
+ 
+                        </td> 
+ 
+                    </tr> 
+ 
+ 
+                    {% endfor %} 
+ 
+ 
+                </tbody> 
+ 
+            </table> 
+ 
+        </div> 
+ 
+    </div> 
+ 
+ 
+    <!-- ===================================================== 
+         REPORT SUMMARY 
+    ====================================================== --> 
+ 
+    <div class="report-box"> 
+ 
+        <div class="box-header"> 
+ 
+            <h2> 
+ 
+                <i class="bi bi-clipboard-data-fill"></i> 
+                Report Summary 
+ 
+            </h2> 
+ 
+        </div> 
+ 
+ 
+        <div class="summary-area"> 
+ 
+ 
+            <div class="summary-card"> 
+ 
+                <h3> 
+                    Total Students 
+                </h3> 
+ 
+                <span> 
+                    {{ total_students }} 
+                </span> 
+ 
+            </div> 
+ 
+ 
+            <div class="summary-card"> 
+ 
+                <h3> 
+                    Total Certificates 
+                </h3> 
+ 
+                <span> 
+                    {{ total_certificates }} 
+                </span> 
+ 
+            </div> 
+ 
+ 
+            <div class="summary-card"> 
+ 
+                <h3> 
+                    Departments 
+                </h3> 
+ 
+                <span> 
+                    {{ department_report|length }} 
+                </span> 
+ 
+            </div> 
+ 
+ 
+            <div class="summary-card"> 
+ 
+                <h3> 
+                    Academic Years 
+                </h3> 
+ 
+                <span> 
+                    {{ year_report|length }} 
+                </span> 
+ 
+            </div> 
+ 
+ 
+        </div> 
+ 
+    </div> 
+ 
+ 
+    <!-- ===================================================== 
+         FOOTER 
+    ====================================================== --> 
+ 
+    <div class="footer"> 
+ 
+ 
+        <div class="footer-left"> 
+ 
+            <h3> 
+ 
+                <i class="bi bi-mortarboard-fill"></i> 
+                Student Certificate Management System 
+ 
+            </h3> 
+ 
+            <p> 
+                Tutor Report Dashboard 
+            </p> 
+ 
+        </div> 
+ 
+ 
+        <div class="footer-right"> 
+ 
+            <p> 
+                Generated by Tutor Panel 
+            </p> 
+ 
+            <p> 
+                © 2026 Designed By PRADEEP From AIDS 
+            </p> 
+ 
+        </div> 
+ 
+ 
+    </div> 
+ 
+ 
+</div> 
+ 
+ 
+<!-- ===================================================== 
+     SEARCH SCRIPT 
+====================================================== --> 
+ 
+<script> 
+ 
+document.addEventListener("DOMContentLoaded", function () { 
+ 
+    const searchInput = 
+        document.getElementById("searchInput"); 
+ 
+ 
+    const tableRows = 
+        document.querySelectorAll( 
+            "#certificateTable tbody tr" 
+        ); 
+ 
+ 
+    if (!searchInput) { 
+        return; 
+    } 
+ 
+ 
+    searchInput.addEventListener( 
+        "keyup", 
+        function () { 
+ 
+            const filter = 
+                this.value 
+                    .toLowerCase() 
+                    .trim(); 
+ 
+ 
+            tableRows.forEach(function (row) { 
+ 
+                const text = 
+                    row.innerText.toLowerCase(); 
+ 
+ 
+                if ( 
+                    filter === "" || 
+                    text.includes(filter) 
+                ) { 
+ 
+                    row.style.display = ""; 
+ 
+                } else { 
+ 
+                    row.style.display = "none"; 
+ 
+                } 
+ 
+            }); 
+ 
+        } 
+    ); 
+ 
+}); 
+ 
+</script> 
+ 
+ 
+<!-- ===================================================== 
+     DOWNLOAD REPORTS 
+====================================================== --> 
+ 
+<script> 
+ 
+function downloadReports() { 
+ 
+    const searchBox = 
+        document.getElementById("searchInput"); 
+ 
+ 
+    if (!searchBox) { 
+        return; 
+    } 
+ 
+ 
+    const searchText = 
+        searchBox.value.trim(); 
+ 
+ 
+    /* ================================================ 
+       EMPTY SEARCH 
+       DOWNLOAD ALL 
+    ================================================= */ 
+ 
+    if (searchText === "") { 
+ 
+        window.location.href = 
+            "/export_zip"; 
+ 
+        return; 
+    } 
+ 
+ 
+    /* ================================================ 
+       SEARCH ENTERED 
+       DOWNLOAD MATCHING CERTIFICATES 
+    ================================================= */ 
+ 
+    window.location.href = 
+        "/export_zip?search=" + 
+        encodeURIComponent(searchText); 
+ 
+} 
+ 
+</script> 
+ 
+ 
+</body> 
+ 
 </html>
