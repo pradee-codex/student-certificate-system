@@ -1333,7 +1333,10 @@ def tutor():
     class_year = tutor[2]
     section = tutor[3]
 
-    # Convert empty values to None
+    # =========================================================
+    # CLEAN TUTOR VALUES
+    # =========================================================
+
     if department:
         department = str(department).strip()
 
@@ -1354,13 +1357,13 @@ def tutor():
     # =========================================================
     # COMMON STUDENT FILTER
     #
-    # Section is NOT used.
+    # Section is NOT used here.
     #
-    # Year = None
-    #     -> All students from tutor department
+    # No class year
+    #   -> All students from department
     #
-    # Year = I / II / III / IV
-    #     -> Students from department + selected year
+    # Class year assigned
+    #   -> Students from department + year
     # =========================================================
 
     if not class_year:
@@ -1420,7 +1423,8 @@ def tutor():
         FROM certificates
 
         INNER JOIN students
-            ON certificates.student_id = students.student_id
+            ON certificates.student_id =
+               students.student_id
 
         WHERE {student_where}
     """, student_params)
@@ -1451,7 +1455,7 @@ def tutor():
     # =========================================================
     # CERTIFICATE LIST
     #
-    # PARTICIPATE ADDED
+    # PARTICIPATION ADDED
     # =========================================================
 
     cursor.execute(f"""
@@ -1462,7 +1466,7 @@ def tutor():
             certificates.certificate_title,
             certificate_categories.category_name,
             certificates.achievement,
-            certificates.participate,
+            certificates.participation,
             students.profile_photo,
             certificates.upload_date,
             certificates.certificate_file
@@ -1470,7 +1474,8 @@ def tutor():
         FROM certificates
 
         INNER JOIN students
-            ON certificates.student_id = students.student_id
+            ON certificates.student_id =
+               students.student_id
 
         INNER JOIN certificate_categories
             ON certificates.category_id =
@@ -1517,7 +1522,7 @@ def tutor():
 
             "achievement": row[5] if row[5] else "Others",
 
-            "participate": row[6] if row[6] else "No"
+            "participation": row[6] if row[6] else "No"
 
         })
 
@@ -1530,7 +1535,8 @@ def tutor():
             students.student_name,
             students.register_no,
             students.department,
-            COUNT(certificates.student_id) AS total_certificates
+            COUNT(certificates.student_id)
+                AS total_certificates
 
         FROM students
 
@@ -1616,12 +1622,12 @@ def tutor():
     achievement_report = cursor.fetchall()
 
     # =========================================================
-    # PARTICIPATE DISTRIBUTION
+    # PARTICIPATION DISTRIBUTION
     # =========================================================
 
     cursor.execute(f"""
         SELECT
-            certificates.participate,
+            certificates.participation,
             COUNT(certificates.certificate_id)
 
         FROM certificates
@@ -1633,13 +1639,13 @@ def tutor():
         WHERE {student_where}
 
         GROUP BY
-            certificates.participate
+            certificates.participation
 
         ORDER BY
             COUNT(certificates.certificate_id) DESC
     """, student_params)
 
-    participate_report = cursor.fetchall()
+    participation_report = cursor.fetchall()
 
     # =========================================================
     # STUDENT + CATEGORY REPORT
@@ -1705,13 +1711,13 @@ def tutor():
     student_achievement_report = cursor.fetchall()
 
     # =========================================================
-    # STUDENT + PARTICIPATE REPORT
+    # STUDENT + PARTICIPATION REPORT
     # =========================================================
 
     cursor.execute(f"""
         SELECT
             students.student_name,
-            certificates.participate,
+            certificates.participation,
             COUNT(certificates.certificate_id)
 
         FROM certificates
@@ -1725,13 +1731,13 @@ def tutor():
         GROUP BY
             students.student_id,
             students.student_name,
-            certificates.participate
+            certificates.participation
 
         ORDER BY
             students.student_name ASC
     """, student_params)
 
-    student_participate_report = cursor.fetchall()
+    student_participation_report = cursor.fetchall()
 
     # =========================================================
     # DEBUG INFORMATION
@@ -1752,14 +1758,29 @@ def tutor():
         student_certificate_counts
     )
 
-    print("CATEGORY REPORT:", category_report)
-    print("ACHIEVEMENT REPORT:", achievement_report)
-    print("PARTICIPATE REPORT:", participate_report)
-    print("STUDENT CHART DATA:", student_chart_data)
+    print(
+        "CATEGORY REPORT:",
+        category_report
+    )
 
     print(
-        "STUDENT PARTICIPATE REPORT:",
-        student_participate_report
+        "ACHIEVEMENT REPORT:",
+        achievement_report
+    )
+
+    print(
+        "PARTICIPATION REPORT:",
+        participation_report
+    )
+
+    print(
+        "STUDENT CHART DATA:",
+        student_chart_data
+    )
+
+    print(
+        "STUDENT PARTICIPATION REPORT:",
+        student_participation_report
     )
 
     print("====================================")
@@ -1804,8 +1825,8 @@ def tutor():
         achievement_report=
             achievement_report,
 
-        participate_report=
-            participate_report,
+        participation_report=
+            participation_report,
 
         student_category_report=
             student_category_report,
@@ -1813,8 +1834,8 @@ def tutor():
         student_achievement_report=
             student_achievement_report,
 
-        student_participate_report=
-            student_participate_report,
+        student_participation_report=
+            student_participation_report,
 
         # Student Search + Charts
         student_chart_data=
@@ -3961,7 +3982,7 @@ def search_certificate_tutor():
 
             certificates.achievement,
 
-            certificates.participate,
+            certificates.participation,
 
             certificates.certificate_file,
 
