@@ -13,7 +13,7 @@ jobs:
         run: |
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
             --max-time 30 \
-            https://YOUR-APP.onrender.com/)
+            https://student-certificate-system.onrender.com/)
       
           echo "Render Website HTTP Status: $STATUS"
       
