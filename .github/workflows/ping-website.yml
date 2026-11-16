@@ -11,6 +11,13 @@ jobs:
     steps:
       - name: Ping Render website
         run: |
-          curl -fsS --max-time 30 \
-            https://student-certificate-system.onrender.com/ \
-            || echo "Ping failed"
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            --max-time 30 \
+            https://YOUR-APP.onrender.com/)
+      
+          echo "Render Website HTTP Status: $STATUS"
+      
+          if [ "$STATUS" -ne 200 ]; then
+            echo "Website health check failed!"
+            exit 1
+          fi
