@@ -2811,445 +2811,387 @@ def tutor_export_pdf():
 ) 
 #------------------------------ 
  
-@app.route("/manage_student") 
-def manage_student(): 
- 
-    if session.get("role") != "tutor": 
-        return redirect("/") 
- 
-    cursor = mysql.connection.cursor() 
- 
-    # =========================== 
-    # Get Tutor Details 
-    # =========================== 
-    cursor.execute(""" 
-        SELECT 
-            department, 
-            class_year, 
-            section 
-        FROM tutors 
-        WHERE user_id=%s 
-    """, (session["user_id"],)) 
- 
-    tutor = cursor.fetchone() 
- 
-    if not tutor: 
-        cursor.close() 
-        flash("Tutor not assigned.") 
-        return redirect("/tutor") 
- 
-    department = tutor[0] 
-    class_year = tutor[1] 
-    section = tutor[2] 
- 
-    # =========================== 
-    # Case 1 
-    # Department only 
-    # Show ALL department students 
-    # =========================== 
-    if not class_year and not section: 
- 
-        cursor.execute(""" 
-            SELECT 
-                s.student_id, 
-                s.student_name, 
-                s.register_no, 
-                s.department, 
-                s.year, 
-                s.section, 
-                s.email, 
-                s.phone, 
-                u.username 
- 
-            FROM students s 
- 
-            JOIN users u 
-            ON s.user_id=u.id 
- 
-            WHERE s.department=%s 
- 
-            ORDER BY s.student_name 
-        """, (department,)) 
- 
-    # =========================== 
-    # Case 2 
-    # Department + Year 
-    # Show all students of that year 
-    # =========================== 
-    elif class_year and not section: 
- 
-        cursor.execute(""" 
-            SELECT 
-                s.student_id, 
-                s.student_name, 
-                s.register_no, 
-                s.department, 
-                s.year, 
-                s.section, 
-                s.email, 
-                s.phone, 
-                u.username 
- 
-            FROM students s 
- 
-            JOIN users u 
-            ON s.user_id=u.id 
- 
-            WHERE 
-                s.department=%s 
-                AND s.year=%s 
- 
-            ORDER BY s.student_name 
-        """, ( 
-            department, 
-            class_year 
-        )) 
- 
-    # =========================== 
-    # Case 3 
-    # Department + Year + Section 
-    # =========================== 
-    else: 
- 
-        cursor.execute(""" 
-            SELECT 
-                s.student_id, 
-                s.student_name, 
-                s.register_no, 
-                s.department, 
-                s.year, 
-                s.section, 
-                s.email, 
-                s.phone, 
-                u.username 
- 
-            FROM students s 
- 
-            JOIN users u 
-            ON s.user_id=u.id 
- 
-            WHERE 
-                s.department=%s 
-                AND s.year=%s 
-                AND s.section=%s 
- 
-            ORDER BY s.student_name 
-        """, ( 
-            department, 
-            class_year, 
-            section 
-        )) 
- 
-    students = cursor.fetchall() 
- 
-    cursor.close() 
- 
-    return render_template( 
-        "tutor/manage_student.html", 
-        students=students, 
-        department=department, 
-        class_year=class_year, 
-        section=section 
-    ) 
- 
-# ========================== 
-# Add Student 
-# ========================== 
- 
-@app.route("/add_student", methods=["POST"]) 
-def add_student(): 
- 
-    if session.get("role") != "tutor": 
-        return redirect("/") 
- 
-    student_name = request.form["student_name"] 
-    register_no = request.form["register_no"] 
-    department = request.form["department"] 
-    year = request.form["year"] 
-    section = request.form["section"]      # NEW 
-    email = request.form["email"] 
-    phone = request.form["phone"] 
-    username = request.form["username"] 
-    password = request.form["password"] 
- 
-    cursor = mysql.connection.cursor() 
- 
-    # Check username 
-    cursor.execute( 
-        "SELECT id FROM users WHERE username=%s", 
-        (username,) 
-    ) 
- 
-    if cursor.fetchone(): 
-        cursor.close() 
-        flash("Username already exists") 
-        return redirect("/manage_student") 
- 
-    # Insert into users 
-    cursor.execute(""" 
-        INSERT INTO users 
-        ( 
-            username, 
-            password, 
-            role 
-        ) 
-        VALUES 
-        ( 
-            %s, 
-            %s, 
-            'student' 
-        ) 
-    """, ( 
-        username, 
-        password 
-    )) 
- 
-    mysql.connection.commit() 
- 
-    user_id = cursor.lastrowid 
- 
-    # Insert into students 
-    cursor.execute(""" 
-        INSERT INTO students 
-        ( 
-            user_id, 
-            student_name, 
-            register_no, 
-            department, 
-            year, 
-            section, 
-            email, 
-            phone 
-        ) 
-        VALUES 
-        ( 
-            %s, 
-            %s, 
-            %s, 
-            %s, 
-            %s, 
-            %s, 
-            %s, 
-            %s 
-        ) 
-    """, ( 
-        user_id, 
-        student_name, 
-        register_no, 
-        department, 
-        year, 
-        section, 
-        email, 
-        phone 
-    )) 
- 
-    mysql.connection.commit() 
- 
-    cursor.close() 
- 
-    flash("Student Created Successfully") 
- 
-    return redirect("/manage_student") 
- 
- 
-@app.route("/delete_student/<int:id>") 
-def delete_student(id): 
- 
-    if session.get("role") != "tutor": 
-        return redirect("/") 
- 
-    cursor = mysql.connection.cursor() 
- 
-    cursor.execute(""" 
-        SELECT user_id 
-        FROM students 
-        WHERE student_id=%s 
-    """, (id,)) 
- 
-    row = cursor.fetchone() 
- 
-    if row: 
- 
-        user_id = row[0] 
- 
-        cursor.execute("DELETE FROM students WHERE student_id=%s", (id,)) 
-        cursor.execute("DELETE FROM users WHERE id=%s", (user_id,)) 
- 
-        mysql.connection.commit() 
- 
-    cursor.close() 
- 
-    flash("Student Deleted Successfully") 
- 
-    return redirect("/manage_student") 
-@app.route("/edit_student/<int:id>") 
-def edit_student(id): 
- 
-    if session.get("role") != "tutor": 
-        return redirect("/") 
- 
-    cursor = mysql.connection.cursor() 
- 
-    cursor.execute(""" 
-        SELECT 
-            students.student_id, 
-            students.student_name, 
-            students.register_no, 
-            students.department, 
-            students.year, 
-            students.section, 
-            students.email, 
-            students.phone, 
-            users.username 
- 
-        FROM students 
- 
-        INNER JOIN users 
-            ON students.user_id = users.id 
- 
-        WHERE students.student_id=%s 
-    """, (id,)) 
- 
-    student = cursor.fetchone() 
- 
-    cursor.close() 
- 
-    if not student: 
-        flash("Student not found") 
-        return redirect("/manage_student") 
- 
-    return render_template( 
-        "tutor/edit_student.html", 
-        student=student 
-    ) 
- 
- 
-@app.route("/update_student/<int:id>", methods=["POST"]) 
-def update_student(id): 
- 
-    if session.get("role") != "tutor": 
-        return redirect("/") 
- 
-    student_name = request.form["student_name"] 
-    register_no = request.form["register_no"] 
-    department = request.form["department"] 
-    year = request.form["year"] 
-    section = request.form["section"] 
-    email = request.form["email"] 
-    phone = request.form["phone"] 
-    username = request.form["username"] 
- 
-    cursor = mysql.connection.cursor() 
- 
-    try: 
- 
-        # ========================================= 
-        # UPDATE STUDENT DETAILS 
-        # ========================================= 
- 
-        cursor.execute(""" 
-            UPDATE students 
-            SET 
-                student_name=%s, 
-                register_no=%s, 
-                department=%s, 
-                year=%s, 
-                section=%s, 
-                email=%s, 
-                phone=%s 
-            WHERE student_id=%s 
-        """, ( 
-            student_name, 
-            register_no, 
-            department, 
-            year, 
-            section, 
-            email, 
-            phone, 
-            id 
-        )) 
- 
-        # ========================================= 
-        # GET USER ID 
-        # ========================================= 
- 
-        cursor.execute(""" 
-            SELECT user_id 
-            FROM students 
-            WHERE student_id=%s 
-        """, (id,)) 
- 
-        row = cursor.fetchone() 
- 
-        if not row: 
-            mysql.connection.rollback() 
-            cursor.close() 
- 
-            flash("Student not found") 
-            return redirect("/manage_student") 
- 
-        user_id = row[0] 
- 
-        # ========================================= 
-        # CHECK DUPLICATE USERNAME 
-        # ========================================= 
- 
-        cursor.execute(""" 
-            SELECT id 
-            FROM users 
-            WHERE username=%s 
-            AND id!=%s 
-        """, ( 
-            username, 
-            user_id 
-        )) 
- 
-        if cursor.fetchone(): 
- 
-            mysql.connection.rollback() 
-            cursor.close() 
- 
-            flash("Username already exists") 
-            return redirect(f"/edit_student/{id}") 
- 
-        # ========================================= 
-        # UPDATE USERNAME 
-        # ========================================= 
- 
-        cursor.execute(""" 
-            UPDATE users 
-            SET username=%s 
-            WHERE id=%s 
-        """, ( 
-            username, 
-            user_id 
-        )) 
- 
-        # ========================================= 
-        # COMMIT 
-        # ========================================= 
- 
-        mysql.connection.commit() 
- 
-        cursor.close() 
- 
-        flash("Student Updated Successfully") 
- 
-        return redirect("/manage_student") 
- 
-    except Exception as e: 
- 
-        mysql.connection.rollback() 
-        cursor.close() 
- 
-        print("===================================") 
-        print("UPDATE STUDENT ERROR") 
-        print("Error:", str(e)) 
-        print("===================================") 
- 
-        flash("Unable to update student") 
- 
-        return redirect(f"/edit_student/{id}") 
+
+# ==========================
+# Manage Students
+# ==========================
+
+@app.route("/manage_student")
+def manage_student():
+
+    if session.get("role") != "tutor":
+        return redirect("/")
+
+    cursor = mysql.connection.cursor()
+
+    try:
+        # Tutor details
+        cursor.execute("""
+            SELECT department, class_year, section
+            FROM tutors
+            WHERE user_id=%s
+        """, (session["user_id"],))
+
+        tutor = cursor.fetchone()
+
+        if not tutor:
+            flash("Tutor not assigned.")
+            return redirect("/tutor")
+
+        department = tutor[0]
+        class_year = tutor[1]
+        tutor_section = tutor[2]
+
+        # Get students by department and, when configured,
+        # the tutor's assigned academic year and section.
+        query = """
+            SELECT
+                s.student_id,
+                s.student_name,
+                s.register_no,
+                s.department,
+                s.batch,
+                s.email,
+                s.phone,
+                u.username
+            FROM students s
+            JOIN users u ON s.user_id = u.id
+            WHERE s.department = %s
+        """
+
+        params = [department]
+
+        # Keep existing tutor assignment filtering.
+        # Convert batch (e.g. 2025-2029) to starting year
+        # for compatibility with the existing class_year field.
+        if class_year:
+            query += " AND s.year = %s"
+            params.append(class_year)
+
+        if class_year and tutor_section:
+            query += " AND s.section = %s"
+            params.append(tutor_section)
+
+        query += " ORDER BY s.student_name"
+
+        cursor.execute(query, tuple(params))
+        students = cursor.fetchall()
+
+        return render_template(
+            "tutor/manage_student.html",
+            students=students,
+            department=department,
+            class_year=class_year,
+            section=tutor_section
+        )
+
+    except Exception as e:
+        print("MANAGE STUDENT ERROR:", str(e))
+        flash("Unable to load students.")
+        return redirect("/tutor")
+
+    finally:
+        cursor.close()
+
+
+# ==========================
+# Add Student
+# ==========================
+
+@app.route("/add_student", methods=["POST"])
+def add_student():
+
+    if session.get("role") != "tutor":
+        return redirect("/")
+
+    student_name = request.form.get("student_name", "").strip()
+    register_no = request.form.get("register_no", "").strip()
+    department = request.form.get("department", "").strip()
+    batch = request.form.get("batch", "").strip()
+    email = request.form.get("email", "").strip()
+    phone = request.form.get("phone", "").strip()
+    username = request.form.get("username", "").strip()
+    password = request.form.get("password", "")
+
+    # Validate batch: YYYY-YYYY
+    try:
+        start_year, end_year = map(int, batch.split("-"))
+        if end_year - start_year != 4:
+            raise ValueError("Invalid batch duration")
+    except (ValueError, AttributeError):
+        flash("Please select a valid batch.")
+        return redirect("/manage_student")
+
+    # Keep legacy year column populated for existing routes.
+    year = start_year
+
+    if not all([
+        student_name, register_no, department,
+        email, phone, username, password
+    ]):
+        flash("Please fill in all required fields.")
+        return redirect("/manage_student")
+
+    cursor = mysql.connection.cursor()
+
+    try:
+        # Verify that the username is unique.
+        cursor.execute(
+            "SELECT id FROM users WHERE username=%s",
+            (username,)
+        )
+
+        if cursor.fetchone():
+            flash("Username already exists.")
+            return redirect("/manage_student")
+
+        # Create the student login.
+        cursor.execute("""
+            INSERT INTO users (username, password, role)
+            VALUES (%s, %s, 'student')
+        """, (username, password))
+
+        user_id = cursor.lastrowid
+
+        # Save batch and preserve legacy year/section columns.
+        cursor.execute("""
+            INSERT INTO students (
+                user_id,
+                student_name,
+                register_no,
+                department,
+                year,
+                batch,
+                section,
+                email,
+                phone
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, NULL, %s, %s)
+        """, (
+            user_id,
+            student_name,
+            register_no,
+            department,
+            year,
+            batch,
+            email,
+            phone
+        ))
+
+        mysql.connection.commit()
+        flash("Student created successfully.")
+
+    except Exception as e:
+        mysql.connection.rollback()
+        print("ADD STUDENT ERROR:", str(e))
+        flash("Unable to create student. Check the entered details.")
+
+    finally:
+        cursor.close()
+
+    return redirect("/manage_student")
+
+
+# ==========================
+# Delete Student
+# ==========================
+
+@app.route("/delete_student/<int:id>")
+def delete_student(id):
+
+    if session.get("role") != "tutor":
+        return redirect("/")
+
+    cursor = mysql.connection.cursor()
+
+    try:
+        cursor.execute("""
+            SELECT user_id
+            FROM students
+            WHERE student_id=%s
+        """, (id,))
+
+        row = cursor.fetchone()
+
+        if not row:
+            flash("Student not found.")
+            return redirect("/manage_student")
+
+        user_id = row[0]
+
+        cursor.execute(
+            "DELETE FROM students WHERE student_id=%s",
+            (id,)
+        )
+
+        cursor.execute(
+            "DELETE FROM users WHERE id=%s",
+            (user_id,)
+        )
+
+        mysql.connection.commit()
+        flash("Student deleted successfully.")
+
+    except Exception as e:
+        mysql.connection.rollback()
+        print("DELETE STUDENT ERROR:", str(e))
+        flash("Unable to delete student.")
+
+    finally:
+        cursor.close()
+
+    return redirect("/manage_student")
+
+
+# ==========================
+# Edit Student
+# ==========================
+
+@app.route("/edit_student/<int:id>")
+def edit_student(id):
+
+    if session.get("role") != "tutor":
+        return redirect("/")
+
+    cursor = mysql.connection.cursor()
+
+    try:
+        cursor.execute("""
+            SELECT
+                students.student_id,
+                students.student_name,
+                students.register_no,
+                students.department,
+                students.batch,
+                students.email,
+                students.phone,
+                users.username
+            FROM students
+            INNER JOIN users
+                ON students.user_id = users.id
+            WHERE students.student_id=%s
+        """, (id,))
+
+        student = cursor.fetchone()
+
+    except Exception as e:
+        print("EDIT STUDENT ERROR:", str(e))
+        flash("Unable to load student details.")
+        return redirect("/manage_student")
+
+    finally:
+        cursor.close()
+
+    if not student:
+        flash("Student not found.")
+        return redirect("/manage_student")
+
+    return render_template(
+        "tutor/edit_student.html",
+        student=student
+    )
+
+
+# ==========================
+# Update Student
+# ==========================
+
+@app.route("/update_student/<int:id>", methods=["POST"])
+def update_student(id):
+
+    if session.get("role") != "tutor":
+        return redirect("/")
+
+    student_name = request.form.get("student_name", "").strip()
+    register_no = request.form.get("register_no", "").strip()
+    department = request.form.get("department", "").strip()
+    batch = request.form.get("batch", "").strip()
+    email = request.form.get("email", "").strip()
+    phone = request.form.get("phone", "").strip()
+    username = request.form.get("username", "").strip()
+
+    try:
+        start_year, end_year = map(int, batch.split("-"))
+        if end_year - start_year != 4:
+            raise ValueError("Invalid batch duration")
+    except (ValueError, AttributeError):
+        flash("Please select a valid batch.")
+        return redirect(f"/edit_student/{id}")
+
+    year = start_year
+    cursor = mysql.connection.cursor()
+
+    try:
+        # Find the student and linked user.
+        cursor.execute("""
+            SELECT user_id
+            FROM students
+            WHERE student_id=%s
+        """, (id,))
+
+        row = cursor.fetchone()
+
+        if not row:
+            flash("Student not found.")
+            return redirect("/manage_student")
+
+        user_id = row[0]
+
+        # Check for a duplicate username belonging to another user.
+        cursor.execute("""
+            SELECT id
+            FROM users
+            WHERE username=%s AND id!=%s
+        """, (username, user_id))
+
+        if cursor.fetchone():
+            flash("Username already exists.")
+            return redirect(f"/edit_student/{id}")
+
+        # Update student details.
+        cursor.execute("""
+            UPDATE students
+            SET
+                student_name=%s,
+                register_no=%s,
+                department=%s,
+                year=%s,
+                batch=%s,
+                email=%s,
+                phone=%s
+            WHERE student_id=%s
+        """, (
+            student_name,
+            register_no,
+            department,
+            year,
+            batch,
+            email,
+            phone,
+            id
+        ))
+
+        # Update username.
+        cursor.execute("""
+            UPDATE users
+            SET username=%s
+            WHERE id=%s
+        """, (username, user_id))
+
+        mysql.connection.commit()
+        flash("Student updated successfully.")
+
+    except Exception as e:
+        mysql.connection.rollback()
+        print("UPDATE STUDENT ERROR:", str(e))
+        flash("Unable to update student.")
+
+    finally:
+        cursor.close()
+
+    return redirect("/manage_student")
+
+
 #-- 
 @app.route("/download_all_tutor") 
 def download_all_tutor(): 
