@@ -5,18 +5,20 @@ from flask import (
     redirect,
     session,
     flash,
+    g,
     send_from_directory,
     send_file,
     url_for
 )
 
-from flask_mysqldb import MySQL
+from pymysql import connect as mysql_connect
 from config import Config
 from flask import send_from_directory
 from werkzeug.utils import secure_filename
 from drive_service import upload_to_drive
 
 import os
+import re
 import zipfile
 import tempfile
 import pandas as pd
@@ -47,6 +49,7 @@ logging.basicConfig(level=logging.INFO)
 _drive_key_paths = [
     os.getenv("GOOGLE_SERVICE_ACCOUNT_FILE"),
     "/etc/secrets/key.json",
+    "key.json",
     os.path.join(os.path.dirname(os.path.abspath(__file__)), "key.json")
 ]
 
@@ -83,17 +86,321 @@ os.makedirs(PROFILE_FOLDER, exist_ok=True)
 # ==========================
 
 
-app.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST", "").strip()
-app.config["MYSQL_USER"] = os.getenv("MYSQL_USER", "").strip()
-app.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD", "").strip()
-app.config["MYSQL_DB"] = os.getenv("MYSQL_DB", "").strip()
-app.config["MYSQL_PORT"] = int(os.getenv("MYSQL_PORT", "3306").strip())
+class MySQL:
+    def __init__(self, app):
+        self.app = app
+        app.teardown_appcontext(self.close_connection)
 
-app.config["MYSQL_SSL"] = {
-    "ssl": {}
-}
+    @property
+    def connection(self):
+        connection = getattr(g, "mysql_connection", None)
+        if connection is None:
+            config = self.app.config
+            connection = mysql_connect(
+                host=config["MYSQL_HOST"],
+                user=config["MYSQL_USER"],
+                password=config["MYSQL_PASSWORD"],
+                database=config["MYSQL_DB"],
+                port=config["MYSQL_PORT"],
+                charset="utf8mb4",
+                autocommit=False,
+            )
+            g.mysql_connection = connection
+        return connection
+
+    def close_connection(self, exception=None):
+        connection = getattr(g, "mysql_connection", None)
+        if connection is not None:
+            connection.close()
+
 
 mysql = MySQL(app)
+
+
+DDL_MODES = {"none", "validate", "update", "create"}
+
+TABLE_COLUMNS = {
+    "users": {
+        "id": "INT AUTO_INCREMENT PRIMARY KEY",
+        "username": "VARCHAR(100) NOT NULL UNIQUE",
+        "password": "VARCHAR(255) NOT NULL",
+        "role": "VARCHAR(20) NOT NULL",
+        "profile_photo": "VARCHAR(500) NULL",
+        "full_name": "VARCHAR(150) NULL",
+        "email": "VARCHAR(255) NULL",
+        "phone": "VARCHAR(50) NULL",
+    },
+    "students": {
+        "student_id": "INT AUTO_INCREMENT PRIMARY KEY",
+        "user_id": "INT NOT NULL UNIQUE",
+        "register_no": "VARCHAR(100) NOT NULL UNIQUE",
+        "student_name": "VARCHAR(200) NOT NULL",
+        "department": "VARCHAR(150) NOT NULL",
+        "year": "VARCHAR(20) NULL",
+        "batch": "VARCHAR(20) NULL",
+        "section": "VARCHAR(50) NULL",
+        "email": "VARCHAR(255) NULL",
+        "phone": "VARCHAR(50) NULL",
+        "profile_photo": "VARCHAR(500) NULL",
+    },
+    "certificate_categories": {
+        "category_id": "INT AUTO_INCREMENT PRIMARY KEY",
+        "category_name": "VARCHAR(200) NOT NULL",
+    },
+    "certificates": {
+        "certificate_id": "INT AUTO_INCREMENT PRIMARY KEY",
+        "student_id": "INT NOT NULL",
+        "category_id": "INT NOT NULL",
+        "certificate_title": "VARCHAR(255) NOT NULL",
+        "achievement": "VARCHAR(50) NULL",
+        "certificate_file": "VARCHAR(1000) NULL",
+        "upload_date": "DATETIME NOT NULL",
+    },
+    "hods": {
+        "hod_id": "INT AUTO_INCREMENT PRIMARY KEY",
+        "user_id": "INT NOT NULL UNIQUE",
+        "hod_name": "VARCHAR(200) NOT NULL",
+        "department": "VARCHAR(150) NOT NULL",
+        "email": "VARCHAR(255) NULL",
+        "phone": "VARCHAR(50) NULL",
+        "profile_photo": "VARCHAR(500) NULL",
+    },
+    "tutors": {
+        "tutor_id": "INT AUTO_INCREMENT PRIMARY KEY",
+        "user_id": "INT NOT NULL UNIQUE",
+        "tutor_name": "VARCHAR(200) NOT NULL",
+        "department": "VARCHAR(150) NOT NULL",
+        "class_year": "VARCHAR(20) NULL",
+        "section": "VARCHAR(50) NULL",
+        "email": "VARCHAR(255) NULL",
+        "phone": "VARCHAR(50) NULL",
+        "profile_photo": "VARCHAR(500) NULL",
+    },
+}
+
+TABLE_CONSTRAINTS = {
+    "students": [
+        "CONSTRAINT fk_students_user FOREIGN KEY (user_id) REFERENCES users (id)"
+    ],
+    "certificates": [
+        "CONSTRAINT fk_certificates_student FOREIGN KEY (student_id) REFERENCES students (student_id)",
+        "CONSTRAINT fk_certificates_category FOREIGN KEY (category_id) REFERENCES certificate_categories (category_id)",
+    ],
+    "hods": [
+        "CONSTRAINT fk_hods_user FOREIGN KEY (user_id) REFERENCES users (id)"
+    ],
+    "tutors": [
+        "CONSTRAINT fk_tutors_user FOREIGN KEY (user_id) REFERENCES users (id)"
+    ],
+}
+
+
+def _schema_connect(database=None):
+    config = app.config
+    host = config["MYSQL_HOST"]
+    port = config["MYSQL_PORT"]
+    user = config["MYSQL_USER"]
+    password = config["MYSQL_PASSWORD"]
+
+    return mysql_connect(
+        host=host,
+        port=int(port),
+        user=user,
+        password=password,
+        database=database,
+        charset="utf8mb4",
+        autocommit=False,
+    )
+
+
+def _database_exists(cursor, database):
+    cursor.execute(
+        "SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = %s",
+        (database,),
+    )
+    return cursor.fetchone() is not None
+
+
+def _table_columns(cursor, table):
+    cursor.execute(
+        """
+        SELECT COLUMN_NAME
+        FROM information_schema.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = %s
+        """,
+        (table,),
+    )
+    return {row[0] for row in cursor.fetchall()}
+
+
+def _create_table(cursor, table):
+    parts = [
+        f"`{column}` {definition}"
+        for column, definition in TABLE_COLUMNS[table].items()
+    ]
+    parts.extend(TABLE_CONSTRAINTS.get(table, []))
+    cursor.execute(
+        f"CREATE TABLE IF NOT EXISTS `{table}` ({', '.join(parts)}) "
+        "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+    )
+
+
+def _seed_users(cursor):
+    seed_roles = {"admin", "tutor", "hod", "student"}
+    for account in app.config["SEED_USERS"]:
+        if not isinstance(account, dict):
+            logging.warning("Seed user skipped: entry is not an object")
+            continue
+
+        username = str(account.get("username", "")).strip()
+        password = str(account.get("password", "")).strip()
+        role = str(account.get("role", "")).strip().lower()
+        full_name = str(account.get("full_name") or username).strip()
+        email = str(account.get("email") or username).strip()
+        phone = str(account.get("phone", "")).strip()
+
+        if not username or not password or role not in seed_roles:
+            logging.warning("Seed user skipped: invalid username, password or role")
+            continue
+
+        register_no = str(account.get("register_no") or username).strip()
+        if role == "student":
+            cursor.execute(
+                "SELECT student_id FROM students WHERE register_no = %s",
+                (register_no,),
+            )
+            if cursor.fetchone() is not None:
+                logging.warning(
+                    "Seed student skipped: register number %s already exists",
+                    register_no,
+                )
+                continue
+
+        cursor.execute("SELECT id FROM users WHERE username = %s", (username,))
+        if cursor.fetchone() is not None:
+            continue
+
+        cursor.execute(
+            "INSERT INTO users (username, password, role, full_name) "
+            "VALUES (%s, %s, %s, %s)",
+            (username, password, role, full_name),
+        )
+        user_id = cursor.lastrowid
+
+        if role == "tutor":
+            cursor.execute(
+                "INSERT INTO tutors "
+                "(user_id, tutor_name, department, class_year, section, email, phone) "
+                "VALUES (%s, %s, %s, %s, %s, %s, %s)",
+                (
+                    user_id,
+                    full_name,
+                    str(account.get("department", "")).strip(),
+                    str(account.get("class_year") or "All").strip(),
+                    str(account.get("section") or "All").strip(),
+                    email,
+                    phone,
+                ),
+            )
+        elif role == "hod":
+            cursor.execute(
+                "INSERT INTO hods (user_id, hod_name, department, email, phone) "
+                "VALUES (%s, %s, %s, %s, %s)",
+                (
+                    user_id,
+                    full_name,
+                    str(account.get("department", "")).strip(),
+                    email,
+                    phone,
+                ),
+            )
+        elif role == "student":
+            cursor.execute(
+                "INSERT INTO students "
+                "(user_id, student_name, register_no, department, year, batch, "
+                "section, email, phone) "
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                (
+                    user_id,
+                    full_name,
+                    register_no,
+                    str(account.get("department", "")).strip(),
+                    str(account.get("year", "")).strip(),
+                    str(account.get("batch", "")).strip(),
+                    str(account.get("section", "")).strip(),
+                    email,
+                    phone,
+                ),
+            )
+
+        logging.info("Seeded %s user %s", role, username)
+
+
+def bootstrap_schema():
+    mode = app.config["DB_DDL_AUTO"]
+    if mode not in DDL_MODES:
+        raise RuntimeError(f"Unsupported DB_DDL_AUTO value: {mode}")
+    if mode == "none":
+        return
+
+    database = app.config["MYSQL_DB"]
+    if not re.fullmatch(r"[A-Za-z0-9_]+", database):
+        raise RuntimeError("MYSQL_DB may only contain letters, numbers and underscores")
+
+    connection = _schema_connect()
+    cursor = connection.cursor()
+    try:
+        database_exists = _database_exists(cursor, database)
+        if mode == "validate":
+            if not database_exists:
+                raise RuntimeError(f"Database '{database}' does not exist")
+        elif not database_exists:
+            cursor.execute(
+                f"CREATE DATABASE `{database}` "
+                "CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+            )
+            connection.commit()
+    finally:
+        cursor.close()
+        connection.close()
+
+    connection = _schema_connect(database=database)
+    cursor = connection.cursor()
+    try:
+        for table, columns in TABLE_COLUMNS.items():
+            existing_columns = _table_columns(cursor, table)
+            if mode == "validate":
+                if not existing_columns:
+                    raise RuntimeError(f"Table '{table}' does not exist")
+                missing_columns = [
+                    column for column in columns if column not in existing_columns
+                ]
+                if missing_columns:
+                    raise RuntimeError(
+                        f"Table '{table}' is missing columns: "
+                        f"{', '.join(missing_columns)}"
+                    )
+                continue
+
+            _create_table(cursor, table)
+            existing_columns = _table_columns(cursor, table)
+            for column, definition in columns.items():
+                if column not in existing_columns:
+                    cursor.execute(
+                        f"ALTER TABLE `{table}` ADD COLUMN `{column}` {definition}"
+                    )
+
+        if mode != "validate":
+            _seed_users(cursor)
+            connection.commit()
+    finally:
+        cursor.close()
+        connection.close()
+
+    logging.info("Database schema check completed with DB_DDL_AUTO=%s", mode)
+
+
+bootstrap_schema()
 
 
 @app.route("/test-db")

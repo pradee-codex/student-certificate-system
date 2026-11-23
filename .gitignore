@@ -5,4 +5,5 @@ uploads/
 credentials.json
 token.json
 key.json
+config.json
 token.pickle

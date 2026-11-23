@@ -65,14 +65,68 @@ pip install -r requirements.txt
 
 ### 3.2 Configure MySQL
 
-Create the database and update credentials in `config.py`:
+Create `config.json` in the project root:
 
-```python
-MYSQL_HOST = "localhost"
-MYSQL_USER = "root"
-MYSQL_PASSWORD = "<your-password>"
-MYSQL_DB = "student_certificate_system"
+```json
+{
+  "MYSQL_HOST": "localhost",
+  "MYSQL_USER": "app_user",
+  "MYSQL_PASSWORD": "<app-password>",
+  "MYSQL_DB": "student_certificate_system",
+  "MYSQL_PORT": 3306,
+  "DB_DDL_AUTO": "create",
+  "SEED_USERS": [
+    {
+      "username": "admin@example.com",
+      "password": "<admin-password>",
+      "role": "admin",
+      "full_name": "Administrator"
+    },
+    {
+      "username": "tutor@example.com",
+      "password": "<tutor-password>",
+      "role": "tutor",
+      "full_name": "Tutor",
+      "department": "CSE",
+      "class_year": "All",
+      "section": "All"
+    },
+    {
+      "username": "hod@example.com",
+      "password": "<hod-password>",
+      "role": "hod",
+      "full_name": "HOD",
+      "department": "CSE"
+    },
+    {
+      "username": "student@example.com",
+      "password": "<student-password>",
+      "role": "student",
+      "full_name": "Student",
+      "department": "CSE",
+      "year": "2026",
+      "batch": "2026-2030",
+      "section": "A",
+      "register_no": "SEED-STUDENT-001"
+    }
+  ]
+}
 ```
+
+It is gitignored. Environment variables with the same names override these values.
+
+`DB_DDL_AUTO` supports:
+
+| Value | Behaviour |
+|---|---|
+| `none` | No schema changes (default) |
+| `validate` | Fail at startup if the database, tables or columns are missing |
+| `update` | Create missing database/tables/columns, then seed `SEED_USERS` |
+| `create` | Same as `update`; safe for a fresh database and does not drop existing data |
+
+Each `SEED_USERS` entry creates a login and, for `tutor`, `hod` and `student`, the matching profile row so the role dashboard works immediately.
+
+Schema DDL uses the same `MYSQL_*` credentials as the application, so that user needs `CREATE DATABASE` and `CREATE TABLE` privileges when `DB_DDL_AUTO` is `create` or `update`.
 
 ### 3.3 Place the service account key
 
@@ -130,10 +184,10 @@ Optional environment variables:
 
 ### 4.4 Database on Render
 
-`config.py` points to localhost MySQL, which does not exist on Render.
-Use a hosted MySQL (e.g. Render MySQL, PlanetScale, Railway) and make the
-values in `config.py` read from environment variables, or point them at
-your hosted instance before deploying.
+Set `MYSQL_HOST`, `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_DB` and `MYSQL_PORT`
+as environment variables on Render. They override `config.json`. For one-time
+schema creation, also set `DB_DDL_AUTO=create` and `SEED_USERS`, then set
+`DB_DDL_AUTO=none` (or remove it) after deployment.
 
 ### 4.5 Verify the deployment
 
